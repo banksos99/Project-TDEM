@@ -90,7 +90,7 @@ export default class OTSummaryDetail extends Component {
     checkDataFormat(DataResponse) {
 
         if (DataResponse) {
-            //console.log('tosummary DataResponse : ', DataResponse)
+            
             this.state.tdataSource = DataResponse.detail.items;
             this.state.headerdataSource = DataResponse.header
             //console.log('tosummary data : ', this.state.tdataSource)
@@ -187,6 +187,17 @@ export default class OTSummaryDetail extends Component {
         data = data[1]
         //console.log('ot data response : ',data)
         if (code.SUCCESS == data.code) {
+            let titems = [];
+            for (let i = 0; i < data.data.detail.items.length; i++) {
+
+                titems.push(
+
+                    data.data.detail.items[i]
+
+                )
+
+            }
+            console.log('tdataSource =>',titems)
 
             this.setState({
 
@@ -536,7 +547,8 @@ export default class OTSummaryDetail extends Component {
 
     }
     renderdetail() {
-        //console.log('this.state.tdataSource',this.state.tdataSource)
+ 
+
         if (this.state.tdataSource.length) {
             return (
                 <View style={{ flex: 16, backgroundColor: Colors.calendarLocationBoxColor, }}>
@@ -550,7 +562,7 @@ export default class OTSummaryDetail extends Component {
                                             {parseInt(item.ot_date.split('-')[2])}
                                         </Text>
                                         <Text style={[styles.otsummarybody, { flex: 2, }]}>{item.time}</Text>
-                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.x15 }</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.x15}</Text>
                                         <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.x20}</Text>
                                         <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.x30}</Text>
                                         <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.total_ot}</Text>
@@ -579,7 +591,7 @@ export default class OTSummaryDetail extends Component {
         // this.state.datasource.map((i, index) => (
         //     <Picker.Item key={index} label={i.label} value={i.value} />
         // ))
-        // ////console.log(this.state.tdataSource.data.detail.items)
+
         let total_ot = 0;
         let ot_15 = 0;
         let ot_20 = 0;

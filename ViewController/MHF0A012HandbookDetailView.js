@@ -101,9 +101,9 @@ export default class HandbookViewer extends Component {
                 console.log('Load Highlights success! value : ' + value);
                 console.log('Load Highlights success! json : ' + json);
                 console.log('Load Highlights success! stringfify : ' + JSON.stringify(value));
-                // if (value)
-                //     SharedPreference.Handbook = value;
-                // this.reloadHighlight();
+                if (value)
+                    SharedPreference.Handbook = value;
+                this.reloadHighlight();
 
 
                 return value;
