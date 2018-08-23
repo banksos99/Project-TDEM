@@ -846,7 +846,7 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     alertDialogBoxSelectText: {
-        textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center'
+        textAlign: 'center', fontSize: 18, width: '100%', height: 50, alignItems: 'center'
     },
     pickerViewAndroidContrianer: {
         justifyContent: 'center', height: 40, alignItems: 'center',

@@ -87,8 +87,6 @@ export default class HandbookViewer extends Component {
 
         this.streamer = new Streamer();
         this.reloadCount = 0;
-
-        
     }
 
     loadHighlights(){

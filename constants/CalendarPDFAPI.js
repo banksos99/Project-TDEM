@@ -20,7 +20,7 @@ export default async function getPDF(year, company,functionID) {
 
     FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, functionID, SharedPreference.profileObject.client_token)
     let url = SharedPreference.CALENDER_YEAR_PDF_API + year + "&company=" + company
-
+    console.log("callback success url : ", url)
 
     return fetch(url, {
         method: 'GET',

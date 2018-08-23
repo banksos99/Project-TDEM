@@ -24,6 +24,7 @@ import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 //monthNames
 let MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+let selectmonth=0;
 
 export default class OTSummaryDetail extends Component {
 
@@ -88,12 +89,42 @@ export default class OTSummaryDetail extends Component {
 
 
     checkDataFormat(DataResponse) {
-
+       
         if (DataResponse) {
-            
-            this.state.tdataSource = DataResponse.detail.items;
+
+            let titems = [];
+            for (let i = 0; i < DataResponse.detail.items.length; i++) {
+
+                // console.log('tosummary data : ', DataResponse.detail.items[i])
+                let x15 = DataResponse.detail.items[i].x15.split('.');
+                let x20 = DataResponse.detail.items[i].x20.split('.');
+                let x30 = DataResponse.detail.items[i].x30.split('.');
+                let total = DataResponse.detail.items[i].total_ot.split('.');
+                titems.push({
+                    ot_date: DataResponse.detail.items[i].ot_date,
+                    time: DataResponse.detail.items[i].time,
+                    x15:x15[0]+'.'+x15[1][0],
+                    x20:x20[0]+'.'+x20[1][0],
+                    x30:x30[0]+'.'+x30[1][0],
+                    total_ot:total[0]+'.'+total[1][0],
+                    meal_no: DataResponse.detail.items[i].meal_no,
+                    shift_allw: DataResponse.detail.items[i].shift_allw,
+
+                })
+
+            }
+            // console.log('tosummary data : ', titems)
+            // this.setState({
+
+            //     tdataSource: titems,
+            //     headerdataSource: DataResponse.header,
+           
+            // })
+
+            // console.log('tdataSource : ', DataResponse)
+            this.state.tdataSource = titems;
             this.state.headerdataSource = DataResponse.header
-            //console.log('tosummary data : ', this.state.tdataSource)
+            // console.log('tosummary data : ', this.state.tdataSource)
         }
 
         let today = new Date();
@@ -116,6 +147,10 @@ export default class OTSummaryDetail extends Component {
       //  this.state.announcementType = initannouncementType;
         this.state.tempannouncementTypetext= initannouncementType;
         console.log('initannouncementType : ',initannouncementType)
+
+
+
+
     }
 
     _onRefresh() {
@@ -189,19 +224,27 @@ export default class OTSummaryDetail extends Component {
         if (code.SUCCESS == data.code) {
             let titems = [];
             for (let i = 0; i < data.data.detail.items.length; i++) {
+                let x15 = data.data.detail.items[i].x15.split('.');
+                let x20 = data.data.detail.items[i].x20.split('.');
+                let x30 = data.data.detail.items[i].x30.split('.');
+                let total = data.data.detail.items[i].total_ot.split('.');
+                titems.push({
+                    ot_date: data.data.detail.items[i].ot_date,
+                    time: data.data.detail.items[i].time,
+                    x15:x15[0]+'.'+x15[1][0],
+                    x20:x20[0]+'.'+x20[1][0],
+                    x30:x30[0]+'.'+x30[1][0],
+                    total_ot:total[0]+'.'+total[1][0],
+                    meal_no: data.data.detail.items[i].meal_no,
+                    shift_allw: data.data.detail.items[i].shift_allw,
 
-                titems.push(
-
-                    data.data.detail.items[i]
-
-                )
+                })
 
             }
-            console.log('tdataSource =>',titems)
-
+    
             this.setState({
 
-                tdataSource: data.data.detail.items,
+                tdataSource: titems,
                 headerdataSource: data.data.header,
            
             })
@@ -265,6 +308,11 @@ export default class OTSummaryDetail extends Component {
             }],
             { cancelable: false }
         )
+    }
+
+    cutDigit() {
+
+
     }
 
     onLoadErrorAlertDialog(error) {
@@ -403,11 +451,11 @@ export default class OTSummaryDetail extends Component {
 
     }
 
-    selected_month(monthselected) {
+    selected_month(monthselected,index) {
 
         ////console.log('monthselected : ',monthselected)
         initannouncementType = monthselected
-
+        selectmonth = index;
         this.setState({
             announcementTypetext: monthselected,
             loadingtype: 1,
@@ -458,10 +506,12 @@ export default class OTSummaryDetail extends Component {
                                 {
                                     this.state.months.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
-                                            onPress={() => { this.selected_month(item) }}
+                                            onPress={() => { this.selected_month(item,index) }}
                                             key={index + 100}>
-                                            <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
-                                                <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                            <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                                <Text style={index === selectmonth ?
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}

@@ -611,7 +611,12 @@ export default class calendarYearView extends Component {
                                 <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
                                 <Picker
                                     selectedValue={this.state.selectYear}
-                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
+                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue }
+                                        , function () {
+
+                                            console.log('selectYear =>: ',this.state.selectYear);
+    
+                                        })}>
                                     {this.state.yearsPickerArray.map((i, index) => (
                                         <Picker.Item key={index} color={Colors.redTextColor} label={i.label} value={i.value} />
                                     ))}
@@ -670,9 +675,14 @@ export default class calendarYearView extends Component {
                                 <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
                                 <Picker
                                     selectedValue={this.state.selectYear}
-                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
+                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue }
+                                        , function () {
+
+                                            console.log('selectYear =>: ',this.state.selectYear);
+    
+                                        })}>
                                     {this.state.yearsPickerArray.map((i, index) => (
-                                        <Picker.Item key={index} color={Colors.redTextColor} selec label={i.label} value={i.value} />
+                                        <Picker.Item key={index} color={Colors.redTextColor}  label={i.label} value={i.value} />
                                     ))}
                                 </Picker>
                                 <View style={styles.alertDialogBox}>

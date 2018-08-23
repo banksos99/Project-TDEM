@@ -455,16 +455,18 @@ export default class calendarYearView extends Component {
         })
     }
 
-    onPressSelectYearWhenSelectPDF(year) {
-
+    onPressSelectYearWhenSelectPDF(year, i) {
+        console.log('android select year => ', year, i)
         this.setState({
             selectYear: year,
             yearPickerForDownloadPDFFileView: false,
             isLoadingPDF: true
-        })
-        this.onloadPDFFile();
+        }, function () {
 
+            this.onloadPDFFile();
+        })
     }
+    
     onPressSelectYearWhenSelectLocation(year, type) {
         this.setState({
             selectYear: year,
@@ -607,7 +609,14 @@ export default class calendarYearView extends Component {
                                 <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
                                 <Picker
                                     selectedValue={this.state.selectYear}
-                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
+                                    onValueChange={(itemValue, itemIndex) => this.setState({
+                                        selectYear: itemValue
+                                    }, function () {
+
+                                        console.log('selectYear =>: ',this.state.selectYear);
+
+                                    })}>
+
                                     {this.state.yearsPickerArray.map((i, index) => (
                                         <Picker.Item key={index} color={Colors.redTextColor} label={i.label} value={i.value} />
                                     ))}
@@ -640,13 +649,14 @@ export default class calendarYearView extends Component {
                                 <Text style={[styles.alertDialogBoxText, {
                                     style: Text,
                                 }]}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
+                                <View style={{height:20}}/>
                                 <ScrollView style={{ height: '40%' }}>
                                     {
                                         this.state.yearsPickerArray.map((i, index) => (
                                             <TouchableOpacity style={styles.button}
-                                                onPress={() => { this.onPressSelectYearWhenSelectPDF(i.label) }}
-                                                key={index + 100}>
-                                                <View style={styles.pickerViewAndroidContrianer} key={index + 200}>
+                                                onPress={() => { this.onPressSelectYearWhenSelectPDF(i.label,i) }}
+                                                >
+                                                <View style={styles.pickerViewAndroidContrianer}>
                                                     <Text style={styles.alertDialogBoxSelectText}> {i.label}</Text>
                                                 </View>
                                             </TouchableOpacity>))}
@@ -666,19 +676,28 @@ export default class calendarYearView extends Component {
                                 <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
                                 <Picker
                                     selectedValue={this.state.selectYear}
-                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
+                                    onValueChange={(itemValue, itemIndex) => this.setState(
+                                        { selectYear: itemValue }, function () {
+
+                                            console.log('selectYear =>: ',this.state.selectYear);
+    
+                                        })}>
                                     {this.state.yearsPickerArray.map((i, index) => (
-                                        <Picker.Item key={index} color={Colors.redTextColor} selec label={i.label} value={i.value} />
+                                        <Picker.Item key={index} color={Colors.redTextColor} label={i.label} value={i.value} />
                                     ))}
                                 </Picker>
                                 <View style={styles.alertDialogBox}>
                                     <TouchableOpacity style={styles.button}
                                         onPress={() => {
+                                            console.log('selectYear =>: ',this.state.selectYear);
                                             this.setState({
                                                 yearPickerForDownloadPDFFileView: false,
                                                 isLoadingPDF: true
+                                            },function(){
+                                               this.onloadPDFFile();
+
                                             })
-                                            this.onloadPDFFile();
+                                            
                                         }}>
                                         <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_BUTTON}</Text>
                                     </TouchableOpacity>
@@ -754,13 +773,16 @@ export default class calendarYearView extends Component {
     }
 
     onloadPDFFile = async () => {
-        console.log("onloadPDFFile",this.state.selectYear)
+        console.log("onloadPDFFile => : ",this.state.selectYear)
         let data = await CalendarPDFAPI(this.state.selectYear, this.state.selectLocation)
+        console.log("dataloadPDFFile => : ",data)
+        console.log("dataloadPDFFile => : ",data)
         code = data[0]
         data = data[1]
 
         ////console.log("onLoadPDFFIle : ", data)
         if (code.SUCCESS == data.code) {
+            
             if (data.data[0].filename == null || data.data[0].filename == 'undefined') {
                 this.onLoadAlertDialog()
             } else {
@@ -804,9 +826,11 @@ export default class calendarYearView extends Component {
     }
 
     onDownloadPDFFile = async (pdfPath, filename) => {
+        console.log('pdfPath : ',pdfPath)
+
         filename = "calendar_" + this.state.selectYear + '.pdf'
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_WORKING_CALENDAR, SharedPreference.profileObject.client_token)
-
+console.log('FUNCTION_TOKEN : ',FUNCTION_TOKEN)
         if (Platform.OS === 'android') {
             this.downloadTask = RNFetchBlob
                 .config({
@@ -816,7 +840,7 @@ export default class calendarYearView extends Component {
                         path: RNFetchBlob.fs.dirs.DownloadDir + '/' + filename,
                         mime: 'application/pdf',
                         title: filename,
-                        description: 'shippingForm'
+                        description: 'shippingForm',
                     },
                     timeout: 15000,
                     overwrite: true
@@ -826,7 +850,7 @@ export default class calendarYearView extends Component {
                     Authorization: FUNCTION_TOKEN
                 })
                 .then((resp) => {
-                    ////console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp);
+                    console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp.data);
                     if (this.state.isLoadingPDF == true) {
                         this.setState({ isLoadingPDF: false })
 
