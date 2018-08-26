@@ -87,21 +87,21 @@ export default class EmpInfoDetail extends Component {
 
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
         
     }
     componentWillUnmount() {
         clearTimeout(this.timer);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
 
     }
-    handleConnectivityChange = isConnected => {
-        this.setState({ isConnected });
-    };
+    // handleConnectivityChange = isConnected => {
+    //     this.setState({ isConnected });
+    // };
     handleBackButtonClick() {
         this.onBack()
         return true;
@@ -141,11 +141,11 @@ export default class EmpInfoDetail extends Component {
             SharedPreference.lastdatetimeinterval = newdate
         }
 
-        this.APIInAppallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
 
     }
 
-    APIInAppallback(data) {
+    APIInAppCallback(data) {
         code = data[0]
         data = data[1]
 
@@ -493,7 +493,7 @@ export default class EmpInfoDetail extends Component {
             return (
 
                 <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10 }}>
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >Hirring</Text>
                         </View>
@@ -502,7 +502,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >Position</Text>
                         </View>
@@ -511,7 +511,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >Group</Text>
                         </View>
@@ -854,14 +854,14 @@ export default class EmpInfoDetail extends Component {
                         <View style={{ flex: 0.3, backgroundColor: '#F20909' }} >
                         </View>
                         <View style={{ flex: 1, backgroundColor: Colors.navColor, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                            <Image
+                            {/* <Image
 
                                 style={{ width: 50, height: 50, borderWidth: 2, borderRadius: 25, borderColor: Colors.backgroundcolor }}
                                 source={require('./../resource/images/people.png')}
                             // resizeMode="contain"
-                            />
+                            /> */}
                         </View>
-                        <View style={{ flex: 5, backgroundColor: Colors.navColor, flexDirection: 'column', }}>
+                        <View style={{ flex: 11, backgroundColor: Colors.navColor, flexDirection: 'column', }}>
                             <View style={{ flex: 0.5 }} />
                             <View style={{ flex: 1, justifyContent: 'center', marginLeft: 10 }}>
                                 <Text style={styles.empInfoLeftText}>{empinfodetail.full_name_en}</Text>

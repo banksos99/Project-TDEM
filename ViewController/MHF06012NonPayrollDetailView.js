@@ -21,42 +21,180 @@ import Decrypt from './../SharedObject/Decryptfun'
 import StringText from './../SharedObject/StringText'
 import moment from 'moment'
 import firebase from 'react-native-firebase';
+import Month from '../constants/Month';
 
 export default class NonpayrollDetailView extends Component {
     constructor(props) {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
-            dataSource: "",
-            monthYear: '',
+           
             isLoading: false,
             dataObject: this.props.navigation.getParam("dataObject", ""),
+            datalist: this.props.navigation.getParam("datalist", ""),
             selectYear: this.props.navigation.getParam("selectYear", ""),
             selectMonth: this.props.navigation.getParam("month", ""),
             badgeData: this.props.navigation.getParam("badgeData", {}),
-
-
+    
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_NON_PAYROLL_DETAIL)
+        this.state.monthYear=Month.monthNames[this.state.selectMonth-1]+' '+this.state.selectYear
 
     }
 
     componentDidMount() {
-        this.loadDataFromAPI()
-    }
-
-    componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        this.settimerInAppNoti()
     }
 
-    // componentWillUnmount() {
-    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    // componentWillMount() {
+    //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     // }
 
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        clearTimeout(this.timer);
+    }
+
     handleBackButtonClick() {
-        // //console.log("handleBackButtonClick")
+        
         this.onBack()
         return true;
+    }
+
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval, 1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+            let dataArray = data.data;
+            for (let index = 0; index < dataArray.length; index++) {
+                const dataReceive = dataArray[index];
+                // //console.log("element ==> ", dataReceive.function_id)
+
+                if (dataReceive.function_id == "PHF06010") {//if nonPayroll
+                    dataListArray = dataReceive.data_list
+
+                    // //console.log("dataListArray ==> ", dataListArray)
+                    for (let index = 0; index < dataListArray.length; index++) {
+                        const str = dataListArray[index];
+                        // //console.log("str ==> ", str)
+                        var res = str.split("|");
+                        // //console.log("res ==> ", res[1])
+                        var data = res[1]
+
+                        var monthYear = data.split("-");
+                        // //console.log("dataListArray ==> monthYear ==> ", monthYear)
+
+                        var year = monthYear[0]
+                        var month = monthYear[1]
+
+                        for (let index = 0; index < dataCustomArray.length; index++) {
+                            const data = dataCustomArray[index];
+                            // //console.log("dataCustomArray data ==> ", data)
+                            // //console.log("dataCustomArray year ==> ", data.year)
+
+                            if (year == data.year) {
+                                const detail = data.detail
+                                // //console.log("detail ==> ", detail)
+                                // //console.log("month select  ==> ", month)
+
+                                let element = detail.find((p) => {
+                                    return p.month === JSON.parse(month)
+                                });
+                                // //console.log("element ==> ", element)
+
+                                element.badge = element.badge + 1
+                                //console.log("detail badge ==> ", element.badge)
+                            }
+                        }
+                    }
+                } else if (dataReceive.function_id == "PHF02010") {
+
+                    console.log("announcement badge ==> ", dataReceive.badge_count)
+
+                    this.setState({
+
+                        notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+                    })
+
+                } else if (dataReceive.function_id == 'PHF05010') {
+                    console.log('new payslip arrive')
+                    this.setState({
+                        notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
+                    }, function () {
+                        dataReceive.data_list.map((item, i) => {
+
+                            SharedPreference.notiPayslipBadge.push(item)
+                            // = dataReceive.data_list
+
+                        })
+                    })
+                    console.log('notiPayslipBadge',SharedPreference.notiPayslipBadge)
+                }
+
+            }
+
+
+            
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
     }
 
     convertDateTime(date) {
@@ -67,45 +205,7 @@ export default class NonpayrollDetailView extends Component {
         })
     }
 
-    loadDataFromAPI = async () => {
-        ////console.log("loadDataFromAPI : ", this.state.selectMonth, " , selectYear : ", this.state.selectYear)
-        this.setState({ isLoading: true })
-        await this.onLoadAPI(this.state.selectMonth, this.state.selectYear)
-    }
-
-    onLoadAPI = async (month, year) => {
-        // SharedPreference.NON_PAYROLL_DETAIL_API
-        let data = await RestAPI(SharedPreference.NON_PAYROLL_DETAIL_API + month + "&year=" + year, SharedPreference.FUNCTIONID_NON_PAYROLL)
-        code = data[0]
-        data = data[1]
-        ////console.log("nonPayRollCallback data : ", data)
-        if (code.SUCCESS == data.code) {
-            this.convertDateTime(data.data.detail[0].pay_date)
-            this.setState({
-                dataSource: data.data,
-                isLoading: false
-            })
-            this.getNonPayrollDetail()
-
-        } else if (code.INVALID_AUTH_TOKEN == data.code) {
-            this.onAutenticateErrorAlertDialog(data)
-
-        } else {
-            Alert.alert(
-                StringText.ALERT_CANNOT_CONNECT_TITLE,
-                StringText.ALERT_CANNOT_CONNECT_DESC,
-                [{
-                    text: 'OK', onPress: () => {
-                        this.setState({
-                            isLoading: false
-                        })
-                    }
-                },
-                ],
-                { cancelable: false }
-            )
-        }
-    }
+    
 
     onAutenticateErrorAlertDialog(error) {
         this.setState({
@@ -119,7 +219,7 @@ export default class NonpayrollDetailView extends Component {
                 text: 'OK', onPress: () => {
                     timerstatus = false
                     SharedPreference.profileObject = null
-                    this.saveProfile.setProfile(null)
+                    //this.saveProfile.setProfile(null)
                     this.props.navigation.navigate('RegisterScreen')
                 }
             }],
@@ -134,7 +234,7 @@ export default class NonpayrollDetailView extends Component {
             const format = 'DD/MM/YYYY'
             detail = []
 
-            let array = this.state.dataSource.detail
+            let array = this.state.dataObject.detail
 
             for (let index = 0; index < array.length; index++) {
                 const element = array[index];
@@ -148,7 +248,7 @@ export default class NonpayrollDetailView extends Component {
                     const item = items[index2];
                     const detail = item.tran_detail;
                     const money = item.nonpay_amt
-                    var decodedString = this.decrypt(money)
+                    var decodedString = Decrypt.decrypt(money)
                     subDetail.push(this.renderSection(detail, decodedString))
                 }
                 detail.push(subDetail);
@@ -162,9 +262,9 @@ export default class NonpayrollDetailView extends Component {
         }
     }
     // return Decrypt.decrypt(code);
-    decrypt(code) {
-        return Decrypt.decrypt(code);
-    }
+    // decrypt(code) {
+    //     return Decrypt.decrypt(code);
+    // }
 
     renderDate(date) {
         return (
@@ -186,26 +286,24 @@ export default class NonpayrollDetailView extends Component {
     }
 
     onBack() {
-        ////console.log("====================")
-        ////console.log("dataResponse : ", this.state.dataObject)
-        ////console.log("selectYear : ", this.state.selectYear)
 
         this.props.navigation.navigate('NonPayrollList', {
-            dataResponse: this.state.dataObject,
+            dataResponse: this.state.datalist,
             selectYear: this.state.selectYear,
             badgeData: this.state.badgeData
-        }
-        );
+        });
     }
 
 
     renderProgressView() {
         if (this.state.isLoading) {
             return (
-                <View style={styles.alertDialogContainer}>
-                    <View style={styles.alertDialogBackgroudAlpha} />
-                    {/* bg */}
-                    <View style={styles.alertDialogContainer}>
+                <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
+                    <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
+
+                    </View>
+
+                    <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <ActivityIndicator />
                     </View>
                 </View>

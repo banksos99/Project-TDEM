@@ -20,11 +20,12 @@ import {
 import Colors from "./../SharedObject/Colors"
 import { styles } from "./../SharedObject/MainStyles"
 import SharedPreference from "./../SharedObject/SharedPreference"
+import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 //monthNames
 let MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-let selectmonth=0;
+let selectmonth = 0;
 
 export default class OTSummaryDetail extends Component {
 
@@ -52,7 +53,7 @@ export default class OTSummaryDetail extends Component {
             deductBG: Colors.pink,
             deductText: Colors.lightred,
             bordercolor: Colors.greenTextColor,
-            isConnected: true,
+            // isConnected: true,
             months: [],
             tdataSource: {},
             headerdataSource: {},
@@ -70,23 +71,90 @@ export default class OTSummaryDetail extends Component {
 
 
     }
-    componentWillMount() {
+
+    componentDidMount() {
+        this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
 
     componentWillUnmount() {
-        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        clearTimeout(this.timer);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
-    handleConnectivityChange = isConnected => {
-        this.setState({ isConnected });
-    };
+    // handleConnectivityChange = isConnected => {
+    //     this.setState({ isConnected });
+    // };
     handleBackButtonClick() {
         this.onBack()
         return true;
     }
 
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
 
     checkDataFormat(DataResponse) {
        
@@ -147,10 +215,6 @@ export default class OTSummaryDetail extends Component {
       //  this.state.announcementType = initannouncementType;
         this.state.tempannouncementTypetext= initannouncementType;
         console.log('initannouncementType : ',initannouncementType)
-
-
-
-
     }
 
     _onRefresh() {
@@ -255,11 +319,7 @@ export default class OTSummaryDetail extends Component {
 
                 data.data[0].code,
                 data.data[0].detail,
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log('OK Pressed')
-                    }
-                }],
+                [{ text: 'OK', onPress: () => { } }],
                 { cancelable: false }
             )
 
@@ -275,8 +335,21 @@ export default class OTSummaryDetail extends Component {
 
 
         } else {
-            this.onLoadErrorAlertDialog(data)
+
+            Alert.alert(
+
+                error.data[0].code,
+                error.data[0].detail,
+                [{
+                    text: 'OK', onPress: () => {
+    
+                    }
+                }],
+                { cancelable: false }
+            )
+
         }
+
         this.setState({
            
             isscreenloading: false,
@@ -310,44 +383,25 @@ export default class OTSummaryDetail extends Component {
         )
     }
 
-    cutDigit() {
-
-
-    }
-
+    
     onLoadErrorAlertDialog(error) {
-        this.setState({
-            isscreenloading: false,
-        })
-        //console.log("isConnected : ", this.state.isConnected)
-        if (this.state.isConnected) {
-            Alert.alert(
-                // 'MHF00001ACRI',
-                // 'Cannot connect to server. Please contact system administrator.',
-                error.data[0].code,
-                error.data[0].detail,
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log('OK Pressed')
-                    }
-                }],
-                { cancelable: false }
-            )
-        } else {
-            Alert.alert(
-                // 'MHF00002ACRI',
-                // 'System Error (API). Please contact system administrator.',
-                'MHF00500AERR',
-                'Cannot connect to the internet.',
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log("onLoadErrorAlertDialog")
-                    }
-                }],
-                { cancelable: false }
-            )
-        }
-        //console.log("error : ", error)
+        // this.setState({
+        //     isscreenloading: false,
+        // })
+        // //console.log("isConnected : ", this.state.isConnected)
+
+        Alert.alert(
+
+            error.data[0].code,
+            error.data[0].detail,
+            [{
+                text: 'OK', onPress: () => {
+
+                }
+            }],
+            { cancelable: false }
+        )
+
     }
 
 
@@ -393,6 +447,7 @@ export default class OTSummaryDetail extends Component {
             this.setState(this.renderloadingscreen())
         });
     }
+
     cancel_select_change_month_andr(){
         
         // console.log('tempannouncementType =>', tempannouncementType)
@@ -405,6 +460,7 @@ export default class OTSummaryDetail extends Component {
          })
  
      }
+
     cancel_select_change_month = () => {
         
         console.log('tempannouncementType =>', tempannouncementType)
@@ -451,51 +507,50 @@ export default class OTSummaryDetail extends Component {
 
     }
 
-    selected_month(monthselected,index) {
+    selected_month(monthselected, index) {
 
-        ////console.log('monthselected : ',monthselected)
-        initannouncementType = monthselected
-        selectmonth = index;
-        this.setState({
-            announcementTypetext: monthselected,
-            loadingtype: 1,
-            isscreenloading: true,
+        if (SharedPreference.isConnected) {
 
-        }, function () {
+            initannouncementType = monthselected
+            selectmonth = index;
+            this.setState({
+                announcementTypetext: monthselected,
+                loadingtype: 1,
+                isscreenloading: true,
 
-            let tdate = initannouncementType.split(' ')
-            let mdate = 0;
+            }, function () {
 
-            for (let i = 0; i < 12; i++) {
-                if (MONTH_LIST[i] === tdate[0]) {
-                    //console.log('month : ', i)
-                    mdate = i;
+                let tdate = initannouncementType.split(' ')
+                let mdate = 0;
+
+                for (let i = 0; i < 12; i++) {
+                    if (MONTH_LIST[i] === tdate[0]) {
+                        //console.log('month : ', i)
+                        mdate = i;
+                    }
                 }
-            }
 
-            this.setState(this.renderloadingscreen())
+                this.loadOTSummarySelffromAPI(mdate + 1, tdate[1])
 
-            this.loadOTSummarySelffromAPI(mdate + 1, tdate[1])
+            });
+        } else {
 
-        });
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+        }
 
     }
+
     renderpickerview() {
 
-        // if (Platform.OS === 'android') {
-
-        //     return (
-        //         <View>
-        //         </View>
-        //     )
-
-        // } else 
         if (this.state.loadingtype == 0) {
 
-            
-
             if (Platform.OS === 'android') {
-                ////console.log('android selectmonth')
+
                 return (
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
@@ -506,7 +561,7 @@ export default class OTSummaryDetail extends Component {
                                 {
                                     this.state.months.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
-                                            onPress={() => { this.selected_month(item,index) }}
+                                            onPress={() => { this.selected_month(item, index) }}
                                             key={index + 100}>
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
                                                 <Text style={index === selectmonth ?
@@ -530,7 +585,7 @@ export default class OTSummaryDetail extends Component {
 
             }
 
-            
+
 
             return (
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
@@ -539,7 +594,7 @@ export default class OTSummaryDetail extends Component {
                             <Text style={styles.titlepicker}>Select Month and Year</Text>
                         </View>
                         <Picker
-                         
+
                             selectedValue={this.state.announcementType}
                             onValueChange={(itemValue, itemIndex) => this.setState({
                                 announcementType: itemValue,
@@ -558,7 +613,7 @@ export default class OTSummaryDetail extends Component {
                         <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
                                 onPress={(this.cancel_select_change_month)}>
-                            >
+                                >
                                 <Text style={styles.buttonpicker}> Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 3, justifyContent: 'center' }} />
@@ -631,7 +686,7 @@ export default class OTSummaryDetail extends Component {
         return (
 
             <View style={{ flex: 16, backgroundColor: 'white', alignItems: 'center' }} key={1000}>
-                <Text style={styles.otsummarynoresulttext}> No result</Text>
+                <Text style={styles.otsummarynoresulttext}> No Result</Text>
             </View>
 
         )

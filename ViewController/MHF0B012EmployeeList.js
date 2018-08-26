@@ -104,8 +104,23 @@ export default class OrganizationStruct extends Component {
     }
 
     loadOrgStructureDetailAPI = async () => {
-        let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
-        this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_EMPLOYEE_INFORMATION))
+
+        if (SharedPreference.isConnected) {
+
+            let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
+            this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_EMPLOYEE_INFORMATION))
+       
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+
+            )
+        }
+
     }
 
     APICallback(data) {
@@ -157,7 +172,7 @@ export default class OrganizationStruct extends Component {
                     timerstatus = false
                     SharedPreference.Handbook = []
                     SharedPreference.profileObject = null
-                    this.saveProfile.setProfile(null)
+                   // this.saveProfile.setProfile(null)
                     this.props.navigation.navigate('RegisterScreen')
                 }
             }],

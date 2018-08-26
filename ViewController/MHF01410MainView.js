@@ -69,7 +69,7 @@ export default class HMF01011MainView extends Component {
             announcementTypetext: initannouncementTypetext,
             announcementStatus: initannouncementStatus,
             announcementStatustext: initannouncementStatustext,
-            isConnected: true,
+           
             refreshing: false,
             loadmore: false,
             announcepage: 0,
@@ -87,7 +87,6 @@ export default class HMF01011MainView extends Component {
         }
 
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
-        inappTimeIntervalStatus = true
         rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
         rolemanagementManager = [0, 0, 0, 0];
         managerstatus = 'N';
@@ -157,6 +156,7 @@ export default class HMF01011MainView extends Component {
             }
         }
 
+
     }
 
     componentWillMount() {
@@ -176,6 +176,7 @@ export default class HMF01011MainView extends Component {
     }
 
     loadData = async () => {
+
         let autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
         if (autoSyncCalendarBool == null) {
             autoSyncCalendarBool = true
@@ -189,11 +190,11 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    async componentDidMount() {
+    componentDidMount() {
 
         //this.inappTimeInterval()
 
-        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        
 
         if (SharedPreference.notipayslipID) {
 
@@ -205,22 +206,25 @@ export default class HMF01011MainView extends Component {
 
         }
 
-        await this.loadData()
+        this.loadData()
 
     }
+
     componentWillUnmount() {
 
         clearTimeout(this.timer);
 
         SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge;
 
-        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        
 
         //SharedPreference.notipayslipID = 0
 
         //SharedPreference.notiAnnounceMentID = 0
     }
+
     onLoadInAppNoti = async () => {
+
         let lastTime = await this.saveTimeNonPayroll.getTimeStamp()
 
         if ((lastTime == null) || (lastTime == undefined)) {
@@ -236,8 +240,6 @@ export default class HMF01011MainView extends Component {
             }
         }
         console.log("onLoadInAppNoti ==> ", lastTime)
-        console.log("inappTimeIntervalStatus ==> ", inappTimeIntervalStatus)
-
 
         if (!SharedPreference.lastdatetimeinterval) {
             let today = new Date()
@@ -262,13 +264,12 @@ export default class HMF01011MainView extends Component {
             .then((responseJson) => {
                 // console.log("onLoadInAppNoti")
                 console.log("responseJson ==> ", responseJson)
+                console.log("firebase token ==> ", SharedPreference.deviceInfo.firebaseToken)
                 try {
 
                     if (responseJson.status == 403) {
 
                         this.onAutenticateErrorAlertDialog()
-
-                        inappTimeIntervalStatus = false
 
                     } else if (responseJson.status == 200) {
 
@@ -385,9 +386,7 @@ export default class HMF01011MainView extends Component {
             });
     }
 
-    handleConnectivityChange = isConnected => {
-        this.setState({ isConnected });
-    };
+    
 
     _loadResourcesAsync = async () => {
         return Promise.all([
@@ -421,18 +420,32 @@ export default class HMF01011MainView extends Component {
             }));
         });
     }
+
     _onLoadMore() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3,
-            loadmore: true,
 
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadAnnouncementMorefromAPI()
-            // this.temploadAnnouncementMorefromAPI()
+        if (SharedPreference.isConnected) {
 
-        });
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3,
+                loadmore: true,
+
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadAnnouncementMorefromAPI()
+                // this.temploadAnnouncementMorefromAPI()
+
+            });
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+
+        }
+
     }
 
     loadAnnouncementfromAPI = async () => {
@@ -641,7 +654,9 @@ export default class HMF01011MainView extends Component {
         }
 
         let hostApi = SharedPreference.ANNOUNCEMENT_ASC_API + '&offset=' + announcementData.length + '&limit=' + ROLL_ANNOUNCE
+        
         if (ascendingSort) {
+
             hostApi = SharedPreference.ANNOUNCEMENT_DSC_API + '&offset=' + announcementData.length + '&limit=' + ROLL_ANNOUNCE
         }
 
@@ -835,7 +850,7 @@ export default class HMF01011MainView extends Component {
             const _format = 'YYYY-MM-DD hh:mm:ss'
             const nowDateTime = moment(today).format(_format).valueOf();
             this.saveTimeNonPayroll.setTimeStamp(nowDateTime)
-
+console.log("non payroll dataSource ==> ", data.data)
             this.props.navigation.navigate('NonPayrollList', {
                 dataResponse: data.data,
                 badgeArray: this.state.nonPayrollBadge
@@ -926,8 +941,6 @@ export default class HMF01011MainView extends Component {
             });
     }
 
-
-
     loadPayslipfromAPI = async () => {
 
         this.APIPayslipCallback(await RestAPI(SharedPreference.PAYSLIP_LIST_API, SharedPreference.FUNCTIONID_PAYSLIP), 'PayslipList')
@@ -1013,27 +1026,25 @@ export default class HMF01011MainView extends Component {
 
     loadOrgStructerfromAPI = async () => {
 
-
         let url = SharedPreference.ORGANIZ_STRUCTURE_API + orgcode
-        //console.log('org url : ', url);
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE), 'OrgStructure', 1)
     }
 
     loadOrgStructerClockInOutfromAPI = async () => {
+
         let url = SharedPreference.ORGANIZ_STRUCTURE_API + orgcode
-        //console.log('org url : ', url);
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE), 'OrgStructure', 2)
     }
 
     loadOrgStructerOTAveragefromAPI = async () => {
+
         let url = SharedPreference.ORGANIZ_STRUCTURE_OT_API + orgcode
-        //console.log('org url : ', url);
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE), 'OrganizationOTStruct', 1)
     }
 
     loadOrgStructerOTHistoryfromAPI = async () => {
+
         let url = SharedPreference.ORGANIZ_STRUCTURE_OT_API + orgcode
-        //console.log('org url : ', url);
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE), 'OrganizationOTStruct', 2)
     }
 
@@ -1145,41 +1156,28 @@ export default class HMF01011MainView extends Component {
         this.setState({
             isscreenloading: false,
         })
-        // //console.log('error message : ',error.data[0])
-        if (this.state.isConnected) {
-            Alert.alert(
-                // 'MHF00001ACRI',
-                // 'Cannot connect to server. Please contact system administrator.',
-                error.data[0].code,
-                error.data[0].detail,
 
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log('OK Pressed')
-                    }
-                }],
-                { cancelable: false }
-            )
-        } else {
-            //inter net not connect
-            Alert.alert(
-                'MHF00500AERR',
-                'Cannot connect to the internet.',
-                [{
-                    text: 'OK', onPress: () => {
-                    }
-                }],
-                { cancelable: false }
-            )
-        }
+        Alert.alert(
+
+            error.data[0].code,
+            error.data[0].detail,
+
+            [{
+                text: 'OK', onPress: () => {
+                    //console.log('OK Pressed')
+                }
+            }],
+            { cancelable: false }
+        )
     }
 
 
     loadLeaveQuotafromAPI = async () => {
+
         let data = await RestAPI(SharedPreference.LEAVE_QUOTA_API, SharedPreference.FUNCTIONID_LEAVE_QUOTA)
         code = data[0]
         data = data[1]
-        ////console.log("nonPayRollCallback data : ", data)
+
         this.setState({
             isscreenloading: false,
         })
@@ -1190,19 +1188,6 @@ export default class HMF01011MainView extends Component {
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
             this.onAutenticateErrorAlertDialog(data)
-
-            // } else if (code.NODATA == data.code) {
-
-            //     Alert.alert(
-            //         StringText.ALERT_NONPAYROLL_NODATA_TITLE,
-            //         StringText.ALERT_NONPAYROLL_NODATA_TITLE,
-            //         [{
-            //             text: 'OK', onPress: () => {
-
-            //             }
-            //         }],
-            //         { cancelable: false }
-            //     )
 
         } else {
 
@@ -1318,44 +1303,178 @@ export default class HMF01011MainView extends Component {
     }
 
     onOpenEmployeeInfo() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadEmployeeInfoformAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.loadEmployeeInfoformAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
     }
 
     onOpenNonpayroll() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadNonpayrollfromAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.loadNonpayrollfromAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
     }
 
     onOpenPayslip() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadPayslipfromAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.loadPayslipfromAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
     }
 
-    onOpenPayslipDetail() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadPayslipDetailfromAPI()
-        });
+    onOpenLeaveQuota() {
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadLeaveQuotafromAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
     }
+
+    onOpenClockInOut() {
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadClockInOutDetailfromAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
+    }
+
+    onOpenOTSummarySelf() {
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadOTSummarySelffromAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
+    }
+
+    onOpenCalendar() {
+
+        if (SharedPreference.isConnected) {
+
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadCalendarfromAPI()
+            });
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
+    }
+
+    onOpenHandbook() {
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadHandbooklistfromAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
+    }
+
+//*********** push notification */
+
+
+    onOpenPayslipDetail() {
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadPayslipDetailfromAPI()
+            });
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+        }
+    }
+
     onOpenAnnouncementDetailnoti() {
         //console.log("onOpenAnnouncementDetailnoti")
         this.setState({
@@ -1367,55 +1486,7 @@ export default class HMF01011MainView extends Component {
         });
     }
 
-    onOpenLeaveQuota() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadLeaveQuotafromAPI()
-        });
-    }
-
-    onOpenClockInOut() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadClockInOutDetailfromAPI()
-        });
-    }
-
-    onOpenOTSummarySelf() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadOTSummarySelffromAPI()
-        });
-    }
-
-    onOpenCalendar() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadCalendarfromAPI()
-        });
-    }
-
-    onOpenHandbook() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadHandbooklistfromAPI()
-        });
-    }
+    //************** orgstructure 
 
     onOpenOrgStruct() {
         this.setState({
@@ -1461,17 +1532,10 @@ export default class HMF01011MainView extends Component {
     }
 
     settabscreen(tabnumber) {
-        //console.log('tabnumber : ', tabnumber)
+   
         if (tabnumber === 1) {
-            // check permission announcement
-            // if (announcestatus == 'N') {
-            //     return
-            // }
-            //load data befor open announcement screen in first time
-            if (announcementData.length) {
-                page = tabnumber
 
-            } else {
+            if (SharedPreference.isConnected) {
                 page = tabnumber
                 this.setState({
 
@@ -1479,9 +1543,17 @@ export default class HMF01011MainView extends Component {
                     loadingtype: 3
                 }, function () {
                     this.loadAnnouncementfromAPI()
-                    // this.temploadAnnouncementfromAPI()
                 });
+            } else {
+
+                Alert.alert(
+                    StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                    StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                    [{text: 'OK', onPress: () => {}}],{ cancelable: false }
+                )
+                return
             }
+
         } if (tabnumber === 3) {
             if (settingstatus == 'N') {
                 return
@@ -1679,6 +1751,7 @@ export default class HMF01011MainView extends Component {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
                 <View style={styles.mainmenutabbarstyle} />
+                {/* <View style={styles.mainmenutabbarstyle} /> */}
                 <View style={styles.mainscreen}>
                     <Image
                         style={{ flex: 1 }}
@@ -1687,7 +1760,7 @@ export default class HMF01011MainView extends Component {
                     />
                     <View style={{ position: 'absolute', height: '40%', width: '80%', marginTop: '7%', marginLeft: '6%' }}>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
 
                                 <Image
 
@@ -2493,19 +2566,14 @@ export default class HMF01011MainView extends Component {
 
     onChangePIN() {
 
-        if (this.state.isConnected) {
+        if (SharedPreference.isConnected) {
             this.props.navigation.navigate('ChangePINScreen')
         } else {
             //TODO Bell
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{
-                    text: 'OK', onPress: () => {
-
-                    }
-                }],
-                { cancelable: false }
+                [{text: 'OK', onPress: () => {}}],{ cancelable: false }
             )
         }
     }

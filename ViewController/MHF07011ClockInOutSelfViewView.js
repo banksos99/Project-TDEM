@@ -16,7 +16,8 @@ import {
     ActivityIndicator,
     Alert,
     moment,
-    BackHandler
+    BackHandler,
+    NetInfo
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -36,6 +37,7 @@ let daymonth;
 let currentday;
 let currentmonth;
 let initannouncementType;
+let selectmonth = 0;
 
 export default class ClockInOutSelfView extends Component {
 
@@ -97,16 +99,22 @@ export default class ClockInOutSelfView extends Component {
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_CLOCK_IN_OUT_SELF)
     }
 
-
-    componentWillMount() {
+    componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
         this.settimerInAppNoti()
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
         clearTimeout(this.timer);
     }
+
+    // handleConnectivityChange = isConnected => {
+    //     this.setState({ isConnected });
+        
+    // };
 
     handleBackButtonClick() {
         this.onBack()
@@ -129,11 +137,11 @@ export default class ClockInOutSelfView extends Component {
             SharedPreference.lastdatetimeinterval = newdate
         }
 
-        this.APIInAppallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
 
     }
 
-    APIInAppallback(data) {
+    APIInAppCallback(data) {
         code = data[0]
         data = data[1]
 
@@ -466,77 +474,74 @@ export default class ClockInOutSelfView extends Component {
 
     onLoadErrorAlertDialog(error) {
 
-        if (this.state.isConnected) {
+        Alert.alert(
+            'MHF00001ACRI',
+            'Cannot connect to server. Please contact system administrator.',
+            [{
+                text: 'OK', onPress: () => {
+                    //console.log('OK Pressed')
+                }
+            }],
+            { cancelable: false }
+        )
+
+    }
+
+    //Event Show Pickerview select date
+    select_month() {
+
+        if (SharedPreference.isConnected) {
+
+            tempannouncementType = this.state.announcementType
+            this.setState({
+                loadingtype: 0,
+                isscreenloading: true,
+
+            }, function () {
+
+            });
+        } else {
 
             Alert.alert(
-                'MHF00001ACRI',
-                'Cannot connect to server. Please contact system administrator.',
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log('OK Pressed')
-                    }
-                }],
-                { cancelable: false }
-            )
-        } else {
-            Alert.alert(
-                'MHF00002ACRI',
-                'System Error (API). Please contact system administrator.',
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log("onLoadErrorAlertDialog")
-                    }
-                }],
-                { cancelable: false }
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
             )
         }
-        //console.log("error : ", error)
     }
 
-
-    select_month() {
-        tempannouncementType = this.state.announcementType
-        this.setState({
-
-            loadingtype: 0,
-            isscreenloading: true,
-
-        }, function () {
-
-            this.setState(this.renderloadingscreen())
-        });
-    }
+    //***** Evant Close Pickerview select date for IOS
     cancel_select_change_month = () => {
-        
-       // console.log('tempannouncementType =>', tempannouncementType)
 
         this.setState({
-           announcementType: tempannouncementType,
+            announcementType: tempannouncementType,
             loadingtype: 1,
             isscreenloading: false,
 
         })
 
     }
-    cancel_select_change_month_andr(){
+
+    //***** Evant Cloce Pickerview select date for Android
+    cancel_select_change_month_andr() {
         
-        // console.log('tempannouncementType =>', tempannouncementType)
- 
          this.setState({
-           // announcementType: tempannouncementType,
+
              loadingtype: 1,
              isscreenloading: false,
  
          })
  
      }
+
+     // ****** Function change data when select Month and Year for IOS
     select_month_clockinout() {
 
-      
         this.setState({
             loadingtype: 1,
             isscreenloading: true,
-            announcementTypetext:this.state.tempannouncementTypetext
+            announcementTypetext: this.state.tempannouncementTypetext
 
         }, function () {
             initannouncementType = tempinitannouncementType;
@@ -544,79 +549,90 @@ export default class ClockInOutSelfView extends Component {
             let tdate = initannouncementType.split(' ')
             let mdate = 0;
 
-            //console.log('month : ', tdate[0])
-
             for (let i = 0; i < 12; i++) {
                 if (Months.monthNames[i] === tdate[0]) {
-                    //console.log('month : ', i)
                     mdate = i;
                 }
             }
-            //console.log('month select  : ', mdate)
-            //console.log('year : ', tdate[1])
-
-            this.setState(this.renderloadingscreen())
-
-            this.loadClockInOutfromAPI(mdate + 1, tdate[1])
-        });
-
-    }
-    select_month_clockinout_and(item) {
-
-        this.setState({
-
-            // announcementType: month,
-            loadingtype: 1,
-            isscreenloading: true,
-
-            announcementTypetext: item
-            // isscreenloading: false,
-
-        }, function () {
-
-            let tdate = item.split(' ')
-            let mdate = 0;
-
-            //console.log('month : ', tdate[0])
-
-            for (let i = 0; i < 12; i++) {
-                if (Months.monthNames[i] === tdate[0]) {
-                    //console.log('month : ', i)
-                    mdate = i;
-                }
-            }
-            //console.log('month select  : ', mdate)
-            //console.log('year : ', tdate[1])
-
-            this.setState(this.renderloadingscreen())
 
             this.loadClockInOutfromAPI(mdate + 1, tdate[1])
         });
 
     }
 
-    conv(date) {
+    // ****** Function change data when select Month and Year for Android
+    select_month_clockinout_and(item, index) {
+
+        if (SharedPreference.isConnected) {
+
+            selectmonth = index;
+
+            this.setState({
+                // announcementType: month,
+                loadingtype: 1,
+                isscreenloading: true,
+                announcementTypetext: item
+
+            }, function () {
+
+                let tdate = item.split(' ')
+                let mdate = 0;
+
+                for (let i = 0; i < 12; i++) {
+                    if (Months.monthNames[i] === tdate[0]) {
+                        mdate = i;
+                    }
+                }
+                this.loadClockInOutfromAPI(mdate + 1, tdate[1])
+            });
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+        }
+
+    }
+
+    //Function change formate date
+    changeformatdata(date) {
 
         if (date == '-') {
-
             return date
         } else if (parseInt(date)) {
             let arr = date.split(':');
-
             return parseInt(arr[0]) + ':' + arr[1]
         }
         return '-'
 
     }
 
+    renderloadingscreen() {
 
+        if (this.state.isscreenloading) {
+
+            return (
+                <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
+                    <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
+
+                    </View>
+                    {this.renderpickerview()}
+                </View>
+            )
+        }
+
+    }
 
     renderpickerview() {
 
         if (this.state.loadingtype == 0) {
 
             if (Platform.OS === 'android') {
-                ////console.log('android selectmonth')
+       
                 return (
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
@@ -627,10 +643,12 @@ export default class ClockInOutSelfView extends Component {
                                 {
                                     this.state.months.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
-                                            onPress={() => { this.select_month_clockinout_and(item) }}
+                                            onPress={() => { this.select_month_clockinout_and(item,index) }}
                                             key={index + 100}>
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
-                                                <Text style={{ textAlign: 'center', fontSize: 10 * scale, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                <Text style={index === selectmonth ?
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
@@ -695,47 +713,21 @@ export default class ClockInOutSelfView extends Component {
 
     }
 
-    renderloadingscreen() {
-
-        if (this.state.isscreenloading) {
-
-            return (
-                <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
-                    <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
-
-                    </View>
-                    {this.renderpickerview()}
-                </View>
-            )
-        }
-
-    }
+    
     renderdetail() {
-        //console.log('weakday : ', (firstday + 1) % 7)
+
+        //Calaulate offset y of scrollview content when select currence Month and Year
         let offsety = 0;
         if (this.state.initialmonth + 2 === this.state.monthselected) {
-
-            //console.log('scroll hight : ', Layout.window.height - 100)
-            //console.log('content height : ', this.state.tdataSource.length * 90)
-            //console.log('currentday : ', (currentday + 1) * 90)
-            //console.log('offsety : ', offsety)
-
-          //  offsety = ((currentday * 90) - 220)
-
             let half = (Layout.window.height - 100) / 2
             offsety = ((currentday + 1) * 90) - half
             if (offsety > (this.state.tdataSource.length * 90) - (Layout.window.height - 100)) {
                 offsety = (this.state.tdataSource.length * 90) - (Layout.window.height - 100)
-
-            } else if (((currentday + 1) * 90)  < ((Layout.window.height - 100 )/ 2)) {
-
-                //offsety = ((currentday ) * 90) 
+            } else if (((currentday + 1) * 90) < ((Layout.window.height - 100) / 2)) {
                 offsety = 0
             }
-            
-        }
 
-       // Layout.window.height - 100 
+        }
 
         return (
             <View style={{ flex: 16, backgroundColor: Colors.calendarLocationBoxColor, }}>
@@ -751,16 +743,13 @@ export default class ClockInOutSelfView extends Component {
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', }}>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
                                         <Text style={item.datetype === 'Y' ? styles.clockinoutdaybluetext :
-                                            item.datetype === 'N' ? styles.clockinoutdayredtext : styles.clockinoutdaytext
-
-                                        }
-                                        >
+                                            item.datetype === 'N' ? styles.clockinoutdayredtext : styles.clockinoutdaytext}>
                                             {index + 1}
                                         </Text >
                                         <Text style={item.datetype === 'Y' ? styles.clockinoutweakdaybluetext :
-                                             item.datetype === 'N' ? styles.clockinoutweakdayredtext : styles.clockinoutweakdaytext
-                                        }>
-                                            {Months.dayNamesShortMonthView[(firstday + index) % 7]}</Text>
+                                            item.datetype === 'N' ? styles.clockinoutweakdayredtext : styles.clockinoutweakdaytext}>
+                                            {Months.dayNamesShortMonthView[(firstday + index) % 7]}
+                                        </Text>
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
                                         <Text style={styles.clockinoutweakdayalphatext}>SHIFT</Text>
@@ -768,16 +757,20 @@ export default class ClockInOutSelfView extends Component {
                                         <Text style={styles.clockinoutweakdayalphatext}>ACTUAL</Text>
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}>{this.conv(item.workstart)}</Text>
+                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}>
+                                            {this.changeformatdata(item.workstart)}
+                                        </Text>
                                         <Text style={styles.clockinoutweakdayalphatext} />
                                         <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : item.actualstart === '-' && item.workstart != '-' ?
                                             styles.clockinoutbodyredtext :
-                                            item.late === 1 && item.datetype === 'W'? styles.clockinoutbodyredtext : styles.clockinoutbodytext}>
+                                            item.late === 1 && item.datetype === 'W' ? styles.clockinoutbodyredtext : styles.clockinoutbodytext}>
 
-                                            {this.conv(item.actualstart)}</Text>
+                                            {this.changeformatdata(item.actualstart)}</Text>
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}>{this.conv(item.workend)}</Text>
+                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}>
+                                            {this.changeformatdata(item.workend)}
+                                        </Text>
                                         <Text style={styles.clockinoutweakdayalphatext} />
                                         <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ?
                                             styles.clockinoutbodyhidetext :
@@ -786,7 +779,7 @@ export default class ClockInOutSelfView extends Component {
                                                 item.early === 1 && item.datetype === 'W'? styles.clockinoutbodyredtext :
                                                     styles.clockinoutbodytext}>
 
-                                            {this.conv(item.actualend)}</Text>
+                                            {this.changeformatdata(item.actualend)}</Text>
                                     </View>
                                 </View>
                                 <View style={{ height: 1, backgroundColor: Colors.lightGrayTextColor, }} />

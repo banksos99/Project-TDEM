@@ -12,7 +12,8 @@ import {
     Platform,
     PermissionsAndroid,
     Alert,
-    BackHandler
+    BackHandler,
+    NetInfo
 } from 'react-native';
 
 import Colors from "../SharedObject/Colors"
@@ -29,6 +30,7 @@ let scale = Layout.window.width / 320;
 import Authorization from '../SharedObject/Authorization'
 import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
+import RestAPI from "../constants/RestAPI"
 
 export default class PayslipDetail extends Component {
 
@@ -61,21 +63,33 @@ export default class PayslipDetail extends Component {
             DataResponse: this.props.navigation.getParam("DataResponse", ""),
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_PAYSLIP_DETAIL)
-        // console.log('yearlist => ',this.state.yearlist) 
-        // console.log('datadetail => ',this.state.datadetail) 
-        // console.log('roll ID => ',this.state.yearlist[this.state.selectedindex]) 
+     
     }
 
-    componentWillMount() {
+    componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        this.settimerInAppNoti()
     }
  
     componentWillUnmount() {
        
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        clearTimeout(this.timer);
     }
- 
+
+    // handleConnectivityChange = isConnected => {
+    //     this.setState({ isConnected });
+    // };
+
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
     handleBackButtonClick() {
         this.onBack()
         return true;
@@ -97,122 +111,256 @@ export default class PayslipDetail extends Component {
         // }
 
     }
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+            for (let index = 0; index < dataArray.length; index++) {
+                const dataReceive = dataArray[index];
+                // //console.log("element ==> ", dataReceive.function_id)
+
+                if (dataReceive.function_id == "PHF06010") {//if nonPayroll
+                    dataListArray = dataReceive.data_list
+
+                    // //console.log("dataListArray ==> ", dataListArray)
+                    for (let index = 0; index < dataListArray.length; index++) {
+                        const str = dataListArray[index];
+                        // //console.log("str ==> ", str)
+                        var res = str.split("|");
+                        // //console.log("res ==> ", res[1])
+                        var data = res[1]
+
+                        var monthYear = data.split("-");
+                        // //console.log("dataListArray ==> monthYear ==> ", monthYear)
+
+                        var year = monthYear[0]
+                        var month = monthYear[1]
+
+                        for (let index = 0; index < dataCustomArray.length; index++) {
+                            const data = dataCustomArray[index];
+                            // //console.log("dataCustomArray data ==> ", data)
+                            // //console.log("dataCustomArray year ==> ", data.year)
+
+                            if (year == data.year) {
+                                const detail = data.detail
+                                // //console.log("detail ==> ", detail)
+                                // //console.log("month select  ==> ", month)
+
+                                let element = detail.find((p) => {
+                                    return p.month === JSON.parse(month)
+                                });
+                                // //console.log("element ==> ", element)
+
+                                element.badge = element.badge + 1
+                                //console.log("detail badge ==> ", element.badge)
+                            }
+                        }
+                    }
+                } else if (dataReceive.function_id == "PHF02010") {
+
+                    console.log("announcement badge ==> ", dataReceive.badge_count)
+
+                    this.setState({
+
+                        notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+                    })
+
+                } else if (dataReceive.function_id == 'PHF05010') {
+                    console.log('new payslip arrive')
+                    this.setState({
+                        notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
+                    }, function () {
+                        dataReceive.data_list.map((item, i) => {
+
+                            SharedPreference.notiPayslipBadge.push(item)
+                            // = dataReceive.data_list
+
+                        })
+                    })
+                    console.log('notiPayslipBadge',SharedPreference.notiPayslipBadge)
+                }
+
+            }
+
+
+            
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
 
     onDownloadPDFFile = async () => {
 
-        this.setState({
+        if (SharedPreference.isConnected) {
 
-            isscreenloading: true,
-       
-            // dataSource: responseJson.results,
-            // datadetail: PayslipDataDetail.detail[this.state.Monthlist[this.state.monthselected].id]
+            this.setState({
 
-        }, function () {
+                isscreenloading: true,
 
-            // //console.log('data response : ', this.state.datadetail.data.detail.deduct);
-            //console.log('data detail :', responseJson)
+                // dataSource: responseJson.results,
+                // datadetail: PayslipDataDetail.detail[this.state.Monthlist[this.state.monthselected].id]
 
-            this.setState(this.renderloadingscreen())
-        });
+            }, function () {
 
-        PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.rollid
-        pdfPath = PAYSLIP_DOWNLOAD_API
+            });
+
+            PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.yearlist[this.state.selectedindex].rollID
+            pdfPath = PAYSLIP_DOWNLOAD_API
 
 
-     //   let yearSelect = this.state.initialyear - this.state.yearselected
-     //   let yearstr = this.state.initialyear - this.state.yearselected
+            //   let yearSelect = this.state.initialyear - this.state.yearselected
+            //   let yearstr = this.state.initialyear - this.state.yearselected
 
-        filename = "Payslip_" + this.state.yearArray[this.state.monthselected] + "_" + this.state.yearlist[this.state.selectedindex].year + '.pdf'
-        FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_PAYSLIP, SharedPreference.profileObject.client_token)
-        console.log("FUNCTIONID_PAYSLIP ==> rollid  : ", this.state.rollid)
-        console.log("FUNCTIONID_PAYSLIP ==> filename  : ", filename)
-        console.log("FUNCTIONID_PAYSLIP ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
-        if (Platform.OS === 'android') {
-            RNFetchBlob
-                .config({
-                    addAndroidDownloads: {
-                        useDownloadManager: true,
-                        notification: false,
-                        path: RNFetchBlob.fs.dirs.DownloadDir + '/' + filename,
-                        mime: 'application/pdf',
-                        title: filename,
-                        description: 'shippingForm'
-                    }
-                })
-                .fetch('GET', pdfPath, {
-                    'Content-Type': 'application/pdf;base64',
-                    Authorization: FUNCTION_TOKEN
-                })
-                .then((resp) => {
-                    ////console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp);
-                    RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf')
-                })
-                .catch((errorCode, errorMessage) => {
-                    ////console.log("Android ==> LoadPDFFile ==> Load errorCode  : ", errorCode);
-                    Alert.alert(
-                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
-                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
-                        [
+            filename = "Payslip_" + this.state.yearArray[this.state.monthselected] + "_" + this.state.yearlist[this.state.selectedindex].year + '.pdf'
+            FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_PAYSLIP, SharedPreference.profileObject.client_token)
+            console.log("FUNCTIONID_PAYSLIP ==> PAYSLIP_DOWNLOAD_API  : ", PAYSLIP_DOWNLOAD_API)
+            console.log("FUNCTIONID_PAYSLIP ==> filename  : ", filename)
+            console.log("FUNCTIONID_PAYSLIP ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
+            if (Platform.OS === 'android') {
+                RNFetchBlob
+                    .config({
+                        addAndroidDownloads: {
+                            useDownloadManager: true,
+                            notification: false,
+                            path: RNFetchBlob.fs.dirs.DownloadDir + '/' + filename,
+                            mime: 'application/pdf',
+                            title: filename,
+                            description: 'shippingForm'
+                        }
+                    })
+                    .fetch('GET', pdfPath, {
+                        'Content-Type': 'application/pdf;base64',
+                        Authorization: FUNCTION_TOKEN
+                    })
+                    .then((resp) => {
+                        ////console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp);
+                        RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf')
+                    })
+                    .catch((errorCode, errorMessage) => {
+                        ////console.log("Android ==> LoadPDFFile ==> Load errorCode  : ", errorCode);
+                        Alert.alert(
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                            [
 
-                            {
-                                text: 'OK', onPress: () => {
-                                    // this.addEventOnCalendar()
-                                }
-                            },
-                        ],
-                        { cancelable: false }
-                    )
-                })
-        } else {//iOS
-            ////console.log("loadPdf pdfPath : ", pdfPath)
-            ////console.log("loadPdf filename : ", filename)
-            RNFetchBlob
-                .config({
-                    fileCache: true,
-                    appendExt: 'pdf',
-                    filename: filename
-                })
-                .fetch('GET', pdfPath, {
-                    'Content-Type': 'application/pdf;base64',
-                    Authorization: FUNCTION_TOKEN
-                })
-                .then((resp) => {
-                    ////console.log("WorkingCalendarYear pdf1 : ", resp);
-                    ////console.log("WorkingCalendarYear pdf2 : ", resp.path());
-                    RNFetchBlob.fs.exists(resp.path())
-                        .then((exist) => {
-                            ////console.log(`WorkingCalendarYear ==> file ${exist ? '' : 'not'} exists`)
-                        })
-                        .catch(() => {
-                            ////console.log('WorkingCalendarYear ==> err while checking')
+                                {
+                                    text: 'OK', onPress: () => {
+                                        // this.addEventOnCalendar()
+                                    }
+                                },
+                            ],
+                            { cancelable: false }
+                        )
+                    })
+            } else {//iOS
+                console.log("loadPdf pdfPath : ", pdfPath)
+                console.log("loadPdf filename : ", filename)
+                RNFetchBlob
+                    .config({
+                        fileCache: true,
+                        appendExt: 'pdf',
+                        filename: filename
+                    })
+                    .fetch('GET', pdfPath, {
+                        'Content-Type': 'application/pdf;base64',
+                        Authorization: FUNCTION_TOKEN
+                    })
+                    .then((resp) => {
+                        ////console.log("WorkingCalendarYear pdf1 : ", resp);
+                        ////console.log("WorkingCalendarYear pdf2 : ", resp.path());
+                        RNFetchBlob.fs.exists(resp.path())
+                            .then((exist) => {
+                                ////console.log(`WorkingCalendarYear ==> file ${exist ? '' : 'not'} exists`)
+                            })
+                            .catch(() => {
+                                ////console.log('WorkingCalendarYear ==> err while checking')
+                            });
+
+                        RNFetchBlob.ios.openDocument(resp.path());
+                        this.setState({
+
+                            isscreenloading: false,
+
+                        }, function () {
+                            // this.setState(this.renderloadingscreen())
                         });
 
-                    RNFetchBlob.ios.openDocument(resp.path());
-                    this.setState({
+                    })
 
-                        isscreenloading: false,
-                   
-                    }, function () {
-                        this.setState(this.renderloadingscreen())
+
+                    .catch((errorMessage, statusCode) => {
+                        Alert.alert(
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                            [
+                                {
+                                    text: 'OK', onPress: () => {
+                                        // this.addEventOnCalendar()
+                                    }
+                                },
+                            ],
+                            { cancelable: false }
+                        )
                     });
+            }
+        } else {
 
-                })
-
-               
-                .catch((errorMessage, statusCode) => {
-                    Alert.alert(
-                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
-                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
-                        [
-                            {
-                                text: 'OK', onPress: () => {
-                                    // this.addEventOnCalendar()
-                                }
-                            },
-                        ],
-                        { cancelable: false }
-                    )
-                });
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
         }
     }
 
@@ -243,8 +391,7 @@ export default class PayslipDetail extends Component {
 
     getPayslipDetailfromAPI = async () => {
 
-        console.log()
-
+  
         // this.state.rollid = 0
 
         // for (let i = 0; i < this.state.yearlist[this.state.yearselected].monthlistdata.length; i++) {
@@ -262,7 +409,7 @@ export default class PayslipDetail extends Component {
         //console.log("calendarPDFAPI ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
 
 
-        if (this.state.rollid) {
+     //   if (this.state.rollid) {
 
             let host = SharedPreference.PAYSLIP_DETAIL_API + this.state.yearlist[this.state.selectedindex].rollID
             console.log('host :', host)
@@ -298,27 +445,27 @@ export default class PayslipDetail extends Component {
                 .catch((error) => {
                     console.error(error);
                 });
-        } else {
+        // } else {
 
-            this.setState({
+        //     this.setState({
 
-                isscreenloading: false,
-                datadetail: '',
-                // dataSource: responseJson.results,
-                // datadetail: PayslipDataDetail.detail[this.state.Monthlist[this.state.monthselected].id]
+        //         isscreenloading: false,
+        //         datadetail: '',
+        //         // dataSource: responseJson.results,
+        //         // datadetail: PayslipDataDetail.detail[this.state.Monthlist[this.state.monthselected].id]
 
-            }, function () {
+        //     }, function () {
 
-                // //console.log('data response : ', this.state.datadetail.data.detail.deduct);
-                // //console.log('data detail :', this.state.Monthlist[this.state.monthselected].id)
+        //         // //console.log('data response : ', this.state.datadetail.data.detail.deduct);
+        //         // //console.log('data detail :', this.state.Monthlist[this.state.monthselected].id)
 
-                this.setState(this.renderloadingscreen())
-            }
+        //       //  this.setState(this.renderloadingscreen())
+        //     }
 
-            );
+        //     );
 
 
-        }
+        // }
     }
 
     onShowIncomeView() {
@@ -332,6 +479,7 @@ export default class PayslipDetail extends Component {
             bordercolor: Colors.greenTextColor,
         });
     }
+
     onShowDeductView() {
 
         this.setState({
@@ -343,68 +491,89 @@ export default class PayslipDetail extends Component {
             bordercolor: Colors.redTextColor,
         });
     }
+
     nextmonth() {
 
-        this.setState({
-            //monthselected: this.state.monthselected + 1,
-            selectedindex:this.state.selectedindex + 1
+        if (SharedPreference.isConnected) {
 
-        }, function () {
+            this.setState({
 
-            // if (this.state.monthselected > 11) {
-            //     this.state.monthselected = 0;
-            //     this.state.yearselected -= 1;
-            // }
+                selectedindex: this.state.selectedindex + 1
 
-            //console.log('nextmonth monthselected : ', this.state.monthselected);
+            }, function () {
 
-            this.onChangeMonth()
-        });
+                this.onChangeMonth()
+            });
+
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+
+        }
 
     }
 
     previousmonth() {
 
-        this.setState({
-            //  monthselected: this.state.monthselected - 1,
-            selectedindex: this.state.selectedindex - 1
-        }, function () {
+        if (SharedPreference.isConnected) {
 
+            this.setState({
 
-            // if (this.state.monthselected < 0) {
-            //     this.state.monthselected = 11;
-            //     this.state.yearselected += 1;
-            // }
+                selectedindex: this.state.selectedindex - 1
 
-            //console.log('monthselected : ', this.state.monthselected);
-            console.log('selectedindex : ', this.state.selectedindex);
+            }, function () {
 
-            this.onChangeMonth()
-        });
+                console.log('selectedindex : ', this.state.selectedindex);
+
+                this.onChangeMonth()
+            });
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+        }
 
     }
 
     onChangeMonth() {
 
-        this.setState({
+        if (this.state.yearlist[this.state.selectedindex].rollID) {
 
-            isscreenloading: true,
-            loadingtype: 3
+            this.setState({
 
-        }, function () {
+                isscreenloading: true,
+                loadingtype: 3
 
-            this.setState(this.renderloadingscreen())
+            }, function () {
 
-            this.getPayslipDetailfromAPI()
+                this.getPayslipDetailfromAPI()
 
-        });
+            });
 
-        // this.props.navigation.navigate('PaySlipDetail');
+        } else {
+            this.setState({
+
+                isscreenloading: false,
+                datadetail: '',
+
+            }, function () {
+
+            });
+
+        }
 
     }
+
     nextmonthbuttonrender() {
 
-       // if (!this.state.yearlist) {
         if (this.state.yearlist.length <= this.state.selectedindex + 1) {
             return (
                 <View style={{ flex: 1 ,justifyContent: 'center'}}>
@@ -438,7 +607,6 @@ export default class PayslipDetail extends Component {
                 </TouchableOpacity>
             </View>
         )
-
     }
 
     previoousbuttonrender() {
@@ -450,7 +618,6 @@ export default class PayslipDetail extends Component {
                     <Image
                         style={{ width: 45, height: 45 }}
                         source={require('./../resource/images/previous_dis.png')}
-
                     />
                 </View>
             )
@@ -460,7 +627,6 @@ export default class PayslipDetail extends Component {
         return (
             <View style={{ flex: 1,justifyContent:'center' }}>
                 <TouchableOpacity onPress={(this.previousmonth.bind(this))}>
-
                     <Image
                         style={{ width: 45, height: 45 }}
                         source={require('./../resource/images/previous.png')}
@@ -470,6 +636,7 @@ export default class PayslipDetail extends Component {
             </View>
         )
     }
+
     renderdetail() {
 
         if (this.state.datadetail) {
@@ -486,7 +653,6 @@ export default class PayslipDetail extends Component {
                             {this.renderdeatilincome()}
                         </View>
                     </View>
-
                 )
 
             }
@@ -664,13 +830,26 @@ export default class PayslipDetail extends Component {
                 sum_income_str = Decryptfun.decrypt(this.state.datadetail.data.header.sum_income);
                 sum_deduct_str = Decryptfun.decrypt(this.state.datadetail.data.header.sum_deduct);
 
-                if (bank_name_str === 'The Siam Commercial Bank Public Company Limited') {
+                // if (bank_name_str === 'The Siam Commercial Bank Public Company Limited') {
+                //     bankicon = require('./../resource/images/bankIcon/scb.png')
+                // } else if (bank_name_str === 'BANK OF AYUDHYA PUBLIC COMPANY LIMITED') {
+                //     bankicon = require('./../resource/images/bankIcon/bay.png')
+                // } else if (bank_name_str === 'BANK OF AYUDHYA PUBLIC COMPANY LIMITED (BAY)') {
+                //     bankicon = require('./../resource/images/bankIcon/bay.png')
+                // } else if (bank_name_str === 'Bangkok Bank Public Company Limited') {
+                //     bankicon = require('./../resource/images/bankIcon/bbc.png')
+                // }
+
+                if (bank_name_str.toLowerCase().split('commercial').length > 1) {
+                    
                     bankicon = require('./../resource/images/bankIcon/scb.png')
-                } else if (bank_name_str === 'BANK OF AYUDHYA PUBLIC COMPANY LIMITED') {
+
+                } else if (bank_name_str.toLowerCase().split('ayudhya').length > 1) {
+
                     bankicon = require('./../resource/images/bankIcon/bay.png')
-                } else if (bank_name_str === 'BANK OF AYUDHYA PUBLIC COMPANY LIMITED (BAY)') {
-                    bankicon = require('./../resource/images/bankIcon/bay.png')
-                } else if (bank_name_str === 'Bangkok Bank Public Company Limited') {
+
+                } else if (bank_name_str.toLowerCase().split('bangkok').length > 1) {
+
                     bankicon = require('./../resource/images/bankIcon/bbc.png')
                 }
 

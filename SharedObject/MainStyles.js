@@ -438,7 +438,7 @@ export const styles = StyleSheet.create({
     mainmenutabbarstyle: {
         ...Platform.select({
             ios: {
-                height: 20,
+                height: 20 ,
                 backgroundColor: Colors.calendarRedText
             },
             android: {
@@ -812,8 +812,21 @@ export const styles = StyleSheet.create({
         width: Layout.window.width,
         height: Layout.window.height,
         alignItems: 'center',
-        justifyContent: 'center'
-    }, alertDialogBox: {
+        justifyContent: 'center',
+      // backgroundColor:Colors.redColor
+    },
+    registerContainer: {
+        flex: 1,
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: Layout.window.width,
+        height: Layout.window.height,
+        alignItems: 'center',
+        justifyContent: 'center',
+      backgroundColor:Colors.redColor
+    },
+     alertDialogBox: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         padding: 10
@@ -1010,10 +1023,15 @@ export const styles = StyleSheet.create({
         flex: 1, flexDirection: 'row'
     },
     nonPayRollItemContainer: {
-        flex: 1, flexDirection: 'column', marginLeft: 3, marginRight: 3
+        flex: 1, flexDirection: 'column', marginLeft: 3, marginRight: 3,
+        backgroundColor: Colors.calendarLocationBoxColor
     },
     nonPayRollDetailContainer: {
-        flex: 1, justifyContent: 'center', alignItems: 'center'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      //  fontSize: 15 * scale,
+       
     },
     nonPayRollitem: {//TODO Bell
         flex: 1,
@@ -1028,6 +1046,21 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    nonPayRollitemRed: {//TODO Bell
+        flex: 1,
+        // margin: 2,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: Colors.lightGrayTextColor,
+        marginLeft: 1,
+        marginRight: 3,
+        marginTop: 2,
+        marginBottom: 2,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.calendarRedDotColor
     },
     nonPayRollitemBg: {
         flex: 1,
@@ -1169,7 +1202,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     registPinNumContainer: {
-        flex: 1,
+       flex: 1,
+        // height: '50%',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.redColor
@@ -1224,7 +1258,8 @@ export const styles = StyleSheet.create({
         color: Colors.grayText,
         fontWeight: 'bold',
         paddingTop: 10,
-        paddingBottom: 10
+        paddingBottom: 10,
+        fontFamily: font_medium,
     },
     pinContainer: {
         width: Layout.window.width,

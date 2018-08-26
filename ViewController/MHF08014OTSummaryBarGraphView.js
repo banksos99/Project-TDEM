@@ -20,11 +20,13 @@ import { styles } from "./../SharedObject/MainStyles"
 import BarChartCompare from "./BarChartCompare";
 import BarChartIndiv from "./BarChartIndividual";
 import SharedPreference from "./../SharedObject/SharedPreference"
+import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 
 let MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 let monthstr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+let selectmonth = 0;
 
 export default class OTSummaryBarChart extends Component {
 
@@ -93,19 +95,85 @@ export default class OTSummaryBarChart extends Component {
         initannouncementType = this.state.months[0]
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
-    // componentWillUnmount() {
-    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // }
+    componentWillUnmount() {
+        clearTimeout(this.timer);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
 
     handleBackButtonClick() {
         this.onBack()
         return true;
     }
 
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
 
     _onRefresh() {
         if (this.state.refreshing) {
@@ -153,9 +221,6 @@ export default class OTSummaryBarChart extends Component {
 
     onOrgStruct(item, index) {
 
-        //console.log('item :', item)
-
-        //console.log('load empinfo  :', item.emp_id)
         this.setState({
 
             isscreenloading: true,
@@ -212,7 +277,7 @@ export default class OTSummaryBarChart extends Component {
         this.setState({
             isscreenloading: false,
         })
-        if (this.state.isConnected) {
+
             Alert.alert(
                 'MHF00001ACRI',
                 'Cannot connect to server. Please contact system administrator.',
@@ -223,18 +288,7 @@ export default class OTSummaryBarChart extends Component {
                 }],
                 { cancelable: false }
             )
-        } else {
-            Alert.alert(
-                'MHF00002ACRI',
-                'System Error (API). Please contact system administrator.',
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log("onLoadErrorAlertDialog")
-                    }
-                }],
-                { cancelable: false }
-            )
-        }
+       
         //console.log("error : ", error)
     }
 
@@ -262,18 +316,31 @@ export default class OTSummaryBarChart extends Component {
     }
     select_month() {
 
-        tempannouncementType = this.state.announcementType;
+        if (SharedPreference.isConnected) {
 
-        this.setState({
+            tempannouncementType = this.state.announcementType;
 
-            loadingtype: 0,
-            isscreenloading: true,
+            this.setState({
 
-        }, function () {
+                loadingtype: 0,
+                isscreenloading: true,
 
-            this.setState(this.renderloadingscreen())
-        });
+            }, function () {
+
+                this.setState(this.renderloadingscreen())
+            });
+
+        } else {
+
+Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+        } 
     }
+
     select_month_ios = () => {
 
         this.setState({
@@ -318,10 +385,12 @@ export default class OTSummaryBarChart extends Component {
 
     }
 
-    selected_month(monthselected) {
+    selected_month(monthselected,index) {
 
         ////console.log('monthselected : ',monthselected)
         initannouncementType = monthselected
+
+        selectmonth = index;
 
         this.setState({
             announcementTypetext: monthselected,
@@ -347,18 +416,19 @@ export default class OTSummaryBarChart extends Component {
         });
 
     }
-    renderpickerview() {
 
-        // if (Platform.OS === 'android') {
-
-        //     return (
-        //         <View>
-        //         </View>
-        //     )
-
-        // } else 
-
+    cancel_select_change_month_andr(){
         
+         this.setState({
+
+             loadingtype: 1,
+             isscreenloading: false,
+ 
+         })
+ 
+     }
+
+    renderpickerview() {
 
         if (this.state.loadingtype == 0) {
 
@@ -374,15 +444,26 @@ export default class OTSummaryBarChart extends Component {
                                 {
                                     this.state.months.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
-                                            onPress={() => { this.selected_month(item) }}
+                                            onPress={() => { this.selected_month(item,index) }}
                                             key={index + 100}>
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
-                                                <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                            <Text style={index === selectmonth ?
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                {/* <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text> */}
                                             </View>
                                         </TouchableOpacity>
 
                                     ))}
                             </ScrollView>
+                            <View style={{ flexDirection: 'row', height: 40, }}>
+                                <View style={{ flex: 2 }} />
+                                <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                                    onPress={() => { this.cancel_select_change_month_andr() }}
+                                >
+                                    <Text style={{ fontSize: 16, color: Colors.redTextColor, textAlign: 'center' }}> Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
                             
                         </View>
                     </View>
