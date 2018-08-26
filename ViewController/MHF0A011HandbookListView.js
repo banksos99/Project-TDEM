@@ -11,7 +11,8 @@ import {
     Image, Picker, WebView,
     FlatList,
     Platform,
-    BackHandler
+    BackHandler,
+    Alert
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -21,6 +22,7 @@ import Authorization from "./../SharedObject/Authorization";
 import inappdata from "./../InAppData/HandbookListData"
 import SharedPreference from "./../SharedObject/SharedPreference"
 import StringText from '../SharedObject/StringText';
+import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 
 import HandBookCover from "./BookCover";
@@ -29,106 +31,106 @@ let dataSource = [];
 let temphandbookData = [];
 let FUNCTION_TOKEN;
 
-class BookCover extends Component {
-    constructor(props) {
-        super(props);
-        this.terminated = false;
-        this.state = {
-            url: this.props.placeholderUrl
-        };
-    }
+// class BookCover extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.terminated = false;
+//         this.state = {
+//             url: this.props.placeholderUrl
+//         };
+//     }
 
-    componentDidMount() {
-        //console.log('[BookCover] componentDidMount');
-        this.refresh();
-    }
+//     componentDidMount() {
+//         //console.log('[BookCover] componentDidMount');
+//         this.refresh();
+//     }
 
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        this.terminated = true;
-        this.task.cancel();
-    }
+//     componentWillUnmount() {
+//         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+//         this.terminated = true;
+//         this.task.cancel();
+//     }
 
-    updateSource(newUrl) {
-        //console.log("Book updateSource : " + newUrl);
+//     updateSource(newUrl) {
+//         //console.log("Book updateSource : " + newUrl);
 
-        if (this.terminated) {
-            return;
-        }
+//         if (this.terminated) {
+//             return;
+//         }
 
-        this.setState(previousState => {
-            return { url: Platform.OS === 'android' ? 'file://' + newUrl : '' + newUrl }
-        });
-    }
+//         this.setState(previousState => {
+//             return { url: Platform.OS === 'android' ? 'file://' + newUrl : '' + newUrl }
+//         });
+//     }
 
 
-    refresh() {
-        //console.log('[BookCover] Refresh');
+//     refresh() {
+//         //console.log('[BookCover] Refresh');
 
-        let dirs = RNFetchBlob.fs.dirs
-        let filename = this.props.bookName + '.jpeg'
-        let targetFile = dirs.DocumentDir + '/cover/' + filename;
+//         let dirs = RNFetchBlob.fs.dirs
+//         let filename = this.props.bookName + '.jpeg'
+//         let targetFile = dirs.DocumentDir + '/cover/' + filename;
 
-       // let hasFile = false;
+//        // let hasFile = false;
 
-        RNFetchBlob.fs.exists(targetFile)
-            .then((exist) => {
-               // hasFile = exist;
-                //console.log("======================");
-                //console.log("Has file : " + hasFile);
-                //console.log("======================");
-                //console.log("======================");
+//         RNFetchBlob.fs.exists(targetFile)
+//             .then((exist) => {
+//                // hasFile = exist;
+//                 //console.log("======================");
+//                 //console.log("Has file : " + hasFile);
+//                 //console.log("======================");
+//                 //console.log("======================");
 
-              //  hasFile = false
-                //   if (hasFile) {
-                //     this.updateSource(targetFile);
-                //   } else {
+//               //  hasFile = false
+//                 //   if (hasFile) {
+//                 //     this.updateSource(targetFile);
+//                 //   } else {
 
-                this.task = RNFetchBlob
-                    .config({
-                        fileCache: true,
-                        // response data will be saved to this path if it has access right.
-                        path: targetFile
-                    })
+//                 this.task = RNFetchBlob
+//                     .config({
+//                         fileCache: true,
+//                         // response data will be saved to this path if it has access right.
+//                         path: targetFile
+//                     })
                   
-                    .fetch('GET', this.props.coverUrl, {
-                        //some headers ..
-                        'Content-Type': 'image/jpeg;base64',
-                        Authorization: FUNCTION_TOKEN
+//                     .fetch('GET', this.props.coverUrl, {
+//                         //some headers ..
+//                         'Content-Type': 'image/jpeg;base64',
+//                         Authorization: FUNCTION_TOKEN
 
-                    });
-                this.task.then((res) => {
-                    // the path should be dirs.DocumentDir + 'path-to-file.anything'
+//                     });
+//                 this.task.then((res) => {
+//                     // the path should be dirs.DocumentDir + 'path-to-file.anything'
 
-                    console.log('load cover TOKEN ', FUNCTION_TOKEN)
-                    //console.log('The file saved to ', res.path())
-                    if (this.terminated) {
-                        return;
-                    }
-                    this.updateSource(targetFile);
-                }).catch((err) => {
-                    // scan file error
-                    //console.log('[BookCover] Catch Error', err);
-                });
-                //   }
+//                     console.log('load cover TOKEN ', FUNCTION_TOKEN)
+//                     //console.log('The file saved to ', res.path())
+//                     if (this.terminated) {
+//                         return;
+//                     }
+//                     this.updateSource(targetFile);
+//                 }).catch((err) => {
+//                     // scan file error
+//                     //console.log('[BookCover] Catch Error', err);
+//                 });
+//                 //   }
 
-            })
-            .catch(() => {
-                //console.log('[Error] BookCover ==> Error on DidMounted')
-            });
+//             })
+//             .catch(() => {
+//                 //console.log('[Error] BookCover ==> Error on DidMounted')
+//             });
 
-    }
+//     }
 
     
 
-    render() {
-        return (
-            <Image source={{ uri: this.state.url }}
-                style={{ width: '100%', height: '100%' }} />
+//     render() {
+//         return (
+//             <Image source={{ uri: this.state.url }}
+//                 style={{ width: '100%', height: '100%' }} />
 
-        );
-    }
-}
+//         );
+//     }
+// }
 
 export default class HandbookActivity extends Component {
 
@@ -146,19 +148,85 @@ export default class HandbookActivity extends Component {
 
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
-    // componentWillUnmount() {
-    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // }
+    componentWillUnmount() {
+        clearTimeout(this.timer);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
 
     handleBackButtonClick() {
         this.onBack()
         return true;
     }
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
 
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
 
     updateToken() {
 
@@ -194,13 +262,26 @@ export default class HandbookActivity extends Component {
 
     onDetail(i) {
 
-        this.props.navigation.navigate('HandbookDetail', {
-            handbook_file: dataSource[i].handbook_file,
-            handbook_title: dataSource[i].handbook_title,
-            FUNCTION_TOKEN: FUNCTION_TOKEN,
-        });
+        if (SharedPreference.isConnected) {
 
+            this.props.navigation.navigate('HandbookDetail', {
+                handbook_file: dataSource[i].handbook_file,
+                handbook_title: dataSource[i].handbook_title,
+                FUNCTION_TOKEN: FUNCTION_TOKEN,
+            });
+
+        } else {
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+
+        }
+        
     }
+
     setrowstate() {
 
         this.setState({ leftside: false });
@@ -253,7 +334,7 @@ export default class HandbookActivity extends Component {
         return (
             <View style={styles.handbookItem} key={i}>
                 <TouchableOpacity style={{ flex: 1 }}
-                    //   onPress={(this.onDetail.bind(this))
+              
                     onPress={() => { this.onDetail(i) }}>
                     <View style={{ flex: 5, }}>
                         <View style={{ flex: 1, margin: 5, justifyContent: 'center', alignItems: 'center' }}>

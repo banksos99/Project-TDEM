@@ -30,7 +30,7 @@ export default class OrganizationStruct extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isConnected: true,
+            // isConnected: true,
             isscreenloading:false,
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -40,16 +40,16 @@ export default class OrganizationStruct extends Component {
 
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
 
     componentWillUnmount() {
-        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
-    handleConnectivityChange = isConnected => {
-        this.setState({ isConnected });
-    };
+    // handleConnectivityChange = isConnected => {
+    //     this.setState({ isConnected });
+    // };
     handleBackButtonClick() {
         this.onBack()
         return true;
@@ -245,8 +245,22 @@ export default class OrganizationStruct extends Component {
 
 
     loadOrgStructureAPI = async () => {
-        let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
-        this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+
+        if (SharedPreference.isConnected) {
+
+            let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
+            this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+
+            )
+        }
     }
 
     APICallback(data) {
@@ -346,15 +360,44 @@ export default class OrganizationStruct extends Component {
 
 
     loadOTLineChartfromAPI = async () => {
-        let url = SharedPreference.OTSUMMARY_LINE_CHART + this.state.org_code
-        this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY), 'OTLineChartView')
+
+        if (SharedPreference.isConnected) {
+
+            let url = SharedPreference.OTSUMMARY_LINE_CHART + this.state.org_code
+            this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY), 'OTLineChartView')
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+
+            )
+        }
     }
 
     loadOTBarChartfromAPI = async () => {
-        let today = new Date();
-        let url = SharedPreference.OTSUMMARY_BAR_CHART + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
-        //console.log('url  :', url)
-        this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY), 'OTBarChartView')
+
+        if(SharedPreference.isConnected){
+
+            let today = new Date();
+            let url = SharedPreference.OTSUMMARY_BAR_CHART + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+            //console.log('url  :', url)
+            this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY), 'OTBarChartView')
+
+        }else{
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+
+            )
+        }
+        
     }
 
 
@@ -408,7 +451,7 @@ export default class OrganizationStruct extends Component {
                     timerstatus = false
                     SharedPreference.Handbook = []
                     SharedPreference.profileObject = null
-                    this.saveProfile.setProfile(null)
+                    //this.saveProfile.setProfile(null)
                     this.props.navigation.navigate('RegisterScreen')
                 }
             }],
@@ -424,32 +467,19 @@ export default class OrganizationStruct extends Component {
             isscreenloading: false,
         })
 
-        if (this.state.isConnected) {
-            Alert.alert(
-                // 'MHF00001ACRI',
-                // 'Cannot connect to server. Please contact system administrator.',
-                error.data[0].code,
-                error.data[0].detail,
+        Alert.alert(
 
-                [{
-                    text: 'OK', onPress: () =>{
+            error.data[0].code,
+            error.data[0].detail,
 
-                    } //console.log('OK Pressed')
-                }],
-                { cancelable: false }
-            )
-        } else {
-            //inter net not connect
-            Alert.alert(
-                'MHF00500AERR',
-                'Cannot connect to the internet.',
-                [{
-                    text: 'OK', onPress: () => {
-                    }
-                }],
-                { cancelable: false }
-            )
-        }
+            [{
+                text: 'OK', onPress: () => {
+
+                } //console.log('OK Pressed')
+            }],
+            { cancelable: false }
+        )
+
     }
 
     renderloadingscreen() {

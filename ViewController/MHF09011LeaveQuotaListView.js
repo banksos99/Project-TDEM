@@ -63,11 +63,11 @@ export default class LeaveQuotaActivity extends Component {
             SharedPreference.lastdatetimeinterval = newdate
         }
 
-        this.APIInAppallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
 
     }
 
-    APIInAppallback(data) {
+    APIInAppCallback(data) {
         code = data[0]
         data = data[1]
 
@@ -123,7 +123,7 @@ export default class LeaveQuotaActivity extends Component {
             height: 50, justifyContent: 'center',
             alignItems: 'center'
         }}>
-            <Text style={{ fontFamily: font_medium }}>No result</Text>
+            <Text style={{ fontFamily: font_medium }}>No Result</Text>
         </View>)
     }
 
@@ -134,7 +134,7 @@ export default class LeaveQuotaActivity extends Component {
                 height: 50, justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <Text style={{ fontFamily: font_medium }}>No result</Text>
+                <Text style={{ fontFamily: font_medium }}>No Result</Text>
             </View>)
         }
 
@@ -164,7 +164,7 @@ export default class LeaveQuotaActivity extends Component {
                 height: 50, justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <Text style={{ fontFamily: font_medium }}>No result</Text>
+                <Text style={{ fontFamily: font_medium }}>No Result</Text>
             </View>)
 
         }

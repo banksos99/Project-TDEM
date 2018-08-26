@@ -19,7 +19,6 @@ export default {
     PAYSLIP_DOWNLOAD_API: HOST + '/api/' + VERSION + '/payslip/file/',
 
     OTSUMMARY_DETAIL: HOST + '/api/' + VERSION + '/ot/summary?',
-    // HANDBOOK_LIST: 'https://randomuser.me/api/?results=2',
 
     HANDBOOK_LIST: HOST + '/api/' + VERSION + '/handbooks',
 
@@ -70,6 +69,7 @@ export default {
 
     HandbookHighlightList: [],
     Handbook: [],
+    isConnected:true,
 
     FUNCTIONID_SPLASH: 'HF0111',
     FUNCTIONID_REGISTER: 'HF0121',

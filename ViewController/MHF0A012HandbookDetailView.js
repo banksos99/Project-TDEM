@@ -32,6 +32,9 @@ import { styles } from "./../SharedObject/MainStyles"
 import Colors from '../SharedObject/Colors';
 import SharedPreference from '../SharedObject/SharedPreference';
 import SaveProfile from "./../constants/SaveProfile"
+import StringText from '../SharedObject/StringText';
+import RestAPI from "../constants/RestAPI"
+
 
 let fontsizearr = ['50%', '80%', '100%', '120%', '150%', '180%'];
 let fontname = ['times', 'courier', 'arial', 'serif', 'cursive', 'fantasy', 'monospace'];
@@ -134,7 +137,7 @@ export default class HandbookViewer extends Component {
     }
 
     componentDidMount()  {
-
+        this.settimerInAppNoti()
         this.downloadEpubFile(SharedPreference.HOST + this.state.handbook_file);
 
         //console.log('SharedPreference.profileObject =====>' + JSON.stringify(SharedPreference.profileObject));
@@ -178,6 +181,8 @@ export default class HandbookViewer extends Component {
 
     componentWillUnmount() {
 
+        clearTimeout(this.timer);
+
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 
         // SharedPreference.Handbook.push({
@@ -212,6 +217,70 @@ export default class HandbookViewer extends Component {
 
         if (this.streamer)
             this.streamer.kill();
+    }
+settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
     }
 
     downloadEpubFile(bookUrl) {
@@ -637,7 +706,7 @@ export default class HandbookViewer extends Component {
                                 key={index + 100}>
                                 <View style={{ justifyContent: 'center', height: 40, marginLeft: 20, marginRight: 20 }}>
                                     {/* <View style={{ flex: 1, ustifyContent: 'center', flexDirection: 'column' }}> */}
-                                    <Text style={styles.epubTocText} numberOfLines={1}> {item.label.split('\n')[1]}</Text>
+                                    <Text style={styles.epubTocText} numberOfLines={1}> {item.label.replace('\n','')}</Text>
                                     {/* <Text style={styles.epubHighlighttitleText} numberOfLines={1}> {item.title}</Text> */}
                                     {/* </View> */}
                                 </View>

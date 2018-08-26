@@ -6,6 +6,7 @@ import {
     Image,
     Alert,
     Platform,
+    ActivityIndicator,
     BackHandler,NetInfo
 } from 'react-native';
 
@@ -26,36 +27,49 @@ export default class NonpayrollActivity extends Component {
         super(props);
         this.state = {
             temparray: [],
-            dataSource: this.props.navigation.getParam("dataResponse", ""),
+           // dataSource: this.props.navigation.getParam("dataResponse", ""),
             selectYear: this.props.navigation.getParam("selectYear", new Date().getFullYear()),
             currentYearData: [],
-            dataSource: this.props.navigation.getParam("dataResponse", ""),
+            datalist: this.props.navigation.getParam("dataResponse", ""),
             badgeArray: this.props.navigation.getParam("badgeArray", []),
             lastYearData: []
         };
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_NON_PAYROLL_LIST)
-
+        
         //console.log("badgeArray ==> ", this.state.badgeArray)
 
     }
 
-    async componentWillMount() {
-        await this.getArrayOfYear()
+    checkinternettype() {
+        NetInfo.fetch().done(
+            (networkType) => {
+                this.setState({ networkType }, function () {
+                    console.log("networkType ==> ", this.state.networkType)
+
+                })
+            }
+        )
+    }
+
+    componentDidMount() {
+        
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
         this.settimerInAppNoti()
     }
 
     componentWillUnmount() {
         clearTimeout(this.timer);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
 
     }
-    
-    handleConnectivityChange = isConnected => {
-        this.setState({ isConnected });
-    };
+
+    // handleConnectivityChange = isConnected => {
+
+    //     this.setState({ isConnected:isConnected });
+    //    console.log(this.state.isConnected);
+    // };
     settimerInAppNoti() {
         this.timer = setTimeout(() => {
             this.onLoadInAppNoti()
@@ -72,11 +86,11 @@ export default class NonpayrollActivity extends Component {
             SharedPreference.lastdatetimeinterval = newdate
         }
 
-        this.APIInAppallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
 
     }
 
-    APIInAppallback(data) {
+    APIInAppCallback(data) {
         code = data[0]
         data = data[1]
 
@@ -110,9 +124,7 @@ export default class NonpayrollActivity extends Component {
                     page = 0
                     SharedPreference.Handbook = []
                     SharedPreference.profileObject = null
-                    this.setState({
-                        isscreenloading: false
-                    })
+   
                     this.props.navigation.navigate('RegisterScreen')
 
                 }
@@ -166,8 +178,8 @@ export default class NonpayrollActivity extends Component {
     }
 
     checkAmount(selectYear, selectMonth) {
-        if (this.state.dataSource) {
-            let dataArray = this.state.dataSource.years;
+        if (this.state.datalist) {
+            let dataArray = this.state.datalist.years;
             for (let index = 0; index < dataArray.length; index++) {
                 const object = dataArray[index];
                 if (object.year == selectYear) {
@@ -204,29 +216,21 @@ export default class NonpayrollActivity extends Component {
             if (amount) {
 
                 return (<View style={styles.nonPayRollitemBg} key={index}>
-                    <View style={[styles.nonPayRollitem, {
-                        backgroundColor: Colors.calendarRedDotColor
-                    }]}>
+                    {/* <View style={styles.nonPayRollitemRed}> */}
                         <TouchableOpacity
-                            style={{ width: '100%', height: '100%' }}
+                            style={styles.payslipitemlast}
                             disable={amount}
-                            onPress={() => {
-
-                                this.props.navigation.navigate('NonPayrollDetail', {
-                                    month: monthNumber,
-                                    selectYear: this.state.selectYear,
-                                    dataObject: this.state.dataSource
-                                });
-                            }}>
+                            onPress={() => { this.onNonPayrollDetail(monthNumber) }} 
+                            >
                             <View style={styles.nonPayRollDetailContainer}>
-                                <Text style={[styles.payslipitemdetail, { color: 'white' }]}>{Months.monthNamesShort[monthNumber - 1]}</Text>
+                                <Text style={[styles.payslipiteMonth, { color: 'white' }]}>{Months.monthNamesShort[monthNumber - 1]}</Text>
                             </View>
                             <View style={styles.nonPayRollDetailContainer}>
                                 <Text style={[styles.payslipitemmoney, { color: 'white' }]}>{amount}</Text>
                             </View>
-                            <View style={styles.nonPayRollDetailContainer}/>
+                            
                         </TouchableOpacity>
-                    </View>
+                    {/* </View> */}
                     {badge != 0 ?
                         <View style={styles.nonPayrollBadgeContrainer}>
                             <Text style={styles.nonPayrollBadgeText}>
@@ -238,23 +242,24 @@ export default class NonpayrollActivity extends Component {
             }
             amount = '0.00'
             return (<View style={styles.nonPayRollitemBg} key={index}>
-                <View style={[styles.nonPayRollitem, {
+                {/* <View style={[styles.nonPayRollitem, {
                     backgroundColor: Colors.calendarRedDotColor
-                }]}>
+                }]}> */}
                     <TouchableOpacity
-                        style={{ width: '100%', height: '100%' }}
+                        style={[styles.nonPayRollitem, {backgroundColor: Colors.calendarRedDotColor}]}
                         disable={amount}
                         onPress={() => {
                             this.onLoadAlertDialog()
                         }}>
                         <View style={styles.nonPayRollDetailContainer}>
-                            <Text style={[styles.payslipitemdetail, { color: 'white' }]}>{Months.monthNamesShort[monthNumber - 1]}</Text>
+                            <Text style={[styles.payslipiteMonth, { color: 'white' }]}>{Months.monthNamesShort[monthNumber - 1]}</Text>
                         </View>
                         <View style={styles.nonPayRollDetailContainer}>
                             <Text style={[styles.payslipitemmoney, { color: 'white' }]}>{amount}</Text>
                         </View>
+                      
                     </TouchableOpacity>
-                </View>
+                {/* </View> */}
                 {badge != 0 ?
                     <View style={styles.nonPayrollBadgeContrainer}>
                         <Text style={styles.nonPayrollBadgeText}>
@@ -262,55 +267,63 @@ export default class NonpayrollActivity extends Component {
                         </Text>
                     </View>
                     : null}
-            </View>)
+            </View>
+            )
 
 
         } else if ((monthNumber > currentMonth) && (currentYear == this.state.selectYear)) {//After currentMonth
             // nodata
-            return <View style={[styles.nonPayRollitem, {
-                backgroundColor: 'white',
-            }]} key={index}>
-            </View>
+            return (
+                <View style={styles.nonPayRollitemBg} key={index}>
+                    <View style={[styles.nonPayRollitem, {
+                        backgroundColor: 'white',
+                    }]} key={index}>
+                    </View>
+                </View>
+                )
 
         } else if (amount) {//Normal Month - Has data 
             //console.log('amount :', amount)
             return (
                 <View style={styles.nonPayRollitemBg} key={index}>
-                    <View style={[styles.nonPayRollitem, {
-                        backgroundColor: Colors.calendarLocationBoxColor
-                    }]}>
+                    {/* <View style={styles.nonPayRollitem}> */}
                         <TouchableOpacity
-                            style={{ width: '100%', height: '100%' }}
-                            onPress={() => {
-                                //console.log("onPress ==> monthNumber ==> ", monthNumber, " , year ==> ", this.state.selectYear)
-                                let badgeData = this.state.badgeArray
-                                //console.log("onPress ==> badgeData1 ==> ", badgeData)
-                                for (let index = 0; index < badgeData.length; index++) {
-                                    const element = badgeData[index];
-                                    if (element.year = this.state.selectYear) {
-                                        let data = element.detail.find((p) => {
-                                            return p.month === monthNumber
-                                        });
-                                        data.badge = 0
-                                    }
-                                }
-                                //console.log("onPress ==> badgeData2 ==> ", badgeData)
+                            style={styles.nonPayRollitem}
+                            // onPress={() => {
+                            //     //console.log("onPress ==> monthNumber ==> ", monthNumber, " , year ==> ", this.state.selectYear)
+                            //     let badgeData = this.state.badgeArray
+                            //     //console.log("onPress ==> badgeData1 ==> ", badgeData)
+                            //     for (let index = 0; index < badgeData.length; index++) {
+                            //         const element = badgeData[index];
+                            //         if (element.year = this.state.selectYear) {
+                            //             let data = element.detail.find((p) => {
+                            //                 return p.month === monthNumber
+                            //             });
+                            //             data.badge = 0
+                            //         }
+                            //     }
+                            //     //console.log("onPress ==> badgeData2 ==> ", badgeData)
 
-                                this.props.navigation.navigate('NonPayrollDetail', {
-                                    month: monthNumber,
-                                    badgeData: badgeData,
-                                    selectYear: this.state.selectYear,
-                                    dataObject: this.state.dataSource
-                                });
-                            }} >
+                            //     this.props.navigation.navigate('NonPayrollDetail', {
+                            //         month: monthNumber,
+                            //         badgeData: badgeData,
+                            //         selectYear: this.state.selectYear,
+                            //         dataObject: this.state.dataSource
+                            //     });
+                            // }} 
+                            
+                            onPress={() => { this.onNonPayrollDetail(monthNumber) }} 
+                            
+                            >
                             <View style={styles.nonPayRollDetailContainer} >
-                                <Text style={styles.payslipitemdetail}>{Months.monthNamesShort[monthNumber - 1]}</Text>
+                                <Text style={styles.payslipiteMonth}>{Months.monthNamesShort[monthNumber - 1]}</Text>
                             </View>
                             <View style={styles.nonPayRollDetailContainer}>
                                 <Text style={styles.payslipitemmoney}>{amount}</Text>
                             </View>
+                            
                         </TouchableOpacity>
-                    </View>
+                    {/* </View> */}
                     {badge != 0 ?
                         <View style={styles.nonPayrollBadgeContrainer}>
                             <Text style={styles.nonPayrollBadgeText}>
@@ -324,22 +337,27 @@ export default class NonpayrollActivity extends Component {
 
         } else {//
             return (//Normal Month - No data
-                <View style={[styles.nonPayRollitem, {
+                <View style={styles.nonPayRollitemBg} key={index}>
+                {/* <View style={[styles.nonPayRollitem, {
                     backgroundColor: "white",
-                }]} key={index}>
+                }]} key={index}> */}
                     <TouchableOpacity
-                        style={{ width: '100%', height: '100%' }}
+                        style={[styles.nonPayRollitem, {
+                            backgroundColor: "white",
+                        }]}
                         onPress={() => {
                             this.onLoadAlertDialog()
                         }}>
                         <View style={styles.nonPayRollDetailContainer}>
-                            <Text style={styles.payslipitemdetail}>{Months.monthNamesShort[monthNumber - 1]}</Text>
+                            <Text style={styles.payslipiteMonth}>{Months.monthNamesShort[monthNumber - 1]}</Text>
                         </View>
                         <View style={styles.nonPayRollDetailContainer}>
-                            <Text style={styles.payslipitemdetail}>00.00</Text>
+                            <Text style={styles.payslipitemmoney}>0.00</Text>
                         </View>
+                       
                     </TouchableOpacity>
 
+                {/* </View> */}
                 </View>
             )
         }
@@ -354,7 +372,13 @@ export default class NonpayrollActivity extends Component {
             StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
             [{
                 text: 'OK', onPress: () => {
-                    this.select_sign_out()
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
                 }
             }],
             { cancelable: false }
@@ -381,6 +405,74 @@ export default class NonpayrollActivity extends Component {
 
     onDetail() {
         this.props.navigation.navigate('NonPayrollDetail');
+    }
+
+    onNonPayrollDetail(monthNumber) {
+       
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+
+            }, function () {
+
+                this.getNonPayrollDetailfromAPI(monthNumber)
+
+            });
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+
+        }
+
+    }
+
+    getNonPayrollDetailfromAPI = async (monthNumber) => {
+        // SharedPreference.NON_PAYROLL_DETAIL_API
+        let data = await RestAPI(SharedPreference.NON_PAYROLL_DETAIL_API + monthNumber + "&year=" + this.state.selectYear, SharedPreference.FUNCTIONID_NON_PAYROLL)
+       console.log('url : ',SharedPreference.NON_PAYROLL_DETAIL_API + monthNumber + "&year=" + this.state.selectYear, SharedPreference.FUNCTIONID_NON_PAYROLL)
+        code = data[0]
+        data = data[1]
+        console.log("nonPayRollCallback data : ", data)
+        if (code.SUCCESS == data.code) {
+            //this.convertDateTime(data.data.detail[0].pay_date)
+            this.setState({
+                //dataSource: data.data,
+                isLoading: false
+            })
+            //  this.getNonPayrollDetail()
+            this.props.navigation.navigate('NonPayrollDetail', {
+                // badgeData: badgeData,
+                month: monthNumber,
+               // dataSource:this.state.dataSource,
+                selectYear: this.state.selectYear,
+                dataObject: data.data,
+                datalist:this.state.datalist
+            })
+
+        } else if (code.INVALID_AUTH_TOKEN == data.code) {
+            this.onAutenticateErrorAlertDialog(data)
+
+        } else {
+
+
+            this.setState({
+                isscreenloading: false,
+            })
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+            )
+
+        }
     }
 
     onLastYear() {
@@ -425,7 +517,24 @@ export default class NonpayrollActivity extends Component {
             </View>)
 
     }
+    renderloadingscreen() {
 
+        if (this.state.isscreenloading) {
+
+            return (
+                <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
+                    <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
+
+                    </View>
+
+                    <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
+                        <ActivityIndicator />
+                    </View>
+                </View>
+            )
+        }
+
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -445,6 +554,7 @@ export default class NonpayrollActivity extends Component {
                 <View style={styles.nonPayRollMonthContainer}>
                     {this.renderRollItem()}
                 </View>
+                {this.renderloadingscreen()}
             </View >
         );
     }

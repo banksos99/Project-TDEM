@@ -20,6 +20,7 @@ import SharedPreference from "./../SharedObject/SharedPreference"
 import RestAPI from "../constants/RestAPI"
 import StringText from '../SharedObject/StringText';
 import SaveProfile from "../constants/SaveProfile"
+
 let dataSource = [];
 let option = 0;
 let org_code = '';
@@ -30,7 +31,7 @@ export default class OrganizationStruct extends Component {
         super(props);
 
         this.state = {
-            isConnected: true,
+            // isConnected: true,
             isscreenloading:false,
         }
 
@@ -50,16 +51,16 @@ export default class OrganizationStruct extends Component {
 
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
 
     componentWillUnmount() {
-        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
-    handleConnectivityChange = isConnected => {
-        this.setState({ isConnected });
-    };
+    // handleConnectivityChange = isConnected => {
+    //     this.setState({ isConnected });
+    // };
     
     handleBackButtonClick() {
         this.onBack()
@@ -292,8 +293,24 @@ export default class OrganizationStruct extends Component {
 
 
     loadOrgStructureAPI = async (org_code) => {
-        let url = SharedPreference.ORGANIZ_STRUCTURE_API + org_code
-        this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+
+        if (SharedPreference.isConnected) {
+
+            let url = SharedPreference.ORGANIZ_STRUCTURE_API + org_code
+            this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+        
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+
+            )
+
+        }
+
     }
 
     APICallback(data) {
@@ -456,20 +473,43 @@ export default class OrganizationStruct extends Component {
     }
 
     loadEmployeeListAPI = async () => {
+        if (SharedPreference.isConnected) {
+            let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
 
-        let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
-        //console.log('url  :', url)
-        this.APIEmpCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+            this.APIEmpCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
 
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+
+            )
+        }
     }
 
     loadOrgStructureDetailAPI = async () => {
-        let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
-        if (option == 2) {
-            let today = new Date();
-            url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+
+        if (SharedPreference.isConnected) {
+            let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
+            if (option == 2) {
+                let today = new Date();
+                url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+            }
+            this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } },
+                ], { cancelable: false }
+
+            )
         }
-        this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
     }
 
     APIEmpCallback(data) {
@@ -552,7 +592,7 @@ export default class OrganizationStruct extends Component {
                     timerstatus = false
                     SharedPreference.Handbook = []
                     SharedPreference.profileObject = null
-                    this.saveProfile.setProfile(null)
+                   // this.saveProfile.setProfile(null)
                     this.props.navigation.navigate('RegisterScreen')
                 }
             }],
@@ -567,38 +607,12 @@ export default class OrganizationStruct extends Component {
         this.setState({
             isscreenloading: false,
         })
+        Alert.alert(
+            error.data[0].code,
+            error.data[0].detail, [{ text: 'OK', onPress: () => { } }],
+            { cancelable: false }
+        )
 
-        if (this.state.isConnected) {
-            Alert.alert(
-                // 'MHF00001ACRI',
-                // 'Cannot connect to server. Please contact system administrator.',
-                error.data[0].code,
-                error.data[0].detail,
-
-                [{
-                    text: 'OK', onPress: () => {
-
-                    //console.log('OK Pressed')
-                }
-                }],
-                { cancelable: false }
-            )
-        } else {
-            //inter net not connect
-            Alert.alert(
-                // 'MHF00002ACRI',
-                // 'System Error (API). Please contact system administrator.',
-                'MHF00500AERR',
-                'Cannot connect to the internet.',
-                [{
-                    text: 'OK', onPress: () => {
-                        ////console.log("onLoadErrorAlertDialog")
-                    }
-                }],
-                { cancelable: false }
-            )
-        }
-        ////console.log("error : ", error)
     }
 
     // onLoadErrorAlertDialog(error) {

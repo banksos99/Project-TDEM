@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
+import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar,NetInfo } from 'react-native';
 
 import SharedPreference from './SharedObject/SharedPreference';
 
@@ -70,11 +70,12 @@ export default class mainview extends Component {
   componentWillUnmount() {
 
     clearTimeout(this.timer);
-
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+    console.log('app componentWillUnmount')
   }
 
   async componentDidMount() {
-
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     this.notificationListener();
     const enabled = await firebase.messaging().hasPermission();
 
@@ -106,7 +107,6 @@ export default class mainview extends Component {
           "deviceOS": deviceOS,
           "deviceOSVersion": deviceOSVersion,
           "firebaseToken": token,
-          // "firebaseToken": '23211321',
           "appVersion": appVersion,
           "buildNumber": buildNumber
         }
@@ -128,10 +128,30 @@ export default class mainview extends Component {
 
   }
 
+  handleConnectivityChange = isConnected => {
+    SharedPreference.isConnected = isConnected
+    console.log('handleConnectivityChange')
+  };
+
   notificationListener() {
+
     notificationListener = firebase
       .notifications()
       .onNotification(notification => {
+
+        // Alert.alert(
+        //   'notification',
+        //   'newmessage',
+        //   [{
+        //     text: 'OK', onPress: () => {
+        //       // this.setState({
+        //       //   showpin: true,
+        //       // });
+        //     }
+        //   }],
+        //   { cancelable: false }
+        // )
+
 
         this.setState({
           notiMessage: 10,
@@ -161,7 +181,7 @@ export default class mainview extends Component {
 
   rendernotificationlabel() {
     if (this.state.notiMessage) {
-     this.closelabelnoti();
+      this.closelabelnoti();
       return (
         <View style={{ width: '100%', height: 120, position: 'absolute', backgroundColor: 'transparent' }}>
           <View style={{ flex: 1, borderRadius: 10, backgroundColor: 'white', justifyContent: 'center', margin: 10 }}>
@@ -612,7 +632,9 @@ export default class mainview extends Component {
             <View style={styles.container} >
               <RootViewController pushstatus={this.state.pageSelect} />
             </View>
+            
             {this.renderPINScreen()}
+            {this.rendernotificationlabel()}
           </View>
         </UserInactivity>
       );

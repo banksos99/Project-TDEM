@@ -6,8 +6,8 @@ import {
     TouchableOpacity,
     ListView,
     Image,
-    BackHandler
-
+    BackHandler,
+    Alert
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -16,6 +16,8 @@ import { styles } from "./../SharedObject/MainStyles"
 import LineChartAerage from "./LineChartAerage";
 import firebase from 'react-native-firebase';
 import SharedPreference from "./../SharedObject/SharedPreference"
+import StringText from '../SharedObject/StringText';
+import RestAPI from "../constants/RestAPI"
 
 let MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -58,7 +60,7 @@ export default class OTSummaryLineChart extends Component {
 
         this.checkDataFormat(this.props.navigation.getParam("DataResponse", ""));
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_OT_SUMMARY_MANAGER)
-        //console.log('org_name : ', this.state.org_name)
+ 
 
     }
 
@@ -86,13 +88,15 @@ export default class OTSummaryLineChart extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
-    // componentWillUnmount() {
-    //     // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // }
+    componentWillUnmount() {
+        clearTimeout(this.timer);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
 
     handleBackButtonClick() {
         this.onBack()
@@ -101,6 +105,71 @@ export default class OTSummaryLineChart extends Component {
 
     onBack() {
         this.props.navigation.navigate('OrganizationOTStruct');
+    }
+
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
     }
 
     renderloadingscreen() {

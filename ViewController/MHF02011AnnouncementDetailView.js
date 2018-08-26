@@ -26,13 +26,13 @@ export default class PaySlipActivity extends Component {
     }
 
     checkDataFormat(DataResponse) {
-        //console.log("PaySlipActivity ==> ", DataResponse)
+       
         if (DataResponse) {
             title = DataResponse.title
             content = DataResponse.content
 
         }
-        //console.log('content : ', content)
+       
     }
 
     componentWillMount() {
@@ -55,8 +55,8 @@ export default class PaySlipActivity extends Component {
     }
 
     render() {
-        const HTMLTemplate = `<span class="price bold some-class-name">$459.00</span>`;
-        content
+        // content = `<span class="price bold some-class-name">$459.00</span>`;
+        
         return (
             <View style={{ flex: 1 }} >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
