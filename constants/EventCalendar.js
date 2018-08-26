@@ -21,7 +21,6 @@ export default class EventCalendar {
         let array = await this.getEventIDFromDevice()
         // let currentyear = new Date().getFullYear();
         console.log("deleteEventCalendar ==> selectYear ==> ", selectYear)
-
         if (array != null) {
             array = JSON.parse(array)
             for (let index = 0; index < array.length; index++) {
@@ -34,6 +33,7 @@ export default class EventCalendar {
                     });
             }
         }
+
         try {
             let emptyUser = []
             await AsyncStorage.setItem(this.state.calendarName, JSON.stringify(emptyUser));
@@ -41,7 +41,7 @@ export default class EventCalendar {
             console.log("arrayTest ==> ", arrayTest)
 
         } catch (error) {
-            //console.log("DeleteEventCalendar ==> error ==> ", error)
+            console.log("DeleteEventCalendar ==> error ==> ", error)
         }
 
         await this._deleteEventFromCalendar(selectYear)
@@ -114,7 +114,9 @@ export default class EventCalendar {
             endDate: momentEnd + "Z",
             location: location,
             // timeZone: "America/New_York",
-            timeZone: 'Asia/Bangkok',
+            // timeZone: 'Asia/Bangkok',
+            // timeZone:DeviceInfo.getTimezone(),
+            timeZone: "GMT",
             allDay: alldayBool,
             description: 'TDEM : ' + eventObject.description
         }

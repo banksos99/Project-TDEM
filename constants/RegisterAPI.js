@@ -24,7 +24,6 @@ export default async function getRestAPI(username, password) {
     // //console.log("getRestAPI ===> SharedPreference.company : ", SharedPreference.company)
     // //console.log("getRestAPI ===> SharedPreference.deviceInfo: ", SharedPreference.deviceInfo)
 
-
     return fetch(SharedPreference.REGISTER_API, {
         method: 'POST',
         headers: {
