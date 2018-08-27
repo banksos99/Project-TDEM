@@ -654,7 +654,7 @@ export default class EmpInfoDetail extends Component {
             return (
 
                 <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10 }}>
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >Graduate Year</Text>
                         </View>
@@ -663,7 +663,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >Degree</Text>
                         </View>
@@ -672,7 +672,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >Place</Text>
                         </View>
@@ -681,7 +681,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >Major</Text>
                         </View>
@@ -690,7 +690,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >GPA</Text>
                         </View>
@@ -699,7 +699,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText} >TOEIC</Text>
                         </View>
@@ -708,7 +708,7 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailRedText}>JLPT</Text>
                         </View>
