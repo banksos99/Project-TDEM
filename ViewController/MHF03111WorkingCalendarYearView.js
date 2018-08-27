@@ -31,7 +31,6 @@ import SaveProfile from "../constants/SaveProfile"
 import CalendarPDFAPI from "../constants/CalendarPDFAPI"
 import firebase from 'react-native-firebase';
 
-
 export default class calendarYearView extends Component {
 
     eventCalendar = new EventCalendar()
@@ -83,7 +82,7 @@ export default class calendarYearView extends Component {
 
         }
 
-        console.log("dataResponse :", this.state.dataResponse)
+        //console.log("dataResponse :", this.state.dataResponse)
         this.LocaleConfig()
         this.getYearSelect()
         this.setNewPicker()
@@ -152,15 +151,15 @@ export default class calendarYearView extends Component {
     }
 
     onLoadCalendarAPI = async (year, location) => {
-        ////console.log("onLoadCalendarAPI ====> year : ", year, " , location : ", location)
-        ////console.log("location : ", this.state.selectLocation)
+        //////console.log("onLoadCalendarAPI ====> year : ", year, " , location : ", location)
+        //////console.log("location : ", this.state.selectLocation)
 
         let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + year + '&company=' + location, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
         code = data[0]
         data = data[1]
 
         if (code.SUCCESS == data.code) {
-            ////console.log("onLoadCalendarAPI ====> SUCCESS")
+            //////console.log("onLoadCalendarAPI ====> SUCCESS")
             this.getYearView(this.state.selectYear, data)
 
         } else {
@@ -169,7 +168,7 @@ export default class calendarYearView extends Component {
                 StringText.CALENDAR_ALERT_NO_DATA_DESC,
                 [{
                     text: 'OK', onPress: () => {
-                        ////console.log("cancel downlosad")
+                        //////console.log("cancel downlosad")
                         this.setState({
                             isLoading: false,
                             selectYear: this.state.showYear,
@@ -193,8 +192,8 @@ export default class calendarYearView extends Component {
     }
 
     getYearView = async (year, calendarEventData) => {
-        ////console.log("getYearView : year ==> ", year)
-        ////console.log("getYearView : calendarEventData ==> ", calendarEventData)
+        //////console.log("getYearView : year ==> ", year)
+        //////console.log("getYearView : calendarEventData ==> ", calendarEventData)
 
         let monthYear = 12
         const original = [];
@@ -206,7 +205,7 @@ export default class calendarYearView extends Component {
             }
         } else {
 
-            // ////console.log("this.state.selectLocation : ", this.state.selectLocation)
+            // //////console.log("this.state.selectLocation : ", this.state.selectLocation)
             // showLocation = "Company"
             year = new Date().getFullYear()
         }
@@ -218,8 +217,8 @@ export default class calendarYearView extends Component {
             showLocation = await this.getFullLocation(this.state.selectLocation)
         }
 
-        ////console.log("getYearView : showLocation ==> ", showLocation)
-        ////console.log("getYearView : year ==> ", year)
+        //////console.log("getYearView : showLocation ==> ", showLocation)
+        //////console.log("getYearView : year ==> ", year)
 
         this.showAllMonthView()
         this.setState({
@@ -237,7 +236,7 @@ export default class calendarYearView extends Component {
         for (let index = 0; index < yearObject.length; index++) {
             const element = yearObject[index];
             if (element.month == month) {
-                //////////console.log("getMonthEvent yearObject ==> ", yearObject[index])
+                ////////////console.log("getMonthEvent yearObject ==> ", yearObject[index])
                 return yearObject[index]
             }
         }
@@ -248,7 +247,7 @@ export default class calendarYearView extends Component {
     }
 
     showAllMonthView() {
-        ////console.log("Calendar ==> showAllMonthView")
+        //////console.log("Calendar ==> showAllMonthView")
         monthView = []
         monthView1 = []
         monthView2 = []
@@ -260,13 +259,13 @@ export default class calendarYearView extends Component {
         for (let f = 0; f < month; f++) {
 
             let selectMonth = (f + 1)
-            // ////console.log("Calendar ==> selectMonth : ", selectMonth)
+            // //////console.log("Calendar ==> selectMonth : ", selectMonth)
 
             let monthText = this.state.showYear + '-' + selectMonth + '-01'
             if (selectMonth < 10) {
                 monthText = this.state.showYear + '-0' + selectMonth + '-01'
             }
-            // ////console.log("Calendar ==> monthText : ", monthText)
+            // //////console.log("Calendar ==> monthText : ", monthText)
             this.state.countDay = []
 
             monthView.push(
@@ -301,14 +300,14 @@ export default class calendarYearView extends Component {
                         }}
 
                         dayComponent={({ date, state }) => {
-                            // ////console.log("selectedDateMonth dayComponent =====> : ", date)
-                            // ////console.log("selectedDateMonth dayComponent =====> state : ", state)
+                            // //////console.log("selectedDateMonth dayComponent =====> : ", date)
+                            // //////console.log("selectedDateMonth dayComponent =====> state : ", state)
 
                             this.state.countDay.push(date.day);
                             const selectedDateMonth = moment(date.dateString).format(_format);
                             let checkSpecialHoliday = this.checkSpecialHoliday(selectedDateMonth);
-                            // ////console.log("selectedDateMonth =====> : ", selectedDateMonth)
-                            // ////console.log("checkSpecialHoliday =====> ", checkSpecialHoliday)
+                            // //////console.log("selectedDateMonth =====> : ", selectedDateMonth)
+                            // //////console.log("checkSpecialHoliday =====> ", checkSpecialHoliday)
 
                             if (checkSpecialHoliday == 'Y') {
                                 return <View style={styles.calendarDayContainer}>
@@ -381,18 +380,18 @@ export default class calendarYearView extends Component {
     }
 
     checkSpecialHoliday(selectedDateMonth) {
-        //////console.log("selectedDateMonth : ", selectedDateMonth)
+        ////////console.log("selectedDateMonth : ", selectedDateMonth)
         try {
             const month = moment(selectedDateMonth).format('M');
-            //////console.log("month : ", month)
+            ////////console.log("month : ", month)
             let checkObject = this.state.yearObject[(month - 1)]
-            //////console.log("checkObject : ", checkObject)
+            ////////console.log("checkObject : ", checkObject)
 
             if (checkObject == []) {
                 return false
             }
             let objectMonth = checkObject.days
-            //////console.log("objectMonth : ", objectMonth)
+            ////////console.log("objectMonth : ", objectMonth)
 
             for (let index = 0; index < objectMonth.length; index++) {
                 let date = objectMonth[index].date
@@ -437,10 +436,10 @@ export default class calendarYearView extends Component {
     }
 
     onPressCalendar(datetime) {
-        //////console.log("datetime : ", datetime)
+        ////////console.log("datetime : ", datetime)
         const month = moment(datetime).format('M');
         let monthObject = this.state.yearObject[(month - 1)]
-        ////console.log("onPressCalendar ==> ", monthObject)
+        //////console.log("onPressCalendar ==> ", monthObject)
         this.props.navigation.navigate('calendarMonthView',
             {
                 month: datetime,
@@ -457,7 +456,7 @@ export default class calendarYearView extends Component {
     }
 
     onPressSelectYearWhenSelectPDF(year, i) {
-        console.log('android select year => ', year, i)
+        // //console.log('android select year => ', year, i)
         this.setState({
             selectYearPicker: year,
             yearPickerForDownloadPDFFileView: false,
@@ -480,13 +479,11 @@ export default class calendarYearView extends Component {
 
     onPressLocation(locationFull, locationShort) {
 
-        console.log("onPressLocation ==> locationShort : ", locationShort)
         this.setState({
             selectLocation: locationShort
         })
 
         this.state.selectLocation = locationShort
-        console.log("onPressLocation ==> locationShort2 : ", this.state.selectLocation)
         this.getLocation()
 
     }
@@ -514,7 +511,7 @@ export default class calendarYearView extends Component {
     }
 
     getLocation = async (location) => {
-        console.log("WorkingCalender ==> getLocation ==> ", location)
+        //console.log("WorkingCalender ==> getLocation ==> ", location)
         if (Platform.OS === 'ios') {
 
             locationShort = await this.getShortLocation(this.state.selectLocation)
@@ -531,7 +528,7 @@ export default class calendarYearView extends Component {
             })
         }
 
-        console.log("workingCalendar ==> getLocation : ", this.state.selectLocation)
+        //console.log("workingCalendar ==> getLocation : ", this.state.selectLocation)
         this.setState({
             locationPickerView: false,
             isLoading: true,
@@ -541,7 +538,7 @@ export default class calendarYearView extends Component {
     }
 
     openNewPage = async (location) => {
-        console.log("openNewPage ==> ", location)
+        //console.log("openNewPage ==> ", location)
         let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + this.state.selectYear + '&company=' + location, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
         code = data[0]
         data = data[1]
@@ -573,7 +570,7 @@ export default class calendarYearView extends Component {
     renderDialog() {
         if (this.state.yearviewPicker) {
             if (Platform.OS === 'android') {
-                // ////console.log("this.state.yearsPickerArray : ", this.state.yearsPickerArray)
+                // //////console.log("this.state.yearsPickerArray : ", this.state.yearsPickerArray)
                 return (
                     <View style={styles.alertDialogContainer}>
                         {/* bg */}
@@ -678,7 +675,7 @@ export default class calendarYearView extends Component {
                                 <View style={styles.alertDialogBox}>
                                     <TouchableOpacity style={styles.button}
                                         onPress={() => {
-                                            console.log('selectYear =>: ',this.state.selectYear);
+                                            //console.log('selectYear =>: ',this.state.selectYear);
                                             this.setState({
                                                 yearPickerForDownloadPDFFileView: false,
                                                 isLoadingPDF: true
@@ -762,12 +759,12 @@ export default class calendarYearView extends Component {
     }
 
     onloadPDFFile = async () => {
-        console.log("onloadPDFFile",this.state.selectYearPicker)
+        //console.log("onloadPDFFile",this.state.selectYearPicker)
         let data = await CalendarPDFAPI(this.state.selectYearPicker, this.state.selectLocation)
         code = data[0]
         data = data[1]
 
-        console.log("onLoadPDFFIle : ", data)
+        //console.log("onLoadPDFFIle : ", data)
         if (code.SUCCESS == data.code) {
             
             if (data.data[0].filename == null || data.data[0].filename == 'undefined') {
@@ -783,7 +780,7 @@ export default class calendarYearView extends Component {
                 StringText.CALENDAR_ALERT_PDF_DESC_FAIL,
                 [{
                     text: 'OK', onPress: () => {
-                        ////console.log("cancel downlosad")
+                        //////console.log("cancel downlosad")
                         this.setState({
                             isLoadingPDF: false
                         })
@@ -796,7 +793,7 @@ export default class calendarYearView extends Component {
     }
 
     onLoadAlertDialog() {
-        //////console.log("onLoadAlertDialog")
+        ////////console.log("onLoadAlertDialog")
         Alert.alert(
             StringText.ALERT_CANNOT_CONNECT_TITLE,
             StringText.ALERT_CANNOT_CONNECT_DESC,
@@ -815,8 +812,8 @@ export default class calendarYearView extends Component {
     onDownloadPDFFile = async (pdfPath, filename) => {
         filename = "calendar_" + this.state.selectYearPicker + '.pdf'
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_WORKING_CALENDAR, SharedPreference.profileObject.client_token)
-        console.log("Android ==> LoadPDFFile ==> filename  : ", filename);
-        console.log("Android ==> LoadPDFFile ==> path  : ", RNFetchBlob.fs.dirs.DownloadDir + '/' + filename);
+        //console.log("Android ==> LoadPDFFile ==> filename  : ", filename);
+        //console.log("Android ==> LoadPDFFile ==> path  : ", RNFetchBlob.fs.dirs.DownloadDir + '/' + filename);
         let pathToFile = RNFetchBlob.fs.dirs.DownloadDir + '/' + filename;
         if (Platform.OS === 'android') {
             this.downloadTask = RNFetchBlob
@@ -839,7 +836,7 @@ export default class calendarYearView extends Component {
                     Authorization: FUNCTION_TOKEN
                 })
                 .then((resp) => {
-                   console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp.path);
+                   //console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp.path);
                     if (this.state.isLoadingPDF == true) {
                         this.setState({ isLoadingPDF: false })
 
@@ -848,7 +845,7 @@ export default class calendarYearView extends Component {
                             StringText.CALENDAR_ALERT_PDF_DESC_SUCCESS_1 + filename + StringText.CALENDAR_ALERT_PDF_DESC_SUCCESS_2,
                             [{
                                 text: 'OK', onPress: () => {
-                                    console.log("Android ==> LoadPDFFile ==> onPress  : ", resp.data);
+                                    //console.log("Android ==> LoadPDFFile ==> onPress  : ", resp.data);
                                     RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf')
                                 }
                             },
@@ -863,7 +860,7 @@ export default class calendarYearView extends Component {
                 })
                 .catch((errorCode, errorMessage) => {
                     this.setState({ isLoadingPDF: false })
-                    ////console.log("Android ==> LoadPDFFile ==> Load errorCode  : ", errorCode);
+                    //////console.log("Android ==> LoadPDFFile ==> Load errorCode  : ", errorCode);
                     Alert.alert(
                         StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
                         StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
@@ -877,8 +874,8 @@ export default class calendarYearView extends Component {
 
 
         } else {//iOS
-            ////console.log("loadPdf pdfPath : ", pdfPath)
-            ////console.log("loadPdf filename : ", filename)
+            //////console.log("loadPdf pdfPath : ", pdfPath)
+            //////console.log("loadPdf filename : ", filename)
             this.downloadTask = RNFetchBlob
                 .config({
                     fileCache: true,
@@ -892,7 +889,7 @@ export default class calendarYearView extends Component {
                     Authorization: FUNCTION_TOKEN
                 })
                 .then((resp) => {
-                    ////console.log('loadPdf ==> resp : ', resp)
+                    //////console.log('loadPdf ==> resp : ', resp)
                     if (this.state.isLoadingPDF == true) {
                         this.setState({ isLoadingPDF: false })
                         Alert.alert(
@@ -940,7 +937,7 @@ export default class calendarYearView extends Component {
                 },
                 {
                     text: 'OK', onPress: () => {
-                        console.log("start addEventOnCalendar")
+                        //console.log("start addEventOnCalendar")
                         this.setState({
                             isLoading: true
                         })
@@ -954,13 +951,13 @@ export default class calendarYearView extends Component {
     }
 
     deleteEventOnCalendar = async () => {
-        console.log("YearView ==> deleteEventCalendar")
+        //console.log("YearView ==> deleteEventCalendar")
         await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
     }
 
     checkDuplicateEventCalendar = async (duplicateEventArray, newEventID) => {
-        //console.log("checkDuplicateEventCalendar ==> checkDuplication ==> ", duplicateEventArray)
-        //console.log("checkDuplicateEventCalendar ==> newEventID ==> ", newEventID)
+        ////console.log("checkDuplicateEventCalendar ==> checkDuplication ==> ", duplicateEventArray)
+        ////console.log("checkDuplicateEventCalendar ==> newEventID ==> ", newEventID)
         let checkFlag = false
         for (let index = 0; index < duplicateEventArray.length; index++) {
             const eventID = duplicateEventArray[index];
@@ -969,7 +966,7 @@ export default class calendarYearView extends Component {
             }
         }
 
-        //console.log("checkDuplicateEventCalendar ==> checkFlag ==> ", checkFlag)
+        ////console.log("checkDuplicateEventCalendar ==> checkFlag ==> ", checkFlag)
         if (checkFlag == false) {
             duplicateEventArray.push(newEventID)
             return [checkFlag, duplicateEventArray]
@@ -994,11 +991,11 @@ export default class calendarYearView extends Component {
 
         let duplicateEventArray = []
 
-        // console.log("addEventOnCalendar ==> this.state.calendarEventData ", this.state.calendarEventData.length)
+        // //console.log("addEventOnCalendar ==> this.state.calendarEventData ", this.state.calendarEventData.length)
 
         if (this.state.calendarEventData.code == 200) {
             let holidayArray = this.state.calendarEventData.data.holidays;
-            // console.log("addEventOnCalendar ==> holidayArray ", holidayArray.length)
+            // //console.log("addEventOnCalendar ==> holidayArray ", holidayArray.length)
             // for (let index = 0; index < holidayArray.length; index++) {
             for (let index = 0; index < holidayArray.length; index++) {
                 const daysArray = holidayArray[index].days
@@ -1058,7 +1055,7 @@ export default class calendarYearView extends Component {
                         } else {
                             await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
                         }
-                        console.log("==============Success==============")
+                        //console.log("==============Success==============")
                     }
                 }
             }
@@ -1158,7 +1155,9 @@ export default class calendarYearView extends Component {
                         </TouchableOpacity>
                         <Text style={styles.navTitleText}>Calendar</Text>
                         <View style={styles.navRightContainer}>
-                            <TouchableOpacity onPress={this.onSynWithCalendar.bind(this)}>
+                            <TouchableOpacity onPress={this.onSynWithCalendar.bind(this)}
+                            //style={{justifyContent:'center'}}
+                            >
                                 <Image
                                     style={styles.navRightButton}
                                     source={require('../resource/images/calendar_sync.png')}
@@ -1166,14 +1165,14 @@ export default class calendarYearView extends Component {
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => {
-                                ////////////console.log("yearPickerForDownloadPDFFileView");
+                                //////////////console.log("yearPickerForDownloadPDFFileView");
                                 this.setState({
                                     yearPickerForDownloadPDFFileView: true
                                 })
                             }}>
                                 <Image
                                     style={styles.navRightButton}
-                                    source={require('../resource/images/calendar_download.png')}
+                                    source={require('../resource/images/PDFdownload.png')}
                                 />
                             </TouchableOpacity>
                         </View>

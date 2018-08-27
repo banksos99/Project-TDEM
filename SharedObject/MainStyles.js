@@ -193,7 +193,27 @@ export const styles = StyleSheet.create({
         // zIndex: '10',
     },
     navRightButton: {
-        flex: 1
+        flex: 1,
+        width: 45,
+        height: 45,
+        padding:5,
+        // marginLeft:10,
+        // marginRight:10,
+        // backgroundColor:'blue',
+        
+
+    },
+    navRightSyncButton: {
+        flex: 1,
+        width: 30,
+        height: 30,
+        margin:10,
+        // width: 25,
+        // height: 25,
+        // marginTop:10,
+        // marginLeft:10,
+        // marginRight:10,
+        // backgroundColor:'green'
     },
     navBackButton: {
         width: 45,

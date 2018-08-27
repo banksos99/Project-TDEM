@@ -17,6 +17,9 @@ import SaveTimeNonPayroll from "../constants/SaveTimeNonPayroll"
 import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
 
+import EventCalendar from "../constants/EventCalendar"
+
+
 const ROLL_ANNOUNCE = 50;
 
 let annountype = { 'All': 'All', 'Company Announcement': 'Company Announcement', 'Emergency Announcement': 'Emergency Announcement', 'Event Announcement': 'Event Announcement', 'General Announcement': 'General Announcement' };
@@ -55,6 +58,7 @@ export default class HMF01011MainView extends Component {
     saveAutoSyncCalendar = new SaveAutoSyncCalendar()
     saveProfile = new SaveProfile()
     saveTimeNonPayroll = new SaveTimeNonPayroll()
+    eventCalendar = new EventCalendar()
 
     constructor(props) {
         super(props);
@@ -78,7 +82,7 @@ export default class HMF01011MainView extends Component {
             notiAnnounceMentBadge: SharedPreference.notiAnnounceMentBadge,
             notiPayslipBadge: SharedPreference.notiPayslipBadge.length,
             nonPayrollBadgeFirstTime: true,
-            loadingannouncement:false
+            loadingannouncement: false
             //  page: 0
         }
 
@@ -208,7 +212,7 @@ export default class HMF01011MainView extends Component {
 
     componentWillUnmount() {
 
-      clearTimeout(this.timer);
+        clearTimeout(this.timer);
 
         SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge;
 
@@ -242,7 +246,7 @@ export default class HMF01011MainView extends Component {
             const _format = 'YYYY-MM-DD HH:mm:ss'
             const newdate = moment(today).format(_format).valueOf();
             SharedPreference.lastdatetimeinterval = newdate
-          //  SharedPreference.lastdatetimeinterval = '2018-08-22 15:07:00'
+            //  SharedPreference.lastdatetimeinterval = '2018-08-22 15:07:00'
         }
         console.log("lastdatetimeinterval ==> ", SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval)
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, 1, SharedPreference.profileObject.client_token)
@@ -360,7 +364,7 @@ export default class HMF01011MainView extends Component {
 
                                     })
                                 })
-                                console.log('notiPayslipBadge',SharedPreference.notiPayslipBadge)
+                                console.log('notiPayslipBadge', SharedPreference.notiPayslipBadge)
                             }
 
                         }
@@ -486,7 +490,7 @@ export default class HMF01011MainView extends Component {
                         if (responseJson.status === 200) {
                             this.setState(this.renderloadingscreen());
 
-                           // console.log('this.state.dataSource.data: ', responseJson.data)
+                            // console.log('this.state.dataSource.data: ', responseJson.data)
                             this.setState({
                                 notiAnnounceMentBadge: 0
                             })
@@ -684,7 +688,7 @@ export default class HMF01011MainView extends Component {
 
         if (code.SUCCESS == data.code) {
             this.setState(this.renderloadingscreen());
-           // console.log('this.state.dataSource.data: ', responseJson.data)
+            // console.log('this.state.dataSource.data: ', responseJson.data)
             this.setState({
                 notiAnnounceMentBadge: 0
             })
@@ -950,7 +954,7 @@ console.log("non payroll dataSource ==> ", data.data)
         })
         console.log('datadetail => ', data)
         if (code.SUCCESS == data.code) {
-           // SharedPreference.notiPayslipBadge = [];
+            // SharedPreference.notiPayslipBadge = [];
             this.props.navigation.navigate(rount, {
                 DataResponse: data.data,
             });
@@ -1287,7 +1291,7 @@ console.log("non payroll dataSource ==> ", data.data)
 
     onOpenAnnouncementDetail(item, index) {
 
-        console.log('onOpenAnnouncementDetail', )
+        console.log('onOpenAnnouncementDetail')
         this.setState({
             isscreenloading: true,
             loadingtype: 3
@@ -1712,15 +1716,28 @@ console.log("non payroll dataSource ==> ", data.data)
         }
     }
 
-    onChangeFunction(newState) {
-        ////console.log("onChangeFunction ==> ", newState)
+    deleteEventOnCalendar = async () => {
+        console.log("YearView ==> deleteEventCalendar")
+        let currentyear = new Date().getFullYear();
+        await this.eventCalendar._deleteEventCalendar(currentyear)
+    }
 
+    onChangeFunction = async (newState) =>  {
+        console.log("onChangeFunction ==> ", newState)
         this.setState({
-            syncCalendar: newState.syncCalendar
+            syncCalendar: newState.syncCalendar,
+            isscreenloading: true
         });
         SharedPreference.calendarAutoSync = newState.syncCalendar
         this.saveAutoSyncCalendar.setAutoSyncCalendar(newState.syncCalendar)
-        ////console.log("onChangeFunction ==> calendarAutoSync ==>  ", SharedPreference.calendarAutoSync)
+
+        if (newState.syncCalendar == false) {
+            await this.deleteEventOnCalendar()//TODO bell
+        }
+
+        this.setState({
+            isscreenloading: false
+        })
     }
 
 
@@ -1768,7 +1785,7 @@ console.log("non payroll dataSource ==> ", data.data)
                         </View>
                     </View>
                 </View>
-                
+
                 <View style={{ flex: 1, backgroundColor: 'white' }} >
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <TouchableOpacity
@@ -1780,10 +1797,10 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[0] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            { width: 50,height:50, tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuEmployee.png')}
-                                       // resizeMode='contain'
+                                    // resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
@@ -1805,10 +1822,10 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[1] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            { width: 50,height:50, tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuNonpayroll.png')}
-                                        //resizeMode='contain'
+                                    //resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
@@ -1826,17 +1843,17 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[2] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            { width: 50,height:50, tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuPayslip.png')}
-                                       // resizeMode='contain'
+                                    // resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
                                     <Text style={styles.mainmenuTextname}>Pay Slip</Text>
                                 </View>
                                 {/* notiPayslipBadge */}
-                                <View style={this.state.notiPayslipBadge ? styles.badgeIconpayslip :styles.badgeIconpayslipDisable}><Text style={this.state.notiPayslipBadge ? { color: 'white' } : { color: 'transparent' }}>{this.state.notiPayslipBadge}</Text></View>
+                                <View style={this.state.notiPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={this.state.notiPayslipBadge ? { color: 'white' } : { color: 'transparent' }}>{this.state.notiPayslipBadge}</Text></View>
 
                             </View>
                         </TouchableOpacity>
@@ -1853,10 +1870,10 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[3] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            { width: 50,height:50, tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuLeave.png')}
-                                        //resizeMode='contain'
+                                    //resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
@@ -1875,10 +1892,10 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[4] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            {  width: 50,height:50,tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuClock.png')}
-                                       // resizeMode='contain'
+                                    // resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
@@ -1897,10 +1914,10 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[5] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            { width: 50,height:50, tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuOT.png')}
-                                       // resizeMode='contain'
+                                    // resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
@@ -1922,10 +1939,10 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[6] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            { width: 50,height:50, tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuCalendar.png')}
-                                       // resizeMode='contain'
+                                    // resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
@@ -1944,10 +1961,10 @@ console.log("non payroll dataSource ==> ", data.data)
                                 <View style={styles.mainmenuImageButton}>
                                     <Image
                                         style={rolemanagementEmpoyee[7] === 1 ?
-                                            { width: 50,height:50, tintColor: Colors.redTextColor } :
-                                            { width: 50,height:50, tintColor: Colors.lightGrayTextColor }}
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
                                         source={require('./../resource/images/MainMenu/MenuHandbook.png')}
-                                       // resizeMode='contain'
+                                    // resizeMode='contain'
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
@@ -2070,7 +2087,7 @@ console.log("non payroll dataSource ==> ", data.data)
 
         return (
             <View style={{ flex: 1 }}>
-                
+
                 <ScrollView
                     ref="announcescrollView"
                     style={{ backgroundColor: 'lightgray' }}
@@ -2151,9 +2168,9 @@ console.log("non payroll dataSource ==> ", data.data)
                         ))
                     }
                 </ScrollView>
-                <View style={tempannouncementData.length|!this.state.loadingannouncement ?{height:0}:{ width: '100%', height: '100%', position: 'absolute', justifyContent: 'center' }}>
+                <View style={tempannouncementData.length | !this.state.loadingannouncement ? { height: 0 } : { width: '100%', height: '100%', position: 'absolute', justifyContent: 'center' }}>
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={tempannouncementData.length|!this.state.loadingannouncement ? { fontSize: 25, textAlign: 'center', color: 'transparent' } : { fontSize: 25, textAlign: 'center', color: 'black' }}> No Data</Text>
+                        <Text style={tempannouncementData.length | !this.state.loadingannouncement ? { fontSize: 25, textAlign: 'center', color: 'transparent' } : { fontSize: 25, textAlign: 'center', color: 'black' }}> No Data</Text>
                     </View>
                 </View>
             </View>
@@ -2326,14 +2343,7 @@ console.log("non payroll dataSource ==> ", data.data)
 
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        {/* <Switch
-                            // onTintColor="red"
-                            // onValueChange={(value) => this.onChangeFunction({ syncCalendar: value })}
-                            // onValueChange={SharedPreference.syncCalendar}
-                            // value={SharedPreference.syncCalendar} />
-                            /> */}
                         <Switch
-                            // onValueChange={this.onChangeFunction}
                             onValueChange={(value) => this.onChangeFunction({ syncCalendar: value })}
                             value={this.state.syncCalendar}
                         />
@@ -2397,11 +2407,11 @@ console.log("non payroll dataSource ==> ", data.data)
             'Sign Out',
             'Do you want to sign out ?',
             [
-              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-              {text: 'OK', onPress: () => { this.on_confire_signout() }},
+                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: 'OK', onPress: () => { this.on_confire_signout() } },
             ],
             { cancelable: false }
-          )
+        )
     }
 
     on_confire_signout() {
@@ -2416,7 +2426,7 @@ console.log("non payroll dataSource ==> ", data.data)
         this.loadSignOutAPI()
 
     }
-   
+
 
     notificationListener(badge) {
 
@@ -2568,16 +2578,16 @@ console.log("non payroll dataSource ==> ", data.data)
         }
     }
 
-    cancel_select_change_month_andr(){
-        
-         this.setState({
-          
-             loadingtype: 1,
-             isscreenloading: false,
- 
-         })
- 
-     }
+    cancel_select_change_month_andr() {
+
+        this.setState({
+
+            loadingtype: 1,
+            isscreenloading: false,
+
+        })
+
+    }
 
     renderpickerview() {
         if (this.state.loadingtype == 1) {
