@@ -1155,7 +1155,9 @@ export default class calendarYearView extends Component {
                         </TouchableOpacity>
                         <Text style={styles.navTitleText}>Calendar</Text>
                         <View style={styles.navRightContainer}>
-                            <TouchableOpacity onPress={this.onSynWithCalendar.bind(this)}>
+                            <TouchableOpacity onPress={this.onSynWithCalendar.bind(this)}
+                            //style={{justifyContent:'center'}}
+                            >
                                 <Image
                                     style={styles.navRightSyncButton}
                                     source={require('../resource/images/calendar_sync.png')}
@@ -1169,7 +1171,7 @@ export default class calendarYearView extends Component {
                             }}>
                                 <Image
                                     style={styles.navRightButton}
-                                    source={require('../resource/images/calendar_download.png')}
+                                    source={require('../resource/images/PDFdownload.png')}
                                 />
                             </TouchableOpacity>
                         </View>

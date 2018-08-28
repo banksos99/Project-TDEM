@@ -811,10 +811,10 @@ export const styles = StyleSheet.create({
     },
     payslipAnnoualLeft: {
         flex: 1,
-        textAlign: 'left',
+       // textAlign: 'left',
         color: Colors.grayTextColor,
         fontSize: scale * 11,
-        marginLeft: 10,
+        marginLeft: scale * 10,
         fontFamily: font_medium
     },
     payslipAnnoualRight: {
@@ -822,7 +822,7 @@ export const styles = StyleSheet.create({
         textAlign: 'right',
         color: Colors.lightredTextColor,
         fontSize: 15 * scale,
-        marginLeft: 10
+        marginLeft: 10* scale
     },
     alertDialogContainer: {
         flex: 1,
