@@ -1157,13 +1157,12 @@ export default class calendarYearView extends Component {
                         <View style={styles.navRightContainer}>
                             <TouchableOpacity onPress={this.onSynWithCalendar.bind(this)}>
                                 <Image
-                                    style={styles.navRightButton}
+                                    style={styles.navRightSyncButton}
                                     source={require('../resource/images/calendar_sync.png')}
                                 />
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => {
-                                //////////////console.log("yearPickerForDownloadPDFFileView");
                                 this.setState({
                                     yearPickerForDownloadPDFFileView: true
                                 })
