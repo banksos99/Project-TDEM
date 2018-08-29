@@ -17,11 +17,14 @@ import RestAPI from "./../constants/RestAPI"
 import firebase from 'react-native-firebase';
 import Layout from "../SharedObject/Layout";
 
+import SaveAutoSyncCalendar from "./../constants/SaveAutoSyncCalendar";
+
+
 let scale = Layout.window.width / 320;
 let countgettokenFB = 0;
 
 export default class RegisterActivity extends Component {
-
+    saveAutoSyncCalendar = new SaveAutoSyncCalendar()
     savePIN = new SavePIN()
     saveProfile = new SaveProfile()
     saveToken = new SaveTOKEN()
@@ -44,6 +47,7 @@ export default class RegisterActivity extends Component {
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_REGISTER)
         SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+        // SharedPreference.sessionOpenFirstTime = true
 
     }
 
@@ -106,6 +110,7 @@ export default class RegisterActivity extends Component {
         // let autoregisterCount = 0;
         
         if (code.SUCCESS == data.code) {
+            this.saveAutoSyncCalendar.setAutoSyncCalendar(null)
             this.saveProfile.setProfile(data.data)
             loginsuccess = true;
             SharedPreference.profileObject = await this.saveProfile.getProfile()
