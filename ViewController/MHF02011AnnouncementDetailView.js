@@ -5,12 +5,16 @@ import {
     View,
     TouchableOpacity,
     Image, WebView,
-    BackHandler
+    BackHandler,
+    Platform,
+    Alert
 } from 'react-native';
 
 import { styles } from "./../SharedObject/MainStyles"
 import SharedPreference from "./../SharedObject/SharedPreference"
 import firebase from 'react-native-firebase';
+import RestAPI from "../constants/RestAPI"
+import StringText from '../SharedObject/StringText'
 
 let content;
 let title;
@@ -35,11 +39,16 @@ export default class PaySlipActivity extends Component {
        
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
+    // componentWillMount() {
+    //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    // }
 
     componentWillUnmount() {
+        clearTimeout(this.timer);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -48,6 +57,102 @@ export default class PaySlipActivity extends Component {
         return true;
     }
 
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog(data) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            'MHF00600AERR',
+            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
 
     onBack() {
         SharedPreference.notiAnnounceMentID = 0
@@ -83,7 +188,8 @@ export default class PaySlipActivity extends Component {
             </View> */}
                 <WebView
                     //source={{ uri: 'https://github.com/facebook/react-native' }}
-                    source={{ html: '<!DOCTYPE html><html><body><style>p{font-size:60px;}</style>' + content + '</body></html>' }}
+                    source={{ html: '<!DOCTYPE html><html><body><style>p{font-family: Prompt-Regular;}</style>' + content + '</body></html>' }}
+                    scalesPageToFit={(Platform.OS === 'ios') ? false : true}
                     style={{ marginTop: 0 }}
                 />
             </View >

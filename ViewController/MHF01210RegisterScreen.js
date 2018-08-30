@@ -665,7 +665,7 @@ console.log('onSetPin')
     render() {
         return (
             <View style={styles.container} >
-                <View style={styles.container} >
+                {/* <View style={styles.container} > */}
 
                     {/* Image Background */}
                     <Image style={styles.registBackground}
@@ -732,7 +732,7 @@ console.log('onSetPin')
                         <Text style={{ fontSize: 10, color: 'lightgray' }}>{SharedPreference.deviceInfo.deviceBrand},{SharedPreference.deviceInfo.deviceOS},{SharedPreference.deviceInfo.deviceModel},{SharedPreference.deviceInfo.deviceOSVersion},{SharedPreference.deviceInfo.appVersion}</Text>
                         <Text style={{ fontSize: 10, color: 'lightgray' }}>{SharedPreference.deviceInfo.firebaseToken}</Text> */}
                     </View>
-                </View >
+                {/* </View > */}
                 {this.renderCreatePin()}
                 {this.renderCreatePinSuccess()}
 

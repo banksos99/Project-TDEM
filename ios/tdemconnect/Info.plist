@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.72</string>
+	<string>1.76</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.72</string>
+	<string>1.76</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -33,7 +33,7 @@
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app requires access to the calendar</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This application requires location services to work</string>
 	<key>UIAppFonts</key>
 	<array>

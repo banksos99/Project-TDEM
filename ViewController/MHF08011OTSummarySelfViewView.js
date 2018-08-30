@@ -63,6 +63,7 @@ export default class OTSummaryDetail extends Component {
             
             dateselected: 0,
         }
+        selectmonth = 0;
         tempannouncementType=0;
         tempinitannouncementType = 0;
         tempinitannouncementTypetext = 0;
@@ -73,6 +74,7 @@ export default class OTSummaryDetail extends Component {
     }
 
     componentDidMount() {
+        selectmonth = 0;
         this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
@@ -119,6 +121,10 @@ export default class OTSummaryDetail extends Component {
 
             this.onAutenticateErrorAlertDialog()
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
         } else if (code.SUCCESS == data.code) {
 
             this.timer = setTimeout(() => {
@@ -155,6 +161,34 @@ export default class OTSummaryDetail extends Component {
             { cancelable: false }
         )
     }
+
+    onRegisterErrorAlertDialog(data) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            'MHF00600AERR',
+            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
 
     checkDataFormat(DataResponse) {
        

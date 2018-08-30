@@ -147,9 +147,9 @@ export default class OrganizationStruct extends Component {
 
     onClickOrgStruct(item, index) {
         
-        //console.log('org_code :', item.org_code)
-
-        if (item.org_code == 0) {
+        console.log('org_code :', item.org_code)
+        console.log('org_name :', item.org_name)
+        if (parseInt(item.org_code) == 0) {
 
             // *** select emp info detail
             this.setState({
@@ -168,8 +168,8 @@ export default class OrganizationStruct extends Component {
         } else {
             
             console.log('item => :', item)
-
-         if (item.org_level === 40){
+            console.log('level => :', item.org_level)
+         if (parseInt(item.org_level) === 40){
             // *** select employee list
             this.setState({
 
@@ -319,7 +319,7 @@ export default class OrganizationStruct extends Component {
         data = data[1]
         // console.log('APICallback data :', data)
         if (code.SUCCESS == data.code) {
-            // console.log('APICallback :', data.data)
+            console.log('APICallback :', data.data)
             // console.log('dataSource :', dataSource.length)
             // console.log('index_org_code :', this.state.index_org_code)
             // if (data.data.org_lst) {
@@ -359,19 +359,42 @@ export default class OrganizationStruct extends Component {
                                 ))
                             }
                             if (data.data[j].org_lst) {
-                                data.data[j].org_lst.map((item) => (
-                                    temparr.push(
-                                        {
-                                            org_code: item.org_code,
-                                            org_name: item.org_name,
-                                            org_level: item.org_level,
-                                            next_level: item.next_level,
-                                            expand: 0
 
-                                        }
-                                    )
+                                for (let i = 0; i < data.data[j].org_lst.length; i++) {
 
-                                ))
+                                    let Orgname = data.data[j].org_lst[i].org_name;
+                                    let Orglevel = data.data[j].org_lst[i].org_level;
+                                    console.log('org_code => :', data.data[j].org_lst[i].org_code)
+                                    if (!data.data[j].org_lst[i].org_code) {
+                                        console.log('data null')
+                                        Orgname = 'N/A'
+                                        Orglevel = parseInt(dataSource[i].org_level) + 10;
+                                    }
+
+                                    temparr.push({
+                                        org_code: data.data[j].org_lst[i].org_code,
+                                        org_name: Orgname,
+                                        org_level: Orglevel,
+                                        next_level: data.data[j].org_lst[i].next_level,
+                                        expand: 0
+
+                                    })
+
+                                }
+                                // data.data[j].org_lst.map((item) => (
+
+                                //     temparr.push(
+                                //         {
+                                //             org_code: item.org_code,
+                                //             org_name: item.org_name,
+                                //             org_level: item.org_level,
+                                //             next_level: item.next_level,
+                                //             expand: 0
+
+                                //         }
+                                //     )
+
+                                // ))
                             }
 
                         }
@@ -513,6 +536,8 @@ export default class OrganizationStruct extends Component {
     }
 
     APIEmpCallback(data) {
+
+        console.log('APIEmpCallback')
         code = data[0]
         data = data[1]
         if (code.SUCCESS == data.code) {
@@ -720,7 +745,7 @@ export default class OrganizationStruct extends Component {
                                                                 { marginLeft: (parseInt(item.org_level-beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular' } :
                                                                 { marginLeft: (parseInt(item.org_level-beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}
 
-                                                            >{item.org_name}</Text>
+                                                            >{item.org_name + item.org_level}</Text>
                                                         </View>
                                                         <View style={item.org_code === 0 ? { height: 20, justifyContent: 'center' } : { height: 0, justifyContent: 'center' }} >
                                                             <Text style={{ marginLeft: (parseInt(item.org_level-beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}

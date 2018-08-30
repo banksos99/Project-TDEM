@@ -246,6 +246,10 @@ settimerInAppNoti() {
 
             this.onAutenticateErrorAlertDialog()
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
         } else if (code.SUCCESS == data.code) {
 
             this.timer = setTimeout(() => {
@@ -266,6 +270,33 @@ settimerInAppNoti() {
         Alert.alert(
             StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
             StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog(data) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            data.data.code,
+            data.data.detail,
             [{
                 text: 'OK', onPress: () => {
 
@@ -749,17 +780,17 @@ settimerInAppNoti() {
     render() {
         
         return (
-            <View style={{ 
-                
-                position:'absolute',
-                top: 0, 
+            <View style={{
+
+                position: 'absolute',
+                top: 0,
                 left: 0,
                 width: this.state.calWidth,
-                height: this.state.calHeight 
-            
+                height: this.state.calHeight,
+                backgroundColor: 'white'
             }}>
 
-                <View style={[styles.navContainer, { flexDirection: 'column' }]}>
+                <View style={[styles.navContainer, { flexDirection: 'column' ,backgroundColor: 'white'}]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
                         <View style={{ flex: 1, justifyContent: 'center', }}>

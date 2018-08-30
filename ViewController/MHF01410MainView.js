@@ -48,6 +48,8 @@ let rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
 let rolemanagementManager = [0, 0, 0, 0];
 let timerstatus = false;
 
+let tempannouncementStatus=0;
+
 
 import moment from 'moment'
 
@@ -82,8 +84,9 @@ export default class HMF01011MainView extends Component {
             notiAnnounceMentBadge: SharedPreference.notiAnnounceMentBadge,
             notiPayslipBadge: SharedPreference.notiPayslipBadge.length,
             nonPayrollBadgeFirstTime: true,
-            loadingannouncement: false
+            loadingannouncement: false,
             //  page: 0
+    
         }
 
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
@@ -171,7 +174,7 @@ export default class HMF01011MainView extends Component {
             this.props.navigation.navigate('HomeScreen');
             return true
         })
-
+        
 
     }
 
@@ -215,7 +218,7 @@ export default class HMF01011MainView extends Component {
         clearTimeout(this.timer);
 
         SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge;
-
+   
         
 
         //SharedPreference.notipayslipID = 0
@@ -271,6 +274,10 @@ export default class HMF01011MainView extends Component {
 
                         this.onAutenticateErrorAlertDialog()
 
+                    } else if (responseJson.status == 401) {
+
+                        this.onRegisterErrorAlertDialog(responseJson.errors)
+                        
                     } else if (responseJson.status == 200) {
 
                         this.timer = setTimeout(() => {
@@ -349,7 +356,8 @@ export default class HMF01011MainView extends Component {
 
                                 this.setState({
 
-                                    notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+                                    // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+                                    notiAnnounceMentBadge: parseInt(dataReceive.badge_count)
                                 })
 
                             } else if (dataReceive.function_id == 'PHF05010') {
@@ -400,7 +408,8 @@ export default class HMF01011MainView extends Component {
         if (this.state.refreshing) {
             return;
         }
-        page = 1
+        page = 1;
+    
         this.setState({
             loadingtype: 3,
             isscreenloading: true,
@@ -491,9 +500,9 @@ export default class HMF01011MainView extends Component {
                             this.setState(this.renderloadingscreen());
 
                             // console.log('this.state.dataSource.data: ', responseJson.data)
-                            this.setState({
-                                notiAnnounceMentBadge: 0
-                            })
+                            // this.setState({
+                            //     notiAnnounceMentBadge: 0
+                            // })
                             this.notificationListener(this.state.notiAnnounceMentBadge);
                             tempannouncementData = []
                             announcementData = responseJson.data;
@@ -689,9 +698,9 @@ export default class HMF01011MainView extends Component {
         if (code.SUCCESS == data.code) {
             this.setState(this.renderloadingscreen());
             // console.log('this.state.dataSource.data: ', responseJson.data)
-            this.setState({
-                notiAnnounceMentBadge: 0
-            })
+            // this.setState({
+            //     notiAnnounceMentBadge: 0
+            // })
             this.notificationListener(this.state.notiAnnounceMentBadge)
             tempannouncementData = []
             announcementData = responseJson.data;
@@ -850,7 +859,7 @@ export default class HMF01011MainView extends Component {
             const _format = 'YYYY-MM-DD hh:mm:ss'
             const nowDateTime = moment(today).format(_format).valueOf();
             this.saveTimeNonPayroll.setTimeStamp(nowDateTime)
-console.log("non payroll dataSource ==> ", data.data)
+            console.log("non payroll dataSource ==> ", data.data)
             this.props.navigation.navigate('NonPayrollList', {
                 dataResponse: data.data,
                 badgeArray: this.state.nonPayrollBadge
@@ -866,8 +875,13 @@ console.log("non payroll dataSource ==> ", data.data)
             this.props.navigation.navigate('NonPayrollList', {
                 badgeArray: this.state.nonPayrollBadge
             });
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
             this.onAutenticateErrorAlertDialog(data)
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+
         } else {
             this.onLoadErrorAlertDialog(data, 'NonPayroll')
         }
@@ -1115,16 +1129,25 @@ console.log("non payroll dataSource ==> ", data.data)
             StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
             [{
                 text: 'OK', onPress: () => {
-                    // this.select_sign_out()/
-                    // page = 0
-                    // timerstatus = false
-                    // SharedPreference.Handbook = []
-                    // SharedPreference.profileObject = null
-                    // this.saveProfile.setProfile(null)
-                    // this.setState({
-                    //     isscreenloading: false
-                    // })
-                    // this.props.navigation.navigate('RegisterScreen')
+                    this.signout()
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog(errors) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            'MHF00600AERR',
+            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            [{
+                text: 'OK', onPress: () => {
                     this.signout()
                 }
             }],
@@ -1228,54 +1251,121 @@ console.log("non payroll dataSource ==> ", data.data)
 
 
     onOpenOrgaStructer() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadOrgStructerfromAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadOrgStructerfromAPI()
+            });
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+
+        }
 
     }
+
     onOpenOrgaStructerClockInOut() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadOrgStructerClockInOutfromAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadOrgStructerClockInOutfromAPI()
+            });
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+
+        }
     }
 
     onOpenOrgaStructerOTHistory() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadOrgStructerOTHistoryfromAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadOrgStructerOTHistoryfromAPI()
+            });
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+
+        }
+
     }
 
     onOpenOrgaStructerOTAverage() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadOrgStructerOTAveragefromAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadOrgStructerOTAveragefromAPI()
+            });
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+
+
+        }
+
+
     }
 
 
     onOpenOrgaStructerOTHistory() {
-        this.setState({
-            isscreenloading: true,
-            loadingtype: 3
-        }, function () {
-            this.setState(this.renderloadingscreen())
-            this.loadOrgStructerOTHistoryfromAPI()
-        });
+
+        if (SharedPreference.isConnected) {
+
+            this.setState({
+                isscreenloading: true,
+                loadingtype: 3
+            }, function () {
+                this.setState(this.renderloadingscreen())
+                this.loadOrgStructerOTHistoryfromAPI()
+            });
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+
+        }
     }
 
     onOpenAnnouncement() {
@@ -1292,6 +1382,7 @@ console.log("non payroll dataSource ==> ", data.data)
     onOpenAnnouncementDetail(item, index) {
 
         console.log('onOpenAnnouncementDetail')
+        console.log('onOpenAnnouncementItem = > ',item)
         this.setState({
             isscreenloading: true,
             loadingtype: 3
@@ -1553,8 +1644,28 @@ console.log("non payroll dataSource ==> ", data.data)
                 )
                 return
             }
+            
+        } 
+        
+        if (tabnumber === 2) {
 
-        } if (tabnumber === 3) {
+            if (SharedPreference.isConnected) {
+                page = tabnumber
+                this.setState({
+
+                })
+            } else {
+                Alert.alert(
+                    StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                    StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                    [{text: 'OK', onPress: () => {}}],{ cancelable: false }
+                )
+                return
+            }
+
+        }
+        
+        if (tabnumber === 3) {
             if (settingstatus == 'N') {
                 return
             }
@@ -1588,38 +1699,86 @@ console.log("non payroll dataSource ==> ", data.data)
     }
 
     select_announce_sort = () => {
+
         if (ascendingSort == false) {
+
             ascendingSort = true;
             sortImageButton = require('./../resource/images/ascending.png');
-        }
-        else {
+
+        }else {
+
             ascendingSort = false;
             sortImageButton = require('./../resource/images/descending.png');
 
         }
+
         this.setState({
+
             isscreenloading: true,
             loadingtype: 3
+
         }, function () {
+
             announcementData = [];
             this.loadAnnouncementfromAPI();
+
         });
+
     }
 
+    cancel_select_announce_type =()=>{
+
+        this.setState({
+            isscreenloading: false,
+            loadingtype: 2
+        }, function () {
+           
+        });
+
+    }
+    select_init_announce_type = () => {
+
+        this.setState({
+            loadingtype: 0,
+
+        }, function () {
+            // this.setState(this.select_search_announce())
+           // this.select_search_announce()
+        });
+    }
     select_announce_type = () => {
+
         this.setState({
             loadingtype: 0
         }, function () {
-            this.setState(this.select_search_announce())
+            // this.setState(this.select_search_announce())
+            this.select_search_announce()
         });
     }
 
-    select_announce_status = () => {
+    cancel_select_announce_status = ()=>{
+
         this.setState({
-            loadingtype: 1
+            isscreenloading: false,
+            loadingtype: 2
         }, function () {
-            this.setState(this.select_search_announce())
+            //this.setState(this.select_search_announce())
+          //  this.select_search_announce()
         });
+    }
+    select_announce_status = () => {
+        // announcementStatus
+
+        this.setState({
+
+            loadingtype: 1
+
+
+        }, function () {
+            //this.setState(this.select_search_announce())
+            this.select_search_announce()
+        });
+
     }
 
     on_select_Announcement_type(item) {
@@ -1628,7 +1787,8 @@ console.log("non payroll dataSource ==> ", data.data)
             announcementType: item,
             announcementTypetext: item
         }, function () {
-            this.setState(this.select_announce_type())
+           // this.setState(this.select_announce_type())
+           this.select_announce_type()
         });
     }
 
@@ -1645,7 +1805,8 @@ console.log("non payroll dataSource ==> ", data.data)
             announcementStatus: temp,
             announcementStatustext: item
         }, function () {
-            this.setState(this.select_announce_status())
+            //this.setState(this.select_announce_status())
+            this.select_announce_status()
         });
     }
 
@@ -1659,7 +1820,7 @@ console.log("non payroll dataSource ==> ", data.data)
 
             }, function () {
 
-                this.setState(this.renderloadingscreen())
+               // this.setState(this.renderloadingscreen())
             });
 
         } else {
@@ -1711,7 +1872,7 @@ console.log("non payroll dataSource ==> ", data.data)
 
             }, function () {
 
-                this.setState(this.renderloadingscreen())
+               // this.setState(this.renderloadingscreen())
             });
         }
     }
@@ -2058,7 +2219,7 @@ console.log("non payroll dataSource ==> ", data.data)
                             <View style={{ height: 25, justifyContent: 'center', backgroundColor: 'lightgray', borderRadius: 3, }} >
                                 <TouchableOpacity
                                     style={styles.button}
-                                    onPress={(this.select_announce_type.bind(this))}
+                                    onPress={(this.select_init_announce_type.bind(this))}
                                 >
                                     <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10 }}>{this.state.announcementTypetext}</Text>
                                 </TouchableOpacity>
@@ -2395,6 +2556,16 @@ console.log("non payroll dataSource ==> ", data.data)
         SharedPreference.Handbook = []
         SharedPreference.profileObject = null
         this.saveProfile.setProfile(null)
+        if (Platform.OS === 'android') {
+
+        } else if (Platform.OS === 'ios') {
+            const localNotification = new firebase.notifications.Notification()
+               
+                .ios.setBadge(0);
+            firebase.notifications()
+                .displayNotification(localNotification)
+                .catch(err => console.error(err));
+        }
         this.setState({
             isscreenloading: false
         })
@@ -2403,15 +2574,28 @@ console.log("non payroll dataSource ==> ", data.data)
 
     select_sign_out() {
 
-        Alert.alert(
-            'Sign Out',
-            'Do you want to sign out ?',
-            [
-                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                { text: 'OK', onPress: () => { this.on_confire_signout() } },
-            ],
-            { cancelable: false }
-        )
+        if (SharedPreference.isConnected) {
+
+            Alert.alert(
+                'Sign Out',
+                'Do you want to sign out ?',
+                [
+                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                    { text: 'OK', onPress: () => { this.on_confire_signout() } },
+                ],
+                { cancelable: false }
+            )
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
+            )
+
+        }
+
+
     }
 
     on_confire_signout() {
@@ -2562,6 +2746,17 @@ console.log("non payroll dataSource ==> ", data.data)
             //     { cancelable: false }
             // )
         }
+
+        if (Platform.OS === 'android') {
+
+        } else if (Platform.OS === 'ios') {
+            const localNotification = new firebase.notifications.Notification()
+               
+                .ios.setBadge(0);
+            firebase.notifications()
+                .displayNotification(localNotification)
+                .catch(err => console.error(err));
+        }
     }
 
     onChangePIN() {
@@ -2639,19 +2834,31 @@ console.log("non payroll dataSource ==> ", data.data)
                                 announcementStatustext: announstatus[itemValue],
 
                             }, function () {
-                                initannouncementStatustext = announstatus[itemValue];
-                                initannouncementStatus = itemValue;
+                                tempannouncementStatustext = announstatus[itemValue];
+                                tempannouncementStatus = itemValue;
                             })}>
                             <Picker.Item label="All" value="All" />
                             <Picker.Item label="Read" value={true} />
                             <Picker.Item label="Unread" value={false} />
                         </Picker>
+                        <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                                onPress={(this.cancel_select_announce_status)}>
+                                >
+                                <Text style={styles.buttonpicker}> Cancel</Text>
+                            </TouchableOpacity>
+                            <View style={{ flex: 3, justifyContent: 'center' }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
+                                onPress={(this.select_announce_status)}>
+                                <Text style={styles.buttonpicker}> OK</Text>
+                            </TouchableOpacity>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
+                        </View>
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
                             <TouchableOpacity style={styles.button} onPress={(this.select_announce_status)}>
                                 <Text style={{ textAlign: 'center', color: Colors.redTextColor, fontSize: 18, width: 80, height: 30, alignItems: 'center' }}> OK</Text>
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
             )
@@ -2714,11 +2921,24 @@ console.log("non payroll dataSource ==> ", data.data)
                             <Picker.Item label="Event Announcement" value="Event Announcement" />
                             <Picker.Item label="General Announcement" value="General Announcement" />
                         </Picker>
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
+                        <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                                onPress={(this.cancel_select_announce_type)}>
+                                >
+                                <Text style={styles.buttonpicker}> Cancel</Text>
+                            </TouchableOpacity>
+                            <View style={{ flex: 3, justifyContent: 'center' }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
+                                onPress={(this.select_announce_type)}>
+                                <Text style={styles.buttonpicker}> OK</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
                             <TouchableOpacity style={styles.button} onPress={(this.select_announce_type)}>
                                 <Text style={{ textAlign: 'center', color: Colors.redTextColor, fontSize: 18, width: 80, height: 30, alignItems: 'center' }}> OK</Text>
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
             )

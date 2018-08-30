@@ -98,6 +98,10 @@ export default class NonpayrollActivity extends Component {
 
             this.onAutenticateErrorAlertDialog()
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
         } else if (code.SUCCESS == data.code) {
 
             this.timer = setTimeout(() => {
@@ -132,6 +136,32 @@ export default class NonpayrollActivity extends Component {
             { cancelable: false }
         )
     }
+
+    onRegisterErrorAlertDialog(data) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            'MHF00600AERR',
+            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+   
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
 
     onBack() {
 
@@ -496,7 +526,9 @@ export default class NonpayrollActivity extends Component {
     }
 
     renderTabYearSelect() {
+
         let lastYear = new Date().getFullYear() - 1
+        
         return (
             <View style={styles.selectYearContainer}>
                 <TouchableOpacity

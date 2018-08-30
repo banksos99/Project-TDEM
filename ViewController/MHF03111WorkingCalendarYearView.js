@@ -123,6 +123,182 @@ export default class calendarYearView extends Component {
                 isLoading: true
             })
         }
+
+        this.settimerInAppNoti()
+
+    }
+
+    componentWillUnmount() {
+
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        clearTimeout(this.timer);
+    }
+
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+            // for (let index = 0; index < dataArray.length; index++) {
+            //     const dataReceive = dataArray[index];
+            //     // //console.log("element ==> ", dataReceive.function_id)
+
+            //     if (dataReceive.function_id == "PHF06010") {//if nonPayroll
+            //         dataListArray = dataReceive.data_list
+
+            //         // //console.log("dataListArray ==> ", dataListArray)
+            //         for (let index = 0; index < dataListArray.length; index++) {
+            //             const str = dataListArray[index];
+            //             // //console.log("str ==> ", str)
+            //             var res = str.split("|");
+            //             // //console.log("res ==> ", res[1])
+            //             var data = res[1]
+
+            //             var monthYear = data.split("-");
+            //             // //console.log("dataListArray ==> monthYear ==> ", monthYear)
+
+            //             var year = monthYear[0]
+            //             var month = monthYear[1]
+
+            //             for (let index = 0; index < dataCustomArray.length; index++) {
+            //                 const data = dataCustomArray[index];
+            //                 // //console.log("dataCustomArray data ==> ", data)
+            //                 // //console.log("dataCustomArray year ==> ", data.year)
+
+            //                 if (year == data.year) {
+            //                     const detail = data.detail
+            //                     // //console.log("detail ==> ", detail)
+            //                     // //console.log("month select  ==> ", month)
+
+            //                     let element = detail.find((p) => {
+            //                         return p.month === JSON.parse(month)
+            //                     });
+            //                     // //console.log("element ==> ", element)
+
+            //                     element.badge = element.badge + 1
+            //                     //console.log("detail badge ==> ", element.badge)
+            //                 }
+            //             }
+            //         }
+            //     } else if (dataReceive.function_id == "PHF02010") {
+
+            //         console.log("announcement badge ==> ", dataReceive.badge_count)
+
+            //         this.setState({
+
+            //             notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+            //         })
+
+            //     } else if (dataReceive.function_id == 'PHF05010') {
+            //         console.log('new payslip arrive')
+            //         this.setState({
+            //             notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
+            //         }, function () {
+            //             dataReceive.data_list.map((item, i) => {
+
+            //                 SharedPreference.notiPayslipBadge.push(item)
+            //                 // = dataReceive.data_list
+
+            //             })
+            //         })
+            //         console.log('notiPayslipBadge',SharedPreference.notiPayslipBadge)
+            //     }
+
+            // }
+
+
+            
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog(data) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            'MHF00600AERR',
+            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
     }
 
     getYearSelect() {
@@ -609,11 +785,24 @@ export default class calendarYearView extends Component {
                                     selectedValue={this.state.selectYearPicker}
                                     onValueChange={(itemValue, itemIndex) => this.setState({ selectYearPicker: itemValue })}>
                                     {this.state.yearsPickerArray.map((i, index) => (
-                                        <Picker.Item key={index} color={Colors.redTextColor} label={i.label} value={i.value} />
+                                        <Picker.Item key={index}  label={i.label} value={i.value} />
                                     ))}
                                 </Picker>
-                                <View style={styles.alertDialogBox}>
-                                    <TouchableOpacity style={styles.button}
+                                <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                                    <TouchableOpacity style={styles.buttonpicker}
+                                        onPress={() => {
+                                            this.setState({
+
+                                                yearviewPicker: false
+                                            }, function () {
+
+                                            })
+                                        }}>
+                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ flex: 2 }}></View>
+
+                                    <TouchableOpacity style={styles.buttonpicker}
                                         onPress={() => {
                                             this.setState({ yearviewPicker: false }),
                                                 this.resetCalendar()
@@ -652,6 +841,21 @@ export default class calendarYearView extends Component {
                                                 </View>
                                             </TouchableOpacity>))}
                                 </ScrollView>
+                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
+                                    <TouchableOpacity style={{ flex: 1 }}
+                                        onPress={() => {
+                                            this.setState({
+                                               
+                                                yearPickerForDownloadPDFFileView: false
+                                            }, function () {
+                                               
+
+                                            })
+                                        }}>
+                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ flex:1}}></View>
+                                </View>
                             </View>
                         </View>
                     </View >
@@ -669,23 +873,36 @@ export default class calendarYearView extends Component {
                                     selectedValue={this.state.selectYearPicker}
                                     onValueChange={(itemValue, itemIndex) => this.setState({ selectYearPicker: itemValue })}>
                                     {this.state.yearsPickerArray.map((i, index) => (
-                                        <Picker.Item key={index} color={Colors.redTextColor} label={i.label} value={i.value} />
+                                        <Picker.Item key={index} label={i.label} value={i.value} />
                                     ))}
                                 </Picker>
-                                <View style={styles.alertDialogBox}>
-                                    <TouchableOpacity style={styles.button}
+                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
+                                    <TouchableOpacity style={{ flex: 1 }}
+                                        onPress={() => {
+                                            this.setState({
+                                               
+                                                yearPickerForDownloadPDFFileView: false
+                                            }, function () {
+                                               
+
+                                            })
+                                        }}>
+                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ flex:1}}></View>
+                                    <TouchableOpacity style={{ flex:1}}
                                         onPress={() => {
                                             //console.log('selectYear =>: ',this.state.selectYear);
                                             this.setState({
                                                 yearPickerForDownloadPDFFileView: false,
                                                 isLoadingPDF: true
-                                            },function(){
-                                               this.onloadPDFFile();
+                                            }, function () {
+                                                this.onloadPDFFile();
 
                                             })
-                                            
+
                                         }}>
-                                        <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_BUTTON}</Text>
+                                        <Text style={styles.buttonpicker}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_BUTTON}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -718,6 +935,21 @@ export default class calendarYearView extends Component {
                                                 </View>
                                             </TouchableOpacity>))}
                                 </ScrollView>
+                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
+                                    <TouchableOpacity style={{ flex: 1 }}
+                                        onPress={() => {
+                                            this.setState({
+                                               
+                                                locationPickerView: false
+                                            }, function () {
+                                               
+
+                                            })
+                                        }}>
+                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ flex:2}}></View>
+                                </View>
                             </View>
                         </View>
                     </View >
@@ -730,22 +962,53 @@ export default class calendarYearView extends Component {
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_LOCATION_TITLE}</Text>
+                                <Text style={[styles.alertDialogBoxText, { style: Text }]}>
+                                    {StringText.CALENDER_YEARVIEW_LOCATION_TITLE}
+                                </Text>
                                 <Picker
                                     selectedValue={this.state.selectLocation}
                                     onValueChange={(itemValue, itemIndex) => this.setState({ selectLocation: itemValue })}>
                                     {this.state.locationPicker.map((i, index) => (
-                                        <Picker.Item key={index} numberOfLines={1} color={Colors.redTextColor} label={i.label} value={i.label} />
+                                        <Picker.Item key={index} numberOfLines={1} label={i.label} value={i.label} />
                                     ))}
                                 </Picker>
-                                <View style={styles.alertDialogBox}>
+
+
+
+                                {/* <View style={styles.alertDialogBox}> */}
+                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
+                                    <TouchableOpacity style={{ flex: 1 }}
+                                        onPress={() => {
+                                            this.setState({
+                                               
+                                                locationPickerView: false
+                                            }, function () {
+                                               
+
+                                            })
+                                        }}>
+                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ flex:1}}></View>
+                                    <TouchableOpacity style={{ flex:1}}
+                                        onPress={() => {
+                                            //console.log('selectYear =>: ',this.state.selectYear);
+                                            
+                                                this.getLocation();
+
+                                        
+                                        }}>
+                                         <Text style={styles.buttonpicker}>{StringText.CALENDER_YEARVIEW_ALERT_LOCATION_BUTTON}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {/* <View style={styles.alertDialogBox}>
                                     <TouchableOpacity style={styles.button}
                                         onPress={() => {
                                             this.getLocation()
                                         }}>
                                         <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_ALERT_LOCATION_BUTTON}</Text>
                                     </TouchableOpacity>
-                                </View>
+                                </View> */}
                             </View>
                         </View>
                     </View >
@@ -810,7 +1073,11 @@ export default class calendarYearView extends Component {
     }
 
     onDownloadPDFFile = async (pdfPath, filename) => {
-        filename = "calendar_" + this.state.selectYearPicker + '.pdf'
+        let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        filename = "calendar_" + this.state.selectYearPicker +'-'+this.state.showLocation+'-'+ newdate+ '.pdf'
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_WORKING_CALENDAR, SharedPreference.profileObject.client_token)
         //console.log("Android ==> LoadPDFFile ==> filename  : ", filename);
         //console.log("Android ==> LoadPDFFile ==> path  : ", RNFetchBlob.fs.dirs.DownloadDir + '/' + filename);

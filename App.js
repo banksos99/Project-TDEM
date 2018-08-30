@@ -378,7 +378,7 @@ export default class mainview extends Component {
             <View style={styles.emptyDialogContainer}>
               <View style={[styles.pinContainer, { paddingTop: 60, backgroundColor: Colors.redColor }]}>
                 <Image
-                  style={styles.pinImage}
+                  style={{width:50,height:50}}
                   source={require('./resource/regist/regist_lock_white.png')}
                   resizeMode="cover" />
                 <Text style={[styles.pinText, { color: 'white' }]}>{this.state.pintitle}</Text>

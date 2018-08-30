@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, BackHandler } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, BackHandler,Alert } from "react-native";
 import { styles } from "./../SharedObject/MainStyles"
 import { Calendar } from 'react-native-calendars';
 import Colors from "./../SharedObject/Colors"
@@ -48,9 +48,18 @@ export default class calendarEventDetailView extends Component {
 
     }
 
-    // componentWillUnmount() {
-    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // }
+    componentDidMount() {
+
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        this.settimerInAppNoti()
+
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        clearTimeout(this.timer);
+    }
 
     handleBackButtonClick() {
         this.onBack()
@@ -61,6 +70,172 @@ export default class calendarEventDetailView extends Component {
         this.getDataOnView()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
+    }
+
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+            // for (let index = 0; index < dataArray.length; index++) {
+            //     const dataReceive = dataArray[index];
+            //     // //console.log("element ==> ", dataReceive.function_id)
+
+            //     if (dataReceive.function_id == "PHF06010") {//if nonPayroll
+            //         dataListArray = dataReceive.data_list
+
+            //         // //console.log("dataListArray ==> ", dataListArray)
+            //         for (let index = 0; index < dataListArray.length; index++) {
+            //             const str = dataListArray[index];
+            //             // //console.log("str ==> ", str)
+            //             var res = str.split("|");
+            //             // //console.log("res ==> ", res[1])
+            //             var data = res[1]
+
+            //             var monthYear = data.split("-");
+            //             // //console.log("dataListArray ==> monthYear ==> ", monthYear)
+
+            //             var year = monthYear[0]
+            //             var month = monthYear[1]
+
+            //             for (let index = 0; index < dataCustomArray.length; index++) {
+            //                 const data = dataCustomArray[index];
+            //                 // //console.log("dataCustomArray data ==> ", data)
+            //                 // //console.log("dataCustomArray year ==> ", data.year)
+
+            //                 if (year == data.year) {
+            //                     const detail = data.detail
+            //                     // //console.log("detail ==> ", detail)
+            //                     // //console.log("month select  ==> ", month)
+
+            //                     let element = detail.find((p) => {
+            //                         return p.month === JSON.parse(month)
+            //                     });
+            //                     // //console.log("element ==> ", element)
+
+            //                     element.badge = element.badge + 1
+            //                     //console.log("detail badge ==> ", element.badge)
+            //                 }
+            //             }
+            //         }
+            //     } else if (dataReceive.function_id == "PHF02010") {
+
+            //         console.log("announcement badge ==> ", dataReceive.badge_count)
+
+            //         this.setState({
+
+            //             notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+            //         })
+
+            //     } else if (dataReceive.function_id == 'PHF05010') {
+            //         console.log('new payslip arrive')
+            //         this.setState({
+            //             notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
+            //         }, function () {
+            //             dataReceive.data_list.map((item, i) => {
+
+            //                 SharedPreference.notiPayslipBadge.push(item)
+            //                 // = dataReceive.data_list
+
+            //             })
+            //         })
+            //         console.log('notiPayslipBadge',SharedPreference.notiPayslipBadge)
+            //     }
+
+            // }
+
+
+            
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog(error) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog(data) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            'MHF00600AERR',
+            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
     }
 
     getDataOnView() {
@@ -310,6 +485,7 @@ export default class calendarEventDetailView extends Component {
                 }
             }
         } else {
+            
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_DESC,

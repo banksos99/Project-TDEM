@@ -50,7 +50,7 @@ export default class ClockInOutSelfView extends Component {
             rowHasChanged: (r1, r2) => r1 !== r2
         });
         let today = new Date();
-
+        selectmonth = 0;
         currentday = today.getDate() - 1;
         currentmonth = today.getMonth();
         this.state = {
@@ -83,6 +83,7 @@ export default class ClockInOutSelfView extends Component {
             employee_name: this.props.navigation.getParam("employee_name", ""),
             employee_position: this.props.navigation.getParam("employee_position", ""),
         }
+        selectmonth = 0;
         tempannouncementType=0;
         tempinitannouncementType = 0;
         tempinitannouncementTypetext = 0;
@@ -149,6 +150,10 @@ export default class ClockInOutSelfView extends Component {
 
             this.onAutenticateErrorAlertDialog()
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
         } else if (code.SUCCESS == data.code) {
 
             this.timer = setTimeout(() => {
@@ -169,6 +174,33 @@ export default class ClockInOutSelfView extends Component {
         Alert.alert(
             StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
             StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog(data) {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            'MHF00600AERR',
+            'MHF00600AERR: Employee ID. {0} is not authorized.'
             [{
                 text: 'OK', onPress: () => {
 

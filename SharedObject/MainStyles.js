@@ -13,6 +13,7 @@ const font_thin = 'Prompt-Thin';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:'white'
     },
 
     statusbarcontainer: {
@@ -1196,6 +1197,9 @@ export const styles = StyleSheet.create({
         fontSize: 16 * scale,
         color: 'white',
         fontFamily: font_medium
+    },
+    epubreader: {
+        backgroundColor: 'white'
     },
     registPinImageSubContainer: {
         width: 30,

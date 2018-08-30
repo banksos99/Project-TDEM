@@ -286,6 +286,8 @@ export default class PinActivity extends Component {
     }
 
     onReset = async () => {
+
+
         SharedPreference.profileObject = await this.saveProfile.getProfile()
         // SharedPreference.TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, '1', SharedPreference.profileObject.client_token)
         this.onLoginResetPinAPI()
@@ -386,9 +388,11 @@ export default class PinActivity extends Component {
                     <View style={styles.emptyDialogContainer}> */}
                         <View style={[styles.pinContainer, { paddingTop: 60, backgroundColor: Colors.redColor }]}>
                             <Image
-                                style={styles.pinImage}
+                                style={{width:65,height:65}}
+                               
                                 source={require('../resource/regist/regist_lock_white.png')}
-                                resizeMode="cover" />
+                                //resizeMode="cover" 
+                                />
                             <Text style={styles.registPinEnterContainer}>{this.state.pintitle}</Text>
                             {this.renderImagePin()}
                             <TouchableOpacity onPress={() => { this.onResetPIN() }}>

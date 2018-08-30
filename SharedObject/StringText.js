@@ -51,8 +51,8 @@ export default {
   CALENDAR_MONTHVIEW_SELECT_NEW_PLACE_TITLE: 'Sorry',
   CALENDAR_MONTHVIEW_SELECT_NEW_PLACE_DESC: 'No Data',
   // 
-  REGISTER_INVALID_TITLE: 'Sorry',
-  REGISTER_INVALID_DESC: 'Invalid User ID or Password.',
+  REGISTER_INVALID_TITLE: 'MHF00600AERR',
+  REGISTER_INVALID_DESC: 'MHF00600AERR: Employee ID. {0} is not authorized.',
 
   SERVER_ERROR_TITLE: 'MHF00002ACRI',
   SERVER_ERROR_DESC: 'System Error (API). Please contact system administrator.',
@@ -103,4 +103,8 @@ export default {
 
   ALERT_SESSION_TIMEOUT_TITILE: 'Sorry',
   ALERT_SESSION_TIMEOUT_DESC: 'Session Time out.Please try again',
+
+  ALERT_SESSION_AUTHORIZED_TITILE:'MHF00600AERR',
+  ALERT_SESSION_AUTHORIZED_DESC:'MHF00600AERR: Employee ID. {0} is not authorized.',
+
 };
