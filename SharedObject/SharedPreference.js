@@ -45,7 +45,7 @@ export default {
     OTSUMMARY_BAR_CHART: HOST + '/api/' + VERSION + '/ot/average?org_code=',
 
     ORGANIZ_STRUCTURE_API: HOST + '/api/' + VERSION + '/organization?type=CE&org_code=',
-    ORGANIZ_STRUCTURE_OT_API: HOST + '/api/' + VERSION + '/organization?type=E&org_code=',
+    ORGANIZ_STRUCTURE_OT_API: HOST + '/api/' + VERSION + '/organization?type=CE&org_code=',
 
     profileObject: {},
     initmaster: {},
@@ -69,7 +69,8 @@ export default {
 
     HandbookHighlightList: [],
     Handbook: [],
-    isConnected:true,
+    isConnected: true,
+    userRegisted: false,
 
     FUNCTIONID_SPLASH: 'HF0111',
     FUNCTIONID_REGISTER: 'HF0121',

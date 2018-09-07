@@ -118,15 +118,15 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 

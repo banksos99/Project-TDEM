@@ -38,12 +38,17 @@ export default class OrganizationStruct extends Component {
         this.checkDataFormat(this.props.navigation.getParam("DataResponse", ""));
     }
 
+    componentDidMount() {
+        this.settimerInAppNoti()
+       
+    }
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
 
     componentWillUnmount() {
+        clearTimeout(this.timer);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
@@ -55,6 +60,76 @@ export default class OrganizationStruct extends Component {
         return true;
     }
 
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
+
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onRegisterErrorAlertDialog() {
+
+        SharedPreference.userRegisted=false;
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
     checkoption(data) {
         if (data) {
             option = data
@@ -98,7 +173,219 @@ export default class OrganizationStruct extends Component {
         this.props.navigation.navigate('HomeScreen');
     }
 
-    onOrgStruct(item, index) {
+    onOrgStruct = async (item, index) => {
+
+        if (SharedPreference.isConnected) {
+            
+                let url = SharedPreference.ORGANIZ_STRUCTURE_API + item.org_code
+                this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+            
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+
+                        this.setState({
+                            isscreenloading: false,
+                        })
+
+                    }
+                },
+                ], { cancelable: false }
+
+            )
+
+        }
+
+    }
+
+    APICallback(data) {
+
+        code = data[0]
+        data = data[1]
+        // console.log('APICallback data :', data)
+        console.log('APICallback :', data.data)
+        if (code.SUCCESS == data.code) {
+            
+            // console.log('dataSource :', dataSource.length)
+            // console.log('index_org_code :', this.state.index_org_code)
+            // if (data.data.org_lst) {
+
+            // if (data.data.org_lst) {
+
+                let temparr = []
+
+                for (let i = 0; i < dataSource.length; i++) {
+
+                    if (i === this.state.index_org_code) {
+                        temparr.push({
+                            org_code: dataSource[i].org_code,
+                            org_name: dataSource[i].org_name,
+                            org_level: dataSource[i].org_level,
+                            next_level: dataSource[i].next_level,
+                           // expand: data.data.org_lst.length,
+
+                        })
+
+                        for (let j = 0; j < data.data.length; j++) {
+
+                            if (data.data[j].org_emp) {
+                                data.data[j].org_emp.map((item) => (
+                                    temparr.push(
+                                        {
+                                            org_code: 0,
+                                            org_name: item.employee_name,
+                                            org_level: parseInt(dataSource[i].org_level) + 10,
+                                            next_level: 'false',
+                                            emp_id: item.employee_id,
+                                            position: item.employee_position,
+                                            expand: 0,
+
+                                        }
+                                    )
+                                ))
+                            }
+                            if (data.data[j].org_lst) {
+
+                                for (let i = 0; i < data.data[j].org_lst.length; i++) {
+
+                                    let Orgname = data.data[j].org_lst[i].org_name;
+                                    let Orglevel = data.data[j].org_lst[i].org_level;
+                                    console.log('org_code => :', data.data[j].org_lst[i].org_code)
+                                    if (!data.data[j].org_lst[i].org_code) {
+                                        console.log('data null')
+                                        Orgname = 'N/A'
+                                        Orglevel = parseInt(dataSource[i].org_level) + 10;
+                                    }
+
+                                    temparr.push({
+                                        org_code: data.data[j].org_lst[i].org_code,
+                                        org_name: Orgname,
+                                        org_level: Orglevel,
+                                        next_level: data.data[j].org_lst[i].next_level,
+                                        expand: 0
+
+                                    })
+
+                                }
+                                // data.data[j].org_lst.map((item) => (
+
+                                //     temparr.push(
+                                //         {
+                                //             org_code: item.org_code,
+                                //             org_name: item.org_name,
+                                //             org_level: item.org_level,
+                                //             next_level: item.next_level,
+                                //             expand: 0
+
+                                //         }
+                                //     )
+
+                                // ))
+                            }
+
+                        }
+
+
+                    }else{
+
+                        temparr.push(
+                            dataSource[i]
+                        )
+
+
+                    }
+                    //     for (let j = 0; j < data.data.length; j++) {
+                    //         //expand org
+                    //         if (data.data[j].org_emp) {
+                    //             data.data[j].org_emp.map((item) => (
+                    //                 temparr.push(
+                    //                     {
+                    //                         org_code: 0,
+                    //                         org_name: item.employee_name,
+                    //                         org_level: parseInt(dataSource[i].org_level) + 10,
+                    //                         next_level: 'false',
+                    //                         emp_id: item.employee_id,
+                    //                         position: item.employee_position,
+                    //                         expand: 0,
+
+                    //                     }
+                    //                 )
+
+                    //             ))
+                    //         }
+
+                    //         if (data.data[j].org_lst) {
+                    //             data.data[j].org_lst.map((item) => (
+                    //                 temparr.push(
+                    //                     {
+                    //                         org_code: item.org_code,
+                    //                         org_name: item.org_name,
+                    //                         org_level: item.org_level,
+                    //                         next_level: item.next_level,
+                    //                         expand: 0
+
+                    //                     }
+                    //                 )
+
+                    //             ))
+                    //         }
+                    //     }
+
+                    // } else {
+                    //     temparr.push(
+                    //         dataSource[i]
+                    //     )
+
+                    // }
+
+                }
+                dataSource = temparr;
+                // console.log('dataSource :', dataSource)
+
+            // } else {
+
+            //     this.props.navigation.navigate('EmployeeList', {
+            //         DataResponse: data,
+            //         Option: option
+            //     });
+
+            //     this.setState({ isscreenloading: false })
+            // }
+
+            // } else {
+            //     Alert.alert(
+            //         'No Data',
+            //         'No data found',
+            //         [{
+            //             text: 'OK', onPress: () => {
+            //                 //console.log("onLoadErrorAlertDialog")
+            //             }
+            //         }],
+            //         { cancelable: false }
+            //     )
+
+
+            // }
+        } else if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        
+        } else {
+
+            this.onLoadErrorAlertDialog(data)
+        }
+
+        this.setState({
+            isscreenloading: false,
+        })
+    }
+
+    onOrgStruct1(item, index) {
 
         console.log('item :', item)
 
@@ -246,10 +533,13 @@ export default class OrganizationStruct extends Component {
 
     loadOrgStructureAPI = async () => {
 
+        console.log('loadOrgStructureAPI')
+
         if (SharedPreference.isConnected) {
 
             let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
-            this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+            console.log('url',url)
+            this.APICallback1(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
 
         } else {
 
@@ -263,12 +553,13 @@ export default class OrganizationStruct extends Component {
         }
     }
 
-    APICallback(data) {
+    APICallback1(data) {
         code = data[0]
         data = data[1]
         if (code.SUCCESS == data.code) {
 
-            //console.log('data.data :', data.data)
+            console.log('data.data :', data.data)
+            console.log('data.data org_lst :', data.data[0].org_lst)
            // if (data.data.org_lst) {
                 let temparr = []
                 for (let i = 0; i < dataSource.length; i++) {
@@ -303,30 +594,36 @@ export default class OrganizationStruct extends Component {
                         )
 
                         // ))
-                        if (data.data.org_lst) {
-                        data.data.org_lst.map((item) => (
-                            temparr.push(
-                                {
-                                    org_code: item.org_code,
-                                    org_name: item.org_name,
-                                    org_level: item.org_level,
-                                    next_level: item.next_level,
-                                    expand: 0
+                        if (data.data) {
 
-                                }
-                            )
+                            for (let j = 0; j < data.data.length; j++) {
 
-                        ))
-                    }
-                    } else {
-                        temparr.push(
-                            dataSource[i]
-                        )
+                                data.data[j].org_lst.map((item) => (
+                                    
+                                    temparr.push(
+                                        {
+                                            org_code: item.org_code,
+                                            org_name: item.org_name,
+                                            org_level: item.org_level,
+                                            next_level: item.next_level,
+                                            expand: 0
 
-                    }
+                                        }
+                                    )
+
+                                ))
+                            }
+
+                        }
+                } else {
+                    temparr.push(
+                        dataSource[i]
+                    )
 
                 }
-                dataSource = temparr;
+
+            }
+            dataSource = temparr;
                 //console.log('dataSource :', dataSource)
 
             // } else {
@@ -344,7 +641,7 @@ export default class OrganizationStruct extends Component {
             // }
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
         
         } else {
@@ -357,7 +654,6 @@ export default class OrganizationStruct extends Component {
 
         })
     }
-
 
     loadOTLineChartfromAPI = async () => {
 
@@ -421,9 +717,13 @@ export default class OrganizationStruct extends Component {
                 org_code: this.state.org_code
             });
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
 
         } else {
@@ -435,7 +735,7 @@ export default class OrganizationStruct extends Component {
         })
     }
 
-    onAutenticateErrorAlertDialog(error) {
+    onAutenticateErrorAlertDialog() {
 
         timerstatus = false;
         this.setState({
@@ -450,7 +750,7 @@ export default class OrganizationStruct extends Component {
                     page = 0
                     timerstatus = false
                     SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
+                    //SharedPreference.profileObject = null
                     //this.saveProfile.setProfile(null)
                     this.props.navigation.navigate('RegisterScreen')
                 }
@@ -530,20 +830,19 @@ export default class OrganizationStruct extends Component {
                             <ScrollView>
                                 {
                                     dataSource.map((item, index) => (
-                                        <View style={{ height: 50 }} key={'m' + index}
-
-                                        >
+                                        <View style={{ height: 50 }} key={'m' + index}>
                                             <TouchableOpacity
-                                                onPress={() => { this.onOrgStruct(item, index) }}
+                                                onPress={() => { this.onOrgStruct1(item, index) }}
                                             >
                                                 <View style={{ height: 49, flexDirection: 'row' }}>
                                                     <View style={{ flex: 1, flexDirection: 'column' }}>
                                                         <View style={{ flex: 1, justifyContent: 'center' }} >
                                                             <Text style={item.expand === 0 ?
                                                                 { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular' } :
-                                                                { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}
-
-                                                            >{item.org_name}</Text>
+                                                                { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}>
+                                                                {/* {item.org_name+ ' ('+item.org_level+')'} */}
+                                                                {item.org_name}
+                                                            </Text>
                                                         </View>
                                                         <View style={item.org_code === 0 ? { height: 20, justifyContent: 'center' } : { height: 0, justifyContent: 'center' }} >
                                                             <Text style={{ marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}

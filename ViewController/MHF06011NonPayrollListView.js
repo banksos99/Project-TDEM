@@ -100,7 +100,7 @@ export default class NonpayrollActivity extends Component {
 
         } else if (code.DOES_NOT_EXISTS == data.code) {
 
-            this.onRegisterErrorAlertDialog(data)
+            this.onRegisterErrorAlertDialog()
 
         } else if (code.SUCCESS == data.code) {
 
@@ -112,7 +112,7 @@ export default class NonpayrollActivity extends Component {
 
     }
 
-    onAutenticateErrorAlertDialog(error) {
+    onAutenticateErrorAlertDialog() {
 
         timerstatus = false;
         this.setState({
@@ -137,16 +137,16 @@ export default class NonpayrollActivity extends Component {
         )
     }
 
-    onRegisterErrorAlertDialog(data) {
-
+    onRegisterErrorAlertDialog() {
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -392,30 +392,30 @@ export default class NonpayrollActivity extends Component {
             )
         }
     }
-    onAutenticateErrorAlertDialog(error) {
-        this.setState({
-            isscreenloading: false,
-        })
+    // onAutenticateErrorAlertDialog(error) {
+    //     this.setState({
+    //         isscreenloading: false,
+    //     })
 
-        Alert.alert(
-            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-            [{
-                text: 'OK', onPress: () => {
-                    page = 0
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                    this.setState({
-                        isscreenloading: false
-                    })
-                    this.props.navigation.navigate('RegisterScreen')
-                }
-            }],
-            { cancelable: false }
-        )
+    //     Alert.alert(
+    //         StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+    //         StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+    //         [{
+    //             text: 'OK', onPress: () => {
+    //                 page = 0
+    //                 SharedPreference.Handbook = []
+    //                 SharedPreference.profileObject = null
+    //                 this.setState({
+    //                     isscreenloading: false
+    //                 })
+    //                 this.props.navigation.navigate('RegisterScreen')
+    //             }
+    //         }],
+    //         { cancelable: false }
+    //     )
 
-        //console.log("error : ", error)
-    }
+    //     //console.log("error : ", error)
+    // }
 
     onLoadAlertDialog() {
         // ////console.log("onLoadAlertDialog")
@@ -486,10 +486,14 @@ export default class NonpayrollActivity extends Component {
             })
 
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
-            this.onAutenticateErrorAlertDialog(data)
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+            
+            this.onRegisterErrorAlertDialog()
 
         } else {
-
 
             this.setState({
                 isscreenloading: false,

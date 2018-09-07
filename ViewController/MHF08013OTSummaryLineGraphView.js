@@ -66,7 +66,7 @@ export default class OTSummaryLineChart extends Component {
 
     checkDataFormat(DataResponse) {
 
-        if (DataResponse) {
+       
 
             let today = new Date();
             date = today.getDate() + "/" + parseInt(today.getMonth() + 1) + "/" + today.getFullYear();
@@ -81,7 +81,7 @@ export default class OTSummaryLineChart extends Component {
                 }
                 this.state.months.push(MONTH_LIST[i % 12] + ' ' + this.state.initialyear)
             }
-
+            if (DataResponse) {
             this.state.tdataSource = DataResponse;
             console.log('tosummary data : ', this.state.tdataSource)
 
@@ -177,15 +177,15 @@ export default class OTSummaryLineChart extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -279,7 +279,21 @@ export default class OTSummaryLineChart extends Component {
 
         let bottomlabel = 260;
         let rowhight = max / 6;
+        let datalist = [];
 
+        console.log('this.state.tdataSource :', this.state.tdataSource)
+
+        if(this.state.tdataSource.org_code){
+
+            datalist = this.state.tdataSource.items;
+
+        }else  if (this.state.tdataSource[0].code != 'MSTD0059AERR') {
+            if (this.state.tdataSource) {
+
+                datalist = this.state.tdataSource.items;
+            }
+
+        }
         return (
             // this.state.dataSource.map((item, index) => (
             <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }} >
@@ -315,7 +329,7 @@ export default class OTSummaryLineChart extends Component {
                         <View style={{ flex: 5 }}>
 
                             <LineChartAerage
-                               datalist={this.state.tdataSource.items}
+                               datalist={datalist}
                               
                             />
 

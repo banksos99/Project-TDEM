@@ -47,10 +47,11 @@ export default class PinActivity extends Component {
 
         if (code.SUCCESS == data.code) {
             this.setState({
-               // isLoading: false
+                // isLoading: false
             })
             SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
             await this.onLoadInitialMaster()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
             Alert.alert(
                 StringText.INVALID_AUTH_TOKEN_TITLE,
@@ -64,6 +65,23 @@ export default class PinActivity extends Component {
                 }
                 ],
                 { cancelable: false })
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+                      //  SharedPreference.profileObject = null
+                      //  this.saveProfile.setProfile(null)
+                       // this.props.navigation.navigate('RegisterScreen')
+                    }
+                }
+                ],
+                { cancelable: false })
+
+
         } else if ((code.INTERNAL_SERVER_ERROR == data.code) || (code.ERROR == data.code)) {
             Alert.alert(
                 StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
@@ -79,9 +97,10 @@ export default class PinActivity extends Component {
                 { cancelable: false })
 
         } else if (code.NETWORK_ERROR == data.code) {
+
             Alert.alert(
-                'section time out',
-                'please try again',
+                StringText.ALERT_CANNOT_CONNECT_SERVER_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_SERVER_DETAIL,
                 [{
                     text: 'OK', onPress: () => {
                         SharedPreference.profileObject = null
@@ -265,6 +284,11 @@ export default class PinActivity extends Component {
                 </Text>
             </View>)
         }
+        return (
+            <View style={styles.pinFailBoxContainer}>
+      
+            </View>
+          )
     }
 
     onResetPIN = async () => {
@@ -382,17 +406,30 @@ export default class PinActivity extends Component {
     }
 
     render() {
+        
         return (
-            <View style={styles.registerContainer}>
+            <View style={{flex:1,backgroundColor: Colors.redColor }}>
                 {/* <View style={styles.alertDialogContainer}>
                     <View style={styles.emptyDialogContainer}> */}
-                        <View style={[styles.pinContainer, { paddingTop: 60, backgroundColor: Colors.redColor }]}>
+
+                {/* <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
+                    <Image
+                        style={{flex:1 }}
+
+                        source={require('../resource/regist/regist_red.png')}
+                    //resizeMode="cover" 
+                    />
+                </View> */}
+
+                <View style={{ height: '50%', justifyContent: 'center', alignItems: 'center', }}>
+          
+                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                             <Image
-                                style={{width:65,height:65}}
-                               
+                                style={{ width: 65, height: 65 }}
+
                                 source={require('../resource/regist/regist_lock_white.png')}
-                                //resizeMode="cover" 
-                                />
+                            //resizeMode="cover" 
+                            />
                             <Text style={styles.registPinEnterContainer}>{this.state.pintitle}</Text>
                             {this.renderImagePin()}
                             <TouchableOpacity onPress={() => { this.onResetPIN() }}>
@@ -400,94 +437,96 @@ export default class PinActivity extends Component {
                             </TouchableOpacity>
                             {this.renderFailPin()}
                         </View>
-                        <View style={{ width:'100%' }}/>
-                        <View style={{ height: 300 * scale,width:'100%' }}>
+                    {/* </View> */}
+                </View>
+                {/* <View style={{ width: '100%' }} /> */}
+                <View style={{ height: '50%', width: '100%' }}>
 
-                            <View style={styles.registPinNumRowContainer}>
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(1) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>1</Text>
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(2) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>2</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(3) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>3</Text>
-                                    </View>
-                                </TouchableOpacity>
+                    <View style={styles.registPinNumRowContainer}>
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(1) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>1</Text>
                             </View>
+                        </TouchableOpacity>
 
-                            <View style={styles.registPinNumRowContainer}>
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(4) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>4</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(5) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>5</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(6) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>6</Text>
-                                    </View>
-                                </TouchableOpacity>
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(2) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>2</Text>
                             </View>
-
-                            <View style={styles.registPinNumRowContainer}>
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(7) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>7</Text>
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(8) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>8</Text>
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(9) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>9</Text>
-                                    </View>
-                                </TouchableOpacity>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(3) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>3</Text>
                             </View>
+                        </TouchableOpacity>
+                    </View>
 
-                            <View style={styles.registPinNumRowContainer}>
-                                <View style={styles.registPinNumContainer} />
-
-                                <TouchableOpacity style={styles.emptyContainer}
-                                    onPress={() => { this.setPIN(0) }}>
-                                    <View style={styles.registPinNumContainer}>
-                                        <Text style={styles.pinnumber}>0</Text>
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.registPinNumContainer}
-                                    onPress={() => { this.setPIN('-') }}>
-                                    <Image style={styles.pinDelete}
-                                        source={require('../resource/images/pin_delete.png')}
-                                        resizeMode="contain" />
-                                </TouchableOpacity>
+                    <View style={styles.registPinNumRowContainer}>
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(4) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>4</Text>
                             </View>
-                        </View>
-                    {/* </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(5) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>5</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(6) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>6</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.registPinNumRowContainer}>
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(7) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>7</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(8) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>8</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(9) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>9</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.registPinNumRowContainer}>
+                        <View style={styles.registPinNumContainer} />
+
+                        <TouchableOpacity style={styles.emptyContainer}
+                            onPress={() => { this.setPIN(0) }}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={styles.pinnumber}>0</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.registPinNumContainer}
+                            onPress={() => { this.setPIN('-') }}>
+                            <Image style={styles.pinDelete}
+                            source={require('../resource/images/pin_delete_red.png')}
+                            resizeMode="contain" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                {/* </View>
                  </View> */}
                 {this.renderProgressView()}
             </View>)

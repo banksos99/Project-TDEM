@@ -31,6 +31,8 @@ import Authorization from '../SharedObject/Authorization'
 import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
 import RestAPI from "../constants/RestAPI"
+import PayslipPDFApi from "../constants/PayslipPDFApi"
+let PAYSLIP_DOWNLOAD_API;
 
 export default class PayslipDetail extends Component {
 
@@ -244,15 +246,15 @@ export default class PayslipDetail extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -269,7 +271,11 @@ export default class PayslipDetail extends Component {
             { cancelable: false }
         )
     }
+    onClickDownload() {
+        
+        this.onDownloadPDFFile()
 
+    }
 
     onDownloadPDFFile = async () => {
 
@@ -287,7 +293,49 @@ export default class PayslipDetail extends Component {
             });
 
             PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.yearlist[this.state.selectedindex].rollID
-            pdfPath = PAYSLIP_DOWNLOAD_API
+
+            console.log('PAYSLIP_DOWNLOAD_API:', PAYSLIP_DOWNLOAD_API)
+
+           this.checkDownloadStatus()
+
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { 
+                    this.setState({
+
+                        isscreenloading: false,
+        
+                    });
+
+                } },
+                ], { cancelable: false }
+            )
+
+        }
+    }
+
+    checkDownloadStatus = async () => {
+
+        PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.yearlist[this.state.selectedindex].rollID
+        let data = await PayslipPDFApi(this.state.yearlist[this.state.selectedindex].rollID)
+        code = data[0]
+        data = data[1]
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
+        } else {
+
+            // console.log('payslip data :',data[1].data)
+
+            let pdfPath = PAYSLIP_DOWNLOAD_API
 
 
             //   let yearSelect = this.state.initialyear - this.state.yearselected
@@ -310,16 +358,16 @@ export default class PayslipDetail extends Component {
                             description: 'shippingForm'
                         }
                     })
-                    .fetch('GET', pdfPath, {
+                    .fetch('GET', PAYSLIP_DOWNLOAD_API, {
                         'Content-Type': 'application/pdf;base64',
                         Authorization: FUNCTION_TOKEN
                     })
                     .then((resp) => {
-                        ////console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp);
+
                         RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf')
                     })
                     .catch((errorCode, errorMessage) => {
-                        ////console.log("Android ==> LoadPDFFile ==> Load errorCode  : ", errorCode);
+
                         Alert.alert(
                             StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
                             StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
@@ -327,7 +375,7 @@ export default class PayslipDetail extends Component {
 
                                 {
                                     text: 'OK', onPress: () => {
-                                        // this.addEventOnCalendar()
+
                                     }
                                 },
                             ],
@@ -335,30 +383,59 @@ export default class PayslipDetail extends Component {
                         )
                     })
             } else {//iOS
-                console.log("loadPdf pdfPath : ", pdfPath)
-                console.log("loadPdf filename : ", filename)
+
                 RNFetchBlob
                     .config({
                         fileCache: true,
                         appendExt: 'pdf',
                         filename: filename
                     })
-                    .fetch('GET', pdfPath, {
+                    .fetch('GET', PAYSLIP_DOWNLOAD_API, {
                         'Content-Type': 'application/pdf;base64',
                         Authorization: FUNCTION_TOKEN
                     })
                     .then((resp) => {
-                        ////console.log("WorkingCalendarYear pdf1 : ", resp);
-                        ////console.log("WorkingCalendarYear pdf2 : ", resp.path());
+
                         RNFetchBlob.fs.exists(resp.path())
                             .then((exist) => {
-                                ////console.log(`WorkingCalendarYear ==> file ${exist ? '' : 'not'} exists`)
+                                // console.log(`WorkingCalendarYear ==> file ${exist ? '' : 'not'} exists`)
                             })
                             .catch(() => {
-                                ////console.log('WorkingCalendarYear ==> err while checking')
+                                // console.log('WorkingCalendarYear ==> err while checking')
                             });
 
-                        RNFetchBlob.ios.openDocument(resp.path());
+                        if (resp.respInfo.status == 200) {
+                            this.setState({
+
+                                isscreenloading: false,
+
+                            }, function () {
+                                // this.setState(this.renderloadingscreen())
+                            });
+
+                            RNFetchBlob.ios.openDocument(resp.path());
+
+                        } else {
+
+                            Alert.alert(
+                                StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                                StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                                [
+                                    {
+                                        text: 'OK', onPress: () => {
+                                            this.setState({
+
+                                                isscreenloading: false,
+
+                                            });
+                                        }
+                                    },
+                                ],
+                                { cancelable: false }
+                            )
+
+                        }
+
                         this.setState({
 
                             isscreenloading: false,
@@ -368,8 +445,6 @@ export default class PayslipDetail extends Component {
                         });
 
                     })
-
-
                     .catch((errorMessage, statusCode) => {
                         Alert.alert(
                             StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
@@ -377,7 +452,11 @@ export default class PayslipDetail extends Component {
                             [
                                 {
                                     text: 'OK', onPress: () => {
-                                        // this.addEventOnCalendar()
+                                        this.setState({
+
+                                            isscreenloading: false,
+
+                                        });
                                     }
                                 },
                             ],
@@ -385,14 +464,6 @@ export default class PayslipDetail extends Component {
                         )
                     });
             }
-        } else {
-
-            Alert.alert(
-                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
-                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
-                ], { cancelable: false }
-            )
         }
     }
 
@@ -412,7 +483,7 @@ export default class PayslipDetail extends Component {
                 this.setState({
                     havePermission: true
                 })
-                this.onDownloadPDFFile()
+                // this.onDownloadPDFFile()
             } else {
                 //console.log("WRITE_EXTERNAL_STORAGE permission denied")
             }
@@ -423,38 +494,30 @@ export default class PayslipDetail extends Component {
 
     getPayslipDetailfromAPI = async () => {
 
-  
-        // this.state.rollid = 0
-
-        // for (let i = 0; i < this.state.yearlist[this.state.yearselected].monthlistdata.length; i++) {
-
-        //     //console.log(' loop  rollid :', this.state.yearlist[this.state.yearselected].monthlistdata[i].id)
-
-        //     if (this.state.yearlist[this.state.yearselected].monthlistdata[i].month === this.state.monthselected + 1) {
-
-        //         this.state.rollid = this.state.yearlist[this.state.yearselected].monthlistdata[i].id
-        //     }
-        // }
-        //console.log('rollid :', this.state.rollid)
-
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_PAYSLIP, SharedPreference.profileObject.client_token)
-        //console.log("calendarPDFAPI ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
 
+        let host = SharedPreference.PAYSLIP_DETAIL_API + this.state.yearlist[this.state.selectedindex].rollID
+        console.log('host :', host)
+        return fetch(host, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: FUNCTION_TOKEN,
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
 
-     //   if (this.state.rollid) {
+                if (responseJson.status == 403) {
 
-            let host = SharedPreference.PAYSLIP_DETAIL_API + this.state.yearlist[this.state.selectedindex].rollID
-            console.log('host :', host)
-            return fetch(host, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    Authorization: FUNCTION_TOKEN,
-                },
-            })
-                .then((response) => response.json())
-                .then((responseJson) => {
+                    this.onAutenticateErrorAlertDialog()
+
+                } else if (parseInt(responseJson.status) == 401) {
+
+                    this.onRegisterErrorAlertDialog()
+
+                } else if (responseJson.status == 200) {
 
                     this.setState({
 
@@ -472,11 +535,12 @@ export default class PayslipDetail extends Component {
                     }
 
                     );
+                }
 
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
         // } else {
 
         //     this.setState({
@@ -710,7 +774,7 @@ export default class PayslipDetail extends Component {
                             <View style={{ height: 50, justifyContent: 'center' }}>
                                 <Text style={styles.payslipDetailTextLeft}>INCOME</Text>
                             </View>
-                            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
+                            <View style={{  flexDirection: 'column', justifyContent: 'center' }}>
                                 <Text style={styles.payslipDetailTextCenter}>No Result</Text>
                             </View>
                         </View>
@@ -793,7 +857,7 @@ export default class PayslipDetail extends Component {
                                 this.state.datadetail.data.detail.deduct.map((item, index) => (
                                     <View style={{ flex: 1, flexDirection: 'row' }} key={index}>
                                         <View style={{ flex: 1, justifyContent: 'center', }}>
-                                            <Text style={styles.payslipDetailTextLeft}> {item.key}</Text>
+                                            <Text style={styles.payslipDetailTextLeft}>{item.key}</Text>
                                         </View>
                                         <View style={{ flex: 1, justifyContent: 'center', }}>
                                             <Text style={styles.payslipDetailTextRight}>
@@ -847,7 +911,8 @@ export default class PayslipDetail extends Component {
         let sum_income_str = 0;
         let sum_deduct_str = 0;
         let bankicon = require('./../resource/images/bankIcon/blank.png')
-        let date_text = ''
+        let date_text = '';
+        let download = false;
         if (this.state.datadetail.data) {
             if(this.state.datadetail.data.header){
                 income = (Decryptfun.decrypt(this.state.datadetail.data.header.sum_income));
@@ -861,7 +926,7 @@ export default class PayslipDetail extends Component {
                 bank_acc_str = this.state.datadetail.data.header.bank_acc_no;
                 sum_income_str = Decryptfun.decrypt(this.state.datadetail.data.header.sum_income);
                 sum_deduct_str = Decryptfun.decrypt(this.state.datadetail.data.header.sum_deduct);
-
+                download = this.state.datadetail.data.download;
                 // if (bank_name_str === 'The Siam Commercial Bank Public Company Limited') {
                 //     bankicon = require('./../resource/images/bankIcon/scb.png')
                 // } else if (bank_name_str === 'BANK OF AYUDHYA PUBLIC COMPANY LIMITED') {
@@ -903,10 +968,9 @@ export default class PayslipDetail extends Component {
             // date_text = temp[1] + ' ' + temp[2]
 
         }
-
+        console.log('download status : ', download)
         return (
             <View style={{ flex: 1 }} >
-
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
@@ -923,14 +987,15 @@ export default class PayslipDetail extends Component {
                             <Text style={styles.navTitleTextTop}>Pay Detail</Text>
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <TouchableOpacity 
-                            disabled = {!this.state.datadetail.data}
-                            onPress={(this.onDownloadPDFFile.bind(this))}
+                            <TouchableOpacity
+                                disabled={!download}
+                                // onPress={(this.onClickDownload.bind(this))}
+                                onPress={() => { this.onClickDownload() }}
                             >
                                 <Image
-                                    style={this.state.datadetail.data ?
+                                    style={ download ?
                                         { width: 50, height: 50, tintColor: 'white' } :
-                                        { width: 50, height: 50, tintColor: 'red' }}
+                                        { width: 50, height: 50, tintColor: Colors.navColor }}
                                     source={require('./../resource/images/PDFdownload.png')}
                                     resizeMode='contain'
                                 />

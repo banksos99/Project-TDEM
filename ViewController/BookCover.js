@@ -105,8 +105,6 @@ export default class HandBookCover extends Component {
 
     }
 
-    
-
     render() {
         return (
             <Image source={{ uri: this.state.url }}

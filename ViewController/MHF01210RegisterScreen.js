@@ -17,11 +17,14 @@ import RestAPI from "./../constants/RestAPI"
 import firebase from 'react-native-firebase';
 import Layout from "../SharedObject/Layout";
 
+import SaveAutoSyncCalendar from "./../constants/SaveAutoSyncCalendar";
+
+
 let scale = Layout.window.width / 320;
 let countgettokenFB = 0;
 
 export default class RegisterActivity extends Component {
-
+    saveAutoSyncCalendar = new SaveAutoSyncCalendar()
     savePIN = new SavePIN()
     saveProfile = new SaveProfile()
     saveToken = new SaveTOKEN()
@@ -44,6 +47,7 @@ export default class RegisterActivity extends Component {
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_REGISTER)
         SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+        // SharedPreference.sessionOpenFirstTime = true
 
     }
 
@@ -87,60 +91,48 @@ export default class RegisterActivity extends Component {
     }
 
     onRegister = async () => {
+
         console.log('onRegister')
-        // this.getfirebasetoken()
-        this.setState({
-            isLoading: true
-        })
-        Keyboard.dismiss()
-
-        let data = await RegisterAPI(this.state.username, this.state.password)
-        code = data[0]
-        data = data[1]
-
-        this.setState({
-            datastatus: data.code
-        })
-
-        // let loginsuccess = false;
-        // let autoregisterCount = 0;
         
-        if (code.SUCCESS == data.code) {
-            this.saveProfile.setProfile(data.data)
-            loginsuccess = true;
-            SharedPreference.profileObject = await this.saveProfile.getProfile()
-            await this.onCheckPINWithChangePIN('1111', '2222')
+        if (SharedPreference.isConnected) {
+
+
+            
+            // this.getfirebasetoken()
             this.setState({
-                isLoading: false
+                isLoading: true
+            })
+            Keyboard.dismiss()
+
+            let data = await RegisterAPI(this.state.username, this.state.password)
+            code = data[0]
+            data = data[1]
+
+            this.setState({
+                datastatus: data.code
             })
 
-        } else if (code.DOES_NOT_EXISTS == data.code) {
+            // let loginsuccess = false;
+            // let autoregisterCount = 0;
 
-            Alert.alert(
-                StringText.REGISTER_INVALID_TITLE,
-                StringText.REGISTER_INVALID_DESC,
-                [
-                    {
-                        text: 'OK', onPress: () => {
-                            this.setState({
-                                isLoading: false
-                            })
-                        }
-                    }
-                ],
-                { cancelable: false }
-            )
-        } else if ((code.INVALID_USER_PASS == data.code) || (code.FAILED == data.code)) {
+            if (code.SUCCESS == data.code) {
+                this.saveAutoSyncCalendar.setAutoSyncCalendar(null)
+                this.saveProfile.setProfile(data.data)
 
-            if (data.data.detail === 'MHF00602AERR: Parameter firebase_tokens value are missing.') {
-                //get firebase token gain
-                console.log('get token again')
-                this.getfirebasetoken()
+                SharedPreference.userRegisted = true;
 
-            } else {
+                loginsuccess = true;
+                SharedPreference.profileObject = await this.saveProfile.getProfile()
+                await this.onCheckPINWithChangePIN('1111', '2222')
+                this.setState({
+                    isLoading: false
+                })
+
+            } else if (code.DOES_NOT_EXISTS == data.code) {
+
                 Alert.alert(
-                    data.data.code,
-                    data.data.detail,
+                    StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                    StringText.ALERT_SESSION_AUTHORIZED_DESC,
                     [
                         {
                             text: 'OK', onPress: () => {
@@ -152,13 +144,65 @@ export default class RegisterActivity extends Component {
                     ],
                     { cancelable: false }
                 )
+            } else if ((code.INVALID_USER_PASS == data.code) || (code.FAILED == data.code)) {
 
+                if (data.data.detail === 'MHF00602AERR: Parameter firebase_tokens value are missing.') {
+                    //get firebase token gain
+                    console.log('get token again')
+                    this.getfirebasetoken()
+
+                } else {
+                    Alert.alert(
+                        data.data.code,
+                        data.data.detail,
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    this.setState({
+                                        isLoading: false
+                                    })
+                                }
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+
+                }
+
+            } else if (code.NETWORK_ERROR == data.code) {
+                Alert.alert(
+                    StringText.ALERT_CANNOT_CONNECT_SERVER_TITLE,
+                    StringText.ALERT_CANNOT_CONNECT_SERVER_DETAIL,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.setState({
+                                    isLoading: false
+                                })
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            } else {
+                Alert.alert(
+                    data.data.code,
+                    data.data.detail,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                console.log('OK Pressed')
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
             }
+        } else {
 
-        } else if (code.NETWORK_ERROR == data.code) {
             Alert.alert(
-                'section time out',
-                'please try again',
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
                 [
                     {
                         text: 'OK', onPress: () => {
@@ -170,21 +214,9 @@ export default class RegisterActivity extends Component {
                 ],
                 { cancelable: false }
             )
-        } else {
-            Alert.alert(
-                data.data.code,
-                data.data.detail,
-                [
-                    {
-                        text: 'OK', onPress: () => {
-                            console.log('OK Pressed')
-                        }
-                    }
-                ],
-                { cancelable: false }
-            )
-        }
 
+
+        }
 
     }
 

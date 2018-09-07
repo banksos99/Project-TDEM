@@ -33,6 +33,11 @@ export const styles = StyleSheet.create({
         backgroundColor: 'white'
 
     },
+    emptyContainer1: {
+        flex: 1,
+        backgroundColor: Colors.redColor
+
+    },
     textContainer: {
         color: 'black',
         height: 40,
@@ -677,6 +682,16 @@ export const styles = StyleSheet.create({
         flex: 1,
         fontSize: scale * 20,
         fontWeight: 'bold',
+        //color: Colors.grayColor,//'white',
+        color: 'white',
+        textAlign: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+    },
+    pinnumber1: {
+        flex: 1,
+        fontSize: scale * 20,
+        fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',
         justifyContent: 'center',
@@ -688,7 +703,8 @@ export const styles = StyleSheet.create({
     },
     pinDelete: {
         width: 65,
-        height: 65
+        height: 65,
+        tintColor:'white'
     },
     pinImageDotContainer: {
         width: Layout.window.width,
@@ -834,15 +850,15 @@ export const styles = StyleSheet.create({
         height: Layout.window.height,
         alignItems: 'center',
         justifyContent: 'center',
-      // backgroundColor:Colors.redColor
+      //backgroundColor:Colors.redColor
     },
     registerContainer: {
-        flex: 1,
+        // flex: 1,
         position: 'absolute',
         left: 0,
         top: 0,
-        width: Layout.window.width,
-        height: Layout.window.height,
+        width:'100%',
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
       backgroundColor:Colors.redColor
@@ -869,11 +885,11 @@ export const styles = StyleSheet.create({
     alertDialogBoxContainer: {
         width: '80%',
         backgroundColor: 'white',
-        borderRadius: 5,
+       // borderRadius: 5,
     },
     alertDialogBoxText: {
         marginLeft: 20,
-        marginTop: 10,
+        // marginTop: 10,
         textAlign: 'left',
         color: 'black',
         fontSize: 18,
@@ -1224,6 +1240,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+     
     },
     registPinNumContainer: {
        flex: 1,
@@ -1235,7 +1252,7 @@ export const styles = StyleSheet.create({
     registPinForgotContainer: {
         marginTop: 10,
         color: 'white',
-        fontSize: 15,
+        fontSize: 15 * scale,
         textAlign: 'right',
         fontFamily: font_medium
 
@@ -1243,7 +1260,9 @@ export const styles = StyleSheet.create({
     registPinEnterContainer: {
         //marginTop: 10,
         color: 'white',
-        fontSize: 15,
+        fontSize: 15 * scale,
+        marginBottom:5,
+        marginTop:5,
         textAlign: 'right',
         fontFamily: font_medium
 
@@ -1286,8 +1305,8 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium,
     },
     pinContainer: {
-        width: Layout.window.width,
-        height: 260,
+        //width: Layout.window.width,
+       // height: 260,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -1359,8 +1378,10 @@ export const styles = StyleSheet.create({
     },
     pinFailBoxText: {
         color: Colors.redColor,
-        fontSize: 12,
+        fontSize: 12 * scale,
         fontFamily: font_medium,
+        marginLeft: 10 * scale,
+        marginRight: 10 * scale
     },
     emptyDialogContainer: {
         flex: 1,
@@ -1533,8 +1554,8 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         color: Colors.redTextColor,
         fontSize: 17 * scale,
-        width: 80 * scale,
-        height: 30 * scale,
+       // width: 80 * scale,
+        height: 50 ,
         alignItems: 'center',
         fontFamily: font_medium
     },

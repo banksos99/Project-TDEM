@@ -163,15 +163,15 @@ export default class OTSummaryDetail extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -319,7 +319,16 @@ export default class OTSummaryDetail extends Component {
         code = data[0]
         data = data[1]
         //console.log('ot data response : ',data)
-        if (code.SUCCESS == data.code) {
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog(data)
+
+        }else if (code.SUCCESS == data.code) {
             let titems = [];
             for (let i = 0; i < data.data.detail.items.length; i++) {
                 let x15 = data.data.detail.items[i].x15.split('.');
@@ -610,7 +619,7 @@ export default class OTSummaryDetail extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={{ fontSize: 16, color: Colors.redTextColor, textAlign: 'center' }}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

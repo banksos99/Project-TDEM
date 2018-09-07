@@ -54,7 +54,13 @@ export default class OrganizationStruct extends Component {
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
 
+    componentDidMount() {
+        this.settimerInAppNoti()
+       
+    }
+
     componentWillUnmount() {
+        clearTimeout(this.timer);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
@@ -66,7 +72,103 @@ export default class OrganizationStruct extends Component {
         this.onBack()
         return true;
     }
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
 
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog() {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                   // SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog() {
+
+        SharedPreference.userRegisted=false;
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
     checkDataFormat(DataResponse) {
         if (DataResponse) {
             console.log('data.data.org_lst2 :', DataResponse)
@@ -136,10 +238,10 @@ export default class OrganizationStruct extends Component {
         }
     }
 
-    componentDidMount() {
+    // componentDidMount() {
         ////console.log(Layout.window.width);
         // this.fetchData()
-    }
+    // }
 
     onBack() {
         this.props.navigation.navigate('HomeScreen');
@@ -149,7 +251,21 @@ export default class OrganizationStruct extends Component {
         
         console.log('org_code :', item.org_code)
         console.log('org_name :', item.org_name)
-        if (parseInt(item.org_code) == 0) {
+
+        if (item.org_name === 'N/A') {
+
+            Alert.alert(
+                'No Data',
+                'No data found',
+                [{
+                    text: 'OK', onPress: () => {
+                        //console.log("onLoadErrorAlertDialog")
+                    }
+                }],
+                { cancelable: false }
+            )
+
+        } else if (parseInt(item.org_code) == 0) {
 
             // *** select emp info detail
             this.setState({
@@ -161,7 +277,6 @@ export default class OrganizationStruct extends Component {
                 employee_position: item.position
 
             }, function () {
-
                 this.loadOrgStructureDetailAPI(item.org_code)
             });
 
@@ -170,7 +285,12 @@ export default class OrganizationStruct extends Component {
             console.log('item => :', item)
             console.log('level => :', item.org_level)
          if (parseInt(item.org_level) === 40){
+
+
+
+
             // *** select employee list
+
             this.setState({
 
                 isscreenloading: true,
@@ -179,7 +299,11 @@ export default class OrganizationStruct extends Component {
 
             }, function () {
 
-                this.loadEmployeeListAPI(item.org_code)
+                let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
+
+
+ 
+             this.loadEmployeeListAPI(item.org_code)
             });
 
         }else  {
@@ -193,7 +317,7 @@ export default class OrganizationStruct extends Component {
                         loadingtype: 3,
                         org_code: item.org_code,
                         index_org_code: index
-
+        
                     }, function () {
                         this.loadOrgStructureAPI(item.org_code)
                     });
@@ -295,16 +419,24 @@ export default class OrganizationStruct extends Component {
     loadOrgStructureAPI = async (org_code) => {
 
         if (SharedPreference.isConnected) {
-
-            let url = SharedPreference.ORGANIZ_STRUCTURE_API + org_code
-            this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
-        
+            
+                let url = SharedPreference.ORGANIZ_STRUCTURE_API + org_code
+                this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+            
         } else {
 
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{
+                    text: 'OK', onPress: () => {
+
+                        this.setState({
+                            isscreenloading: false,
+                        })
+
+                    }
+                },
                 ], { cancelable: false }
 
             )
@@ -482,9 +614,12 @@ export default class OrganizationStruct extends Component {
             // }
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
-        
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else {
 
             this.onLoadErrorAlertDialog(data)
@@ -496,17 +631,26 @@ export default class OrganizationStruct extends Component {
     }
 
     loadEmployeeListAPI = async () => {
-        if (SharedPreference.isConnected) {
-            let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
 
+        if (SharedPreference.isConnected) {
+
+            let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
             this.APIEmpCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+
 
         } else {
 
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
+                            isscreenloading: false,
+                        })
+
+                    }
+                },
                 ], { cancelable: false }
 
             )
@@ -516,19 +660,25 @@ export default class OrganizationStruct extends Component {
     loadOrgStructureDetailAPI = async () => {
 
         if (SharedPreference.isConnected) {
-            let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
-            if (option == 2) {
-                let today = new Date();
-                url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
-            }
-            this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+
+                let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
+                if (option == 2) {
+                    let today = new Date();
+                    url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+                }
+                this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
 
         } else {
 
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{ text: 'OK', onPress: () => { 
+                    this.setState({
+                        isscreenloading: false,
+                    })
+
+                } },
                 ], { cancelable: false }
 
             )
@@ -547,9 +697,12 @@ export default class OrganizationStruct extends Component {
             });
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
-        
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else {
             this.onLoadErrorAlertDialog(data)
         }
@@ -586,9 +739,12 @@ export default class OrganizationStruct extends Component {
             }
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
-        
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else {
             this.onLoadErrorAlertDialog(data)
         }
@@ -601,31 +757,31 @@ export default class OrganizationStruct extends Component {
 
     }
 
-    onAutenticateErrorAlertDialog(error) {
+    // onAutenticateErrorAlertDialog() {
 
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
+    //     timerstatus = false;
+    //     this.setState({
+    //         isscreenloading: false,
+    //     })
 
-        Alert.alert(
-            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-            [{
-                text: 'OK', onPress: () => {
-                    page = 0
-                    timerstatus = false
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                   // this.saveProfile.setProfile(null)
-                    this.props.navigation.navigate('RegisterScreen')
-                }
-            }],
-            { cancelable: false }
-        )
+    //     Alert.alert(
+    //         StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+    //         StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+    //         [{
+    //             text: 'OK', onPress: () => {
+    //                 page = 0
+    //                 timerstatus = false
+    //                 SharedPreference.Handbook = []
+    //                 SharedPreference.profileObject = null
+    //                // this.saveProfile.setProfile(null)
+    //                 this.props.navigation.navigate('RegisterScreen')
+    //             }
+    //         }],
+    //         { cancelable: false }
+    //     )
 
-        //console.log("error : ", error)
-    }
+    //     //console.log("error : ", error)
+    // }
 
     onLoadErrorAlertDialog(error, resource) {
 
@@ -732,9 +888,7 @@ export default class OrganizationStruct extends Component {
                             <ScrollView>
                                 {
                                     dataSource.map((item, index) => (
-                                        <View style={{ height: 50 }} key={'m' + index}
-
-                                        >
+                                        <View style={{ height: 50 }} key={'m' + index}>
                                             <TouchableOpacity
                                                 onPress={() => { this.onClickOrgStruct(item, index) }}
                                             >
@@ -742,13 +896,14 @@ export default class OrganizationStruct extends Component {
                                                     <View style={{ flex: 1, flexDirection: 'column' }}>
                                                         <View style={{ flex: 1, justifyContent: 'center' }} >
                                                             <Text style={item.expand === 0 ?
-                                                                { marginLeft: (parseInt(item.org_level-beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular' } :
-                                                                { marginLeft: (parseInt(item.org_level-beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}
-
-                                                            >{item.org_name + item.org_level}</Text>
+                                                                { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular' } :
+                                                                { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}>
+                                                                {/* {item.org_name + ' ('+item.org_level+')'} */}
+                                                                {item.org_name}
+                                                            </Text>
                                                         </View>
                                                         <View style={item.org_code === 0 ? { height: 20, justifyContent: 'center' } : { height: 0, justifyContent: 'center' }} >
-                                                            <Text style={{ marginLeft: (parseInt(item.org_level-beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
+                                                            <Text style={{ marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
                                                             >{item.position}</Text>
                                                         </View>
                                                     </View>

@@ -60,9 +60,9 @@ export default class LineChart extends Component {
     }
 
     render() {
-        //console.log('data list :', this.props.datalist)
+        console.log('data list :', this.props.datalist)
         let tmax = 0
-        if (this.props.datalist) {
+        if (this.props.datalist != 'undefined') {
 
 
             for (let i = 0; i < this.props.datalist.length; i++) {
@@ -78,6 +78,10 @@ export default class LineChart extends Component {
         let shiftdown = 50 * scale
         let shiftRight = 70 * scale
         let ratio = (200 / Math.floor(tmax));
+        let over = (parseInt((tmax / 6)/10) + 1 )*10;
+        tmax = over * 6;
+        ratio = (200 / Math.floor(tmax));
+        console.log('ratio floor : ',parseInt((tmax / 6)/10)*10)
         console.log('tmax :', tmax)
         console.log('ratio :', ratio)
 

@@ -67,8 +67,12 @@ export default class OrganizationStruct extends Component {
        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
-
+    componentDidMount() {
+        this.settimerInAppNoti()
+       
+    }
     componentWillUnmount() {
+        clearTimeout(this.timer);
        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
@@ -79,7 +83,103 @@ export default class OrganizationStruct extends Component {
         this.onBack()
         return true;
     }
+    settimerInAppNoti() {
+        this.timer = setTimeout(() => {
+            this.onLoadInAppNoti()
+        }, SharedPreference.timeinterval);
 
+    }
+
+    onLoadInAppNoti = async () => {
+        
+        if (!SharedPreference.lastdatetimeinterval) {
+            let today = new Date()
+            const _format = 'YYYY-MM-DD hh:mm:ss'
+            const newdate = moment(today).format(_format).valueOf();
+            SharedPreference.lastdatetimeinterval = newdate
+        }
+
+        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+
+    }
+
+    APIInAppCallback(data) {
+        
+        code = data[0]
+        data = data[1]
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
+        } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }
+
+    }
+
+    onAutenticateErrorAlertDialog() {
+
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                   // SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
+
+    onRegisterErrorAlertDialog() {
+
+        SharedPreference.userRegisted=false;
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
+
+        Alert.alert(
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
+            [{
+                text: 'OK', onPress: () => {
+
+                    page = 0
+                    SharedPreference.Handbook = []
+                    SharedPreference.profileObject = null
+                    this.setState({
+                        isscreenloading: false
+                    })
+                    this.props.navigation.navigate('RegisterScreen')
+
+                }
+            }],
+            { cancelable: false }
+        )
+    }
     onBack() {
         this.props.navigation.navigate('OrgStructure');
     }
@@ -146,41 +246,22 @@ export default class OrganizationStruct extends Component {
                 });
 
             }
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
         } else {
+
             this.onLoadErrorAlertDialog(data)
         }
 
     }
 
-    onAutenticateErrorAlertDialog(error) {
-
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
-
-        Alert.alert(
-            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-            [{
-                text: 'OK', onPress: () => {
-                    page = 0
-                    timerstatus = false
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                   // this.saveProfile.setProfile(null)
-                    this.props.navigation.navigate('RegisterScreen')
-                }
-            }],
-            { cancelable: false }
-        )
-
-        //console.log("error : ", error)
-    }
     onLoadErrorAlertDialog(error) {
         this.setState({
 

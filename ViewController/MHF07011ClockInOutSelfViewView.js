@@ -152,7 +152,7 @@ export default class ClockInOutSelfView extends Component {
 
         } else if (code.DOES_NOT_EXISTS == data.code) {
 
-            this.onRegisterErrorAlertDialog(data)
+            this.onRegisterErrorAlertDialog()
 
         } else if (code.SUCCESS == data.code) {
 
@@ -164,7 +164,7 @@ export default class ClockInOutSelfView extends Component {
 
     }
 
-    onAutenticateErrorAlertDialog(error) {
+    onAutenticateErrorAlertDialog() {
 
         timerstatus = false;
         this.setState({
@@ -179,7 +179,7 @@ export default class ClockInOutSelfView extends Component {
 
                     page = 0
                     SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
+                   // SharedPreference.profileObject = null
                     this.setState({
                         isscreenloading: false
                     })
@@ -191,7 +191,9 @@ export default class ClockInOutSelfView extends Component {
         )
     }
 
-    onRegisterErrorAlertDialog(data) {
+    onRegisterErrorAlertDialog() {
+
+        SharedPreference.userRegisted=false;
 
         timerstatus = false;
         this.setState({
@@ -199,14 +201,14 @@ export default class ClockInOutSelfView extends Component {
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
                     page = 0
                     SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
+                   // SharedPreference.profileObject = null
                     this.setState({
                         isscreenloading: false
                     })
@@ -392,7 +394,16 @@ export default class ClockInOutSelfView extends Component {
         code = data[0]
         data = data[1]
         //console.log('CLOCK_IN_OUT_API data :', data)
-        if (code.SUCCESS == data.code) {
+
+        if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
+        }else if (code.SUCCESS == data.code) {
 
             this.state.tdataSource = [];
 
@@ -690,7 +701,7 @@ export default class ClockInOutSelfView extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={{ fontSize: 16, color: Colors.redTextColor, textAlign: 'center' }}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -753,8 +764,8 @@ export default class ClockInOutSelfView extends Component {
         if (this.state.initialmonth + 2 === this.state.monthselected) {
             let half = (Layout.window.height - 100) / 2
             offsety = ((currentday + 1) * 90) - half
-            if (offsety > (this.state.tdataSource.length * 90) - (Layout.window.height - 100)) {
-                offsety = (this.state.tdataSource.length * 90) - (Layout.window.height - 100)
+            if (offsety > ((this.state.tdataSource.length * 90)+60) - (Layout.window.height - 100)) {
+                offsety = ((this.state.tdataSource.length * 90)+60) - (Layout.window.height - 100)
             } else if (((currentday + 1) * 90) < ((Layout.window.height - 100) / 2)) {
                 offsety = 0
             }
@@ -768,7 +779,6 @@ export default class ClockInOutSelfView extends Component {
                 >
                     {
                         this.state.tdataSource.map((item, index) => (
-
                             <View key={item.id} style={index === currentday && (this.state.initialmonth + 2 === this.state.monthselected) ?
                                 { height: 120, backgroundColor: '#F2DEDE' } :
                                 { height: 90, backgroundColor: '#F5F5F5' }} key={index + 500}>

@@ -233,15 +233,15 @@ export default class HandbookActivity extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -380,7 +380,9 @@ export default class HandbookActivity extends Component {
                         </View>
                     </View>
                     <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', }}>
-                        <Text style={styles.epubbookname}>{dataSource[i].handbook_title}</Text>
+                        <Text style={styles.epubbookname}
+                        numberOfLines={2}
+                        >{dataSource[i].handbook_title}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

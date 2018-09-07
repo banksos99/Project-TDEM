@@ -45,6 +45,7 @@ export default async function getRestAPI(username, password) {
     })
         .then((response) => response.json())
         .then((responseJson) => {
+            console.log("RegisterAPI ==>  body : ", username,password)
             console.log("RegisterAPI ==> callback  success : ", responseJson)
             let object
             if (responseJson.status == code.SUCCESS) {

@@ -37,7 +37,7 @@ import RestAPI from "../constants/RestAPI"
 
 
 let fontsizearr = ['50%', '80%', '100%', '120%', '150%', '180%'];
-let fontname = ['times', 'courier', 'arial', 'serif', 'cursive', 'fantasy', 'monospace'];
+let fontname = ['Times', 'Courier', 'Arial', 'Serif', 'Cursive', 'Fantasy', 'Monospace'];
 let fonttext = ['Times', 'Courier', 'Arial', 'Serif', 'Cursive', 'Fantasy', 'Monospace'];
 let HandbookHighlightList = [];
 let HandbookMarkList = [];
@@ -75,17 +75,19 @@ export default class HandbookViewer extends Component {
             tocviewheight: '100%',
             hilightviewheight: '0%',
             selectfontnametext: fontname[0],
+            tempselectfontname:fontname[0],
+            initselectfontname:fontname[0],
             typeTOC: 1,
             showTOC: 1,
-            titleTOC: 'Table Of Content',
-            calTop: parseInt( Dimensions.get('window').height * 0.01),
-            calWidth: parseInt( Dimensions.get('window').width),
-            calHeight: parseInt( Dimensions.get('window').height * 0.85),
 
-           handbook_file: this.props.navigation.getParam("handbook_file", ""),
-           handbook_title: this.props.navigation.getParam("handbook_title", ""),
-           FUNCTION_TOKEN: this.props.navigation.getParam("FUNCTION_TOKEN", ""),
-      
+            calTop: parseInt(Dimensions.get('window').height * 0.01),
+            calWidth: parseInt(Dimensions.get('window').width),
+            calHeight: parseInt(Dimensions.get('window').height * 0.85),
+
+            handbook_file: this.props.navigation.getParam("handbook_file", ""),
+            handbook_title: this.props.navigation.getParam("handbook_title", ""),
+            FUNCTION_TOKEN: this.props.navigation.getParam("FUNCTION_TOKEN", ""),
+            titleTOC: this.props.navigation.getParam("handbook_title", ""),
         };
 
         this.streamer = new Streamer();
@@ -288,15 +290,15 @@ settimerInAppNoti() {
     }
 
     onRegisterErrorAlertDialog(data) {
-
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            data.data.code,
-            data.data.detail,
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -435,7 +437,7 @@ settimerInAppNoti() {
         } else {
             this.setState({
                 typeTOC: 1,
-                titleTOC: 'Table Of Content'
+                titleTOC: this.state.handbook_title
             })
         }
 
@@ -467,12 +469,24 @@ settimerInAppNoti() {
 
     }
 
-    onchangefont() {
+    cancel_select_change_month_andr() {
+        
+        this.setState({
+
+            loadingtype: 1,
+            isscreenloading: false,
+
+        })
+
+    }
+
+    onchangefont= () => {
 
         this.setState({
 
-            loadingtype: 0,
+            // loadingtype: 0,
             isscreenloading: true,
+            loadingtype: 0,
 
         }, function () {
 
@@ -489,6 +503,7 @@ settimerInAppNoti() {
             loadingtype: 1,
             isscreenloading: false,
             selectfontnametext: fontselected
+
         }, function () {
 
 
@@ -503,17 +518,34 @@ settimerInAppNoti() {
             loadingtype: 1,
             isscreenloading: false,
 
+            selectfontnametext:this.state.tempselectfontname
+
         }, function () {
 
         });
 
     }
+    cancel_select_change_font= () => {
+
+        this.setState({
+
+            loadingtype: 1,
+            isscreenloading: false,
+            selectfontnametext:this.state.initselectfontname,
+            tempselectfontname:this.state.initselectfontname
+
+        }, function () {
+
+        });
+
+    }
+
     onSelecteTable = () => {
 
         this.setState({
 
             typeTOC: 1,
-            titleTOC: 'Table Of Content'
+            titleTOC: this.state.handbook_title
 
         }, function () {
 
@@ -578,7 +610,10 @@ settimerInAppNoti() {
                         <Text style={{ textAlign: 'center' }}>Font Style</Text>
                     </View>
                     <View style={{ flex: 4, justifyContent: 'center', borderWidth: 1, borderRadius: 5, margin: 8, backgroundColor: 'lightgray' }} >
-                        <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }} onPress={this.onchangefont.bind(this)}>
+                        <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
+                         onPress={this.onchangefont.bind(this)}
+                    
+                         >
                             <Text style={{ textAlign: 'left', color: 'red', marginLeft: 5 }}>{this.state.selectfontnametext}</Text>
                         </TouchableOpacity>
                     </View>
@@ -605,18 +640,29 @@ settimerInAppNoti() {
                                     fontname.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
                                             onPress={() => { this.selected_Font(item) }}
-                                            key={index + 100}>
+                                            >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
                                                 <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
                             </ScrollView>
+                            <View style={{ flexDirection: 'row', height: 40, }}>
+                                <View style={{ flex: 2 }} />
+                                <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                                    onPress={() => { this.cancel_select_change_month_andr() }}
+                                >
+                                    <Text style={styles.buttonpicker}> Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 )
 
             }
+
+            this.state.initselectfontname = this.state.selectfontnametext;
+     
             return (
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
@@ -624,10 +670,10 @@ settimerInAppNoti() {
                             <Text style={{ marginLeft: 20, marginTop: 10, textAlign: 'left', color: 'black', fontSize: 18, fontWeight: 'bold' }}>Select Font</Text>
                         </View>
                         <Picker
-                            selectedValue={this.state.selectfontname}
+                            selectedValue={this.state.tempselectfontname}
                             onValueChange={(itemValue, itemIndex) => this.setState({
-                                selectfontname: itemValue,
-                                selectfontnametext: fontname[itemIndex],
+                                tempselectfontname: itemValue,
+                              //  tempselectfontnametext: fontname[itemIndex],
 
                             }, function () {
 
@@ -641,13 +687,19 @@ settimerInAppNoti() {
                                 ))}
                         </Picker>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
-
-                            <TouchableOpacity style={styles.button}
-                                onPress={(this.onSelecteFont.bind(this))}
-                            >
-                                <Text style={{ textAlign: 'center', color: Colors.redTextColor, fontSize: 18, width: 80, height: 30, alignItems: 'center' }}> OK</Text>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                                onPress={(this.cancel_select_change_font.bind(this))}
+                                >
+                                <Text style={styles.buttonpicker}> Cancel</Text>
+                            </TouchableOpacity>
+                            <View style={{ flex: 3, justifyContent: 'center' }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
+                              onPress={(this.onSelecteFont.bind(this))}
+                              >
+                                <Text style={styles.buttonpicker}> OK</Text>
                             </TouchableOpacity>
                         </View>
+                        
                     </View>
                 </View>
             )
@@ -702,7 +754,7 @@ settimerInAppNoti() {
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={[styles.navTitleTextTop]}>{this.state.titleTOC}</Text>
+                                <Text style={[styles.navTitleTextTop]}numberOfLines={1}>{this.state.titleTOC}</Text>
                             </View>
                             <View style={{ flex: 1, }}>
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
@@ -790,7 +842,7 @@ settimerInAppNoti() {
                 backgroundColor: 'white'
             }}>
 
-                <View style={[styles.navContainer, { flexDirection: 'column' ,backgroundColor: 'white'}]}>
+                <View style={[styles.navContainer, { flexDirection: 'column' ,backgroundColor: Colors.redTextColor}]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
                         <View style={{ flex: 1, justifyContent: 'center', }}>
@@ -803,7 +855,7 @@ settimerInAppNoti() {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={[styles.navTitleTextTop, { fontFamily: "Prompt-Regular" }]}>{this.state.handbook_title}</Text>
+                            <Text style={[styles.navTitleTextTop, { fontFamily: "Prompt-Regular" }]}numberOfLines={1}>{this.state.handbook_title}</Text>
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             <TouchableOpacity
@@ -821,16 +873,18 @@ settimerInAppNoti() {
 
                 {this.renderexpand()}
 
-                <Epub style={styles.epubreader}
+                <Epub 
                     ref={component => this.epub = component}
                     src={this.state.src}
                    // highlights={HandbookHighlightList}
                     flow={"paginated"}
-                    font={this.state.selectfontnametext}
+                    font={this.state.selectfontnametext.toLowerCase()}
                     height='100%'
                     fontSize={fontsizearr[this.state.fontsizelivel]}
                     flow={this.state.flow}
                     location={this.state.location}
+        
+
                     onLocationChange={(visibleLocation) => {
                         console.log("locationChanged : ", visibleLocation.start.displayed)
                         this.setState({
@@ -847,13 +901,16 @@ settimerInAppNoti() {
                     }}
 
                     onLocationsReady={(locations) => {
-
-                        this.setState({ sliderDisabled: false });
+console.log('onLocationsReady')
+                        this.setState({ 
+                            sliderDisabled: false 
+                        
+                        });
 
                     }}
 
                     onReady={(book) => {
-
+                        console.log('onReady')
                         // add old highlight
                         for (let i = 0; i < HandbookHighlightList.length; i++) {
 
@@ -940,8 +997,8 @@ settimerInAppNoti() {
                         )
 
                     }}
-                    regenerateLocations={true}
-                    generateLocations={true}
+                    // regenerateLocations={true}
+                    // generateLocations={true}
                 />
 
                 <View style={{ height: 30, justifyContent: 'center' }}>

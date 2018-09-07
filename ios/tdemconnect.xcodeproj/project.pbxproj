@@ -53,6 +53,15 @@
 		BAB061E8210E0CE1001ABB73 /* libRNZipArchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA0A8B6A21098D2F001BCCF4 /* libRNZipArchive.a */; };
 		BAF9561BB4526904D3EC6946 /* libPods-tdemconnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA56E1C6F131DAF32B1777B /* libPods-tdemconnect.a */; };
 		BAF9756920FD89CB0044C4ED /* SplashBg.png in Resources */ = {isa = PBXBuildFile; fileRef = BAF9753A20FD89CA0044C4ED /* SplashBg.png */; };
+		BAFE4A86213810AA000CFBB9 /* Appstore_1024.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A7D213810AA000CFBB9 /* Appstore_1024.png */; };
+		BAFE4A87213810AA000CFBB9 /* iPhone20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A7E213810AA000CFBB9 /* iPhone20@2x.png */; };
+		BAFE4A88213810AA000CFBB9 /* iPhone20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A7F213810AA000CFBB9 /* iPhone20@3x.png */; };
+		BAFE4A89213810AA000CFBB9 /* iPhone29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A80213810AA000CFBB9 /* iPhone29@2x.png */; };
+		BAFE4A8A213810AA000CFBB9 /* iPhone29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A81213810AA000CFBB9 /* iPhone29@3x.png */; };
+		BAFE4A8B213810AA000CFBB9 /* iPhone40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A82213810AA000CFBB9 /* iPhone40@2x.png */; };
+		BAFE4A8C213810AA000CFBB9 /* iPhone40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A83213810AA000CFBB9 /* iPhone40@3x.png */; };
+		BAFE4A8D213810AA000CFBB9 /* iPhone60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A84213810AA000CFBB9 /* iPhone60@2x.png */; };
+		BAFE4A8E213810AA000CFBB9 /* iPhone60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAFE4A85213810AA000CFBB9 /* iPhone60@3x.png */; };
 		BD0A0EFC20EA3CD2006E652B /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0A0EFB20EA3CD2006E652B /* EventKit.framework */; };
 		BD0A0EFE20EA3CDF006E652B /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0A0EFD20EA3CDF006E652B /* CoreFoundation.framework */; };
 		BD6BCF8320F4AB1E00E7AB24 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6BCF8020F4AAFE00E7AB24 /* libRNSVG.a */; };
@@ -476,6 +485,15 @@
 		BA4C9B7A20F73FEA00C47899 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		BA8CB6E120F72AFE00FC1F92 /* tdemconnect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tdemconnect.entitlements; path = tdemconnect/tdemconnect.entitlements; sourceTree = "<group>"; };
 		BAF9753A20FD89CA0044C4ED /* SplashBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SplashBg.png; sourceTree = "<group>"; };
+		BAFE4A7D213810AA000CFBB9 /* Appstore_1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Appstore_1024.png; sourceTree = "<group>"; };
+		BAFE4A7E213810AA000CFBB9 /* iPhone20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone20@2x.png"; sourceTree = "<group>"; };
+		BAFE4A7F213810AA000CFBB9 /* iPhone20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone20@3x.png"; sourceTree = "<group>"; };
+		BAFE4A80213810AA000CFBB9 /* iPhone29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone29@2x.png"; sourceTree = "<group>"; };
+		BAFE4A81213810AA000CFBB9 /* iPhone29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone29@3x.png"; sourceTree = "<group>"; };
+		BAFE4A82213810AA000CFBB9 /* iPhone40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone40@2x.png"; sourceTree = "<group>"; };
+		BAFE4A83213810AA000CFBB9 /* iPhone40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone40@3x.png"; sourceTree = "<group>"; };
+		BAFE4A84213810AA000CFBB9 /* iPhone60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone60@2x.png"; sourceTree = "<group>"; };
+		BAFE4A85213810AA000CFBB9 /* iPhone60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone60@3x.png"; sourceTree = "<group>"; };
 		BD0A0EFB20EA3CD2006E652B /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		BD0A0EFD20EA3CDF006E652B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		BD6BCF5320F4AAFE00E7AB24 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
@@ -637,6 +655,7 @@
 		13B07FAE1A68108700A75B9A /* tdemconnect */ = {
 			isa = PBXGroup;
 			children = (
+				BAFE4A7C213810AA000CFBB9 /* icon */,
 				BAF9753A20FD89CA0044C4ED /* SplashBg.png */,
 				BA8CB6E120F72AFE00FC1F92 /* tdemconnect.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -815,6 +834,22 @@
 				BA4C9B7F20F73FEB00C47899 /* libRNFetchBlob.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BAFE4A7C213810AA000CFBB9 /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE4A7D213810AA000CFBB9 /* Appstore_1024.png */,
+				BAFE4A7E213810AA000CFBB9 /* iPhone20@2x.png */,
+				BAFE4A7F213810AA000CFBB9 /* iPhone20@3x.png */,
+				BAFE4A80213810AA000CFBB9 /* iPhone29@2x.png */,
+				BAFE4A81213810AA000CFBB9 /* iPhone29@3x.png */,
+				BAFE4A82213810AA000CFBB9 /* iPhone40@2x.png */,
+				BAFE4A83213810AA000CFBB9 /* iPhone40@3x.png */,
+				BAFE4A84213810AA000CFBB9 /* iPhone60@2x.png */,
+				BAFE4A85213810AA000CFBB9 /* iPhone60@3x.png */,
+			);
+			path = icon;
 			sourceTree = "<group>";
 		};
 		BD6BCF3220F49B6F00E7AB24 /* Products */ = {
@@ -1489,18 +1524,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAFE4A8C213810AA000CFBB9 /* iPhone40@3x.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				BAFE4A89213810AA000CFBB9 /* iPhone29@2x.png in Resources */,
+				BAFE4A88213810AA000CFBB9 /* iPhone20@3x.png in Resources */,
+				BAFE4A86213810AA000CFBB9 /* Appstore_1024.png in Resources */,
 				8E7D4B171F8AFD9C00699FE4 /* GoogleService-Info.plist in Resources */,
 				4889EEAF70734C2ABCF02CA2 /* Prompt-Bold.ttf in Resources */,
 				C81E53BA144248D689D84CD9 /* Prompt-Light.ttf in Resources */,
 				04D7CBE8327843E6AB07C8CA /* Prompt-Medium.ttf in Resources */,
 				606619CF086D4B5CA9330CE8 /* Prompt-Regular.ttf in Resources */,
 				30347D275CBF413DB203F68C /* Prompt-Thin.ttf in Resources */,
+				BAFE4A8E213810AA000CFBB9 /* iPhone60@3x.png in Resources */,
+				BAFE4A8D213810AA000CFBB9 /* iPhone60@2x.png in Resources */,
 				BAF9756920FD89CB0044C4ED /* SplashBg.png in Resources */,
 				8D23B666C5C34102B2B7A96E /* Roboto-Bold.ttf in Resources */,
+				BAFE4A8A213810AA000CFBB9 /* iPhone29@3x.png in Resources */,
 				0B582ED7764B45179D566188 /* Roboto-Medium.ttf in Resources */,
 				8E5223DD70154EDBB00C0852 /* Roboto-Regular.ttf in Resources */,
+				BAFE4A87213810AA000CFBB9 /* iPhone20@2x.png in Resources */,
+				BAFE4A8B213810AA000CFBB9 /* iPhone40@2x.png in Resources */,
 				8D244B14598E46EF9804BEE1 /* SpaceMono-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

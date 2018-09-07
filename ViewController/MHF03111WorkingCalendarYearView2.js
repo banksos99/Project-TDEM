@@ -174,15 +174,15 @@ export default class calendarYearView extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -693,6 +693,7 @@ export default class calendarYearView extends Component {
                                             </TouchableOpacity>))}
                                 </ScrollView>
                                 <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={{ flex: 2 }}></View>
                                     <TouchableOpacity style={styles.buttonpicker}
                                         onPress={() => {
                                             this.setState({
@@ -705,7 +706,7 @@ export default class calendarYearView extends Component {
                                         }}>
                                         <Text style={styles.buttonpicker}>Cancel</Text>
                                     </TouchableOpacity>
-                                    <View style={{ flex: 2 }}></View>
+                                    
                                 </View>
                             </View>
                         </View>
@@ -783,6 +784,7 @@ export default class calendarYearView extends Component {
                                             </TouchableOpacity>))}
                                 </ScrollView>
                                 <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
+                                <View style={{ flex:2}}></View>
                                     <TouchableOpacity style={{ flex: 1 }}
                                         onPress={() => {
                                             this.setState({
@@ -795,7 +797,7 @@ export default class calendarYearView extends Component {
                                         }}>
                                         <Text style={styles.buttonpicker}>Cancel</Text>
                                     </TouchableOpacity>
-                                    <View style={{ flex:2}}></View>
+                                    
                                 </View>
                             </View>
                         </View>
@@ -899,6 +901,7 @@ export default class calendarYearView extends Component {
                                             </TouchableOpacity>))}
                                 </ScrollView>
                                 <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={{ flex: 2}}></View>
                                         <TouchableOpacity style={{ flex: 1 }}
                                             onPress={() => {
                                                 this.setState({
@@ -911,7 +914,7 @@ export default class calendarYearView extends Component {
                                             }}>
                                             <Text style={styles.buttonpicker}>Cancel</Text>
                                         </TouchableOpacity>
-                                        <View style={{ flex: 2}}></View>
+                                        
                                     </View>
                             </View>
                         </View>

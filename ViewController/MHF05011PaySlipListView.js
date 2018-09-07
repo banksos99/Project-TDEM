@@ -39,13 +39,14 @@ let pay_date_str = 0;
 //let indexselectyear = 0;
 let tempdatadetail = []
 let tempdatabody = []
+let currentYear = new Date().getFullYear()
 
 export default class PaySlipActivity extends Component {
 
     constructor(props) {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-
+      
         this.state = {
             isscreenloading: false,
             loadingtype: 0,
@@ -55,7 +56,7 @@ export default class PaySlipActivity extends Component {
             currentmonth : new Date().getMonth(),
             updatedHeight: 50,
             dataSource: [],
-            selectYearArray: [],
+            selectYearArray: [currentYear - 2 , currentYear - 1,currentYear],
          //   yearselected:0,
             indexselectyear:2,
             DataResponse:this.props.navigation.getParam("DataResponse", ""),
@@ -72,7 +73,7 @@ export default class PaySlipActivity extends Component {
        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
         this.settimerInAppNoti()
-        this.getArrayOfYear()
+       // this.getArrayOfYear()
         if (this.state.DataResponse) {
             this.state.yearlistdata=[]
             dataSource = this.state.DataResponse;
@@ -93,11 +94,12 @@ export default class PaySlipActivity extends Component {
                             let paydate = 0;
                             let netsalary = 0;
                             let badge = 0;
+
                             for (let l = 0; l < this.state.DataResponse.years[j].detail.length; l++) {
+
                                 if (this.state.DataResponse.years[j].detail[l].month_no === k + 1) {
                                     
-                                    
-                                    rollID = this.state.DataResponse.years[j].detail[l].payroll_id
+                                    rollID = this.state.DataResponse.years[j].detail[l].payroll_id;
                                     paydate = this.state.DataResponse.years[j].detail[l].pay_date
                                     netsalary = this.state.DataResponse.years[j].detail[l].net_salary
                                     for (let m = 0; m < SharedPreference.notiPayslipBadge.length; m++) {
@@ -211,6 +213,7 @@ export default class PaySlipActivity extends Component {
     }
 
     APIInAppCallback(data) {
+        
         code = data[0]
         data = data[1]
 
@@ -220,7 +223,7 @@ export default class PaySlipActivity extends Component {
 
         } else if (code.DOES_NOT_EXISTS == data.code) {
 
-            this.onRegisterErrorAlertDialog(data)
+            this.onRegisterErrorAlertDialog()
 
         } else if (code.SUCCESS == data.code) {
 
@@ -331,16 +334,16 @@ export default class PaySlipActivity extends Component {
         )
     }
 
-    onRegisterErrorAlertDialog(data) {
-
+    onRegisterErrorAlertDialog() {
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
 
@@ -822,26 +825,48 @@ export default class PaySlipActivity extends Component {
                             rollid: rollid
                         });
 
-                    } else if (this.state.dataSource.status == 403) {
-                        Alert.alert(
-                            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-                            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-                            [{
-                                text: 'OK', onPress: () => {
+                    } else if (this.state.dataSource.status == 401) {
+
+                        this.onRegisterErrorAlertDialog()
+                        // Alert.alert(
+                        //     StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                        //     StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                        //     [{
+                        //         text: 'OK', onPress: () => {
                             
-                                    SharedPreference.Handbook = []
-                                    SharedPreference.profileObject = null
-                                   // this.saveProfile.setProfile(null)
-                                    this.setState({
-                                        isscreenloading: false
-                                    })
-                                    this.props.navigation.navigate('RegisterScreen')
+                        //             SharedPreference.Handbook = []
+                        //             SharedPreference.profileObject = null
+                        //            // this.saveProfile.setProfile(null)
+                        //             this.setState({
+                        //                 isscreenloading: false
+                        //             })
+                        //             this.props.navigation.navigate('RegisterScreen')
 
-                                }
-                            }],
-                            { cancelable: false }
-                        )
+                        //         }
+                        //     }],
+                        //     { cancelable: false }
+                        // )
+                    } else if (this.state.dataSource.status == 403) {
 
+                        this.onAutenticateErrorAlertDialog()
+                        // Alert.alert(
+                        //     StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+                        //     StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+                        //     [{
+                        //         text: 'OK', onPress: () => {
+                            
+                        //             SharedPreference.Handbook = []
+                        //             SharedPreference.profileObject = null
+                        //            // this.saveProfile.setProfile(null)
+                        //             this.setState({
+                        //                 isscreenloading: false
+                        //             })
+                        //             this.props.navigation.navigate('RegisterScreen')
+
+                        //         }
+                        //     }],
+                        //     { cancelable: false }
+                        // )
                     } else {
 
                         Alert.alert(
@@ -1206,7 +1231,7 @@ export default class PaySlipActivity extends Component {
             return
         } else if (data === '0.00') {
             Alert.alert(
-                'HAVE NO DATA',
+                'No Data',
                 'No Data',
                 [{text: StringText.ALERT_NONPAYROLL_NODATA_BUTTON, onPress: () => {}},
                 ],{ cancelable: false }

@@ -17,6 +17,7 @@ export default async function getRestAPI(url, functionID) {
         ERROR: "501",
         UPDATE_APPLICATION: "600",
         CUT_JSON: "700",
+        NETWORK_ERROR: "800"
     }
 
     // //console.log("RestAPI ==>  url : ", url)

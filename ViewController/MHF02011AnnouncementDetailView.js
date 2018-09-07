@@ -129,29 +129,36 @@ export default class PaySlipActivity extends Component {
 
     onRegisterErrorAlertDialog(data) {
 
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
+        if (SharedPreference.userRegisted == true) {
+            
+            timerstatus = false;
+            this.setState({
+                isscreenloading: false,
+            })
 
-        Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
-            [{
-                text: 'OK', onPress: () => {
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
 
-                    page = 0
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                    this.setState({
-                        isscreenloading: false
-                    })
-                    this.props.navigation.navigate('RegisterScreen')
+                        page = 0
+                        SharedPreference.Handbook = []
+                        SharedPreference.profileObject = null
+                        this.setState({
+                            isscreenloading: false
+                        })
+                        this.props.navigation.navigate('RegisterScreen')
 
-                }
-            }],
-            { cancelable: false }
-        )
+                    }
+                }],
+                { cancelable: false }
+            )
+
+            SharedPreference.userRegisted = false;
+
+        }
+
     }
 
     onBack() {

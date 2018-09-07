@@ -16,7 +16,7 @@ import SaveProfile from "../constants/SaveProfile"
 import SaveTimeNonPayroll from "../constants/SaveTimeNonPayroll"
 import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 import EventCalendar from "../constants/EventCalendar"
 
 
@@ -33,9 +33,9 @@ let ascendingSort = false;
 let filterImageButton = require('./../resource/images/filter.png');
 let sortImageButton = require('./../resource/images/descending.png');
 
-let initannouncementType = 'All';
+//let initannouncementType = 'All';
 let initannouncementTypetext = 'All';
-let initannouncementStatus = 'All';
+//let initannouncementStatus = 'All';
 let initannouncementStatustext = 'All'
 let page = 0;
 let orgcode = '';//60162305;
@@ -48,7 +48,7 @@ let rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
 let rolemanagementManager = [0, 0, 0, 0];
 let timerstatus = false;
 
-let tempannouncementStatus=0;
+//let tempannouncementStatus=0;
 
 
 import moment from 'moment'
@@ -67,26 +67,35 @@ export default class HMF01011MainView extends Component {
         this.state = {
             // isscreenloading: true,
             syncCalendar: true,
-            announcementType: initannouncementType,
+            
             announcementTypetext: initannouncementTypetext,
-            announcementStatus: initannouncementStatus,
+            
             announcementStatustext: initannouncementStatustext,
            
             refreshing: false,
             loadmore: false,
             announcepage: 0,
             enddragannounce: false,
-            annrefresh: false,
+            annrefresh: true,
             username: SharedPreference.profileObject.employee_name,
             nonPayrollBadge: [],
             announcetypelist: ['All', 'Company Announcement', 'Emergency Announcement', 'Event Announcement', 'General Announcement'],
             announcestatuslist: ['All', 'Read', 'Unread'],
+            tempannouncementType:'All',
+            initannouncementType:'All',
+            announcementType: 'All',
+            tempannouncementStatus:'All',
+            initannouncementStatus:'All',
+            announcementStatus: 'All',
+
+
             notiAnnounceMentBadge: SharedPreference.notiAnnounceMentBadge,
             notiPayslipBadge: SharedPreference.notiPayslipBadge.length,
             nonPayrollBadgeFirstTime: true,
             loadingannouncement: false,
             //  page: 0
-    
+            select_announcement_type:0,
+            select_announcement_status:0
         }
 
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
@@ -188,7 +197,7 @@ export default class HMF01011MainView extends Component {
             syncCalendar: autoSyncCalendarBool
         })
         SharedPreference.calendarAutoSync = autoSyncCalendarBool
-
+        this.notificationListener(0)
         this.onLoadInAppNoti()
 
     }
@@ -274,9 +283,9 @@ export default class HMF01011MainView extends Component {
 
                         this.onAutenticateErrorAlertDialog()
 
-                    } else if (responseJson.status == 401) {
+                    } else if (parseInt(responseJson.status) == 401) {
 
-                        this.onRegisterErrorAlertDialog(responseJson.errors)
+                        this.onRegisterErrorAlertDialog()
                         
                     } else if (responseJson.status == 200) {
 
@@ -308,7 +317,13 @@ export default class HMF01011MainView extends Component {
                                 "detail": monthArray
                             },
                         ]
+                        this.setState({
 
+                            // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+                            notiAnnounceMentBadge: parseInt(0)
+                        })
+
+                        this.notificationListener(0);
                         for (let index = 0; index < dataArray.length; index++) {
                             const dataReceive = dataArray[index];
                             // //console.log("element ==> ", dataReceive.function_id)
@@ -359,7 +374,7 @@ export default class HMF01011MainView extends Component {
                                     // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
                                     notiAnnounceMentBadge: parseInt(dataReceive.badge_count)
                                 })
-
+                                this.notificationListener(dataReceive.badge_count);
                             } else if (dataReceive.function_id == 'PHF05010') {
                                 console.log('new payslip arrive')
                                 this.setState({
@@ -529,6 +544,10 @@ export default class HMF01011MainView extends Component {
                             });
                             this.setState(this.renderannouncementbody());
 
+                        } else if (parseInt(responseJson.status) == 401) {
+
+                            this.onRegisterErrorAlertDialog()
+
                         } else if (responseJson.status === 403) {
 
                             this.onAutenticateErrorAlertDialog()
@@ -622,6 +641,10 @@ export default class HMF01011MainView extends Component {
                                 }
                             });
                             this.setState(this.renderannouncementbody());
+
+                        } else if (parseInt(responseJson.status) == 401) {
+
+                            this.onRegisterErrorAlertDialog()
 
                         } else if (this.state.dataSource.status === 403) {
 
@@ -727,9 +750,13 @@ export default class HMF01011MainView extends Component {
             });
             this.setState(this.renderannouncementbody());
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
         } else {
 
@@ -779,9 +806,13 @@ export default class HMF01011MainView extends Component {
             });
             this.setState(this.renderannouncementbody());
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
         } else {
 
@@ -829,9 +860,13 @@ export default class HMF01011MainView extends Component {
 
             SharedPreference.notipayAnnounceMentID = 0;
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
         } else {
 
@@ -877,10 +912,12 @@ export default class HMF01011MainView extends Component {
             });
 
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
-            this.onAutenticateErrorAlertDialog(data)
+
+            this.onAutenticateErrorAlertDialog()
 
         } else if (code.DOES_NOT_EXISTS == data.code) {
 
+            this.onRegisterErrorAlertDialog()
 
         } else {
             this.onLoadErrorAlertDialog(data, 'NonPayroll')
@@ -976,8 +1013,14 @@ export default class HMF01011MainView extends Component {
             this.props.navigation.navigate(rount, {
                 //  DataResponse: data.data,
             });
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
-            this.onAutenticateErrorAlertDialog(data)
+
+            this.onAutenticateErrorAlertDialog()
 
         } else {
             this.onLoadErrorAlertDialog(data, rount)
@@ -1008,8 +1051,14 @@ export default class HMF01011MainView extends Component {
             this.props.navigation.navigate('OTSummarySelfView', {
                 // DataResponse: data.data,
             });
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
-            this.onAutenticateErrorAlertDialog(data)
+
+            this.onAutenticateErrorAlertDialog()
 
         } else {
 
@@ -1052,13 +1101,13 @@ export default class HMF01011MainView extends Component {
 
     loadOrgStructerOTAveragefromAPI = async () => {
 
-        let url = SharedPreference.ORGANIZ_STRUCTURE_OT_API + orgcode
+        let url = SharedPreference.ORGANIZ_STRUCTURE_API + orgcode
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE), 'OrganizationOTStruct', 1)
     }
 
     loadOrgStructerOTHistoryfromAPI = async () => {
 
-        let url = SharedPreference.ORGANIZ_STRUCTURE_OT_API + orgcode
+        let url = SharedPreference.ORGANIZ_STRUCTURE_API + orgcode
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE), 'OrganizationOTStruct', 2)
     }
 
@@ -1075,9 +1124,13 @@ export default class HMF01011MainView extends Component {
                 Option: option
             });
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
         } else {
 
@@ -1104,9 +1157,13 @@ export default class HMF01011MainView extends Component {
                 // DataResponse: data,
             });
 
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
 
         } else {
@@ -1117,7 +1174,7 @@ export default class HMF01011MainView extends Component {
 
     // Alert Error
 
-    onAutenticateErrorAlertDialog(error) {
+    onAutenticateErrorAlertDialog() {
 
         timerstatus = false;
         this.setState({
@@ -1136,16 +1193,17 @@ export default class HMF01011MainView extends Component {
         )
     }
 
-    onRegisterErrorAlertDialog(errors) {
-
+    onRegisterErrorAlertDialog() {
+        
+        SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
         })
 
         Alert.alert(
-            'MHF00600AERR',
-            'MHF00600AERR: Employee ID. {0} is not authorized.'
+            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+            StringText.ALERT_SESSION_AUTHORIZED_DESC,
             [{
                 text: 'OK', onPress: () => {
                     this.signout()
@@ -1208,9 +1266,14 @@ export default class HMF01011MainView extends Component {
             this.props.navigation.navigate('LeavequotaList', {
                 dataResponse: data,
             });
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog(data)
+            this.onAutenticateErrorAlertDialog()
 
         } else {
 
@@ -1726,53 +1789,68 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    cancel_select_announce_type =()=>{
 
-        this.setState({
-            isscreenloading: false,
-            loadingtype: 2
-        }, function () {
-           
-        });
-
-    }
     select_init_announce_type = () => {
 
         this.setState({
             loadingtype: 0,
+            isscreenloading: true,
 
         }, function () {
             // this.setState(this.select_search_announce())
-           // this.select_search_announce()
+         //  this.select_search_announce()
         });
     }
+
     select_announce_type = () => {
 
         this.setState({
-            loadingtype: 0
+            loadingtype: 0,
+            announcementType:this.state.tempannouncementType
         }, function () {
             // this.setState(this.select_search_announce())
             this.select_search_announce()
         });
+    }
+
+    cancel_select_announce_type= () => {
+
+        this.setState({
+
+            isscreenloading: false,
+            loadingtype: 2,
+            announcementType:this.state.initannouncementType,
+            tempannouncementType:this.state.initannouncementType
+
+        }, function () {
+
+        });
+
     }
 
     cancel_select_announce_status = ()=>{
 
         this.setState({
             isscreenloading: false,
-            loadingtype: 2
+            loadingtype: 2,
+            announcementStatus:this.state.initannouncementStatus,
+            tempannouncementStatus:this.state.initannouncementStatus
+            // isscreenloading: false,
+            // loadingtype: 2
         }, function () {
             //this.setState(this.select_search_announce())
           //  this.select_search_announce()
         });
     }
+
     select_announce_status = () => {
         // announcementStatus
 
         this.setState({
 
-            loadingtype: 1
-
+            loadingtype: 1,
+//loadingtype: 0,
+            announcementStatus:this.state.tempannouncementStatus
 
         }, function () {
             //this.setState(this.select_search_announce())
@@ -1781,18 +1859,23 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    on_select_Announcement_type(item) {
+    on_select_Announcement_type(item,index) {
         // select_announce_company_type = () => {
         this.setState({
+            select_announcement_type:index,
             announcementType: item,
-            announcementTypetext: item
+            announcementTypetext: item,
+            tempannouncementType:item
         }, function () {
            // this.setState(this.select_announce_type())
            this.select_announce_type()
         });
     }
 
-    on_select_Announcement_status(item) {
+    on_select_Announcement_status(item,index) {
+
+        console.log('on_select_Announcement_status :',item);
+
         let temp = item;
         if (item == 'Read') {
             temp = true
@@ -1802,8 +1885,11 @@ export default class HMF01011MainView extends Component {
 
         // select_announce_company_type = () => {
         this.setState({
+            select_announcement_status:index,
             announcementStatus: temp,
-            announcementStatustext: item
+            announcementStatustext: item,
+            tempannouncementStatus: temp
+
         }, function () {
             //this.setState(this.select_announce_status())
             this.select_announce_status()
@@ -2153,6 +2239,13 @@ export default class HMF01011MainView extends Component {
     }
 
     renderannouncementheader() {
+        console.log('announcementType :',this.state.announcementStatus)
+        let tempannouncementStatustext = 'All'
+        if (this.state.announcementStatus == true) {
+            tempannouncementStatustext = 'Read'
+        } else if (this.state.announcementStatus == false) {
+            tempannouncementStatustext = 'Unread'
+        } 
 
         return (
             <View style={{ flexDirection: 'column', }}>
@@ -2221,7 +2314,7 @@ export default class HMF01011MainView extends Component {
                                     style={styles.button}
                                     onPress={(this.select_init_announce_type.bind(this))}
                                 >
-                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10 }}>{this.state.announcementTypetext}</Text>
+                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10 }}>{this.state.announcementType}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -2234,7 +2327,7 @@ export default class HMF01011MainView extends Component {
                                     style={styles.button}
                                     onPress={(this.select_announce_status.bind(this))}
                                 >
-                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10 }}>{this.state.announcementStatustext}</Text>
+                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10 }}>{tempannouncementStatustext}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -2641,7 +2734,7 @@ export default class HMF01011MainView extends Component {
                 //   .setSubtitle(notification.subtitle)
                 //   .setBody(notification.body)
                 //   .setData(notification.data)
-                .ios.setBadge(badge);
+                .ios.setBadge(0);
             firebase.notifications()
                 .displayNotification(localNotification)
                 .catch(err => console.error(err));
@@ -2762,22 +2855,54 @@ export default class HMF01011MainView extends Component {
     onChangePIN() {
 
         if (SharedPreference.isConnected) {
-            this.props.navigation.navigate('ChangePINScreen')
+            this.onCheckPINWithChangePIN('1111', '2222')
+            // this.props.navigation.navigate('ChangePINScreen')
         } else {
             //TODO Bell
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{text: 'OK', onPress: () => {}}],{ cancelable: false }
+                [{ text: 'OK', onPress: () => { } }], { cancelable: false }
             )
         }
     }
 
+    onCheckPINWithChangePIN = async (PIN1, PIN2) => {
+
+       // let data = await LoginChangePinAPI(PIN1, PIN2, SharedPreference.FUNCTIONID_PIN)
+        let data = await RestAPI(SharedPreference.HANDBOOK_LIST, SharedPreference.FUNCTIONID_HANDBOOK)
+        console.log('onCheckPINWithChangePIN : ',data)
+        code = data[0]
+        data = data[1]
+        if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
+        } else if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+        } else {
+            
+            this.props.navigation.navigate('ChangePINScreen')
+        }
+
+    }
+
+    cancel_select_Announcement_type(){
+        this.setState({
+
+            loadingtype: 2,
+            isscreenloading: false,
+
+        })
+
+    }
     cancel_select_change_month_andr() {
 
         this.setState({
 
-            loadingtype: 1,
+            loadingtype: 2,
             isscreenloading: false,
 
         })
@@ -2799,10 +2924,13 @@ export default class HMF01011MainView extends Component {
                                     this.state.announcestatuslist.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
 
-                                            onPress={() => { this.on_select_Announcement_status(item) }}
-                                            key={index + 100}>
+                                            onPress={() => { this.on_select_Announcement_status(item,index) }}
+                                            >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
-                                                <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                {/* <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text> */}
+                                                <Text style={index === this.state.select_announcement_status ?
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
@@ -2812,7 +2940,7 @@ export default class HMF01011MainView extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={{ fontSize: 16, color: Colors.redTextColor, textAlign: 'center' }}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -2821,21 +2949,22 @@ export default class HMF01011MainView extends Component {
 
             }
 
+            this.state.initannouncementStatus = this.state.announcementStatus;
             return (
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={{ marginLeft: 20, marginTop: 10, textAlign: 'left', color: 'black', fontSize: 18, fontWeight: 'bold' }}>Select Status</Text>
+                            <Text style={styles.titlepicker}>Select Status</Text>
                         </View>
                         <Picker
-                            selectedValue={this.state.announcementStatus}
+                            selectedValue={this.state.tempannouncementStatus}
                             onValueChange={(itemValue, itemIndex) => this.setState({
-                                announcementStatus: itemValue,
-                                announcementStatustext: announstatus[itemValue],
+                                tempannouncementStatus: itemValue,
+                               // announcementStatustext: announstatus[itemValue],
 
                             }, function () {
-                                tempannouncementStatustext = announstatus[itemValue];
-                                tempannouncementStatus = itemValue;
+                               // tempannouncementStatustext = announstatus[itemValue];
+                               // tempannouncementStatus = itemValue;
                             })}>
                             <Picker.Item label="All" value="All" />
                             <Picker.Item label="Read" value={true} />
@@ -2843,13 +2972,15 @@ export default class HMF01011MainView extends Component {
                         </Picker>
                         <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
-                                onPress={(this.cancel_select_announce_status)}>
+                                onPress={(this.cancel_select_announce_status.bind(this))}
                                 >
                                 <Text style={styles.buttonpicker}> Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 3, justifyContent: 'center' }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
-                                onPress={(this.select_announce_status)}>
+                            onPress={(this.select_announce_status.bind(this))}
+                              //  onPress={(this.select_announce_status)}
+                                >
                                 <Text style={styles.buttonpicker}> OK</Text>
                             </TouchableOpacity>
 
@@ -2878,10 +3009,13 @@ export default class HMF01011MainView extends Component {
                                     this.state.announcetypelist.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
 
-                                            onPress={() => { this.on_select_Announcement_type(item) }}
-                                            key={index + 100}>
+                                            onPress={() => { this.on_select_Announcement_type(item,index) }}
+                                           >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
-                                                <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                {/* <Text style={styles.titlepicker}> {item}</Text> */}
+                                                <Text style={index === this.state.select_announcement_type ?
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
@@ -2889,30 +3023,33 @@ export default class HMF01011MainView extends Component {
                             <View style={{ flexDirection: 'row', height: 40, }}>
                                 <View style={{ flex: 2 }} />
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={() => { this.cancel_select_change_month_andr() }}
+                                    onPress={() => { this.cancel_select_Announcement_type() }}
                                 >
-                                    <Text style={{ fontSize: 16, color: Colors.redTextColor, textAlign: 'center' }}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 )
             }
+
+            this.state.initannouncementType = this.state.announcementType;
+
             return (
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={{ marginLeft: 20, marginTop: 10, textAlign: 'left', color: 'black', fontSize: 18, fontWeight: 'bold' }}>Select Type</Text>
+                            <Text style={styles.titlepicker}>Select Type</Text>
                         </View>
                         <Picker
-                            selectedValue={this.state.announcementType}
+                            selectedValue={this.state.tempannouncementType}
                             onValueChange={(itemValue, itemIndex) => this.setState({
-                                announcementType: itemValue,
-                                announcementTypetext: annountype[itemValue],
+                                tempannouncementType: itemValue,
+                              //  announcementTypetext: annountype[itemValue],
                             }, function () {
 
-                                initannouncementType = itemValue;
-                                initannouncementTypetext = annountype[itemValue];
+                             //   initannouncementType = itemValue;
+                             //   initannouncementTypetext = annountype[itemValue];
 
                             })}>
                             <Picker.Item label="All" value="All" />
@@ -2923,7 +3060,7 @@ export default class HMF01011MainView extends Component {
                         </Picker>
                         <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
-                                onPress={(this.cancel_select_announce_type)}>
+                                onPress={(this.cancel_select_announce_type.bind(this))}
                                 >
                                 <Text style={styles.buttonpicker}> Cancel</Text>
                             </TouchableOpacity>
