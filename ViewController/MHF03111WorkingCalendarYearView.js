@@ -1120,7 +1120,7 @@ export default class calendarYearView extends Component {
                     timeout: 15000,
                     overwrite: true
                 })
-                .fetch('GET', SharedPreference.HOST + pdfPath, {
+                .fetch('GET', SharedPreference.CALENDER_DOWNLOAD + pdfPath, {
                     'Content-Type': 'application/pdf;base64',
                     Authorization: FUNCTION_TOKEN
                 })
@@ -1173,7 +1173,7 @@ export default class calendarYearView extends Component {
                     timeout: 15000,
                     overwrite: true
                 })
-                .fetch('GET', SharedPreference.HOST + pdfPath, {
+                .fetch('GET', SharedPreference.CALENDER_DOWNLOAD + pdfPath, {
                     'Content-Type': 'application/pdf;base64',
                     Authorization: FUNCTION_TOKEN
                 })

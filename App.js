@@ -50,7 +50,7 @@ export default class mainview extends Component {
 
   onInactivity = (timeWentInactive) => {
     if (timeWentInactive != null) {
-      if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN & SharedPreference.userRegisted) {
+      if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN ) {
         Alert.alert(
           StringText.ALERT_SESSION_TIMEOUT_TITILE,
           StringText.ALERT_SESSION_TIMEOUT_DESC,
@@ -115,6 +115,9 @@ export default class mainview extends Component {
     notificationOpen = await firebase.notifications().getInitialNotification();
 
     if (notificationOpen) {
+
+      SharedPreference.notipayslipID=0;
+      SharedPreference.notiAnnounceMentID = 0;
       const notification = notificationOpen.notification;
       if (notification._data.type === 'Payroll') {
         SharedPreference.notipayslipID = notification._data.id
@@ -140,6 +143,8 @@ export default class mainview extends Component {
       .notifications()
       .onNotification(notification => {
 
+        console.log('notification => ',notification)
+
         // Alert.alert(
         //   'notification',
         //   'newmessage',
@@ -152,7 +157,41 @@ export default class mainview extends Component {
         //   }],
         //   { cancelable: false }
         // )
+        if (Platform.OS === 'android') {
+          
+          const localNotification = new firebase.notifications.Notification({
+            sound: 'default',
+            show_in_foreground: true,
+            
+          })
+            .setNotificationId(notification.notificationId)
+            .setTitle(notification.title)
+            .setSubtitle(notification.subtitle)
+            .setBody(notification.body)
+            .setData(notification.data)
+            .android.setChannelId('channelId') // e.g. the id you chose above
+            .android.setSmallIcon('ic_stat_notification') // create this icon in Android Studio
+            .android.setColor('#000000') // you can set a color here
+            .android.setPriority(firebase.notifications.Android.Priority.High)
+            .android.setBadge(10)
 
+          firebase.notifications()
+            .displayNotification(localNotification)
+            .catch(err => console.error(err));
+        
+
+        } else if (Platform.OS === 'ios') {
+          // const localNotification = new firebase.notifications.Notification()
+          //   .setNotificationId(notification.notificationId)
+          //   .setTitle(notification.title)
+          //   .setSubtitle(notification.subtitle)
+          //   .setBody(notification.body)
+          //   .setData(notification.data)
+          //   .ios.setBadge(0);
+          // firebase.notifications()
+          //   .displayNotification(localNotification)
+          //   .catch(err => console.error(err));
+        }
 
         this.setState({
           notiMessage: 10,
@@ -196,10 +235,10 @@ export default class mainview extends Component {
                 <View style={{ flex: 7, justifyContent: 'center' }}><Text>TDEM Connect</Text></View>
               </View>
               <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text>{this.state.notiTitle}</Text>
+                <Text style={{ fontSize:14}}>{this.state.notiTitle}</Text>
               </View>
               <View style={{ flex: 2, marginLeft: 10 }}>
-                <Text>{this.state.notiBody}</Text>
+                <Text style={{ fontSize:14}}>{this.state.notiBody}</Text>
               </View>
             </View>
           </View>

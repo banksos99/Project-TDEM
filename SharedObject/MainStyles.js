@@ -1491,6 +1491,14 @@ export const styles = StyleSheet.create({
         marginLeft: 20 * scale,
         fontFamily: font_medium
     },
+    empinfoDetailonTopRedText: {
+        marginTop:5,
+        marginBottom:5,
+        color: Colors.redTextColor,
+        marginLeft: 20 * scale,
+        fontFamily: font_medium,
+        alignItems:'flex-start'
+    },
     empinfocareerLeftText: {
         fontSize: 9 * scale,
         marginRight: 10 * scale,

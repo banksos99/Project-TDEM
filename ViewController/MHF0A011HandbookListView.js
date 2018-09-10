@@ -372,7 +372,7 @@ export default class HandbookActivity extends Component {
 
                             <HandBookCover
                                 // placeholderUrl={'https://facebook.github.io/react/logo-og.png'}
-                                coverUrl={SharedPreference.HOST + dataSource[i].handbook_cover}
+                                coverUrl={SharedPreference.HANDBOOK_DOWNLOAD + dataSource[i].handbook_cover}
                                 bookName={dataSource[i].handbook_cover.split('=')[1]}
                             // bookName={new Date().getUTCMilliseconds()}
                             />

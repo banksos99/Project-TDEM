@@ -69,21 +69,19 @@ export default class PayslipDetail extends Component {
     }
 
     componentDidMount() {
+
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+    
         this.settimerInAppNoti()
     }
  
     componentWillUnmount() {
        
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+   
         clearTimeout(this.timer);
-    }
 
-    // handleConnectivityChange = isConnected => {
-    //     this.setState({ isConnected });
-    // };
+    }
 
     settimerInAppNoti() {
         this.timer = setTimeout(() => {
@@ -99,18 +97,17 @@ export default class PayslipDetail extends Component {
 
 
     onBack() {
+
         SharedPreference.notipayslipID = 0
 
-        // if (this.state.yearlist) {
-
-           
+        if (this.state.yearlist) {
             this.props.navigation.navigate('PayslipList', {
-                DataResponse:this.state.DataResponse,
+                DataResponse: this.state.DataResponse,
             })
-        // } else {
+        } else {
 
-        //     this.props.navigation.navigate('HomeScreen');
-        // }
+            this.props.navigation.navigate('HomeScreen');
+        }
 
     }
     onLoadInAppNoti = async () => {
@@ -292,9 +289,8 @@ export default class PayslipDetail extends Component {
 
             });
 
-            PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.yearlist[this.state.selectedindex].rollID
-
-            console.log('PAYSLIP_DOWNLOAD_API:', PAYSLIP_DOWNLOAD_API)
+            
+         //   console.log('PAYSLIP_DOWNLOAD_API:', PAYSLIP_DOWNLOAD_API)
 
            this.checkDownloadStatus()
 
@@ -319,10 +315,21 @@ export default class PayslipDetail extends Component {
 
     checkDownloadStatus = async () => {
 
-        PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.yearlist[this.state.selectedindex].rollID
-        let data = await PayslipPDFApi(this.state.yearlist[this.state.selectedindex].rollID)
+        //PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.yearlist[this.state.selectedindex].rollID
+        let url;
+        if (this.state.yearlist) {
+            PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.yearlist[this.state.selectedindex].rollID
+            url = this.state.yearlist[this.state.selectedindex].rollID
+        } else {
+            PAYSLIP_DOWNLOAD_API = SharedPreference.PAYSLIP_DOWNLOAD_API + this.state.datadetail.data.payroll_id
+            url = this.state.datadetail.data.payroll_id
+        }
+        
+        
+        let data = await PayslipPDFApi(url)
         code = data[0]
         data = data[1]
+        console.log('payslip download => ',PAYSLIP_DOWNLOAD_API)
         if (code.INVALID_AUTH_TOKEN == data.code) {
 
             this.onAutenticateErrorAlertDialog()
@@ -340,8 +347,17 @@ export default class PayslipDetail extends Component {
 
             //   let yearSelect = this.state.initialyear - this.state.yearselected
             //   let yearstr = this.state.initialyear - this.state.yearselected
+            let filename;
+            if (this.state.yearlist) {
 
-            filename = "Payslip_" + this.state.yearArray[this.state.monthselected] + "_" + this.state.yearlist[this.state.selectedindex].year + '.pdf'
+                filename = "Payslip_" + this.state.yearArray[this.state.monthselected] + "_" + this.state.yearlist[this.state.selectedindex].year + '.pdf'
+            
+            } else {
+
+                let temp = this.state.datadetail.data.header.pay_date.split('-')
+                filename = "Payslip_" + Months.monthNames[parseInt(temp[1])-1] + ' _' + temp[0] + '.pdf'
+            }
+
             FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_PAYSLIP, SharedPreference.profileObject.client_token)
             console.log("FUNCTIONID_PAYSLIP ==> PAYSLIP_DOWNLOAD_API  : ", PAYSLIP_DOWNLOAD_API)
             console.log("FUNCTIONID_PAYSLIP ==> filename  : ", filename)
@@ -496,7 +512,13 @@ export default class PayslipDetail extends Component {
 
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_PAYSLIP, SharedPreference.profileObject.client_token)
 
-        let host = SharedPreference.PAYSLIP_DETAIL_API + this.state.yearlist[this.state.selectedindex].rollID
+        let host;
+
+        if(this.state.yearlist){
+             host = SharedPreference.PAYSLIP_DETAIL_API + this.state.yearlist[this.state.selectedindex].rollID
+        }else{
+             host = SharedPreference.PAYSLIP_DETAIL_API + this.state.datadetail.data.payroll_id
+        }
         console.log('host :', host)
         return fetch(host, {
             method: 'GET',
@@ -535,6 +557,30 @@ export default class PayslipDetail extends Component {
                     }
 
                     );
+                } else {
+                    this.setState({
+
+                        isscreenloading: false,
+                        datadetail:[]
+
+                    }, function () {
+
+                      
+                    });
+            
+                    Alert.alert(
+                        responseJson.errors[0].code,
+                        responseJson.errors[0].detail,
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    //console.log('OK Pressed') },
+                                }
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+
                 }
 
             })
@@ -641,7 +687,7 @@ export default class PayslipDetail extends Component {
 
     onChangeMonth() {
 
-        if (this.state.yearlist[this.state.selectedindex].rollID) {
+      //  if (this.state.yearlist[this.state.selectedindex].rollID) {
 
             this.setState({
 
@@ -654,23 +700,23 @@ export default class PayslipDetail extends Component {
 
             });
 
-        } else {
-            this.setState({
+        // } else {
+        //     this.setState({
 
-                isscreenloading: false,
-                datadetail: '',
+        //         isscreenloading: false,
+        //         datadetail: '',
 
-            }, function () {
+        //     }, function () {
 
-            });
+        //     });
 
-        }
+        // }
 
     }
 
     nextmonthbuttonrender() {
 
-        if (this.state.yearlist.length <= this.state.selectedindex + 1) {
+        if (this.state.yearlist.length <= this.state.selectedindex + 1 | !this.state.yearlist ) {
             return (
                 <View style={{ flex: 1 ,justifyContent: 'center'}}>
                     <Image
@@ -705,9 +751,9 @@ export default class PayslipDetail extends Component {
         )
     }
 
-    previoousbuttonrender() {
+    previousbuttonrender() {
 
-        if (0 == this.state.selectedindex) {
+        if (0 == this.state.selectedindex | !this.state.yearlist) {
 
             return (
                 <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -820,12 +866,12 @@ export default class PayslipDetail extends Component {
                             {
                                 this.state.datadetail.data.detail.income.map((item, index) => (
                                     <View style={{ flex: 1, flexDirection: 'row' }} key={index}>
-                                        <View style={{ flex: 1, justifyContent: 'center', }}>
+                                        <View style={{ flex: 2, justifyContent: 'center' }}>
                                             <Text style={styles.payslipDetailTextLeft}>
                                                 {item.key}
                                             </Text>
                                         </View>
-                                        <View style={{ flex: 1, justifyContent: 'center', }}>
+                                        <View style={{ flex: 1, justifyContent: 'center' }}>
                                             <Text style={styles.payslipDetailTextRight}>
                                                 {(Decryptfun.decrypt(item.value))}
                                             </Text>
@@ -957,15 +1003,16 @@ export default class PayslipDetail extends Component {
 
         }
         let yearstr = this.state.initialyear - this.state.yearselected
-        date_text = this.state.yearlist[this.state.selectedindex].monthfull +' '+ this.state.yearlist[this.state.selectedindex].year//Months.monthNames[this.state.monthselected] + ' ' + yearstr.toString()
 
-        if (!this.state.yearlist) {
+        if (this.state.yearlist) {
 
-            //console.log('pay_date_str : ',pay_date_str)
+            date_text = this.state.yearlist[this.state.selectedindex].monthfull + ' ' + this.state.yearlist[this.state.selectedindex].year//Months.monthNames[this.state.monthselected] + ' ' + yearstr.toString()
 
-            let temp = pay_date_str.split(' ')
+        } else {
 
-            // date_text = temp[1] + ' ' + temp[2]
+            let temp = this.state.datadetail.data.header.pay_date.split('-')
+
+            date_text = Months.monthNames[parseInt(temp[1])-1] + ' ' + temp[0]
 
         }
         console.log('download status : ', download)
@@ -1009,7 +1056,7 @@ export default class PayslipDetail extends Component {
                     <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'center' }}>
                         <View style={{  flexDirection: 'row', justifyContent: 'center' }}>
                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                {this.previoousbuttonrender()}
+                                {this.previousbuttonrender()}
                             </View>
 
                             <View style={{ flex: 7, justifyContent: 'center', alignItems: 'center' }}>

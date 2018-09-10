@@ -90,9 +90,9 @@ export default class NonpayrollActivity extends Component {
 
     }
 
-    APIInAppCallback(data) {
-        code = data[0]
-        data = data[1]
+    APIInAppCallback(odata) {
+        code = odata[0]
+        data = odata[1]
 
         if (code.INVALID_AUTH_TOKEN == data.code) {
 
@@ -108,6 +108,112 @@ export default class NonpayrollActivity extends Component {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
 
+            
+            //console.log('APIInAppCallback data => ',data.meta.request_date)
+
+            //SharedPreference.lastdatetimeinterval = data.meta.request_date;
+
+            // let dataArray = data
+            // let currentyear = new Date().getFullYear();
+
+            // let monthArray = []
+            // for (let index = 0; index < 12; index++) {
+            //     monthData = {
+            //         "month": index + 1,
+            //         "badge": 0
+            //     }
+            //     monthArray.push(monthData)
+            // }
+
+            // let dataCustomArray = [
+            //     {
+            //         "year": currentyear - 1,
+            //         "detail": monthArray
+            //     },
+            //     {
+            //         "year": currentyear,
+            //         "detail": monthArray
+            //     },
+            // ]
+            // this.setState({
+
+            //     // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+            //     notiAnnounceMentBadge: parseInt(0)
+            // })
+
+            // this.notificationListener(0);
+            // for (let index = 0; index < dataArray.length; index++) {
+            //     const dataReceive = dataArray[index];
+            //     // //console.log("element ==> ", dataReceive.function_id)
+
+            //     if (dataReceive.function_id == "PHF06010") {//if nonPayroll
+            //         dataListArray = dataReceive.data_list
+
+            //         // //console.log("dataListArray ==> ", dataListArray)
+            //         for (let index = 0; index < dataListArray.length; index++) {
+            //             const str = dataListArray[index];
+            //             // //console.log("str ==> ", str)
+            //             var res = str.split("|");
+            //             // //console.log("res ==> ", res[1])
+            //             var data = res[1]
+
+            //             var monthYear = data.split("-");
+            //             // //console.log("dataListArray ==> monthYear ==> ", monthYear)
+
+            //             var year = monthYear[0]
+            //             var month = monthYear[1]
+
+            //             for (let index = 0; index < dataCustomArray.length; index++) {
+            //                 const data = dataCustomArray[index];
+            //                 // //console.log("dataCustomArray data ==> ", data)
+            //                 // //console.log("dataCustomArray year ==> ", data.year)
+
+            //                 if (year == data.year) {
+            //                     const detail = data.detail
+            //                     // //console.log("detail ==> ", detail)
+            //                     // //console.log("month select  ==> ", month)
+
+            //                     let element = detail.find((p) => {
+            //                         return p.month === JSON.parse(month)
+            //                     });
+            //                     // //console.log("element ==> ", element)
+
+            //                     element.badge = element.badge + 1
+            //                     //console.log("detail badge ==> ", element.badge)
+            //                 }
+            //             }
+            //         }
+
+            //         this.setState({
+            //             badgeArray: dataCustomArray
+            //         })
+                    
+            //     // } else if (dataReceive.function_id == "PHF02010") {
+
+            //     //     console.log("announcement badge ==> ", dataReceive.badge_count)
+
+            //     //     this.setState({
+
+            //     //         // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+            //     //         notiAnnounceMentBadge: parseInt(dataReceive.badge_count)
+            //     //     })
+            //     //     this.notificationListener(dataReceive.badge_count);
+            //     } else if (dataReceive.function_id == 'PHF05010') {
+            //         console.log('new payslip arrive')
+            //         this.setState({
+            //             notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
+            //         }, function () {
+            //             dataReceive.data_list.map((item, i) => {
+
+            //                 SharedPreference.notiPayslipBadge.push(item)
+            //                 // = dataReceive.data_list
+
+            //             })
+            //         })
+            //         console.log('notiPayslipBadge', SharedPreference.notiPayslipBadge)
+            //     }
+
+            // }
         }
 
     }
@@ -275,15 +381,16 @@ export default class NonpayrollActivity extends Component {
                 {/* <View style={[styles.nonPayRollitem, {
                     backgroundColor: Colors.calendarRedDotColor
                 }]}> */}
-                    <TouchableOpacity
-                        style={[styles.nonPayRollitem, {backgroundColor: Colors.calendarRedDotColor}]}
-                        disable={amount}
-                        onPress={() => {
-                            this.onLoadAlertDialog()
-                        }}>
-                        <View style={styles.nonPayRollDetailContainer}>
-                            <Text style={[styles.payslipiteMonth, { color: 'white' }]}>{Months.monthNamesShort[monthNumber - 1]}</Text>
-                        </View>
+                <TouchableOpacity
+                    style={[styles.nonPayRollitem, { backgroundColor: Colors.calendarRedDotColor }]}
+                    disable={amount}
+                    // onPress={() => {this.onLoadAlertDialog()}}
+
+                    onPress={() => { this.onNonPayrollDetail(monthNumber) }}
+                >
+                    <View style={styles.nonPayRollDetailContainer}>
+                        <Text style={[styles.payslipiteMonth, { color: 'white' }]}>{Months.monthNamesShort[monthNumber - 1]}</Text>
+                    </View>
                         <View style={styles.nonPayRollDetailContainer}>
                             <Text style={[styles.payslipitemmoney, { color: 'white' }]}>{amount}</Text>
                         </View>
@@ -375,9 +482,9 @@ export default class NonpayrollActivity extends Component {
                         style={[styles.nonPayRollitem, {
                             backgroundColor: "white",
                         }]}
-                        onPress={() => {
-                            this.onLoadAlertDialog()
-                        }}>
+                        // onPress={() => {this.onLoadAlertDialog()}}
+                        onPress={() => { this.onNonPayrollDetail(monthNumber) }}
+                        >
                         <View style={styles.nonPayRollDetailContainer}>
                             <Text style={styles.payslipiteMonth}>{Months.monthNamesShort[monthNumber - 1]}</Text>
                         </View>
@@ -431,7 +538,6 @@ export default class NonpayrollActivity extends Component {
             { cancelable: false }
         )
     }
-
 
     onDetail() {
         this.props.navigation.navigate('NonPayrollDetail');
@@ -500,10 +606,11 @@ export default class NonpayrollActivity extends Component {
             })
 
             Alert.alert(
-                StringText.ALERT_CANNOT_CONNECT_TITLE,
-                StringText.ALERT_CANNOT_CONNECT_DESC,
-                [{ text: 'OK', onPress: () => { } },
-                ], { cancelable: false }
+
+                data.data[0].code,
+                data.data[0].detail,
+                [{ text: 'OK', onPress: () => { } }],
+                { cancelable: false }
             )
 
         }

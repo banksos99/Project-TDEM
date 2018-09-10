@@ -25,8 +25,6 @@ export default class PaySlipActivity extends Component {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.checkDataFormat(this.props.navigation.getParam("DataResponse", ""));
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_ANNOUCEMENT_DETAIL)
-
-
     }
 
     checkDataFormat(DataResponse) {
@@ -162,6 +160,7 @@ export default class PaySlipActivity extends Component {
     }
 
     onBack() {
+        
         SharedPreference.notiAnnounceMentID = 0
         this.props.navigation.navigate('HomeScreen');
     }

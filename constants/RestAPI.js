@@ -45,12 +45,14 @@ export default async function getRestAPI(url, functionID) {
             if (responseJson.status == code.SUCCESS) {
                 object = [code, {
                     code: responseJson.status,
-                    data: responseJson.data
+                    data: responseJson.data,
+                    meta:responseJson.meta,
                 }]
             } else {
                 object = [code, {
                     code: responseJson.status,
-                    data: responseJson.errors
+                    data: responseJson.errors,
+                    meta:responseJson.meta,
                 }]
             }
             return object

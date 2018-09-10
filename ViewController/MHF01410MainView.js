@@ -47,7 +47,7 @@ let settingstatus = 'Y';
 let rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
 let rolemanagementManager = [0, 0, 0, 0];
 let timerstatus = false;
-
+let viewupdate=false;
 //let tempannouncementStatus=0;
 
 
@@ -95,7 +95,8 @@ export default class HMF01011MainView extends Component {
             loadingannouncement: false,
             //  page: 0
             select_announcement_type:0,
-            select_announcement_status:0
+            select_announcement_status:0,
+            sendlastupdate:0,
         }
 
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
@@ -202,11 +203,24 @@ export default class HMF01011MainView extends Component {
 
     }
 
+    componentWillUpdate() {
+
+
+    }
+
+    componentDidUpdate() {
+
+        // if(!viewupdate){
+
+        //     viewupdate = true;
+            
+        // }
+        
+
+    }
     componentDidMount() {
 
         //this.inappTimeInterval()
-
-        
 
         if (SharedPreference.notipayslipID) {
 
@@ -217,6 +231,8 @@ export default class HMF01011MainView extends Component {
             this.onOpenAnnouncementDetailnoti()
 
         }
+
+        
 
         this.loadData()
 
@@ -261,6 +277,10 @@ export default class HMF01011MainView extends Component {
             //  SharedPreference.lastdatetimeinterval = '2018-08-22 15:07:00'
         }
         console.log("lastdatetimeinterval ==> ", SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval)
+        this.setState({
+            sendlastupdate: SharedPreference.lastdatetimeinterval
+        })
+        
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, 1, SharedPreference.profileObject.client_token)
         console.log("FUNCTION_TOKEN ==> ", FUNCTION_TOKEN)
         return fetch(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval, {
@@ -1617,7 +1637,7 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: true,
                 loadingtype: 3
             }, function () {
-                this.setState(this.renderloadingscreen())
+               // this.setState(this.renderloadingscreen())
                 this.loadPayslipDetailfromAPI()
             });
         } else {
@@ -3207,6 +3227,9 @@ export default class HMF01011MainView extends Component {
                 </View>
 
                 {this.renderloadingscreen()}
+                <View style={{ height: 40,marginTop:20, position: 'absolute' }}>
+                <Text>{this.state.sendlastupdate}</Text>
+                </View>
 
             </View>
         );

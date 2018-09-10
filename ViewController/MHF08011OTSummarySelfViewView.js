@@ -353,50 +353,34 @@ export default class OTSummaryDetail extends Component {
 
                 tdataSource: titems,
                 headerdataSource: data.data.header,
-           
+                isscreenloading: false,
             })
 
-        } else if (code.NODATA == data.code) {
+        } else  {
+
+            console.log('data :',data)
 
             Alert.alert(
-
                 data.data[0].code,
                 data.data[0].detail,
-                [{ text: 'OK', onPress: () => { } }],
+                [
+                    {
+                        text: 'OK', onPress: () => {
+                            console.log('OK Pressed')
+                        }
+                    }
+                ],
                 { cancelable: false }
             )
 
             this.setState({
 
                 tdataSource: [],
-                headerdataSource: []
+                headerdataSource: [],
+                isscreenloading: false,
             })
 
-        } else if (code.INVALID_AUTH_TOKEN == data.code) {
-
-            this.onAutenticateErrorAlertDialog(data)
-
-
-        } else {
-
-            Alert.alert(
-
-                error.data[0].code,
-                error.data[0].detail,
-                [{
-                    text: 'OK', onPress: () => {
-    
-                    }
-                }],
-                { cancelable: false }
-            )
-
         }
-
-        this.setState({
-           
-            isscreenloading: false,
-        })
     }
 
     onAutenticateErrorAlertDialog(error) {

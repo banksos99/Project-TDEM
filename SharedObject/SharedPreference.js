@@ -1,7 +1,9 @@
-
 const HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
+
+// const HOST = 'https://tdemconnect.tdem.toyota-asia.com'
 // const HOST = 'http://192.168.2.189:8080'
-const VERSION = 'v1'
+//const VERSION = 'v1'
+const VERSION = 'v1.0.58'//10-09-61
 
 export default {
     HOST: HOST,
@@ -21,12 +23,14 @@ export default {
     OTSUMMARY_DETAIL: HOST + '/api/' + VERSION + '/ot/summary?',
 
     HANDBOOK_LIST: HOST + '/api/' + VERSION + '/handbooks',
+    HANDBOOK_DOWNLOAD: HOST + '/api/' + VERSION,
 
     LEAVE_QUOTA_API: HOST + '/api/' + VERSION + '/leavequota/summary',
     NONPAYROLL_SUMMARY_API: HOST + '/api/' + VERSION + '/nonpayroll/summary',
     CALENDER_YEAR_API: HOST + '/api/' + VERSION + '/calendar?year=',
     CALENDER_YEAR_PDF_API: HOST + '/api/' + VERSION + '/calendar/file?year=',
-
+    CALENDER_DOWNLOAD: HOST + '/api/' + VERSION,
+    
     NON_PAYROLL_DETAIL_API: HOST + '/api/' + VERSION + '/nonpayroll?month=',
 
     CLOCK_IN_OUT_API: HOST + '/api/' + VERSION + '/clockinout?empcode=',

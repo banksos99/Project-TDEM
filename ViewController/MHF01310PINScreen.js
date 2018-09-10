@@ -182,7 +182,7 @@ export default class PinActivity extends Component {
         code = data[0]
         data = data[1]
 
-        ////console.log("onLoadInitialMaster : ", data.code)
+        console.log("onLoadInitialMaster : ", data)
         if (code.SUCCESS == data.code) {
             this.setState({
                 isLoading: false

@@ -51,29 +51,27 @@ export default class PaySlipActivity extends Component {
             isscreenloading: false,
             loadingtype: 0,
             isFetching: false,
-           // isConnected:false,
             expand: false,
             currentmonth : new Date().getMonth(),
             updatedHeight: 50,
             dataSource: [],
             selectYearArray: [currentYear - 2 , currentYear - 1,currentYear],
-         //   yearselected:0,
             indexselectyear:2,
             DataResponse:this.props.navigation.getParam("DataResponse", ""),
             yearlistdata : [],
             inappTimeIntervalStatus:true
         };
 
-       // firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_PAYSLIP_LIST)
-       console.log('currentmonth = >',this.state.currentmonth)
+       firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_PAYSLIP_LIST)
+   
     }
 
     componentDidMount() {
 
        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+
         this.settimerInAppNoti()
-       // this.getArrayOfYear()
+
         if (this.state.DataResponse) {
             this.state.yearlistdata=[]
             dataSource = this.state.DataResponse;
@@ -870,7 +868,7 @@ export default class PaySlipActivity extends Component {
                     } else {
 
                         Alert.alert(
-                            'error',
+                            this.state.dataSource.errors[0].code,
                             this.state.dataSource.errors[0].detail,
                             [
                                 {
@@ -1229,16 +1227,16 @@ export default class PaySlipActivity extends Component {
 
         if (index > this.state.currentmonth && this.state.indexselectyear === 2) {
             return
-        } else if (data === '0.00') {
-            Alert.alert(
-                'No Data',
-                'No Data',
-                [{text: StringText.ALERT_NONPAYROLL_NODATA_BUTTON, onPress: () => {}},
-                ],{ cancelable: false }
-            )
+            // } else if (data === '0.00') {
+            //     Alert.alert(
+            //         'No Data',
+            //         'No Data',
+            //         [{text: StringText.ALERT_NONPAYROLL_NODATA_BUTTON, onPress: () => {}},
+            //         ],{ cancelable: false }
+            //     )
 
         } else {
-console.log('isConnected => ',this.state.isConnected)
+            console.log('isConnected => ', this.state.isConnected)
             if (SharedPreference.isConnected) {
 
                 this.setState({

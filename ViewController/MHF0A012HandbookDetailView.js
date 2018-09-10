@@ -140,7 +140,7 @@ export default class HandbookViewer extends Component {
 
     componentDidMount()  {
         this.settimerInAppNoti()
-        this.downloadEpubFile(SharedPreference.HOST + this.state.handbook_file);
+        this.downloadEpubFile(SharedPreference.HANDBOOK_DOWNLOAD + this.state.handbook_file);
 
         //console.log('SharedPreference.profileObject =====>' + JSON.stringify(SharedPreference.profileObject));
         let value = this.loadHighlights();
@@ -359,7 +359,7 @@ settimerInAppNoti() {
                 this.streamer.stop();
                 if (this.reloadCount < 3) {
                    
-                    this.downloadEpubFile(SharedPreference.HOST + this.state.handbook_file)
+                    this.downloadEpubFile(SharedPreference.HANDBOOK_DOWNLOAD + this.state.handbook_file)
                     this.reloadCount++;
                 } else {
                   
