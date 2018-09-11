@@ -12,6 +12,16 @@ import io.invertase.firebase.RNFirebasePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.calendarevents.CalendarEventsPackage;
+import me.jhen.react.BadgePackage;
+import com.rnziparchive.RNZipArchivePackage;
+import com.horcrux.svg.SvgPackage;
+import com.futurepress.staticserver.FPStaticServerPackage;
+import com.github.yamill.orientation.OrientationPackage;
+import com.rnfs.RNFSPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.calendarevents.CalendarEventsPackage;
 import com.rnziparchive.RNZipArchivePackage;
 import com.horcrux.svg.SvgPackage;
 import com.futurepress.staticserver.FPStaticServerPackage;
@@ -56,6 +66,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+           
+          
+         
+           
+          
+            new BadgePackage(),
         new SvgPackage(),
         new RNZipArchivePackage(),
         new FPStaticServerPackage(),

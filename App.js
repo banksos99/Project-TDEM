@@ -21,7 +21,7 @@ import UserInactivity from 'react-native-user-inactivity';
 import { styles } from "./SharedObject/MainStyles"
 import LoginWithPinAPI from "./constants/LoginWithPinAPI"
 // import registerScreen from "./ViewController/MHF01210RegisterScreen";
-
+var BadgeAndroid = require('react-native-android-badge')
 export default class mainview extends Component {
 
   savePIN = new SavePIN()
@@ -75,6 +75,8 @@ export default class mainview extends Component {
   }
 
   async componentDidMount() {
+    BadgeAndroid.setBadge(0)
+    
     NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     this.notificationListener();
     const enabled = await firebase.messaging().hasPermission();
@@ -173,7 +175,7 @@ export default class mainview extends Component {
             .android.setSmallIcon('ic_stat_notification') // create this icon in Android Studio
             .android.setColor('#000000') // you can set a color here
             .android.setPriority(firebase.notifications.Android.Priority.High)
-            .android.setBadge(10)
+            .android.setBadge(6)
 
           firebase.notifications()
             .displayNotification(localNotification)

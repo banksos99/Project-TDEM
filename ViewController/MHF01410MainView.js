@@ -18,7 +18,7 @@ import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 import EventCalendar from "../constants/EventCalendar"
-
+var BadgeAndroid = require('react-native-android-badge')
 
 const ROLL_ANNOUNCE = 50;
 
@@ -219,7 +219,7 @@ export default class HMF01011MainView extends Component {
 
     }
     componentDidMount() {
-
+        
         //this.inappTimeInterval()
 
         if (SharedPreference.notipayslipID) {
@@ -2670,7 +2670,7 @@ export default class HMF01011MainView extends Component {
         SharedPreference.profileObject = null
         this.saveProfile.setProfile(null)
         if (Platform.OS === 'android') {
-
+            BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
             const localNotification = new firebase.notifications.Notification()
                
@@ -2728,7 +2728,7 @@ export default class HMF01011MainView extends Component {
     notificationListener(badge) {
 
         if (Platform.OS === 'android') {
-
+            BadgeAndroid.setBadge(badge)
             // const localNotification = new firebase.notifications.Notification({
             //     sound: 'default',
             //     show_in_foreground: true,
@@ -2754,7 +2754,7 @@ export default class HMF01011MainView extends Component {
                 //   .setSubtitle(notification.subtitle)
                 //   .setBody(notification.body)
                 //   .setData(notification.data)
-                .ios.setBadge(0);
+                .ios.setBadge(badge);
             firebase.notifications()
                 .displayNotification(localNotification)
                 .catch(err => console.error(err));
@@ -2861,7 +2861,7 @@ export default class HMF01011MainView extends Component {
         }
 
         if (Platform.OS === 'android') {
-
+            BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
             const localNotification = new firebase.notifications.Notification()
                
