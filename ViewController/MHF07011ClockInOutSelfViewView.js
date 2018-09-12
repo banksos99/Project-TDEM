@@ -38,6 +38,7 @@ let currentday;
 let currentmonth;
 let initannouncementType;
 let selectmonth = 0;
+let DataResponse=[];
 
 export default class ClockInOutSelfView extends Component {
 
@@ -80,6 +81,7 @@ export default class ClockInOutSelfView extends Component {
             tfirstday: 0,
             manager: this.props.navigation.getParam("manager", ""),
             previous: this.props.navigation.getParam("previous", ""),
+            employee_ID: 0,
             employee_name: this.props.navigation.getParam("employee_name", ""),
             employee_position: this.props.navigation.getParam("employee_position", ""),
         }
@@ -222,10 +224,12 @@ export default class ClockInOutSelfView extends Component {
 
     checkDataFormat(DataResponse) {
 
-        console.log('DataResponse :', DataResponse);
-        //console.log('monthselected :', this.state.monthselected);
+        
+        // console.log('DataResponse :', DataResponse);
         ////console.log('initialmonth :', this.state.initialmonth);
         // if (DataResponse) {
+
+        this.state.employee_ID = DataResponse.data.employee_code;
 
         let today = new Date();
         date = today.getDate() + "/" + parseInt(today.getMonth() + 1) + "/" + today.getFullYear();
@@ -378,11 +382,11 @@ export default class ClockInOutSelfView extends Component {
         if (omonth < 10) {
             tmonth = '0' + omonth
         }
-        let today = new Date();
+        // let today = new Date();
         let birthday = new Date(Months.monthNames[parseInt(omonth) - 1] + '1,' + oyear);
         firstday = birthday.getDay();
 
-        let url = SharedPreference.CLOCK_IN_OUT_API + SharedPreference.profileObject.employee_id + '&month=' + tmonth + '&year=' + oyear
+        let url = SharedPreference.CLOCK_IN_OUT_API + this.state.employee_ID + '&month=' + tmonth + '&year=' + oyear
         //console.log('CLOCK_IN_OUT_API :', url)
 
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_CLOCK_IN_OUT))
@@ -393,7 +397,7 @@ export default class ClockInOutSelfView extends Component {
 
         code = data[0]
         data = data[1]
-        //console.log('CLOCK_IN_OUT_API data :', data)
+        console.log('CLOCK_IN_OUT_API data :', data)
 
         if (code.INVALID_AUTH_TOKEN == data.code) {
 

@@ -634,7 +634,7 @@ export default class OrganizationStruct extends Component {
 
         if (SharedPreference.isConnected) {
 
-            let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
+            let url = SharedPreference.ORGANIZ_STRUCTURE_API + this.state.org_code
             this.APIEmpCallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
 
 
@@ -717,6 +717,7 @@ export default class OrganizationStruct extends Component {
     APIDetailCallback(data) {
         code = data[0]
         data = data[1]
+        console.log('org data',data)
         if (code.SUCCESS == data.code) {
             if (option == 2) {
                 this.props.navigation.navigate('ClockInOutSelfView', {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar,NetInfo } from 'react-native';
+import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar,NetInfo,AppState } from 'react-native';
 
 import SharedPreference from './SharedObject/SharedPreference';
 
@@ -17,7 +17,7 @@ import Colors from "./SharedObject/Colors";
 import StringText from "./SharedObject/StringText";
 
 import UserInactivity from 'react-native-user-inactivity';
-
+import moment from 'moment'
 import { styles } from "./SharedObject/MainStyles"
 import LoginWithPinAPI from "./constants/LoginWithPinAPI"
 // import registerScreen from "./ViewController/MHF01210RegisterScreen";
@@ -30,6 +30,7 @@ export default class mainview extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      appState: AppState.currentState,
       inactive: false,
       showpin: false,
       notiMessage: 0,
@@ -43,14 +44,17 @@ export default class mainview extends Component {
       savePin: '',
       isLoading: false,
       sessionTimeoutBool: false,
-      pageSelect: ''
+      pageSelect: '',
+      quitdate:new Date(),
+   
     }
     console.log("this.props.navigation ==> ", this.props.navigation)
   }
 
   onInactivity = (timeWentInactive) => {
     if (timeWentInactive != null) {
-      if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN ) {
+      if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN) {
+        this.state.quitdate = new Date()
         Alert.alert(
           StringText.ALERT_SESSION_TIMEOUT_TITILE,
           StringText.ALERT_SESSION_TIMEOUT_DESC,
@@ -67,16 +71,38 @@ export default class mainview extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentDidUpdate() {
+    console.log('mainApp => componentDidUpdate',AppState.currentState)
 
+    
+    // Alert.alert(
+    //   'update',
+    //   'update',
+    //   [{
+    //     text: 'OK', onPress: () => {
+    //       this.setState({
+    //         showpin: true,
+    //       });
+    //     }
+    //   }],
+    //   { cancelable: false }
+    // )
+
+
+
+
+  }
+  componentWillUnmount() {
+    console.log('mainApp => componentWillUnmount')
+    AppState.removeEventListener('change', this._handleAppStateChange);
     clearTimeout(this.timer);
     NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     console.log('app componentWillUnmount')
   }
 
   async componentDidMount() {
-    BadgeAndroid.setBadge(0)
-    
+    console.log('mainApp => componentDidMount')
+    AppState.addEventListener('change', this._handleAppStateChange);
     NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     this.notificationListener();
     const enabled = await firebase.messaging().hasPermission();
@@ -132,6 +158,27 @@ export default class mainview extends Component {
       inactive: true,
     });
 
+  }
+
+  //check application active
+  _handleAppStateChange = (nextAppState) => {
+
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      let diff = moment(new Date()).diff(this.state.quitdate, 'seconds')
+      console.log('show date before foreground =>', diff)
+      if (diff > 300) {
+
+        this.setState({
+          showpin: true,
+        });
+      }
+
+    } else if (nextAppState === 'inactive') {
+
+      console.log('show date before background =>', this.state.quitdate)
+
+    }
+    this.setState({ appState: nextAppState });
   }
 
   handleConnectivityChange = isConnected => {
@@ -697,7 +744,9 @@ export default class mainview extends Component {
     data = data[1]
 
     console.log("onLoadLoginWithPin ==> ", data.code)
+    this.state.quitdate = new Date()
     if (code.SUCCESS == data.code) {
+
       this.setState({
         isLoading: false,
         showpin: false,
@@ -802,10 +851,11 @@ export default class mainview extends Component {
 
   render() {
     if (this.state.inactive) {
+
       return (
         <UserInactivity
-          timeForInactivity={1500000}
-          checkInterval={1500000}
+          timeForInactivity={300000}
+          checkInterval={300000}
           onInactivity={this.onInactivity} >
           <StatusBar
             barStyle="light-content"

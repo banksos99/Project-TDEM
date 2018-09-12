@@ -107,8 +107,8 @@ android {
         applicationId "com.toyotaasia.tdemconnect"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 53
-        versionName "1.53"
+        versionCode 54
+        versionName "1.54"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

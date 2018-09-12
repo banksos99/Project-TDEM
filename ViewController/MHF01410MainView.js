@@ -173,6 +173,8 @@ export default class HMF01011MainView extends Component {
     }
 
     componentWillMount() {
+
+        
         // this.interval = setInterval(() => {
         //     this.setState({
         //         isscreenloading: false
@@ -204,12 +206,12 @@ export default class HMF01011MainView extends Component {
     }
 
     componentWillUpdate() {
-
+        // console.log('mainview => componentWillUpdate')
 
     }
 
     componentDidUpdate() {
-
+        // console.log('mainview => componentDidUpdate')
         // if(!viewupdate){
 
         //     viewupdate = true;
@@ -218,8 +220,9 @@ export default class HMF01011MainView extends Component {
         
 
     }
+
     componentDidMount() {
-        
+        // console.log('mainview => componentDidMount')
         //this.inappTimeInterval()
 
         if (SharedPreference.notipayslipID) {
@@ -239,7 +242,7 @@ export default class HMF01011MainView extends Component {
     }
 
     componentWillUnmount() {
-
+        // console.log('mainview => componentWillUnmount')
         clearTimeout(this.timer);
 
         SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge;
@@ -3228,7 +3231,7 @@ export default class HMF01011MainView extends Component {
 
                 {this.renderloadingscreen()}
                 <View style={{ height: 40,marginTop:20, position: 'absolute' }}>
-                <Text>{this.state.sendlastupdate}</Text>
+                <Text style ={{color:'white'}}>{this.state.sendlastupdate}</Text>
                 </View>
 
             </View>

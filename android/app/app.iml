@@ -213,5 +213,6 @@
     <orderEntry type="module" module-name="react-native-fs" />
     <orderEntry type="module" module-name="react-native-zip-archive" />
     <orderEntry type="module" module-name="react-native-orientation" />
+    <orderEntry type="module" module-name="react-native-android-badge" />
   </component>
 </module>

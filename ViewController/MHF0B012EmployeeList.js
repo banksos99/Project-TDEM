@@ -206,9 +206,18 @@ export default class OrganizationStruct extends Component {
     loadOrgStructureDetailAPI = async () => {
 
         if (SharedPreference.isConnected) {
+            
+            if (option == 1) {
+                let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
+                this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_EMPLOYEE_INFORMATION))
 
-            let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
-            this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_EMPLOYEE_INFORMATION))
+            }else if (option == 2) {
+                let today = new Date();
+                let url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code+ '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+                console.log('url :',url)
+                this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_CLOCK_IN_OUT))
+
+            }
        
         } else {
 
@@ -228,10 +237,11 @@ export default class OrganizationStruct extends Component {
         data = data[1]
         if (code.SUCCESS == data.code) {
 
-            //console.log('option : ', option)
+            console.log('employee data : ', data)
             if (option == 2) {
+                
                 this.props.navigation.navigate('ClockInOutSelfView', {
-                    DataResponse: data.data,
+                    DataResponse: data,
                     employee_name: this.state.employee_name,
                     employee_position: this.state.employee_position,
                     manager: 1,
