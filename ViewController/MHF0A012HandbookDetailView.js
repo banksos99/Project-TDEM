@@ -34,7 +34,7 @@ import SharedPreference from '../SharedObject/SharedPreference';
 import SaveProfile from "./../constants/SaveProfile"
 import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 
 let fontsizearr = ['50%', '80%', '100%', '120%', '150%', '180%'];
 let fontname = ['Times', 'Courier', 'Arial', 'Serif', 'Cursive', 'Fantasy', 'Monospace'];
@@ -82,7 +82,7 @@ export default class HandbookViewer extends Component {
 
             calTop: parseInt(Dimensions.get('window').height * 0.01),
             calWidth: parseInt(Dimensions.get('window').width),
-            calHeight: parseInt(Dimensions.get('window').height * 0.85),
+            calHeight: parseInt(Dimensions.get('window').height * 1),
 
             handbook_file: this.props.navigation.getParam("handbook_file", ""),
             handbook_title: this.props.navigation.getParam("handbook_title", ""),
@@ -211,7 +211,7 @@ export default class HandbookViewer extends Component {
             handbook_hilight: HandbookHighlightList,
             handbook_mark: HandbookMarkList
 
-        }) 
+        })
 
         SharedPreference.Handbook = tempHB
 
@@ -220,7 +220,7 @@ export default class HandbookViewer extends Component {
         if (this.streamer)
             this.streamer.kill();
     }
-settimerInAppNoti() {
+    settimerInAppNoti() {
         this.timer = setTimeout(() => {
             this.onLoadInAppNoti()
         }, SharedPreference.timeinterval);
@@ -228,16 +228,16 @@ settimerInAppNoti() {
     }
 
     onLoadInAppNoti = async () => {
-        
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval, 1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
@@ -253,6 +253,12 @@ settimerInAppNoti() {
             this.onRegisterErrorAlertDialog(data)
 
         } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }else{
 
             this.timer = setTimeout(() => {
                 this.onLoadInAppNoti()
@@ -923,8 +929,11 @@ console.log('onLocationsReady')
                             book: book,
                             title: book.package.metadata.title,
                             toc: book.navigation.toc,
-                            isscreenloading: false
+                            isscreenloading: false,
+                            calHeight: parseInt(Dimensions.get('window').height * 0.85)
                         });
+
+                        
                         // add old highlight
                         for (let i = 0; i < HandbookHighlightList.length; i++) {
 

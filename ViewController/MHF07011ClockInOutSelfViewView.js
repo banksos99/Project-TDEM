@@ -29,7 +29,7 @@ import Months from "./../constants/Month"
 import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 let scale = Layout.window.height / 320;
 
 let firstday;
@@ -133,15 +133,15 @@ export default class ClockInOutSelfView extends Component {
 
     onLoadInAppNoti = async () => {
         
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
-
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
@@ -161,7 +161,11 @@ export default class ClockInOutSelfView extends Component {
             this.timer = setTimeout(() => {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
+        }else{
 
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
         }
 
     }
@@ -768,8 +772,8 @@ export default class ClockInOutSelfView extends Component {
         if (this.state.initialmonth + 2 === this.state.monthselected) {
             let half = (Layout.window.height - 100) / 2
             offsety = ((currentday + 1) * 90) - half
-            if (offsety > ((this.state.tdataSource.length * 90)+60) - (Layout.window.height - 100)) {
-                offsety = ((this.state.tdataSource.length * 90)+60) - (Layout.window.height - 100)
+            if (offsety > ((this.state.tdataSource.length * 92)) - (Layout.window.height - 100)) {
+                offsety = ((this.state.tdataSource.length * 92)) - (Layout.window.height - 100)
             } else if (((currentday + 1) * 90) < ((Layout.window.height - 100) / 2)) {
                 offsety = 0
             }

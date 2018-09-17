@@ -38,116 +38,148 @@ export default class PinActivity extends Component {
     }
 
     onLoadLoginWithPin = async (PIN) => {
-        ////console.log("login with pin ==> ", PIN)
-        let data = await LoginWithPinAPI(PIN, SharedPreference.FUNCTIONID_PIN)
-        code = data[0]
-        data = data[1]
 
-        console.log("onLoadLoginWithPin ==> ", data.code)
+        if (SharedPreference.isConnected) {
 
-        if (code.SUCCESS == data.code) {
-            this.setState({
-                // isLoading: false
-            })
-            SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
-            await this.onLoadInitialMaster()
+            console.log("login with pin ==> ", PIN,SharedPreference.FUNCTIONID_PIN)
+            let data = await LoginWithPinAPI(PIN, SharedPreference.FUNCTIONID_PIN)
+            code = data[0]
+            data = data[1]
 
-        } else if (code.INVALID_AUTH_TOKEN == data.code) {
-            Alert.alert(
-                StringText.INVALID_AUTH_TOKEN_TITLE,
-                StringText.INVALID_AUTH_TOKEN_DESC,
-                [{
-                    text: 'OK', onPress: () => {
-                        SharedPreference.profileObject = null
-                        this.saveProfile.setProfile(null)
-                        this.props.navigation.navigate('RegisterScreen')
-                    }
-                }
-                ],
-                { cancelable: false })
+            console.log("onLoadLoginWithPin ==> ", data)
 
-        } else if (code.DOES_NOT_EXISTS == data.code) {
-
-            Alert.alert(
-                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
-                StringText.ALERT_SESSION_AUTHORIZED_DESC,
-                [{
-                    text: 'OK', onPress: () => {
-                      //  SharedPreference.profileObject = null
-                      //  this.saveProfile.setProfile(null)
-                       // this.props.navigation.navigate('RegisterScreen')
-                    }
-                }
-                ],
-                { cancelable: false })
-
-
-        } else if ((code.INTERNAL_SERVER_ERROR == data.code) || (code.ERROR == data.code)) {
-            Alert.alert(
-                StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-                StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-                [{
-                    text: 'OK', onPress: () => {
-                        SharedPreference.profileObject = null
-                        this.saveProfile.setProfile(null)
-                        this.props.navigation.navigate('RegisterScreen')
-                    }
-                }
-                ],
-                { cancelable: false })
-
-        } else if (code.NETWORK_ERROR == data.code) {
-
-            Alert.alert(
-                StringText.ALERT_CANNOT_CONNECT_SERVER_TITLE,
-                StringText.ALERT_CANNOT_CONNECT_SERVER_DETAIL,
-                [{
-                    text: 'OK', onPress: () => {
-                        SharedPreference.profileObject = null
-                        this.saveProfile.setProfile(null)
-                        this.props.navigation.navigate('RegisterScreen')
-                    }
-                }
-                ],
-                { cancelable: false })
-        } else {
-            if (this.state.failPin == 4) {
+            if (code.SUCCESS == data.code) {
                 this.setState({
-                  //  isLoading: false
+                    // isLoading: false
                 })
+                SharedPreference.lastdatetimeinterval = data.data.last_request
+                SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
+                await this.onLoadInitialMaster()
+
+            } else if (code.INVALID_AUTH_TOKEN == data.code) {
                 Alert.alert(
-                    StringText.ALERT_PIN_TITLE_NOT_CORRECT,
-                    StringText.ALERT_PIN_DESC_TOO_MANY_NOT_CORRECT,
+                    StringText.INVALID_AUTH_TOKEN_TITLE,
+                    StringText.INVALID_AUTH_TOKEN_DESC,
+                    [{
+                        text: 'OK', onPress: () => {
+                            this.setState({
+                                pin: '',
+                                isLoading: false
+                            })
+                            SharedPreference.profileObject = null
+                            this.saveProfile.setProfile(null)
+                            this.props.navigation.navigate('RegisterScreen')
+                        }
+                    }
+                    ],
+                    { cancelable: false })
+
+            } else if (code.DOES_NOT_EXISTS == data.code) {
+
+                Alert.alert(
+                    StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                    StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                    [{
+                        text: 'OK', onPress: () => {
+                            this.setState({
+                                pin: '',
+                                isLoading: false
+                            })
+                            //  SharedPreference.profileObject = null
+                            //  this.saveProfile.setProfile(null)
+                            // this.props.navigation.navigate('RegisterScreen')
+                        }
+                    }
+                    ],
+                    { cancelable: false })
+
+
+            } else if ((code.INTERNAL_SERVER_ERROR == data.code) || (code.ERROR == data.code)) {
+                Alert.alert(
+                    StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+                    StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
                     [{
                         text: 'OK', onPress: () => {
                             SharedPreference.profileObject = null
                             this.saveProfile.setProfile(null)
                             this.props.navigation.navigate('RegisterScreen')
                         }
-                    }],
-                    { cancelable: false }
-                )
-            } else {
-                this.setState({
-                    isLoading: false
-                })
+                    }
+                    ],
+                    { cancelable: false })
+
+            } else if (code.NETWORK_ERROR == data.code) {
+
                 Alert.alert(
-                    StringText.ALERT_PIN_TITLE_NOT_CORRECT,
-                    StringText.ALERT_PIN_DESC_NOT_CORRECT,
+                    StringText.ALERT_CANNOT_CONNECT_SERVER_TITLE,
+                    StringText.ALERT_CANNOT_CONNECT_SERVER_DETAIL,
                     [{
                         text: 'OK', onPress: () => {
-                            let origin = this.state.failPin + 1
-                            this.setState({
-                                failPin: origin,
-                                pin: ''
-                            })
+                            SharedPreference.profileObject = null
+                            this.saveProfile.setProfile(null)
+                            this.props.navigation.navigate('RegisterScreen')
                         }
-                    },
+                    }
                     ],
-                    { cancelable: false }
-                )
+                    { cancelable: false })
+            } else {
+                if (this.state.failPin == 4) {
+                    this.setState({
+                        //  isLoading: false
+                    })
+                    Alert.alert(
+                        StringText.ALERT_PIN_TITLE_NOT_CORRECT,
+                        StringText.ALERT_PIN_DESC_TOO_MANY_NOT_CORRECT,
+                        [{
+                            text: 'OK', onPress: () => {
+                                SharedPreference.profileObject = null
+                                this.saveProfile.setProfile(null)
+                                this.props.navigation.navigate('RegisterScreen')
+                            }
+                        }],
+                        { cancelable: false }
+                    )
+                } else {
+                    this.setState({
+                        isLoading: false
+                    })
+                    Alert.alert(
+                        StringText.ALERT_PIN_TITLE_NOT_CORRECT,
+                        StringText.ALERT_PIN_DESC_NOT_CORRECT,
+                        [{
+                            text: 'OK', onPress: () => {
+                                let origin = this.state.failPin + 1
+                                this.setState({
+                                    failPin: origin,
+                                    pin: ''
+                                })
+                            }
+                        },
+                        ],
+                        { cancelable: false }
+                    )
+                }
             }
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
+                         
+                            pin: '',
+                            isLoading: false
+                        })
+
+                    }
+                }], { cancelable: false }
+            )
+
+
         }
+
     }
 
     onLoadAppInfo = async () => {
@@ -175,6 +207,10 @@ export default class PinActivity extends Component {
         }
 
         this.props.navigation.navigate('HomeScreen')
+    }
+    
+    componentWillUnmount() {
+
     }
 
     onLoadInitialMaster = async () => {

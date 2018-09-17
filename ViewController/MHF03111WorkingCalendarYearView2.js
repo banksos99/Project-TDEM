@@ -30,7 +30,7 @@ import EventCalendar from "../constants/EventCalendar"
 import SaveProfile from "../constants/SaveProfile"
 import CalendarPDFAPI from "../constants/CalendarPDFAPI"
 import firebase from 'react-native-firebase';
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 
 export default class calendarYearView extends Component {
 
@@ -114,15 +114,15 @@ export default class calendarYearView extends Component {
 
     onLoadInAppNoti = async () => {
         
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
-
+       // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
@@ -138,6 +138,12 @@ export default class calendarYearView extends Component {
             this.onRegisterErrorAlertDialog(data)
 
         } else if (code.SUCCESS == data.code) {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
+
+        }else{
 
             this.timer = setTimeout(() => {
                 this.onLoadInAppNoti()
@@ -749,7 +755,7 @@ export default class calendarYearView extends Component {
                                             this.setState({ yearviewPicker: false }),
                                                 this.resetCalendar()
                                         }}>
-                                        <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
+                                        <Text style={styles.alertDialogBoxText}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -1391,9 +1397,24 @@ export default class calendarYearView extends Component {
 
                             <TouchableOpacity onPress={() => {
                                 //////////////console.log("yearPickerForDownloadPDFFileView");
-                                this.setState({
-                                    yearPickerForDownloadPDFFileView: true
-                                })
+                                if (SharedPreference.isConnected) {
+                                    this.setState({
+                                        yearPickerForDownloadPDFFileView: true
+                                    })
+                                } else {
+                                    Alert.alert(
+                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                                        [{
+                                            text: 'OK', onPress: () => {
+                                                this.setState({
+                                                    isscreenloading: false,
+                                                });
+                                            }
+                                        },
+                                        ], { cancelable: false }
+                                    )
+                                }
                             }}>
                                 <Image
                                     style={styles.navRightButton}
@@ -1405,17 +1426,52 @@ export default class calendarYearView extends Component {
                     <View style={styles.detailContainer} >
                         <View style={styles.calendarTitleBox} >
                             <TouchableOpacity style={styles.calendarMonthTextLeftContainer} onPress={() => {
-                                this.setState({
-                                    yearviewPicker: true
-                                })
+
+                                if (SharedPreference.isConnected) {
+                                    this.setState({
+                                        yearviewPicker: true
+                                    })
+
+                                } else {
+                                    Alert.alert(
+                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                                        [{
+                                            text: 'OK', onPress: () => {
+                                                this.setState({
+                                                    isscreenloading: false,
+                                                });
+                                            }
+                                        },
+                                        ], { cancelable: false }
+                                    )
+
+                                }
+
                             }}>
                                 <Text style={styles.calendarYearText}>{this.state.showYear}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.calendarMonthTextRightContainer} onPress={() => {
-                                this.setState({
-                                    locationPickerView: true
-                                })
+                                if (SharedPreference.isConnected) {
+
+                                    this.setState({
+                                        locationPickerView: true
+                                    })
+                                } else {
+                                    Alert.alert(
+                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                                        [{
+                                            text: 'OK', onPress: () => {
+                                                this.setState({
+                                                    isscreenloading: false,
+                                                });
+                                            }
+                                        },
+                                        ], { cancelable: false }
+                                    )
+                                }
                             }}>
                                 <View style={styles.calendarCoverTitleBox}>
                                     <Text style={styles.calendarLocationText}>{this.state.showLocation}</Text>

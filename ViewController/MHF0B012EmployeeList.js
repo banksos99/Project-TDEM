@@ -23,7 +23,7 @@ import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 import StringText from '../SharedObject/StringText';
 import SaveProfile from "../constants/SaveProfile"
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 let dataSource = [];
 let option = 0;
 
@@ -92,19 +92,19 @@ export default class OrganizationStruct extends Component {
 
     onLoadInAppNoti = async () => {
         
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
-
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
-        
+
         code = data[0]
         data = data[1]
 
@@ -122,6 +122,11 @@ export default class OrganizationStruct extends Component {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
 
+        } else {
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
         }
 
     }
@@ -206,19 +211,22 @@ export default class OrganizationStruct extends Component {
     loadOrgStructureDetailAPI = async () => {
 
         if (SharedPreference.isConnected) {
-            
+
             if (option == 1) {
                 let url = SharedPreference.EMP_INFO_MANAGER_API + this.state.org_code
                 this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_EMPLOYEE_INFORMATION))
 
-            }else if (option == 2) {
+            } else if (option == 2) {
                 let today = new Date();
-                let url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code+ '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
-                console.log('url :',url)
+                let url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+                if (parseInt(today.getMonth() + 1) > 9) {
+                    url = SharedPreference.CLOCK_IN_OUT_MANAGER_API + this.state.org_code + '&month=' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+                }
+                console.log('url :', url)
                 this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_CLOCK_IN_OUT))
 
             }
-       
+
         } else {
 
             Alert.alert(

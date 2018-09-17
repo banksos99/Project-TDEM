@@ -32,6 +32,8 @@ import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
 import RestAPI from "../constants/RestAPI"
 import PayslipPDFApi from "../constants/PayslipPDFApi"
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+
 let PAYSLIP_DOWNLOAD_API;
 
 export default class PayslipDetail extends Component {
@@ -99,7 +101,8 @@ export default class PayslipDetail extends Component {
     onBack() {
 
         SharedPreference.notipayslipID = 0
-
+        SharedPreference.notiPayslipBadge = [];
+        
         if (this.state.yearlist) {
             this.props.navigation.navigate('PayslipList', {
                 DataResponse: this.state.DataResponse,
@@ -112,14 +115,14 @@ export default class PayslipDetail extends Component {
     }
     onLoadInAppNoti = async () => {
         
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
-
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
 
     }
 
@@ -208,7 +211,11 @@ export default class PayslipDetail extends Component {
 
             // }
 
+        }else{
 
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
             
 
         }
@@ -326,19 +333,20 @@ export default class PayslipDetail extends Component {
         }
         
         
-        let data = await PayslipPDFApi(url)
-        code = data[0]
-        data = data[1]
-        console.log('payslip download => ',PAYSLIP_DOWNLOAD_API)
-        if (code.INVALID_AUTH_TOKEN == data.code) {
+        // let data = await PayslipPDFApi(url)
+        // code = data[0]
+        // data = data[1]
+        // console.log('payslip download => ',PAYSLIP_DOWNLOAD_API)
+        // if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog()
+        //     this.onAutenticateErrorAlertDialog()
 
-        } else if (code.DOES_NOT_EXISTS == data.code) {
+        // } else if (code.DOES_NOT_EXISTS == data.code) {
 
-            this.onRegisterErrorAlertDialog(data)
+        //     this.onRegisterErrorAlertDialog(data)
 
-        } else {
+        // } else 
+        {
 
             // console.log('payslip data :',data[1].data)
 
@@ -362,6 +370,7 @@ export default class PayslipDetail extends Component {
             console.log("FUNCTIONID_PAYSLIP ==> PAYSLIP_DOWNLOAD_API  : ", PAYSLIP_DOWNLOAD_API)
             console.log("FUNCTIONID_PAYSLIP ==> filename  : ", filename)
             console.log("FUNCTIONID_PAYSLIP ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
+
             if (Platform.OS === 'android') {
                 RNFetchBlob
                     .config({
@@ -381,6 +390,15 @@ export default class PayslipDetail extends Component {
                     .then((resp) => {
 
                         RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf')
+                        this.setState({
+
+                            isscreenloading: false,
+
+                        }, function () {
+                            // this.setState(this.renderloadingscreen())
+                        });
+                        
+
                     })
                     .catch((errorCode, errorMessage) => {
 
@@ -391,7 +409,9 @@ export default class PayslipDetail extends Component {
 
                                 {
                                     text: 'OK', onPress: () => {
-
+                                        this.setState({
+                                            isscreenloading: false
+                                        })
                                     }
                                 },
                             ],
@@ -421,15 +441,19 @@ export default class PayslipDetail extends Component {
                             });
 
                         if (resp.respInfo.status == 200) {
+
+                            RNFetchBlob.ios.openDocument(resp.path());
+
                             this.setState({
 
                                 isscreenloading: false,
 
                             }, function () {
                                 // this.setState(this.renderloadingscreen())
+                                
                             });
 
-                            RNFetchBlob.ios.openDocument(resp.path());
+                            
 
                         } else {
 
@@ -499,7 +523,7 @@ export default class PayslipDetail extends Component {
                 this.setState({
                     havePermission: true
                 })
-                // this.onDownloadPDFFile()
+                this.onDownloadPDFFile()
             } else {
                 //console.log("WRITE_EXTERNAL_STORAGE permission denied")
             }
@@ -575,6 +599,9 @@ export default class PayslipDetail extends Component {
                             {
                                 text: 'OK', onPress: () => {
                                     //console.log('OK Pressed') },
+                                    this.setState({
+                                        isscreenloading: false
+                                    })
                                 }
                             }
                         ],
@@ -651,7 +678,11 @@ export default class PayslipDetail extends Component {
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{ text: 'OK', onPress: () => {
+                    this.setState({
+                        isscreenloading: false
+                    })
+                 } },
                 ], { cancelable: false }
             )
 
@@ -678,7 +709,11 @@ export default class PayslipDetail extends Component {
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{ text: 'OK', onPress: () => {
+                    this.setState({
+                        isscreenloading: false
+                    })
+                 } },
                 ], { cancelable: false }
             )
         }

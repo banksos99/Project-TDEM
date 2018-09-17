@@ -517,7 +517,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center' // Us
     },
     managermenuTextname: {
-        fontSize: scale * 14,
+        fontSize: scale * 13,
         color: Colors.grayTextColor,
         fontFamily: font_medium
     },
@@ -740,7 +740,7 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium
     },
     payslipitemmoney: {
-        fontSize: 15 * scale,
+        fontSize: 13 * scale,
         color: Colors.thingrayTextColor,
         fontFamily: font_medium
     },
@@ -766,14 +766,14 @@ export const styles = StyleSheet.create({
 
     },
     payslipitemcurrentdNet:{
-        fontSize: 16 * scale,
+        fontSize: 12 * scale,
         color: 'white',
         fontFamily: font_medium
 
     },
 
     payslipitemdetailred: {
-        fontSize: 12 * scale,
+        fontSize: 13 * scale,
         color: 'white',
         fontFamily: font_medium
 
@@ -1043,24 +1043,24 @@ export const styles = StyleSheet.create({
         height: 50,
         backgroundColor: Colors.backgroundcolor,
         paddingTop: 10,
-        paddingLeft: 5,
-        paddingRight: 5
+        paddingLeft: 3,
+        paddingRight: 3
     },
     nonPayRollMonthContainer: {
         flex: 1, flexDirection: 'column',
         backgroundColor: Colors.calendarLocationBoxColor,
         // backgroundColor:"red",
-        marginLeft: 5,
-        marginRight: 5,
-        marginTop: -5,
-        paddingBottom: 5,
-        borderRadius: 5
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: -3,
+        paddingBottom: 3,
+        borderRadius: 3
     },
     selectYearContainer: {
         flex: 1, flexDirection: 'row'
     },
     nonPayRollItemContainer: {
-        flex: 1, flexDirection: 'column', marginLeft: 3, marginRight: 3,
+        flex: 1, flexDirection: 'column', marginLeft: 2, marginRight: 2,
         backgroundColor: Colors.calendarLocationBoxColor
     },
     nonPayRollDetailContainer: {
@@ -1178,6 +1178,7 @@ export const styles = StyleSheet.create({
     registTextContainer: {
         flexDirection: 'row',
         height: 30,
+        
         alignItems: 'center',
     },
     registLine: {
@@ -1189,7 +1190,7 @@ export const styles = StyleSheet.create({
         fontSize: 17 * scale,
         //color: Colors.lightGrayTextColor,
         flex: 1,
-        height: 45,
+        height: 45* scale,
         fontFamily:font_medium
     },
     registTitleText: {

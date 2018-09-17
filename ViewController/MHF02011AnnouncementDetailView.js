@@ -15,7 +15,7 @@ import SharedPreference from "./../SharedObject/SharedPreference"
 import firebase from 'react-native-firebase';
 import RestAPI from "../constants/RestAPI"
 import StringText from '../SharedObject/StringText'
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 let content;
 let title;
 export default class PaySlipActivity extends Component {
@@ -71,8 +71,8 @@ export default class PaySlipActivity extends Component {
             SharedPreference.lastdatetimeinterval = newdate
         }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
-
+       // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
@@ -93,7 +93,12 @@ export default class PaySlipActivity extends Component {
             this.timer = setTimeout(() => {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
+            
+        }else{
 
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
         }
 
     }
@@ -110,10 +115,23 @@ export default class PaySlipActivity extends Component {
             StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
             [{
                 text: 'OK', onPress: () => {
-
                     page = 0
+                    SharedPreference.notiAnnounceMentBadge = 0;
+                    SharedPreference.notiPayslipBadge.length = [];
+                    SharedPreference.nonPayslipBadge.length = [];
                     SharedPreference.Handbook = []
                     SharedPreference.profileObject = null
+
+                    if (Platform.OS === 'android') {
+                        BadgeAndroid.setBadge(0)
+                    } else if (Platform.OS === 'ios') {
+                        const localNotification = new firebase.notifications.Notification()
+
+                            .ios.setBadge(0);
+                        firebase.notifications()
+                            .displayNotification(localNotification)
+                            .catch(err => console.error(err));
+                    }
                     this.setState({
                         isscreenloading: false
                     })
@@ -128,7 +146,7 @@ export default class PaySlipActivity extends Component {
     onRegisterErrorAlertDialog(data) {
 
         if (SharedPreference.userRegisted == true) {
-            
+
             timerstatus = false;
             this.setState({
                 isscreenloading: false,

@@ -20,7 +20,7 @@ import SharedPreference from "./../SharedObject/SharedPreference"
 import RestAPI from "../constants/RestAPI"
 import StringText from '../SharedObject/StringText';
 import SaveProfile from "../constants/SaveProfile"
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 let dataSource = [];
 let option = 0;
 let org_code = '';
@@ -69,15 +69,15 @@ export default class OrganizationStruct extends Component {
 
     onLoadInAppNoti = async () => {
         
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
-
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
@@ -99,6 +99,11 @@ export default class OrganizationStruct extends Component {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
 
+        }else{
+
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
         }
 
     }
@@ -546,7 +551,12 @@ export default class OrganizationStruct extends Component {
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{ text: 'OK', onPress: () => {
+                    this.setState({
+                        isscreenloading: false
+                    })
+
+                 } },
                 ], { cancelable: false }
 
             )
@@ -667,7 +677,12 @@ export default class OrganizationStruct extends Component {
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{ text: 'OK', onPress: () => {
+                    this.setState({
+                        isscreenloading: false
+                    })
+
+                 } },
                 ], { cancelable: false }
 
             )
@@ -676,19 +691,27 @@ export default class OrganizationStruct extends Component {
 
     loadOTBarChartfromAPI = async () => {
 
-        if(SharedPreference.isConnected){
+        if (SharedPreference.isConnected) {
 
             let today = new Date();
             let url = SharedPreference.OTSUMMARY_BAR_CHART + this.state.org_code + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+            if (parseInt(today.getMonth() + 1) > 9) {
+                url = SharedPreference.OTSUMMARY_BAR_CHART + this.state.org_code + '&month=' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
+            }
             //console.log('url  :', url)
             this.APIDetailCallback(await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY), 'OTBarChartView')
 
-        }else{
+        } else {
 
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{ text: 'OK', onPress: () => {
+                    this.setState({
+                        isscreenloading: false
+                    })
+
+                } },
                 ], { cancelable: false }
 
             )

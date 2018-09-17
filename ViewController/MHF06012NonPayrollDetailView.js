@@ -22,7 +22,7 @@ import StringText from './../SharedObject/StringText'
 import moment from 'moment'
 import firebase from 'react-native-firebase';
 import Month from '../constants/Month';
-
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 export default class NonpayrollDetailView extends Component {
     constructor(props) {
         super(props);
@@ -35,6 +35,8 @@ export default class NonpayrollDetailView extends Component {
             selectYear: this.props.navigation.getParam("selectYear", ""),
             selectMonth: this.props.navigation.getParam("month", ""),
             badgeData: this.props.navigation.getParam("badgeData", {}),
+            DataResponse: this.props.navigation.getParam("DataResponse", {}),
+            indexselectyear: this.props.navigation.getParam("indexselectyear", {}),
     
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_NON_PAYROLL_DETAIL)
@@ -71,15 +73,15 @@ export default class NonpayrollDetailView extends Component {
 
     onLoadInAppNoti = async () => {
 
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval, 1))
-
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval, 1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
@@ -168,7 +170,11 @@ export default class NonpayrollDetailView extends Component {
 
             // }
 
+        }else{
 
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
             
 
         }
@@ -244,7 +250,7 @@ export default class NonpayrollDetailView extends Component {
             detail = []
 
             let array = this.state.dataObject.detail
-
+            let keyindex = 0;
             for (let index = 0; index < array.length; index++) {
                 const element = array[index];
                 // //////console.log("getNonPayrollDetail ==> element : ", element.pay_date)
@@ -261,8 +267,10 @@ export default class NonpayrollDetailView extends Component {
                     subDetail.push(this.renderSection(detail, decodedString))
                 }
                 detail.push(subDetail);
-                detail.push(<View style={{ height: 1, backgroundColor: 'gray',marginLeft:20,marginRight:20 }}></View>
+                detail.push(<View style={{ height: 1, backgroundColor: 'gray', marginLeft: 20, marginRight: 20 }} key={keyindex}></View>
+
                 );
+                keyindex = keyindex + 1;
             }
 
             return detail
@@ -277,7 +285,7 @@ export default class NonpayrollDetailView extends Component {
 
     renderDate(date) {
         return (
-            <Text style={styles.nonPayRollTitleText}>{date}</Text>
+            <Text style={styles.nonPayRollTitleText} key={date}>{date}</Text>
         );
     }
 
@@ -296,10 +304,16 @@ export default class NonpayrollDetailView extends Component {
 
     onBack() {
 
+        // this.props.navigation.navigate('NonPayrollList', {
+        //     dataResponse: this.state.datalist,
+        // })
+console.log()
         this.props.navigation.navigate('NonPayrollList', {
+            DataResponse:this.state.DataResponse,
             dataResponse: this.state.datalist,
             selectYear: this.state.selectYear,
-            badgeData: this.state.badgeData
+            badgeData: this.state.badgeData,
+            indexselectyear:this.state.indexselectyear
         });
     }
 

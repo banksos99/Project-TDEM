@@ -19,7 +19,7 @@ export default async function loginWithPinAPI(pin, functionID) {
         NETWORK_ERROR: "800"
     }
 
-    // console.log("LoginWithPin ==> url  : ",SharedPreference.REGISTER_API)
+    console.log("LoginWithPin ==> url  : ",SharedPreference.REGISTER_API)
     // console.log("LoginWithPin ==> pin  : ", pin, " , functionID : ", functionID)
     let FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, functionID, SharedPreference.profileObject.client_token)
     // console.log("LoginWithPin ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
@@ -40,7 +40,7 @@ export default async function loginWithPinAPI(pin, functionID) {
     })
         .then((response) => response.json())
         .then((responseJson) => {
-            // //console.log("LoginWithPinAPI ==> callback success : ", responseJson)
+            console.log("SharedPreference.REGISTER_API ==>  : ", SharedPreference.REGISTER_API)
             let object
             if (responseJson.status == code.SUCCESS) {
                 SharedPreference.profileObject = responseJson.data

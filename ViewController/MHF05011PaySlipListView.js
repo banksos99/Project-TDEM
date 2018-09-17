@@ -23,6 +23,7 @@ import StringText from '../SharedObject/StringText';
 import Month from "../constants/Month"
 import firebase from 'react-native-firebase';
 import RestAPI from "../constants/RestAPI"
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 
 let monthlistdata = [];
 
@@ -54,7 +55,7 @@ export default class PaySlipActivity extends Component {
             expand: false,
             currentmonth : new Date().getMonth(),
             updatedHeight: 50,
-            dataSource: [],
+            dataSource: 0,
             selectYearArray: [currentYear - 2 , currentYear - 1,currentYear],
             indexselectyear:2,
             DataResponse:this.props.navigation.getParam("DataResponse", ""),
@@ -102,7 +103,7 @@ export default class PaySlipActivity extends Component {
                                     netsalary = this.state.DataResponse.years[j].detail[l].net_salary
                                     for (let m = 0; m < SharedPreference.notiPayslipBadge.length; m++) {
                                         if (SharedPreference.notiPayslipBadge[m] == rollID) {
-                                            badge = 1;
+                                            badge = badge + 1;
                                         }
                                     }
                                 }
@@ -199,15 +200,15 @@ export default class PaySlipActivity extends Component {
 
     onLoadInAppNoti = async () => {
         
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
-
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
@@ -229,75 +230,79 @@ export default class PaySlipActivity extends Component {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
 
-            let dataArray = data.data
+            // let dataArray = data.data
 
-            for (let index = 0; index < dataArray.length; index++) {
-                const dataReceive = dataArray[index];
-                // //console.log("element ==> ", dataReceive.function_id)
+            // for (let index = 0; index < dataArray.length; index++) {
+            //     const dataReceive = dataArray[index];
+            //     // //console.log("element ==> ", dataReceive.function_id)
 
-                if (dataReceive.function_id == "PHF06010") {//if nonPayroll
-                    dataListArray = dataReceive.data_list
+            //     if (dataReceive.function_id == "PHF06010") {//if nonPayroll
+            //         dataListArray = dataReceive.data_list
 
-                    // //console.log("dataListArray ==> ", dataListArray)
-                    for (let index = 0; index < dataListArray.length; index++) {
-                        const str = dataListArray[index];
-                        // //console.log("str ==> ", str)
-                        var res = str.split("|");
-                        // //console.log("res ==> ", res[1])
-                        var data = res[1]
+            //         // //console.log("dataListArray ==> ", dataListArray)
+            //         for (let index = 0; index < dataListArray.length; index++) {
+            //             const str = dataListArray[index];
+            //             // //console.log("str ==> ", str)
+            //             var res = str.split("|");
+            //             // //console.log("res ==> ", res[1])
+            //             var data = res[1]
 
-                        var monthYear = data.split("-");
-                        // //console.log("dataListArray ==> monthYear ==> ", monthYear)
+            //             var monthYear = data.split("-");
+            //             // //console.log("dataListArray ==> monthYear ==> ", monthYear)
 
-                        var year = monthYear[0]
-                        var month = monthYear[1]
+            //             var year = monthYear[0]
+            //             var month = monthYear[1]
 
-                        for (let index = 0; index < dataCustomArray.length; index++) {
-                            const data = dataCustomArray[index];
-                            // //console.log("dataCustomArray data ==> ", data)
-                            // //console.log("dataCustomArray year ==> ", data.year)
+            //             for (let index = 0; index < dataCustomArray.length; index++) {
+            //                 const data = dataCustomArray[index];
+            //                 // //console.log("dataCustomArray data ==> ", data)
+            //                 // //console.log("dataCustomArray year ==> ", data.year)
 
-                            if (year == data.year) {
-                                const detail = data.detail
-                                // //console.log("detail ==> ", detail)
-                                // //console.log("month select  ==> ", month)
+            //                 if (year == data.year) {
+            //                     const detail = data.detail
+            //                     // //console.log("detail ==> ", detail)
+            //                     // //console.log("month select  ==> ", month)
 
-                                let element = detail.find((p) => {
-                                    return p.month === JSON.parse(month)
-                                });
-                                // //console.log("element ==> ", element)
+            //                     let element = detail.find((p) => {
+            //                         return p.month === JSON.parse(month)
+            //                     });
+            //                     // //console.log("element ==> ", element)
 
-                                element.badge = element.badge + 1
-                                //console.log("detail badge ==> ", element.badge)
-                            }
-                        }
-                    }
-                } else if (dataReceive.function_id == "PHF02010") {
+            //                     element.badge = element.badge + 1
+            //                     //console.log("detail badge ==> ", element.badge)
+            //                 }
+            //             }
+            //         }
+            //     } else if (dataReceive.function_id == "PHF02010") {
 
-                    console.log("announcement badge ==> ", dataReceive.badge_count)
+            //         console.log("announcement badge ==> ", dataReceive.badge_count)
 
-                    this.setState({
+            //         this.setState({
 
-                        notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
-                    })
+            //             notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+            //         })
 
-                } else if (dataReceive.function_id == 'PHF05010') {
-                    console.log('new payslip arrive')
-                    this.setState({
-                        notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
-                    }, function () {
-                        dataReceive.data_list.map((item, i) => {
+            //     } else if (dataReceive.function_id == 'PHF05010') {
+            //         console.log('new payslip arrive')
+            //         this.setState({
+            //             notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
+            //         }, function () {
+            //             dataReceive.data_list.map((item, i) => {
 
-                            SharedPreference.notiPayslipBadge.push(item)
-                            // = dataReceive.data_list
+            //                 SharedPreference.notiPayslipBadge.push(item)
+            //                 // = dataReceive.data_list
 
-                        })
-                    })
-                    console.log('notiPayslipBadge',SharedPreference.notiPayslipBadge)
-                }
+            //             })
+            //         })
+            //         console.log('notiPayslipBadge',SharedPreference.notiPayslipBadge)
+            //     }
 
-            }
+            // }
+        }else{
 
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
 
             
 
@@ -741,25 +746,30 @@ export default class PaySlipActivity extends Component {
 
         let rollid;
 
-        for (let i = 0; i < dataSource.years.length; i++) {
+        if (dataSource.year) {
 
-            if (dataSource.years[i].year == year) {
 
-                for (let j = 0; j < dataSource.years[i].detail.length; j++) {
 
-                    let realindex = index + 1;
+            for (let i = 0; i < dataSource.years.length; i++) {
 
-                    if (dataSource.years[i].detail[j].month_no === realindex) {
+                if (dataSource.years[i].year == year) {
 
-                        rollid = dataSource.years[i].detail[j].payroll_id;
+                    for (let j = 0; j < dataSource.years[i].detail.length; j++) {
 
-                        break
+                        let realindex = index + 1;
+
+                        if (dataSource.years[i].detail[j].month_no === realindex) {
+
+                            rollid = dataSource.years[i].detail[j].payroll_id;
+
+                            break
+                        }
+
                     }
 
                 }
 
             }
-
         }
         // for (let i = 0; i < yearlistdata[year].monthlistdata.length; i++) {
 
@@ -767,8 +777,12 @@ export default class PaySlipActivity extends Component {
         //         rollid = yearlistdata[year].monthlistdata[i].id
         //     }
         // }
-        console.log('rollid :', this.state.yearlistdata[(this.state.indexselectyear * 12)+index])
-        let host = SharedPreference.PAYSLIP_DETAIL_API + this.state.yearlistdata[(this.state.indexselectyear * 12)+index].rollID
+        console.log('rollid :', this.state.yearlistdata[(this.state.indexselectyear * 12) + index])
+        let host = SharedPreference.PAYSLIP_DETAIL_API + 0
+        if (this.state.yearlistdata[(this.state.indexselectyear * 12) + index]) {
+            host = SharedPreference.PAYSLIP_DETAIL_API + this.state.yearlistdata[(this.state.indexselectyear * 12) + index].rollID
+        }
+
         // console
         console.log('host :', host)
 
@@ -812,7 +826,7 @@ export default class PaySlipActivity extends Component {
                         // });
 
                         this.props.navigation.navigate('PayslipDetail', {
-                            DataResponse:this.state.DataResponse,
+                            DataResponse: this.state.DataResponse,
                             yearlist: this.state.yearlistdata,
                             initialyear: initialyear,
                             initialmonth: 0,
@@ -831,7 +845,7 @@ export default class PaySlipActivity extends Component {
                         //     StringText.ALERT_SESSION_AUTHORIZED_DESC,
                         //     [{
                         //         text: 'OK', onPress: () => {
-                            
+
                         //             SharedPreference.Handbook = []
                         //             SharedPreference.profileObject = null
                         //            // this.saveProfile.setProfile(null)
@@ -852,7 +866,7 @@ export default class PaySlipActivity extends Component {
                         //     StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
                         //     [{
                         //         text: 'OK', onPress: () => {
-                            
+
                         //             SharedPreference.Handbook = []
                         //             SharedPreference.profileObject = null
                         //            // this.saveProfile.setProfile(null)
@@ -900,36 +914,38 @@ export default class PaySlipActivity extends Component {
         let social_fund = '0';
         let emp_pf_year = '0';
         let com_pf_year = '0';
-        
-    
+
+
         // tempdatadetail = []
         // tempdatabody = []
+        console.log('dataSource => ', dataSource.length)
+        if (dataSource) {
 
-        if (dataSource.years) {
+            if (dataSource.years) {
 
-            console.log('tempdatadetail => ', dataSource.years)
-            console.log('indexselectyear => ', this.state.selectYearArray[this.state.indexselectyear])
-            
-            for (let i = 0; i < dataSource.years.length; i++) {
-                console.log('dataSource.years[i].year: => ', dataSource.years[i].year, this.state.selectYearArray[this.state.indexselectyear])
-                if (dataSource.years[i].year == this.state.selectYearArray[this.state.indexselectyear]) {
+                console.log('tempdatadetail => ', dataSource.years)
+                console.log('indexselectyear => ', this.state.selectYearArray[this.state.indexselectyear])
 
-                    let ttempdatadetail = dataSource.years[i].header
-                   // tempdatabody = dataSource.years[i].detail
-                    console.log('dataSource.years : => ', ttempdatadetail)
-                    exemption = Dcryptfun.decrypt(ttempdatadetail.exemption);
-                    income_acc = Dcryptfun.decrypt(ttempdatadetail.income_acc);
-                    tax_acc = Dcryptfun.decrypt(ttempdatadetail.tax_acc);
-                    social_fund = Dcryptfun.decrypt(ttempdatadetail.social_fund);
-                    emp_pf_year = Dcryptfun.decrypt(ttempdatadetail.emp_pf_year);
-                    com_pf_year = Dcryptfun.decrypt(ttempdatadetail.com_pf_year);
+                for (let i = 0; i < dataSource.years.length; i++) {
+                    console.log('dataSource.years[i].year: => ', dataSource.years[i].year, this.state.selectYearArray[this.state.indexselectyear])
+                    if (dataSource.years[i].year == this.state.selectYearArray[this.state.indexselectyear]) {
 
-                   // break
+                        let ttempdatadetail = dataSource.years[i].header
+                        // tempdatabody = dataSource.years[i].detail
+                        console.log('dataSource.years : => ', ttempdatadetail)
+                        exemption = Dcryptfun.decrypt(ttempdatadetail.exemption);
+                        income_acc = Dcryptfun.decrypt(ttempdatadetail.income_acc);
+                        tax_acc = Dcryptfun.decrypt(ttempdatadetail.tax_acc);
+                        social_fund = Dcryptfun.decrypt(ttempdatadetail.social_fund);
+                        emp_pf_year = Dcryptfun.decrypt(ttempdatadetail.emp_pf_year);
+                        com_pf_year = Dcryptfun.decrypt(ttempdatadetail.com_pf_year);
+
+                        // break
+                    }
+
                 }
 
             }
-
-        }
 
         // if (tempdatadetail.exemption) {
 
@@ -991,6 +1007,7 @@ export default class PaySlipActivity extends Component {
 
         )
     }
+}
 
 
     PayslipItem() {

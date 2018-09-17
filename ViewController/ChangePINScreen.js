@@ -270,7 +270,8 @@ export default class NonpayrollActivity extends Component {
         return (
             <View style={styles.alertDialogContainer}>
                 {/* renderCreatePinSuccess() */}
-                <View style={styles.emptyDialogContainer}>
+                {/* <View style={styles.emptyDialogContainer}> */}
+                <View style={{ height: '50%', }}>
                     <View style={[styles.navContainer, { backgroundColor: 'white' }]}>
                         <TouchableOpacity style={styles.navLeftContainer} onPress={() => { this.onClosePIN() }} >
                             <Image
@@ -279,7 +280,8 @@ export default class NonpayrollActivity extends Component {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={[styles.pinContainer, { backgroundColor: 'white' }]}>
+                    
+                    <View style={[styles.pinContainer, { backgroundColor: 'white',flex:1 }]}>
                         <Image
                             style={styles.pinImage}
                             source={require('../resource/regist/regist_lock_gray.png')}
@@ -289,7 +291,8 @@ export default class NonpayrollActivity extends Component {
                         {this.renderImagePin()}
 
                     </View>
-
+                    </View>
+                    <View style={{ height: '50%', width: '100%' ,backgroundColor:Colors.redColor}}>
                     <View style={styles.registPinNumRowContainer}>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(1) }}>
@@ -375,7 +378,9 @@ export default class NonpayrollActivity extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>)
+                </View>
+          
+            )
     }
 
     render() {

@@ -23,6 +23,8 @@ import SharedPreference from "./../SharedObject/SharedPreference"
 import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+
 //monthNames
 let MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 let selectmonth = 0;
@@ -102,21 +104,21 @@ export default class OTSummaryDetail extends Component {
 
     onLoadInAppNoti = async () => {
         
-        if (!SharedPreference.lastdatetimeinterval) {
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const newdate = moment(today).format(_format).valueOf();
-            SharedPreference.lastdatetimeinterval = newdate
-        }
+        // if (!SharedPreference.lastdatetimeinterval) {
+        //     let today = new Date()
+        //     const _format = 'YYYY-MM-DD hh:mm:ss'
+        //     const newdate = moment(today).format(_format).valueOf();
+        //     SharedPreference.lastdatetimeinterval = newdate
+        // }
 
-        this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
-
+        // this.APIInAppCallback(await RestAPI(SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval,1))
+        this.APIInAppCallback(await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN))
     }
 
     APIInAppCallback(data) {
         code = data[0]
         data = data[1]
-
+        console.log('APIInAppCallback', data)
         if (code.INVALID_AUTH_TOKEN == data.code) {
 
             this.onAutenticateErrorAlertDialog()
@@ -130,7 +132,11 @@ export default class OTSummaryDetail extends Component {
             this.timer = setTimeout(() => {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
+        }else{
 
+            this.timer = setTimeout(() => {
+                this.onLoadInAppNoti()
+            }, SharedPreference.timeinterval);
         }
 
     }
@@ -296,89 +302,106 @@ export default class OTSummaryDetail extends Component {
     }
 
     loadOTSummarySelffromAPI = async (omonth, oyear) => {
-
-        this.setState({
-            loadingtype: 1,
-            isscreenloading: true,
-        })
-
-        let tmonth = omonth.toString();
+        if (SharedPreference.isConnected) {
 
 
-        if (omonth < 10) {
-            tmonth = '0' + omonth
-        }
+            this.setState({
+                loadingtype: 1,
+                isscreenloading: true,
+            })
 
-        let today = new Date();
+            let tmonth = omonth.toString();
 
 
-        let url = SharedPreference.OTSUMMARY_DETAIL + 'month=' + tmonth + '&year=' + oyear
+            if (omonth < 10) {
+                tmonth = '0' + omonth
+            }
 
-        // this.APICallback(await RestAPI(url), 'OTSummarySelfView')
-        let data = await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY)
-        code = data[0]
-        data = data[1]
-        //console.log('ot data response : ',data)
+            let today = new Date();
 
-        if (code.INVALID_AUTH_TOKEN == data.code) {
 
-            this.onAutenticateErrorAlertDialog()
+            let url = SharedPreference.OTSUMMARY_DETAIL + 'month=' + tmonth + '&year=' + oyear
 
-        } else if (code.DOES_NOT_EXISTS == data.code) {
+            // this.APICallback(await RestAPI(url), 'OTSummarySelfView')
+            let data = await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY)
+            code = data[0]
+            data = data[1]
+            //console.log('ot data response : ',data)
 
-            this.onRegisterErrorAlertDialog(data)
+            if (code.INVALID_AUTH_TOKEN == data.code) {
 
-        }else if (code.SUCCESS == data.code) {
-            let titems = [];
-            for (let i = 0; i < data.data.detail.items.length; i++) {
-                let x15 = data.data.detail.items[i].x15.split('.');
-                let x20 = data.data.detail.items[i].x20.split('.');
-                let x30 = data.data.detail.items[i].x30.split('.');
-                let total = data.data.detail.items[i].total_ot.split('.');
-                titems.push({
-                    ot_date: data.data.detail.items[i].ot_date,
-                    time: data.data.detail.items[i].time,
-                    x15:x15[0]+'.'+x15[1][0],
-                    x20:x20[0]+'.'+x20[1][0],
-                    x30:x30[0]+'.'+x30[1][0],
-                    total_ot:total[0]+'.'+total[1][0],
-                    meal_no: data.data.detail.items[i].meal_no,
-                    shift_allw: data.data.detail.items[i].shift_allw,
+                this.onAutenticateErrorAlertDialog()
 
+            } else if (code.DOES_NOT_EXISTS == data.code) {
+
+                this.onRegisterErrorAlertDialog(data)
+
+            } else if (code.SUCCESS == data.code) {
+                let titems = [];
+                for (let i = 0; i < data.data.detail.items.length; i++) {
+                    let x15 = data.data.detail.items[i].x15.split('.');
+                    let x20 = data.data.detail.items[i].x20.split('.');
+                    let x30 = data.data.detail.items[i].x30.split('.');
+                    let total = data.data.detail.items[i].total_ot.split('.');
+                    titems.push({
+                        ot_date: data.data.detail.items[i].ot_date,
+                        time: data.data.detail.items[i].time,
+                        x15: x15[0] + '.' + x15[1][0],
+                        x20: x20[0] + '.' + x20[1][0],
+                        x30: x30[0] + '.' + x30[1][0],
+                        total_ot: total[0] + '.' + total[1][0],
+                        meal_no: data.data.detail.items[i].meal_no,
+                        shift_allw: data.data.detail.items[i].shift_allw,
+
+                    })
+
+                }
+
+                this.setState({
+
+                    tdataSource: titems,
+                    headerdataSource: data.data.header,
+                    isscreenloading: false,
+                })
+
+            } else {
+
+                console.log('data :', data)
+
+                Alert.alert(
+                    data.data[0].code,
+                    data.data[0].detail,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                console.log('OK Pressed')
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+
+                this.setState({
+
+                    tdataSource: [],
+                    headerdataSource: [],
+                    isscreenloading: false,
                 })
 
             }
-    
-            this.setState({
-
-                tdataSource: titems,
-                headerdataSource: data.data.header,
-                isscreenloading: false,
-            })
-
-        } else  {
-
-            console.log('data :',data)
-
+        } else {
             Alert.alert(
-                data.data[0].code,
-                data.data[0].detail,
-                [
-                    {
-                        text: 'OK', onPress: () => {
-                            console.log('OK Pressed')
-                        }
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
+                            isscreenloading: false,
+                        });
                     }
-                ],
-                { cancelable: false }
+                },
+                ], { cancelable: false }
             )
-
-            this.setState({
-
-                tdataSource: [],
-                headerdataSource: [],
-                isscreenloading: false,
-            })
 
         }
     }
@@ -408,6 +431,7 @@ export default class OTSummaryDetail extends Component {
             }],
             { cancelable: false }
         )
+        
     }
 
     
@@ -462,17 +486,33 @@ export default class OTSummaryDetail extends Component {
 
     select_month() {
         console.log('announcementType : ',this.state.announcementType)
-        tempannouncementType = this.state.announcementType
+
+        if(SharedPreference.isConnected){
+            tempannouncementType = this.state.announcementType
         
-        this.setState({
+            this.setState({
+    
+                loadingtype: 0,
+                isscreenloading: true,
+    
+            }, function () {
+    
+                this.setState(this.renderloadingscreen())
+            });
+        }else{
 
-            loadingtype: 0,
-            isscreenloading: true,
-
-        }, function () {
-
-            this.setState(this.renderloadingscreen())
-        });
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{ text: 'OK', onPress: () => { 
+                    this.setState({
+                        isscreenloading: false,
+                    });
+                } },
+                ], { cancelable: false }
+            )
+        }
+       
     }
 
     cancel_select_change_month_andr(){
@@ -565,7 +605,12 @@ export default class OTSummaryDetail extends Component {
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { } },
+                [{ text: 'OK', onPress: () => {
+                    this.setState({
+                        isscreenloading: false,
+            
+                    });
+                 } },
                 ], { cancelable: false }
             )
         }

@@ -339,67 +339,67 @@ export default class LineChart extends Component {
                 <Line x1={(w * 1) + shiftRight} y1={p1} x2={(w * 2) + shiftRight} y2={p2} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 1) + shiftRight} cy={p1} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 1) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 1) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot1}</Text>
+                    <Text x={(w * 1) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot1}</Text>
                 </G>
                 <Line x1={(w * 2) + shiftRight} y1={p2} x2={(w * 3) + shiftRight} y2={p3} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 2) + shiftRight} cy={p2} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 2) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 2) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot2}</Text>
+                    <Text x={(w * 2) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot2}</Text>
                 </G>
                 <Line x1={(w * 3) + shiftRight} y1={p3} x2={(w * 4) + shiftRight} y2={p4} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 3) + shiftRight} cy={p3} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 3) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 3) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot3}</Text>
+                    <Text x={(w * 3) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot3}</Text>
                 </G>
                 <Line x1={(w * 4) + shiftRight} y1={p4} x2={(w * 5) + shiftRight} y2={p5} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 4) + shiftRight} cy={p4} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 4) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 4) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot4}</Text>
+                    <Text x={(w * 4) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot4}</Text>
                 </G>
                 <Line x1={(w * 5) + shiftRight} y1={p5} x2={(w * 6) + shiftRight} y2={p6} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 5) + shiftRight} cy={p5} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 5) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 5) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot5}</Text>
+                    <Text x={(w * 5) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot5}</Text>
                 </G>
                 <Line x1={(w * 6) + shiftRight} y1={p6} x2={(w * 7) + shiftRight} y2={p7} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 6) + shiftRight} cy={p6} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 6) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 6) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot6}</Text>
+                    <Text x={(w * 6) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot6}</Text>
                 </G>
                 <Line x1={(w * 7) + shiftRight} y1={p7} x2={(w * 8) + shiftRight} y2={p8} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 7) + shiftRight} cy={p7} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 7) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 7) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot7}</Text>
+                    <Text x={(w * 7) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot7}</Text>
                 </G>
                 <Line x1={(w * 8) + shiftRight} y1={p8} x2={(w * 9) + shiftRight} y2={p9} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 8) + shiftRight} cy={p8} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 8) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 8) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot8}</Text>
+                    <Text x={(w * 8) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot8}</Text>
                 </G>
                 <Line x1={(w * 9) + shiftRight} y1={p9} x2={(w * 10) + shiftRight} y2={p10} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 9) + shiftRight} cy={p9} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 9) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 9) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot9}</Text>
+                    <Text x={(w * 9) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot9}</Text>
                 </G>
                 <Line x1={(w * 10) + shiftRight} y1={p10} x2={(w * 11) + shiftRight} y2={p11} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 10) + shiftRight} cy={p10} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 10) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 10) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot10}</Text>
+                    <Text x={(w * 10) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot10}</Text>
                 </G>
                 <Line x1={(w * 11) + shiftRight} y1={p11} x2={(w * 12) + shiftRight} y2={p12} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 11) + shiftRight} cy={p11} r="2" strokeWidth="2" stroke="red" fill="red" />
                 {/* onPress={() => alert('Press on Circle')} /> */}
                 <G rotation="315" origin={(w * 11) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 11) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot11}</Text>
+                    <Text x={(w * 11) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot11}</Text>
                 </G>
                 <Line x1={(w * 12) + shiftRight} y1={p12} x2={(w * 13) + shiftRight} y2={p13} stroke={linecolor} strokeWidth="1" />
                 <Circle cx={(w * 12) + shiftRight} cy={p12} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 12) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 12) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot12}</Text>
+                    <Text x={(w * 12) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot12}</Text>
                 </G>
                 <Circle cx={(w * 13) + shiftRight} cy={p13} r="2" strokeWidth="2" stroke="red" fill="red" />
                 <G rotation="315" origin={(w * 13) + shiftRight + ',' + rowhight}>
-                    <Text x={(w * 13) + shiftRight} y={rowhight} fill="red" fontSize="10" textAnchor="start">{ot13}</Text>
+                    <Text x={(w * 13) + shiftRight} y={rowhight} fill="red" fontSize="10" fontFamily='Prompt-Regular' textAnchor="start">{ot13}</Text>
                 </G>
 
                 <G rotation="315" origin={(w * 1) + shiftRight + ',' + bottomlabel}>

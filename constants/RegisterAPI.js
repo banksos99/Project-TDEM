@@ -20,9 +20,9 @@ export default async function getRestAPI(username, password) {
     }
 
     // //console.log("getRestAPI ===> username : ", username, " ,  password :", password)
-    // //console.log("getRestAPI ===> SharedPreference.REGISTER_API : ", SharedPreference.REGISTER_API)
+    console.log("getRestAPI ===> SharedPreference.REGISTER_API : ", SharedPreference.REGISTER_API)
     // //console.log("getRestAPI ===> SharedPreference.company : ", SharedPreference.company)
-    // //console.log("getRestAPI ===> SharedPreference.deviceInfo: ", SharedPreference.deviceInfo)
+    console.log("getRestAPI ===> SharedPreference.deviceInfo: ", SharedPreference.deviceInfo)
 
     return fetch(SharedPreference.REGISTER_API, {
         method: 'POST',
@@ -45,6 +45,7 @@ export default async function getRestAPI(username, password) {
     })
         .then((response) => response.json())
         .then((responseJson) => {
+            console.log("REGISTER_API ==>  body : ", SharedPreference.REGISTER_API)
             console.log("RegisterAPI ==>  body : ", username,password)
             console.log("RegisterAPI ==> callback  success : ", responseJson)
             let object

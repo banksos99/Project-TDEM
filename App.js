@@ -20,6 +20,7 @@ import UserInactivity from 'react-native-user-inactivity';
 import moment from 'moment'
 import { styles } from "./SharedObject/MainStyles"
 import LoginWithPinAPI from "./constants/LoginWithPinAPI"
+
 // import registerScreen from "./ViewController/MHF01210RegisterScreen";
 var BadgeAndroid = require('react-native-android-badge')
 export default class mainview extends Component {
@@ -92,6 +93,7 @@ export default class mainview extends Component {
 
 
   }
+
   componentWillUnmount() {
     console.log('mainApp => componentWillUnmount')
     AppState.removeEventListener('change', this._handleAppStateChange);
@@ -101,6 +103,8 @@ export default class mainview extends Component {
   }
 
   async componentDidMount() {
+
+    
     console.log('mainApp => componentDidMount')
     AppState.addEventListener('change', this._handleAppStateChange);
     NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
@@ -141,10 +145,25 @@ export default class mainview extends Component {
       });
 
     notificationOpen = await firebase.notifications().getInitialNotification();
+    // Reset badge
+    SharedPreference.notipayslipID = 0;
+      SharedPreference.notiAnnounceMentID = 0;
+    if (Platform.OS === 'android') {
+      BadgeAndroid.setBadge(0)
+
+    } else if (Platform.OS === 'ios') {
+      const localNotification = new firebase.notifications.Notification()
+
+        .ios.setBadge(0);
+      firebase.notifications()
+        .displayNotification(localNotification)
+        .catch(err => console.error(err));
+    }
+
 
     if (notificationOpen) {
 
-      SharedPreference.notipayslipID=0;
+      SharedPreference.notipayslipID = 0;
       SharedPreference.notiAnnounceMentID = 0;
       const notification = notificationOpen.notification;
       if (notification._data.type === 'Payroll') {
@@ -222,7 +241,7 @@ export default class mainview extends Component {
             .android.setSmallIcon('ic_stat_notification') // create this icon in Android Studio
             .android.setColor('#000000') // you can set a color here
             .android.setPriority(firebase.notifications.Android.Priority.High)
-            .android.setBadge(6)
+            // .android.setBadge(6)
 
           firebase.notifications()
             .displayNotification(localNotification)
@@ -230,13 +249,13 @@ export default class mainview extends Component {
         
 
         } else if (Platform.OS === 'ios') {
-          // const localNotification = new firebase.notifications.Notification()
+          const localNotification = new firebase.notifications.Notification()
           //   .setNotificationId(notification.notificationId)
           //   .setTitle(notification.title)
           //   .setSubtitle(notification.subtitle)
           //   .setBody(notification.body)
           //   .setData(notification.data)
-          //   .ios.setBadge(0);
+            .ios.setBadge(0);
           // firebase.notifications()
           //   .displayNotification(localNotification)
           //   .catch(err => console.error(err));
@@ -854,8 +873,8 @@ export default class mainview extends Component {
 
       return (
         <UserInactivity
-          timeForInactivity={300000}
-          checkInterval={300000}
+          timeForInactivity={30000}
+          checkInterval={30000}
           onInactivity={this.onInactivity} >
           <StatusBar
             barStyle="light-content"

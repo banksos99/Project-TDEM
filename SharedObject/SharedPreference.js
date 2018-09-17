@@ -1,10 +1,13 @@
-const HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
+// const HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
 
-// const HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+const HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+// 
 // const HOST = 'http://192.168.2.189:8080'
 //const VERSION = 'v1'
-const VERSION = 'v1.0.58'//10-09-61
-
+//const VERSION = 'v1.0.59'//10-09-61
+// const VERSION = 'v1.0.60'//11-09-61
+// const VERSION = 'v1.0.61'//14-09-61
+const VERSION = 'v1.0.62'//14-09-61 IOS: Android:
 export default {
     HOST: HOST,
     TOKEN: '',
@@ -12,6 +15,7 @@ export default {
     INITIAL_MASTER_API: HOST + '/api/' + VERSION + '/initmaster/',
     APPLICATION_INFO_API: HOST + '/api/' + VERSION + '/appinfo',
     PULL_NOTIFICATION_API: HOST + '/api/' + VERSION + '/pullnotification?latest_date=',
+    PULL_NOTIFICATION_NODATE_API: HOST + '/api/' + VERSION + '/pullnotification',
     ANNOUNCEMENT_ASC_API: HOST + '/api/' + VERSION + '/announcement?sort=-create_date',
     ANNOUNCEMENT_DSC_API: HOST + '/api/' + VERSION + '/announcement?sort=%2Bcreate_date',
     ANNOUNCEMENT_DETAIL_API: HOST + '/api/' + VERSION + '/announcement/',
@@ -36,6 +40,7 @@ export default {
     CLOCK_IN_OUT_API: HOST + '/api/' + VERSION + '/clockinout?empcode=',
     CALENDAR_PDF_YEAR_API: HOST + '/api/' + VERSION + '/calendar/file?year=',
     CALENDAR_NAME: 'Toyota',
+
     REGISTER_API: HOST + '/api/' + VERSION + '/auth',
     SET_PIN_API: HOST + '/api/' + VERSION + '/pin',
 
@@ -67,6 +72,7 @@ export default {
     notiAnnounceMentBadge: 0,
     setHomeViewStatus: 0,
     notiPayslipBadge:[],
+    nonPayslipBadge:[],
     timeinterval: 40000,
     lastdatetimeinterval: 0,
     payslipBadgeList: [],

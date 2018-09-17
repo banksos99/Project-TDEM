@@ -50,11 +50,22 @@ export default class PinActivity extends Component {
         // let listData = [6, 30, 20, 40];
 
         let previousmax = this.props.datalist.previous_month.maxIndividual;
+        if(previousmax == 0){
+            previousmax='';
+        }
         let currencemax = this.props.datalist.request_month.maxIndividual;
-
+        if(currencemax == 0){
+            currencemax='';
+        }
         let previouemin = this.props.datalist.previous_month.minIndividual;
+        if(previouemin == 0){
+            previouemin
+            ='';
+        }
         let currencemin = this.props.datalist.request_month.minIndividual;
-
+        if(currencemin == 0){
+            currencemin='';
+        }
         let listdata = [previousmax, currencemax, previouemin, currencemin]
 
         let max = 0;
@@ -66,6 +77,9 @@ export default class PinActivity extends Component {
         }
         //console.log('max :', max)
         let ratio = 50 / max
+        if(max == 0){
+           ratio = 1
+        }
         let intratio = Math.ceil(ratio)
         let fonrsize = 12 * scale
         let barhight = 20 * scale;

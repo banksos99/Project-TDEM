@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     createSwitchNavigator,
 } from 'react-navigation';
+import DeviceInfo from 'react-native-device-info';
 
 import homeScreen from "./MHF01410MainView";
 import empInfoDetail from "./MHF04011EmpInfoSelfViewView";
@@ -138,6 +139,20 @@ export default class rootNavigation extends Component {
     }
 
     async componentWillMount() {
+
+        // if (DeviceInfo.getBundleId() == 'com.tdem.tdemconnect') {
+
+        //     SharedPreference.HOST = 'https://tdemconnect.tdem.toyota-asia.com';
+        //     SharedPreference.SERVER = 'PROD';
+
+        // } else {
+
+        //     SharedPreference.HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
+        //     SharedPreference.SERVER = 'Dev'
+        // }
+
+        // console.log("HOST ==>  body : ", SharedPreference.HOST)
+
         profile = await this.getProfileObject()
     }
 

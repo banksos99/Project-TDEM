@@ -79,10 +79,14 @@ export default class PinActivity extends Component {
 
         let labelbottom = 20 * scale;
 
-
-
-
         let linewidth = 350 * scale;
+        let zero = 0;
+        if (max > 0) {
+            zero = this.twodigi(0 / 5 * max)
+        }else{
+            max =10
+        }
+
         return (
 
             <Svg height="300" width={Layout.window.width}>
@@ -99,7 +103,7 @@ export default class PinActivity extends Component {
                 <Text x={shiftRight - 20} y={(rowhight * 2) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{this.twodigi(3 / 5 * max)}</Text>
                 <Text x={shiftRight - 20} y={(rowhight * 3) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{this.twodigi(2 / 5 * max)}</Text>
                 <Text x={shiftRight - 20} y={(rowhight * 4) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{this.twodigi(1 / 5 * max)}</Text>
-                <Text x={shiftRight - 20} y={(rowhight * 5) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{this.twodigi(0 / 5 * max)}</Text>
+                <Text x={shiftRight - 20} y={(rowhight * 5) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{zero}</Text>
 
                 <Rect x={shiftRight} y={((rowhight * 5) + shiftTop) - ((previous1) * rowhight * ratio)} width={barwidth} height={((previous1) * rowhight * ratio)} fill="#d77c7c" />
                 <Rect x={shiftRight + gap1 + barwidth} y={((rowhight * 5) + shiftTop) - ((current1) * rowhight * ratio)} width={barwidth} height={((current1) * rowhight * ratio)} fill="#f20909" />
