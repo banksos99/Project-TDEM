@@ -1,13 +1,15 @@
 import DeviceInfo from 'react-native-device-info';
-const bundleId = DeviceInfo.getBundleId(); // "com.learnium.mobile"
+const bundleId = DeviceInfo.getBundleId();
 console.log("BUNDLE ID ======================= " + bundleId);
 
-const HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
+const HOST = bundleId == "com.toyotaasia.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
+
+
 
 // const HOST = 'https://tdemconnect.tdem.toyota-asia.com'
 // const HOST = 'http://192.168.2.189:8080'
 //const VERSION = 'v1'
-const VERSION = 'v1.0.58'//10-09-61
+const VERSION = 'v1.0.62'//10-09-61
 
 export default {
     HOST: HOST,

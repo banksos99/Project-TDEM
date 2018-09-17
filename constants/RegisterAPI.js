@@ -20,7 +20,7 @@ export default async function getRestAPI(username, password) {
     }
 
     // //console.log("getRestAPI ===> username : ", username, " ,  password :", password)
-    // //console.log("getRestAPI ===> SharedPreference.REGISTER_API : ", SharedPreference.REGISTER_API)
+    console.log("getRestAPI ===> SharedPreference.REGISTER_API : ", SharedPreference.REGISTER_API)
     // //console.log("getRestAPI ===> SharedPreference.company : ", SharedPreference.company)
     // //console.log("getRestAPI ===> SharedPreference.deviceInfo: ", SharedPreference.deviceInfo)
 
