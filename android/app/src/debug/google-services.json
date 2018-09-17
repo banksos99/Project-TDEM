@@ -8,57 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:166754553752:android:8d41d5753ad7812b",
-        "android_client_info": {
-          "package_name": "com.toyotaasia.tdem.tdemconnect"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "166754553752-t66j71mm2kuo15sd5g4bk7fgpujte8pr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.toyotaasia.tdem.tdemconnect",
-            "certificate_hash": "99c5ecee13b369bf0a19c8dba9f20f127c306784"
-          }
-        },
-        {
-          "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCjhfYoY2LxK2Y6xs-9nb26LvynUrzZwuk"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "166754553752-ump0r40c4qaji98ilabcrkokpfkcav4e.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "asia.technobrave.TDEMConnect"
-              }
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:166754553752:android:c4efca517c12a3e2",
         "android_client_info": {
           "package_name": "com.toyotaasia.tdemconnect"
@@ -95,13 +44,44 @@
               "client_type": 3
             },
             {
-              "client_id": "166754553752-ump0r40c4qaji98ilabcrkokpfkcav4e.apps.googleusercontent.com",
+              "client_id": "166754553752-50svglklk60teibc5bfcr6kb7itrt23m.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "asia.technobrave.TDEMConnect"
+                "bundle_id": "com.tdem.tdemconnect"
               }
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166754553752:android:e0ba149e373d8841",
+        "android_client_info": {
+          "package_name": "com.toyotaasia.tdemconnect_dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjhfYoY2LxK2Y6xs-9nb26LvynUrzZwuk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

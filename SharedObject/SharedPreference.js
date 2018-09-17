@@ -1,4 +1,10 @@
-// const HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
+import DeviceInfo from 'react-native-device-info';
+const bundleId = DeviceInfo.getBundleId();
+console.log("BUNDLE ID ======================= " + bundleId);
+
+const HOST = bundleId == "com.toyotaasia.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
+
+
 
 const HOST = 'https://tdemconnect.tdem.toyota-asia.com'
 // 

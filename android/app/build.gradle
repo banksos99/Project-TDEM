@@ -144,9 +144,22 @@ android {
         debug {
 //            minifyEnabled false
 //            minifyEnabled true
+            
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "api"
+    productFlavors {
+        dev {
+            dimension "api"
+            applicationId "com.toyotaasia.tdemconnect_dev"
+        }
+        prod {
+            dimension "api"
+            applicationId "com.toyotaasia.tdemconnect"
+        }
+    }
+
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
