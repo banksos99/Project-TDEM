@@ -466,9 +466,10 @@ export default class calendarYearView extends Component {
             this.state.countDay = []
 
             monthView.push(
-                <TouchableOpacity key={f} style={styles.container}
+                <TouchableOpacity key={f} style={[styles.container]}
                     onPress={() => this.onPressCalendar(monthText)} >
                     <Calendar
+                        
                         current={monthText}
                         hideArrows={true}
                         hideExtraDays={false}
@@ -476,6 +477,7 @@ export default class calendarYearView extends Component {
                         monthFormat={'MMMM'}
                         hideDayNames={false}
                         theme={{
+                            
                             dayTextColor: 'white',
                             todayTextColor: 'white',
                             monthTextColor: 'white',
@@ -493,7 +495,8 @@ export default class calendarYearView extends Component {
                                     textAlign: 'left',
                                     color: Colors.calendarRedText,
                                 }
-                            }
+                            },
+                        
                         }}
 
                         dayComponent={({ date, state }) => {
@@ -531,7 +534,9 @@ export default class calendarYearView extends Component {
                                 return <View style={styles.calendarCurrentDayCicleContainer}>
                                     <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : 'red' }]} />
                                     <Text style={styles.calendarCurrentDayText}>
-                                        {date.day}</Text>
+                                        {date.day}
+                                        
+                                        </Text>
                                 </View>
                             } else {
                                 return <View style={styles.calendarDayContainer}>
