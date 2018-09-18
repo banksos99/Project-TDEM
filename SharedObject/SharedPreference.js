@@ -1,12 +1,16 @@
 import DeviceInfo from 'react-native-device-info';
 const bundleId = DeviceInfo.getBundleId();
 console.log("BUNDLE ID ======================= " + bundleId);
-
+// let HOST = 'https://tdemconnect.tdem.toyota-asia.com';
+let SERVER = 'DEV'
 const HOST = bundleId == "com.toyotaasia.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
 
+if (bundleId == "com.tdem.tdemconnect") {
+    HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+    SERVER = 'PROD'
+}
 
 
-const HOST = 'https://tdemconnect.tdem.toyota-asia.com'
 // 
 // const HOST = 'http://192.168.2.189:8080'
 //const VERSION = 'v1'
@@ -16,6 +20,8 @@ const HOST = 'https://tdemconnect.tdem.toyota-asia.com'
 const VERSION = 'v1.0.62'//14-09-61 IOS: Android:
 export default {
     HOST: HOST,
+    SERVER: SERVER,
+    VERSION: VERSION,
     TOKEN: '',
 
     INITIAL_MASTER_API: HOST + '/api/' + VERSION + '/initmaster/',

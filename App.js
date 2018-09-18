@@ -185,7 +185,7 @@ export default class mainview extends Component {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       let diff = moment(new Date()).diff(this.state.quitdate, 'seconds')
       console.log('show date before foreground =>', diff)
-      if (diff > 300) {
+      if (diff > 30) {
 
         this.setState({
           showpin: true,
@@ -412,7 +412,10 @@ export default class mainview extends Component {
 
       SharedPreference.gotoRegister = true
       this.setState({
-        showpin: false
+        isLoading: false,
+        showpin: false,
+        failPin: 0,
+        pin: ''
       })
 
     } else if (code.INVALID_AUTH_TOKEN == data.code) {
@@ -873,8 +876,8 @@ export default class mainview extends Component {
 
       return (
         <UserInactivity
-          timeForInactivity={30000}
-          checkInterval={30000}
+          timeForInactivity={300000}
+          checkInterval={300000}
           onInactivity={this.onInactivity} >
           <StatusBar
             barStyle="light-content"

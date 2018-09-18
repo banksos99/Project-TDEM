@@ -2229,7 +2229,7 @@ export default class HMF01011MainView extends Component {
                                 </View>
                                 <View style={{ flex: 1, }} />
                                 {/* Device Info */}
-                                <Text>{"Version : " + SharedPreference.deviceInfo.buildNumber + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
+                                <Text>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
                             </View>
                         </View>
                     </View>
