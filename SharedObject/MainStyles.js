@@ -279,7 +279,7 @@ export const styles = StyleSheet.create({
         flex: 1, backgroundColor: 'white', flexDirection: 'row'
     },
     calendarDayContainer: {
-        flex: 1, height: 15, marginBottom: -13, marginTop: -10,
+        flex: 1, height: 15, marginBottom: -13, marginTop: -10
         // alignItems: 'right',
     },
     calendarDayText: {
@@ -287,19 +287,21 @@ export const styles = StyleSheet.create({
         textAlign: 'right',
     },
     calendarCurrentDayCircle: {
-        height: 13, width: 13,
+        height: 15, width: 15,
         backgroundColor: 'red',
         borderRadius: 100,
         position: 'absolute',
-        alignSelf: 'center'
+        marginLeft: 4.5,
+        marginTop:0
+
     },
     calendarCurrentDayCicleContainer: {
         flex: 1,
-        height: 15, marginBottom: -13, marginTop: -10, marginLeft: 5
+        height: 15, marginBottom: -13, marginTop: -10
     },
     calendarCurrentDayText:
     {
-        fontSize: 10, textAlign: 'center', color: 'white'
+        fontSize: 10, textAlign: 'right', color: 'white'
     },
     calendarTitleDialogText: {
         color: 'black',
