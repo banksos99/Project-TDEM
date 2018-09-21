@@ -41,18 +41,18 @@ export default class RegisterActivity extends Component {
             pintitle: 'Create Pin',
             username: '',
             password: '',
-            versionCode: "Version : " + SharedPreference.deviceInfo.buildNumber,
+            versionCode: "Version : " + SharedPreference.deviceInfo.appVersion,
             datastatus: 0,
             isLoading: false
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_REGISTER)
-        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+        
         // SharedPreference.sessionOpenFirstTime = true
 
     }
 
     async getfirebasetoken() {
-
+console.log('getfirebasetoken')
         if (!SharedPreference.deviceInfo.firebaseToken) {
             const fcmToken = await firebase.messaging().getToken();
 
@@ -95,15 +95,12 @@ export default class RegisterActivity extends Component {
         
         
         if (SharedPreference.isConnected) {
-
-
-            
             // this.getfirebasetoken()
             this.setState({
                 isLoading: true
             })
             Keyboard.dismiss()
-
+            console.log('onRegister')
             let data = await RegisterAPI(this.state.username, this.state.password)
             code = data[0]
             data = data[1]
@@ -114,16 +111,17 @@ export default class RegisterActivity extends Component {
 
             // let loginsuccess = false;
             // let autoregisterCount = 0;
-
+          //  console.log('get token again',data.data.detail)
             if (code.SUCCESS == data.code) {
                 this.saveAutoSyncCalendar.setAutoSyncCalendar(null)
-                this.saveProfile.setProfile(data.data)
+                // SharedPreference.profileObject = data.data
+                // this.saveProfile.setProfile(data.data)
 
                 SharedPreference.userRegisted = true;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
                 
                 loginsuccess = true;
-                SharedPreference.profileObject = await this.saveProfile.getProfile()
+                // SharedPreference.profileObject = await this.saveProfile.getProfile()
                 await this.onCheckPINWithChangePIN('1111', '2222')
                 this.setState({
                     isLoading: false
@@ -146,7 +144,7 @@ export default class RegisterActivity extends Component {
                     { cancelable: false }
                 )
             } else if ((code.INVALID_USER_PASS == data.code) || (code.FAILED == data.code)) {
-
+                
                 if (data.data.detail === 'MHF00602AERR: Parameter firebase_tokens value are missing.') {
                     //get firebase token gain
                     console.log('get token again')
@@ -226,7 +224,7 @@ export default class RegisterActivity extends Component {
         SharedPreference.notiPayslipBadge.length = [];
         SharedPreference.nonPayslipBadge.length = [];
         SharedPreference.Handbook = []
-        SharedPreference.profileObject = null
+       // SharedPreference.profileObject = null
         if (Platform.OS === 'android') {
             BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
@@ -382,6 +380,7 @@ console.log('onSetPin')
 
         }
         this.props.navigation.navigate('HomeScreen')
+        
     }
 
     onClosePIN = () => {
@@ -395,7 +394,7 @@ console.log('onSetPin')
 
 
     componentWillMount() {
-        
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
     }
@@ -663,8 +662,8 @@ console.log('onSetPin')
                                     source={require('../resource/regist/regist_lock_green.png')}
                                     resizeMode="cover" />
                                 <Text style={styles.pinCreateSuccessTitleText}>Create PIN Successfully</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You've successfully changed your PIN.You can use</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>this new PIN to log in next time.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.You can use</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>this PIN to log in next time.</Text>
                             </View>
                         </View>
 

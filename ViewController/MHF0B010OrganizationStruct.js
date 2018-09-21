@@ -129,7 +129,7 @@ export default class OrganizationStruct extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }
@@ -176,6 +176,7 @@ export default class OrganizationStruct extends Component {
 
     onBack() {
         this.props.navigation.navigate('HomeScreen');
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     onOrgStruct = async (item, index) => {
@@ -776,6 +777,7 @@ export default class OrganizationStruct extends Component {
                     //SharedPreference.profileObject = null
                     //this.saveProfile.setProfile(null)
                     this.props.navigation.navigate('RegisterScreen')
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }

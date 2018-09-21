@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar,NetInfo,AppState } from 'react-native';
+import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar,NetInfo,AppState,PanResponder,ViewPropTypes } from 'react-native';
 
 import SharedPreference from './SharedObject/SharedPreference';
 
@@ -20,13 +20,24 @@ import UserInactivity from 'react-native-user-inactivity';
 import moment from 'moment'
 import { styles } from "./SharedObject/MainStyles"
 import LoginWithPinAPI from "./constants/LoginWithPinAPI"
-
+import PropTypes from 'prop-types';
 // import registerScreen from "./ViewController/MHF01210RegisterScreen";
 var BadgeAndroid = require('react-native-android-badge')
+let sessionTimeoutSec = 300000;
+
 export default class mainview extends Component {
+
+  static propTypes = {
+    timeForInactivity: PropTypes.number,
+    checkInterval: PropTypes.number,
+    children: PropTypes.node.isRequired,
+    style: ViewPropTypes.style,
+    onInactivity: PropTypes.func.isRequired,
+  };
 
   savePIN = new SavePIN()
   saveProfile = new SaveProfile()
+  panResponder = {};
 
   constructor(props) {
     super(props);
@@ -47,14 +58,20 @@ export default class mainview extends Component {
       sessionTimeoutBool: false,
       pageSelect: '',
       quitdate:new Date(),
-   
+      glass:false,
+      sessionTimeOutAlert:false
     }
     console.log("this.props.navigation ==> ", this.props.navigation)
   }
 
   onInactivity = (timeWentInactive) => {
-    if (timeWentInactive != null) {
-      if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN) {
+    console.log("onInactivity ", timeWentInactive)
+    // if (timeWentInactive != null) {
+    if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN) {
+
+      if (this.state.sessionTimeoutBool == false) {
+        
+        this.state.sessionTimeoutBool = true
         this.state.quitdate = new Date()
         Alert.alert(
           StringText.ALERT_SESSION_TIMEOUT_TITILE,
@@ -62,15 +79,28 @@ export default class mainview extends Component {
           [{
             text: 'OK', onPress: () => {
               this.setState({
+
                 showpin: true,
+                failPin: 0,
+                pin: '',
+                isLoading: false
+                //showpin: true,
               });
             }
           }],
           { cancelable: false }
         )
       }
+    } else {
+      this.setState({
+        showpin: false,
+        glass:false
+      });
+
     }
+    // }
   }
+
 
   componentDidUpdate() {
     console.log('mainApp => componentDidUpdate',AppState.currentState)
@@ -92,6 +122,49 @@ export default class mainview extends Component {
 
 
 
+  }
+
+  componentWillMount() {
+
+    // this.checkUserInActive();
+    this.panResponder = PanResponder.create({
+
+      onStartShouldSetPanResponder: () => {
+          console.log('onStartShouldSetPanResponder'); 
+          this.resetTimer()
+          return false
+        },
+      onMoveShouldSetPanResponder:() => {
+          console.log('onMoveShouldSetPanResponder'); 
+          this.resetTimer()
+          return false
+        },
+      onStartShouldSetPanResponderCapture: () => {
+        console.log('onStartShouldSetPanResponderCapture'); 
+        this.resetTimer()
+        return false
+      },
+      // onStartShouldSetPanResponderCapture: () => false,
+      onMoveShouldSetPanResponderCapture: () => false,
+      onPanResponderTerminationRequest: () => true,
+      onShouldBlockNativeResponder: () => false,
+    });
+    this.timer = setTimeout(() => this.setState({
+      glass:true
+    }, function () {
+      this.onInactivity();
+     // this.resetTimer();
+    }), sessionTimeoutSec)
+  }
+
+  onStartShouldSetPanResponder() {
+    this.resetTimer()
+    return true
+  }
+
+  onMoveShouldSetPanResponder() {
+    this.resetTimer()
+    return true
   }
 
   componentWillUnmount() {
@@ -132,7 +205,7 @@ export default class mainview extends Component {
 
     await firebase.messaging().getToken()
       .then((token) => {
-        // //console.log('App ==> firebase ==> message Device FCM Token: ', token);
+        console.log('App ==> firebase ==> message Device FCM Token: ', token);
         SharedPreference.deviceInfo = {
           "deviceModel": deviceModel,
           "deviceBrand": deviceBrand,
@@ -185,12 +258,35 @@ export default class mainview extends Component {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       let diff = moment(new Date()).diff(this.state.quitdate, 'seconds')
       console.log('show date before foreground =>', diff)
-      if (diff > 30) {
 
-        this.setState({
-          showpin: true,
-        });
-      }
+      // if (diff > 300) {
+      //   if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN) {
+      //     Alert.alert(
+      //       StringText.ALERT_SESSION_TIMEOUT_TITILE,
+      //       StringText.ALERT_SESSION_TIMEOUT_DESC,
+      //       [{
+      //         text: 'OK', onPress: () => {
+      //           this.setState({
+                  
+      //             showpin: true,
+      //             failPin: 0,
+      //             pin: '',
+      //             isLoading: false,
+      //             //  showpin: true,
+      //           });
+      //         }
+      //       }],
+      //       { cancelable: false }
+      //     )
+      //   }
+        // this.setState({
+        //   isLoading: false,
+        // showpin: true,
+        // failPin: 0,
+        // pin: ''
+
+        // });
+      // }
 
     } else if (nextAppState === 'inactive') {
 
@@ -412,10 +508,11 @@ export default class mainview extends Component {
 
       SharedPreference.gotoRegister = true
       this.setState({
-        isLoading: false,
         showpin: false,
         failPin: 0,
-        pin: ''
+        pin: '',
+        isLoading: false,
+        glass:false
       })
 
     } else if (code.INVALID_AUTH_TOKEN == data.code) {
@@ -431,6 +528,8 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
+              isLoading: false,
+              glass:false
             })
           }
         }
@@ -449,6 +548,8 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
+              isLoading: false,
+              glass:false
             })
           }
         }
@@ -480,6 +581,8 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
+              isLoading: false,
+              glass:false
             })
           }
         }
@@ -487,6 +590,24 @@ export default class mainview extends Component {
         { cancelable: false }
       )
     }
+  }
+
+  rendertranscreen() {
+
+    if (this.state.glass) {
+
+      return (
+        <View style={styles.alertDialogContainer}>
+          <View style={{width: Layout.window.width,height: Layout.window.height, opacity: 0.8}} />
+          {/* bg */}
+          {/* <View style={styles.alertDialogContainer}> */}
+            {/* <ActivityIndicator /> */}
+          {/* </View> */}
+        </View>
+      )
+
+    }
+
   }
 
   renderPINScreen() {
@@ -751,16 +872,18 @@ export default class mainview extends Component {
     this.state.pin = origin
 
     if (this.state.pin.length == 6) {
+
+      console.log('pin == 6')
       this.setState({
         isLoading: true
       })
-      SharedPreference.profileObject = await this.saveProfile.getProfile()
+      // SharedPreference.profileObject = await this.saveProfile.getProfile()
       await this.onLoadLoginWithPin(this.state.pin)
     }
   }
 
   onLoadLoginWithPin = async (PIN) => {
-    //console.log("login with pin ==> ", PIN)
+    console.log("login with pin client_id ==> ", SharedPreference.profileObject)
     let data = await LoginWithPinAPI(PIN, SharedPreference.FUNCTIONID_PIN)
     code = data[0]
     data = data[1]
@@ -770,10 +893,11 @@ export default class mainview extends Component {
     if (code.SUCCESS == data.code) {
 
       this.setState({
-        isLoading: false,
         showpin: false,
+        sessionTimeoutBool:false,
         failPin: 0,
-        pin: ''
+        pin: '',
+        glass:false
       })
     } else if (code.INVALID_AUTH_TOKEN == data.code) {
       Alert.alert(
@@ -781,29 +905,43 @@ export default class mainview extends Component {
         StringText.INVALID_AUTH_TOKEN_DESC,
         [{
           text: 'OK', onPress: () => {
-            SharedPreference.profileObject = null
+            // SharedPreference.profileObject = null
             this.saveProfile.setProfile(null)
             SharedPreference.gotoRegister = true
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
+              sessionTimeoutBool:false,
+              glass:false
             })
           }
         }
         ],
         { cancelable: false })
+
+    } else if (code.INVALID_AUTH_TOKEN == data.code) {
+
+      this.onAutenticateErrorAlertDialog()
+
+    } else if (code.DOES_NOT_EXISTS == data.code) {
+
+      this.onRegisterErrorAlertDialog()
+
+
     } else if ((code.INTERNAL_SERVER_ERROR == data.code) || (code.ERROR == data.code)) {
       Alert.alert(
         StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
         StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
         [{
           text: 'OK', onPress: () => {
-            SharedPreference.profileObject = null
+            // SharedPreference.profileObject = null
             this.saveProfile.setProfile(null)
             SharedPreference.gotoRegister = true
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
+              sessionTimeoutBool:false,
+              glass:false
             })
           }
         }
@@ -816,12 +954,14 @@ export default class mainview extends Component {
         StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
         [{
           text: 'OK', onPress: () => {
-            SharedPreference.profileObject = null
+            // SharedPreference.profileObject = null
             this.saveProfile.setProfile(null)
             SharedPreference.gotoRegister = true
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
+              sessionTimeoutBool:false,
+              glass:false
             })
           }
         }
@@ -837,12 +977,14 @@ export default class mainview extends Component {
           StringText.ALERT_PIN_DESC_TOO_MANY_NOT_CORRECT,
           [{
             text: 'OK', onPress: () => {
-              SharedPreference.profileObject = null
+              // SharedPreference.profileObject = null
               this.saveProfile.setProfile(null)
               SharedPreference.gotoRegister = true
               // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
               this.setState({
                 showpin: false,
+                sessionTimeoutBool:false,
+                glass:false
               })
             }
           }],
@@ -860,6 +1002,7 @@ export default class mainview extends Component {
               let origin = this.state.failPin + 1
               this.setState({
                 failPin: origin,
+                sessionTimeoutBool:false,
                 pin: ''
               })
             }
@@ -871,14 +1014,42 @@ export default class mainview extends Component {
     }
   }
 
+  
+
+  resetTimer() {
+    console.log('resetTimer')
+    clearTimeout(this.timer)
+    // this.checkUserInActive();
+    // if (this.state.showpin)
+    //   this.setState({ showpin: false })
+    this.timer = setTimeout(() => this.setState({
+      glass:true
+
+    }, function () {
+      this.onInactivity();
+      this.resetTimer();
+    }), sessionTimeoutSec)
+  }
+
   render() {
     if (this.state.inactive) {
-
+const {
+      style,
+      children,
+    } = this.props;
       return (
-        <UserInactivity
-          timeForInactivity={300000}
-          checkInterval={300000}
-          onInactivity={this.onInactivity} >
+        <View style={{ flex: 1 }}
+          collapsable={false}
+          {...this.panResponder.panHandlers}
+
+        >
+     
+          {/* <UserInactivity
+          timeForInactivity={60000}
+         checkInterval={2000}
+          onInactivity={this.onInactivity}
+
+           > */}
           <StatusBar
             barStyle="light-content"
             backgroundColor="#e60c0c"
@@ -887,11 +1058,13 @@ export default class mainview extends Component {
             <View style={styles.container} >
               <RootViewController pushstatus={this.state.pageSelect} />
             </View>
+            {this.rendertranscreen()}
             {this.rendernotificationlabel()}
             {this.renderPINScreen()}
-            
+
           </View>
-        </UserInactivity>
+        </View>
+        // </UserInactivity>
       );
     }
     return (

@@ -172,7 +172,7 @@ export default class calendarYearView extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }
@@ -199,7 +199,7 @@ export default class calendarYearView extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }
@@ -535,7 +535,7 @@ export default class calendarYearView extends Component {
     resetCalendar() {
 
         // if (this.state.connectWithServer == true) {
-        this.loadDataFromAPI(this.state.selectYear, this.state.selectLocation)
+        this.loadDataFromAPI(this.state.selectYearPicker, this.state.selectLocation)
         // } else {
         // this.getLocalYearView(this.state.selectYear)
         // }
@@ -985,6 +985,7 @@ export default class calendarYearView extends Component {
 
     onBack() {
         this.props.navigation.navigate('HomeScreen');
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     onloadPDFFile = async () => {

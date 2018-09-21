@@ -51,6 +51,7 @@ export default class OrganizationStruct extends Component {
     }
     onBack() {
         this.props.navigation.navigate('HomeScreen');
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
     onDetail() {
         this.props.navigation.navigate('HandbookDetail');

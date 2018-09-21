@@ -120,7 +120,7 @@ export default class PaySlipActivity extends Component {
                     SharedPreference.notiPayslipBadge.length = [];
                     SharedPreference.nonPayslipBadge.length = [];
                     SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
+                    // SharedPreference.profileObject = null
 
                     if (Platform.OS === 'android') {
                         BadgeAndroid.setBadge(0)
@@ -136,6 +136,7 @@ export default class PaySlipActivity extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
 
                 }
             }],
@@ -160,11 +161,12 @@ export default class PaySlipActivity extends Component {
 
                         page = 0
                         SharedPreference.Handbook = []
-                        SharedPreference.profileObject = null
+                        // SharedPreference.profileObject = null
                         this.setState({
                             isscreenloading: false
                         })
                         this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
 
                     }
                 }],
@@ -181,6 +183,7 @@ export default class PaySlipActivity extends Component {
         
         SharedPreference.notiAnnounceMentID = 0
         this.props.navigation.navigate('HomeScreen');
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     render() {

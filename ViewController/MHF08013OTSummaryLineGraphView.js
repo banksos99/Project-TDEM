@@ -173,7 +173,7 @@ export default class OTSummaryLineChart extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }
@@ -200,7 +200,7 @@ export default class OTSummaryLineChart extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }

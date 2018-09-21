@@ -184,8 +184,8 @@ export default class rootNavigation extends Component {
     }
 
     getProfileObject = async () => {
-        profileObject = await this.saveProfile.getProfile()
-        if (profileObject) {
+        SharedPreference.profileObject = await this.saveProfile.getProfile()
+        if (SharedPreference.profileObject) {
             this.setState({
                 hasPin: true
             })

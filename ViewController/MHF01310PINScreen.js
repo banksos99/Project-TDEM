@@ -32,8 +32,7 @@ export default class PinActivity extends Component {
             isLoading: false
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_PIN)
-        SharedPreference.currentNavigator = SharedPreference.SCREEN_PIN
-        console.log("PinScreen")
+        
 
     }
 
@@ -41,17 +40,18 @@ export default class PinActivity extends Component {
 
         if (SharedPreference.isConnected) {
 
-            console.log("login with pin ==> ", PIN,SharedPreference.FUNCTIONID_PIN)
             let data = await LoginWithPinAPI(PIN, SharedPreference.FUNCTIONID_PIN)
+            console.log('onLoadLoginWithPin =>',data)
             code = data[0]
             data = data[1]
-
-            console.log("onLoadLoginWithPin ==> ", data)
 
             if (code.SUCCESS == data.code) {
                 this.setState({
                     // isLoading: false
                 })
+                console.log('setProfile =>',data.data)
+                this.saveProfile.setProfile(data.data)
+                
                 SharedPreference.lastdatetimeinterval = data.data.last_request
                 SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
                 await this.onLoadInitialMaster()
@@ -66,9 +66,10 @@ export default class PinActivity extends Component {
                                 pin: '',
                                 isLoading: false
                             })
-                            SharedPreference.profileObject = null
+                            // SharedPreference.profileObject = null
                             this.saveProfile.setProfile(null)
                             this.props.navigation.navigate('RegisterScreen')
+                            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                         }
                     }
                     ],
@@ -84,10 +85,11 @@ export default class PinActivity extends Component {
                             this.setState({
                                 pin: '',
                                 isLoading: false
+                                
                             })
-                            //  SharedPreference.profileObject = null
-                            //  this.saveProfile.setProfile(null)
-                            // this.props.navigation.navigate('RegisterScreen')
+                             SharedPreference.profileObject = null
+                             this.saveProfile.setProfile(null)
+                            this.props.navigation.navigate('RegisterScreen')
                         }
                     }
                     ],
@@ -100,9 +102,10 @@ export default class PinActivity extends Component {
                     StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
                     [{
                         text: 'OK', onPress: () => {
-                            SharedPreference.profileObject = null
+                            // SharedPreference.profileObject = null
                             this.saveProfile.setProfile(null)
                             this.props.navigation.navigate('RegisterScreen')
+                            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                         }
                     }
                     ],
@@ -115,9 +118,10 @@ export default class PinActivity extends Component {
                     StringText.ALERT_CANNOT_CONNECT_SERVER_DETAIL,
                     [{
                         text: 'OK', onPress: () => {
-                            SharedPreference.profileObject = null
+                            // SharedPreference.profileObject = null
                             this.saveProfile.setProfile(null)
                             this.props.navigation.navigate('RegisterScreen')
+                            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                         }
                     }
                     ],
@@ -132,9 +136,10 @@ export default class PinActivity extends Component {
                         StringText.ALERT_PIN_DESC_TOO_MANY_NOT_CORRECT,
                         [{
                             text: 'OK', onPress: () => {
-                                SharedPreference.profileObject = null
+                                // SharedPreference.profileObject = null
                                 this.saveProfile.setProfile(null)
                                 this.props.navigation.navigate('RegisterScreen')
+                                SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                             }
                         }],
                         { cancelable: false }
@@ -183,6 +188,7 @@ export default class PinActivity extends Component {
     }
 
     onLoadAppInfo = async () => {
+        console.log('onLoadAppInfo')
         let data = await RestAPI(SharedPreference.APPLICATION_INFO_API, "1")
         code = data[0]
         data = data[1]
@@ -208,12 +214,18 @@ export default class PinActivity extends Component {
 
         this.props.navigation.navigate('HomeScreen')
     }
-    
+    componentWillMount() {
+
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_PIN
+
+    }
+
     componentWillUnmount() {
 
     }
 
     onLoadInitialMaster = async () => {
+        console.log('onLoadInitialMaster')
         let data = await RestAPI(SharedPreference.INITIAL_MASTER_API, SharedPreference.FUNCTIONID_GENERAL_INFORMATION_SHARING)
         code = data[0]
         data = data[1]
@@ -282,7 +294,7 @@ export default class PinActivity extends Component {
             this.setState({
                 isLoading: true
             })
-            SharedPreference.profileObject = await this.saveProfile.getProfile()
+            // SharedPreference.profileObject = await this.saveProfile.getProfile()
             await this.onLoadLoginWithPin(this.state.pin)
         }
     }
@@ -348,14 +360,14 @@ export default class PinActivity extends Component {
     onReset = async () => {
 
 
-        SharedPreference.profileObject = await this.saveProfile.getProfile()
+        // SharedPreference.profileObject = await this.saveProfile.getProfile()
         // SharedPreference.TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, '1', SharedPreference.profileObject.client_token)
         this.onLoginResetPinAPI()
     }
 
 
     onLoginResetPinAPI = async () => {
-
+        console.log('onLoginResetPinAPI')
         let data = await LoginResetPinAPI(SharedPreference.FUNCTIONID_PIN)
         code = data[0]
         data = data[1]
@@ -366,6 +378,7 @@ export default class PinActivity extends Component {
             SharedPreference.profileObject = null
             this.saveProfile.setProfile(null)
             this.props.navigation.navigate('RegisterScreen')
+            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
             Alert.alert(
                 StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
@@ -375,6 +388,7 @@ export default class PinActivity extends Component {
                         SharedPreference.profileObject = null
                         this.saveProfile.setProfile(null)
                         this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                     }
                 }
                 ],
@@ -389,6 +403,7 @@ export default class PinActivity extends Component {
                         SharedPreference.profileObject = null
                         this.saveProfile.setProfile(null)
                         this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                     }
                 }
                 ],
@@ -416,6 +431,7 @@ export default class PinActivity extends Component {
                         SharedPreference.profileObject = null
                         this.saveProfile.setProfile(null)
                         this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                     }
                 }
                 ],

@@ -62,7 +62,7 @@ export default class calendarYearView extends Component {
             showYear: '',
             showLocation: '',
 
-            selectYearPicker: this.props.navigation.getParam("selectYear", ""),
+            selectYearPicker: '2018',//this.props.navigation.getParam("selectYear", ""),
             yearPickerForDownloadPDFFileView: '',
             yearsPickerView: '',
             locationPickerView: '',
@@ -292,6 +292,7 @@ export default class calendarYearView extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
 
                 }
             }],
@@ -319,7 +320,7 @@ export default class calendarYearView extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }
@@ -635,7 +636,7 @@ export default class calendarYearView extends Component {
     resetCalendar() {
 
         // if (this.state.connectWithServer == true) {
-        this.loadDataFromAPI(this.state.selectYear, this.state.selectLocation)
+        this.loadDataFromAPI(this.state.selectYearPicker, this.state.selectLocation)
         // } else {
         // this.getLocalYearView(this.state.selectYear)
         // }
@@ -785,7 +786,7 @@ export default class calendarYearView extends Component {
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.alertDialogBoxText}>
+                                <Text style={styles.titlepicker}>
                                     {StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}
                                 </Text>
                                 <ScrollView style={{ height: '40%' }}>
@@ -812,7 +813,7 @@ export default class calendarYearView extends Component {
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={styles.alertDialogBoxText}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
+                                <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
                             </View>
                             <Picker
                                 selectedValue={this.state.selectYearPicker}
@@ -860,7 +861,7 @@ export default class calendarYearView extends Component {
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.alertDialogBoxText}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
+                                <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
                                 <View style={{height:20}}/>
                                 <ScrollView style={{ height: '40%' }}>
                                     {
@@ -901,7 +902,7 @@ export default class calendarYearView extends Component {
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.alertDialogBoxText}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
+                                <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
                                 <Picker
                                     selectedValue={this.state.selectYearPicker}
                                     onValueChange={(itemValue, itemIndex) => this.setState({ selectYearPicker: itemValue })}>
@@ -954,7 +955,7 @@ export default class calendarYearView extends Component {
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.alertDialogBoxText}>
+                                <Text style={styles.titlepicker}>
                                     {StringText.CALENDER_YEARVIEW_LOCATION_TITLE}
                                 </Text>
                                 <ScrollView style={{ height: '40%' }}>
@@ -996,7 +997,7 @@ export default class calendarYearView extends Component {
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
                             <View style={{height:50, justifyContent:'center'}}>
-                                <Text style={styles.alertDialogBoxText}>
+                                <Text style={styles.titlepicker}>
                                     {StringText.CALENDER_YEARVIEW_LOCATION_TITLE}
                                 </Text>
                                 </View>
@@ -1011,21 +1012,21 @@ export default class calendarYearView extends Component {
 
 
                                 {/* <View style={styles.alertDialogBox}> */}
-                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
-                                    <TouchableOpacity style={{ flex: 1 }}
+                                <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                                    <TouchableOpacity style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignContent: 'center' }}
                                         onPress={() => {
                                             this.setState({
-                                               
+
                                                 locationPickerView: false
                                             }, function () {
-                                               
+
 
                                             })
                                         }}>
                                         <Text style={styles.buttonpicker}>Cancel</Text>
                                     </TouchableOpacity>
-                                    <View style={{ flex:1}}></View>
-                                    <TouchableOpacity style={{ flex:1}}
+                                    <View style={{ flex: 1 }}></View>
+                                    <TouchableOpacity style={{ flex: 1 }}
                                         onPress={() => {
                                             //console.log('selectYear =>: ',this.state.selectYear);
                                             
@@ -1055,6 +1056,7 @@ export default class calendarYearView extends Component {
 
     onBack() {
         this.props.navigation.navigate('HomeScreen');
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     onloadPDFFile = async () => {

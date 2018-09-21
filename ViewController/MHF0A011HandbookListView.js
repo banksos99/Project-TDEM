@@ -230,7 +230,7 @@ export default class HandbookActivity extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }
@@ -257,7 +257,7 @@ export default class HandbookActivity extends Component {
                         isscreenloading: false
                     })
                     this.props.navigation.navigate('RegisterScreen')
-
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
                 }
             }],
             { cancelable: false }
@@ -294,6 +294,7 @@ export default class HandbookActivity extends Component {
     onBack() {
         dataSource=[]
         this.props.navigation.navigate('HomeScreen');
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     onDetail(i) {

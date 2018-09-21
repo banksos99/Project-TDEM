@@ -3,8 +3,11 @@ const bundleId = DeviceInfo.getBundleId();
 console.log("BUNDLE ID ======================= " + bundleId);
 // let HOST = 'https://tdemconnect.tdem.toyota-asia.com';
 let SERVER = 'DEV'
-const HOST = bundleId == "com.toyotaasia.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
-
+let HOST = bundleId == "com.toyotaasia.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
+if (bundleId == "com.toyotaasia.tdemconnect") {
+   // HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+    SERVER = 'PROD'
+}
 if (bundleId == "com.tdem.tdemconnect") {
     HOST = 'https://tdemconnect.tdem.toyota-asia.com'
     SERVER = 'PROD'
@@ -17,7 +20,12 @@ if (bundleId == "com.tdem.tdemconnect") {
 //const VERSION = 'v1.0.59'//10-09-61
 // const VERSION = 'v1.0.60'//11-09-61
 // const VERSION = 'v1.0.61'//14-09-61
-const VERSION = 'v1.0.62'//14-09-61 IOS: Android:
+// const VERSION = 'v1.0.62'//14-09-61 IOS: Android:
+// const VERSION = 'v1.0.63'//18-09-61 IOS: Android:
+// const VERSION = 'v1.0.64'//18-09-61 IOS: Android:
+// const VERSION = 'v1.0.65'//19-09-61 IOS: Android:
+const VERSION = 'v1.0.68'//20-09-61 IOS: Android:
+// const VERSION = 'v1.0.70'//20-09-61 IOS: Android:
 export default {
     HOST: HOST,
     SERVER: SERVER,
@@ -85,7 +93,7 @@ export default {
     setHomeViewStatus: 0,
     notiPayslipBadge:[],
     nonPayslipBadge:[],
-    timeinterval: 40000,
+    timeinterval: 60000,
     lastdatetimeinterval: 0,
     payslipBadgeList: [],
 

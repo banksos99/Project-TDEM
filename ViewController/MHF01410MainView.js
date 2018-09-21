@@ -100,7 +100,7 @@ export default class HMF01011MainView extends Component {
             sendlastupdate:SharedPreference.lastdatetimeinterval,
         }
 
-        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
+        
         rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
         rolemanagementManager = [0, 0, 0, 0];
         managerstatus = 'N';
@@ -175,7 +175,7 @@ export default class HMF01011MainView extends Component {
 
     componentWillMount() {
 
-        
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
         // this.interval = setInterval(() => {
         //     this.setState({
         //         isscreenloading: false
@@ -184,10 +184,16 @@ export default class HMF01011MainView extends Component {
         // this.notificationListener();
         if (Platform.OS !== 'android') return
         BackHandler.addEventListener('hardwareBackPress', () => {
-            this.props.navigation.navigate('HomeScreen');
+            //   this.props.navigation.navigate('HomeScreen');
+            BackHandler.exitApp()
             return true
         })
-        
+        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+      
+        return true;
     }
 
     loadData = async () => {
@@ -236,7 +242,7 @@ export default class HMF01011MainView extends Component {
 
         }
 
-        
+        // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
         this.loadData()
         
@@ -333,11 +339,13 @@ export default class HMF01011MainView extends Component {
                         SharedPreference.lastdatetimeinterval = responseJson.meta.request_date;
 
                         let dataArray = responseJson.data
-                        
+
                         this.setState({
 
                             // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
-                            notiAnnounceMentBadge: parseInt(0)
+                            notiAnnounceMentBadge: parseInt(0),
+                            nonPayslipBadge: parseInt(0),
+                            nonPayslipBadge: parseInt(0),
                         })
 
                         this.notificationListener(0);
@@ -2850,8 +2858,8 @@ export default class HMF01011MainView extends Component {
         this.state.loadingannouncement = false
         timerstatus = false
         SharedPreference.Handbook = []
-        SharedPreference.profileObject = null
-        this.saveProfile.setProfile(null)
+        // SharedPreference.profileObject = null
+        // this.saveProfile.setProfile(null)
         if (Platform.OS === 'android') {
             BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
@@ -2866,6 +2874,7 @@ export default class HMF01011MainView extends Component {
             isscreenloading: false
         })
         this.props.navigation.navigate('RegisterScreen')
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
     }
 
     select_sign_out() {
@@ -2968,6 +2977,7 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: false
             })
             this.props.navigation.navigate('RegisterScreen')
+            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
 
         } else if (code.INVALID_USER_PASS == data.code) {
 
@@ -2976,12 +2986,13 @@ export default class HMF01011MainView extends Component {
             SharedPreference.Handbook = []
             announcementData = []
             tempannouncementData = []
-            SharedPreference.profileObject = null
-            this.saveProfile.setProfile(null)
+            // SharedPreference.profileObject = null
+            // this.saveProfile.setProfile(null)
             this.setState({
                 isscreenloading: false
             })
             this.props.navigation.navigate('RegisterScreen')
+            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
             // Alert.alert(
             //     data.data.code,
             //     data.data.detail,
@@ -3011,12 +3022,13 @@ export default class HMF01011MainView extends Component {
             page = 0
             timerstatus = false
             SharedPreference.Handbook = []
-            SharedPreference.profileObject = null
-            this.saveProfile.setProfile(null)
+            // SharedPreference.profileObject = null
+            // this.saveProfile.setProfile(null)
             this.setState({
                 isscreenloading: false
             })
             this.props.navigation.navigate('RegisterScreen')
+            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
             // Alert.alert(
             //     StringText.ALERT_PIN_CANNOT_LOGOUT_TITILE,
             //     StringText.ALERT_PIN_CANNOT_LOGOUT_DESC,
@@ -3367,6 +3379,16 @@ export default class HMF01011MainView extends Component {
         );
 
     }
+    rendertimeInterval() {
+        if (SharedPreference.SERVER==='DEV') {
+            return (
+                <View style={{ height: 40, marginTop: 20, position: 'absolute' }}>
+                    <Text style={{marginLeft:40, color: 'black',fontSize:10 }}>{this.state.sendlastupdate}</Text>
+                </View>
+            )
+        }
+
+    }
 
     render() {
         let badgeBG = 'transparent'
@@ -3433,9 +3455,8 @@ export default class HMF01011MainView extends Component {
                 </View>
 
                 {this.renderloadingscreen()}
-                {/* <View style={{ height: 40,marginTop:20, position: 'absolute' }}>
-                <Text style ={{color:'white'}}>{this.state.sendlastupdate}</Text>
-                </View> */}
+                {this.rendertimeInterval()}
+                
 
             </View>
         );

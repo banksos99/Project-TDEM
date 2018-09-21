@@ -211,8 +211,8 @@ export default class NonpayrollActivity extends Component {
                                     source={require('../resource/regist/regist_lock_green.png')}
                                     resizeMode="cover" />
                                 <Text style={styles.pinCreateSuccessTitleText}>Create PIN Successfully</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You've successfully changed your PIN.You can use</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>this new PIN to log in next time.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.You can use</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>this PIN to log in next time.</Text>
                             </View>
                         </View>
 
@@ -235,6 +235,7 @@ export default class NonpayrollActivity extends Component {
             pin2: [],
         })
         this.props.navigation.navigate('HomeScreen');
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     renderImagePin() {

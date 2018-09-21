@@ -1567,7 +1567,7 @@ export const styles = StyleSheet.create({
         fontSize: 17 * scale,
        // width: 80 * scale,
         height: 50 ,
-        alignItems: 'center',
+       // alignItems: 'center',
         fontFamily: font_medium
     },
     datapicker:{
