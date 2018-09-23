@@ -92,8 +92,6 @@ console.log('getfirebasetoken')
 
     onRegister = async () => {
 
-        
-        
         if (SharedPreference.isConnected) {
             // this.getfirebasetoken()
             this.setState({
@@ -143,7 +141,27 @@ console.log('getfirebasetoken')
                     ],
                     { cancelable: false }
                 )
-            } else if ((code.INVALID_USER_PASS == data.code) || (code.FAILED == data.code)) {
+            } else if (code.INVALID_USER_PASS == data.code) {
+
+                Alert.alert(
+                    data.data.code,
+                    data.data.detail,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.setState({
+                                    isLoading: false,
+                                    password:''
+                                    
+                                })
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+
+
+            } else if(code.FAILED == data.code) {
                 
                 if (data.data.detail === 'MHF00602AERR: Parameter firebase_tokens value are missing.') {
                     //get firebase token gain
@@ -160,6 +178,7 @@ console.log('getfirebasetoken')
                                     this.setState({
                                         isLoading: false
                                     })
+
                                 }
                             }
                         ],
@@ -722,76 +741,79 @@ console.log('onSetPin')
         }
     }
 
+    
     render() {
         return (
             <View style={styles.container} >
                 {/* <View style={styles.container} > */}
 
-                    {/* Image Background */}
-                    <Image style={styles.registBackground}
-                        source={require('../resource/regist/regist_white.png')} />
+                {/* Image Background */}
+                <Image style={styles.registBackground}
+                    source={require('../resource/regist/regist_white.png')} />
 
-                    <View style={styles.registContainer}>
-                        <Image source={require('../resource/regist/regist_logo.png')} />
+                <View style={styles.registContainer}>
+                    <Image source={require('../resource/regist/regist_logo.png')} />
 
-                        <View style={[styles.registerContainerWidth, { marginBottom: this.state.keyboardHeight }]}>
-                            <View style={styles.registTextContainer}>
-                                <Image style={[styles.registetImageContainer, { height: 20, width: 20, }]}
-                                    source={require('../resource/regist/regist_location.png')} />
-                                <Text style={[styles.registText, { color: Colors.grayTextColor, marginTop: 15 }]}>TDEM</Text>
-                            </View>
-                            <View style={styles.registLine} />
-
-                            <View style={styles.registTextContainer}>
-                                <Image style={[styles.registetImageContainer, { height: 20, width: 20 }]}
-
-                                    source={require('../resource/regist/regist_user.png')} />
-                                <TextInput
-                                    onSubmitEditing={Keyboard.dismiss}
-                                    autoCapitalize='none'
-                                    underlineColorAndroid="transparent"
-                                    selectionColor='black'
-                                    style={styles.registText}
-                                    placeholder="User ID"
-                                    placeholderTextColor={Colors.lightGrayTextColor}
-                                    onChangeText={(username) => this.setState({ username })} />
-
-                            </View>
-                            <View style={styles.registLine} />
-
-                            <View style={styles.registTextContainer}>
-                                <Image style={[styles.registetImageContainer, { height: 20, width: 20, }]}
-                                    source={require('../resource/regist/regist_locked.png')} />
-                                <TextInput
-                                    onSubmitEditing={Keyboard.dismiss}
-                                    autoCapitalize='none'
-                                    underlineColorAndroid="transparent"
-                                    secureTextEntry={true}
-                                    selectionColor='black'
-                                    style={styles.registText}
-                                    placeholder="Password"
-                                    placeholderTextColor={Colors.lightGrayTextColor}
-                                    onChangeText={(password) => this.setState({ password })} />
-                            </View>
-
-                            <View style={styles.registLine} />
-                            <TouchableOpacity
-                                onPress={() => this.onRegister()}
-                            >
-                                <View style={styles.registButton}>
-                                    <Text style={styles.registTextButton}>
-                                        Log In
-                                </Text>
-                                </View>
-                            </TouchableOpacity>
+                    <View style={[styles.registerContainerWidth, { marginBottom: this.state.keyboardHeight }]}>
+                        <View style={styles.registTextContainer}>
+                            <Image style={[styles.registetImageContainer, { height: 20, width: 20, }]}
+                                source={require('../resource/regist/regist_location.png')} />
+                            <Text style={[styles.registText, { color: Colors.grayTextColor, marginTop: 15 }]}>TDEM</Text>
                         </View>
-                        {/* Device Info */}
-                        <Text></Text>
-                        <Text>{this.state.versionCode}</Text>
-                        {/* <Text style={{ color: 'lightgray' }}>{this.state.datastatus}</Text>
+                        <View style={styles.registLine} />
+
+                        <View style={styles.registTextContainer}>
+                            <Image style={[styles.registetImageContainer, { height: 20, width: 20 }]}
+
+                                source={require('../resource/regist/regist_user.png')} />
+                            <TextInput
+                                onSubmitEditing={Keyboard.dismiss}
+                                autoCapitalize='none'
+                                underlineColorAndroid="transparent"
+                                selectionColor='black'
+                                style={styles.registText}
+                                placeholder="User ID"
+                                placeholderTextColor={Colors.lightGrayTextColor}
+                                onChangeText={(username) => this.setState({ username })} />
+
+                        </View>
+                        <View style={styles.registLine} />
+
+                        <View style={styles.registTextContainer}>
+                            <Image style={[styles.registetImageContainer, { height: 20, width: 20, }]}
+                                source={require('../resource/regist/regist_locked.png')} />
+                            <TextInput
+
+                                onSubmitEditing={Keyboard.dismiss}
+                                autoCapitalize='none'
+                                underlineColorAndroid="transparent"
+                                secureTextEntry={true}
+                                selectionColor='black'
+                                style={styles.registText}
+                                placeholder="Password"
+                                placeholderTextColor={Colors.lightGrayTextColor}
+                                value={this.state.password}
+                                onChangeText={(password) => this.setState({ password })} />
+                        </View>
+
+                        <View style={styles.registLine} />
+                        <TouchableOpacity
+                            onPress={() => this.onRegister()}
+                        >
+                            <View style={styles.registButton}>
+                                <Text style={styles.registTextButton}>
+                                    Log In
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    {/* Device Info */}
+                    <Text></Text>
+                    <Text>{this.state.versionCode}</Text>
+                    {/* <Text style={{ color: 'lightgray' }}>{this.state.datastatus}</Text>
                         <Text style={{ fontSize: 10, color: 'lightgray' }}>{SharedPreference.deviceInfo.deviceBrand},{SharedPreference.deviceInfo.deviceOS},{SharedPreference.deviceInfo.deviceModel},{SharedPreference.deviceInfo.deviceOSVersion},{SharedPreference.deviceInfo.appVersion}</Text>
                         <Text style={{ fontSize: 10, color: 'lightgray' }}>{SharedPreference.deviceInfo.firebaseToken}</Text> */}
-                    </View>
+                </View>
                 {/* </View > */}
                 {this.renderCreatePin()}
                 {this.renderCreatePinSuccess()}

@@ -80,6 +80,8 @@ export default class PinActivity extends Component {
         if(max == 0){
            ratio = 1
         }
+
+        console.log('ratio :', ratio)
         let intratio = Math.ceil(ratio)
         let fonrsize = 12 * scale
         let barhight = 20 * scale;

@@ -73,7 +73,7 @@ export default class OTSummaryBarChart extends Component {
     checkDataFormat(DataResponse) {
 
         if (DataResponse) {
-
+console.log('OTSummaryBarChart DataResponse =>',DataResponse)
             let today = new Date();
             date = today.getDate() + "/" + parseInt(today.getMonth() + 1) + "/" + today.getFullYear();
             this.state.initialyear = today.getFullYear();

@@ -62,7 +62,7 @@ export default class calendarYearView extends Component {
             showYear: '',
             showLocation: '',
 
-            selectYearPicker: '2018',//this.props.navigation.getParam("selectYear", ""),
+            selectYearPicker: this.props.navigation.getParam("selectYear", ""),
             yearPickerForDownloadPDFFileView: '',
             yearsPickerView: '',
             locationPickerView: '',
@@ -1013,7 +1013,7 @@ export default class calendarYearView extends Component {
 
                                 {/* <View style={styles.alertDialogBox}> */}
                                 <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignContent: 'center' }}
+                                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}
                                         onPress={() => {
                                             this.setState({
 

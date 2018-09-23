@@ -726,7 +726,10 @@ export default class calendarYearView extends Component {
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={[styles.alertDialogBoxText, { style: Text }]}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
+                            <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
+                                <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
+                            </View>
+                                {/* <Text style={styles.alertDialogBoxText}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text> */}
                                 <Picker
                                     selectedValue={this.state.selectYearPicker}
                                     onValueChange={(itemValue, itemIndex) => this.setState({ selectYearPicker: itemValue })}>
@@ -736,7 +739,7 @@ export default class calendarYearView extends Component {
                                 </Picker>
 
                                 <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity style={styles.buttonpicker}
+                                    <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
                                         onPress={() => {
                                             this.setState({
 
@@ -750,12 +753,12 @@ export default class calendarYearView extends Component {
                                     </TouchableOpacity>
                                     <View style={{ flex: 2 }}></View>
 
-                                    <TouchableOpacity style={styles.buttonpicker}
+                                    <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
                                         onPress={() => {
                                             this.setState({ yearviewPicker: false }),
                                                 this.resetCalendar()
                                         }}>
-                                        <Text style={styles.alertDialogBoxText}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
+                                        <Text style={styles.buttonpicker}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

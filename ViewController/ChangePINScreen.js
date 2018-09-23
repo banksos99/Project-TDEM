@@ -13,6 +13,7 @@ import { styles } from "./../SharedObject/MainStyles"
 import StringText from "../SharedObject/StringText";
 
 import LoginChangePinAPI from './../constants/LoginChangePinAPI';
+import SharedPreference from "./../SharedObject/SharedPreference"
 
 export default class NonpayrollActivity extends Component {
     constructor(props) {

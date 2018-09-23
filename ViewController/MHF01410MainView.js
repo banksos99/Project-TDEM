@@ -1437,7 +1437,7 @@ export default class HMF01011MainView extends Component {
         } else {
             this.props.navigation.navigate('calendarYearView', {
                 dataResponse: data,
-                selectYear: new Date().getFullYear(),
+                selectYear: new Date().getFullYear().toString(),
                 location: company,
                 page: 1
             });
@@ -2215,9 +2215,9 @@ export default class HMF01011MainView extends Component {
                         source={require('./../resource/images/mainscreen.png')}
                     // resizeMode="contain" 
                     />
-                    <View style={{ position: 'absolute', height: '40%', width: '80%', marginTop: '7%', marginLeft: '6%' }}>
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ position: 'absolute', height: 100, width: '80%', marginTop: '7%', marginLeft: '6%' }}>
+                        {/* <View style={{ flex: 1, flexDirection: 'row' }}> */}
+                            {/* <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
 
                                 <Image
 
@@ -2226,20 +2226,24 @@ export default class HMF01011MainView extends Component {
                                     resizeMode="contain"
                                 />
 
-                            </View>
-                            <View style={{ flex: 2, justifyContent: 'center', flexDirection: 'column' }}>
-                                <View style={{ flex: 1, }} />
-                                <View style={{ flex: 1, }}>
+                            </View> */}
+                            <View style={{ flex: 3, justifyContent: 'center', flexDirection: 'column' }}>
+                                <View style={{ flex: 1}} />
+                                <View style={{ flex: 1}}>
                                     <Text style={[styles.userTitleText, { fontFamily: "Prompt-Bold" }]}>Welcome</Text>
                                 </View>
-                                <View style={{ flex: 1, }}>
+                                <View style={{ flex: 1 }}>
                                     <Text style={styles.usernameText}>{this.state.username}</Text>
                                 </View>
-                                <View style={{ flex: 1, }} />
+                                <View style={{ flex: 1 }} />
                                 {/* Device Info */}
-                                <Text>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
+                                <View style={{ flex: 2,flexDirection: 'column'}} >
+                                <Text style={{ flex: 1}}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
+                                {/* <Text style={{ flex: 1,fontSize:10}}>{this.state.sendlastupdate}</Text> */}
+                                {this.rendertimeInterval()}
                             </View>
-                        </View>
+                            </View>
+                        {/* </View> */}
                     </View>
                 </View>
 
@@ -3382,8 +3386,8 @@ export default class HMF01011MainView extends Component {
     rendertimeInterval() {
         if (SharedPreference.SERVER==='DEV') {
             return (
-                <View style={{ height: 40, marginTop: 20, position: 'absolute' }}>
-                    <Text style={{marginLeft:40, color: 'black',fontSize:10 }}>{this.state.sendlastupdate}</Text>
+                <View style={{ flex:1 }}>
+                    <Text style={{ color: 'black',fontSize:10 }}>{this.state.sendlastupdate}</Text>
                 </View>
             )
         }
@@ -3455,7 +3459,7 @@ export default class HMF01011MainView extends Component {
                 </View>
 
                 {this.renderloadingscreen()}
-                {this.rendertimeInterval()}
+                {/* {this.rendertimeInterval()} */}
                 
 
             </View>
