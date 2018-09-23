@@ -5,6 +5,8 @@ import moment from 'moment'
 import SharedPreference from '../SharedObject/SharedPreference';
 import DeviceInfo from 'react-native-device-info';
 
+var momentTZ = require('moment-timezone');
+
 export default class EventCalendar {
 
     state = {
@@ -92,12 +94,27 @@ export default class EventCalendar {
     _addEventsToCalendar = async (eventObject, location) => {
         console.log("eventObject  : ", eventObject)
 
-        let format = 'YYYY-MM-DDTHH:mm:ss.sss'
-        let momentStart = moment(eventObject.time_start).format(format);
-        let momentEnd = moment(eventObject.time_end).format(format);
+        let timeZone = DeviceInfo.getTimezone()
+        console.log("timeZone  : ", timeZone)
 
-        // let momentStart = moment("2018-01-01 00:00:01").format(format);
-        // let momentEnd = moment("2018-01-01 00:00:10").format(format);
+        let format = 'YYYY-MM-DDTHH:mm:ss.sss'
+
+        // var momentStart = momentTZ.tz(eventObject.time_start, "Asia/Bangkok").format(format);
+        // var momentEnd = momentTZ.tz(eventObject.time_end, "Asia/Bangkok").format(format);
+        // 2013-11-18 11:55
+        // let momentStart = moment(eventObject.time_start).format();
+        // let momentEnd = moment(eventObject.time_end).format();
+
+        // let format = 'YYYY-MM-DDTHH:mm:ss.sss'
+
+        var momentStart = momentTZ.tz(eventObject.time_start, "Asia/Bangkok").utc().format(format);
+        var momentEnd = momentTZ.tz(eventObject.time_end, "Asia/Bangkok").utc().format(format);
+
+        console.log("eventObject  momentStart : ", momentStart)
+        console.log("eventObject  momentEnd : ", momentEnd)
+
+        console.log("eventObject  momentStart : ", momentStart)
+        console.log("eventObject  momentEnd : ", momentEnd)
 
         let alldayBool = false
 
@@ -105,18 +122,11 @@ export default class EventCalendar {
             alldayBool = true
         }
 
-        // console.log("eventObject title : ", eventObject.title)
-        // console.log("eventObject.description : ", eventObject.description)
-
         title = eventObject.title
         let event = {
             startDate: momentStart + "Z",
             endDate: momentEnd + "Z",
             location: location,
-            // timeZone: "America/New_York",
-            // timeZone: 'Asia/Bangkok',
-            // timeZone:DeviceInfo.getTimezone(),
-            timeZone: "GMT",
             allDay: alldayBool,
             description: 'TDEM : ' + eventObject.description
         }
