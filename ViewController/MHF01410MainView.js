@@ -47,7 +47,7 @@ let settingstatus = 'Y';
 let rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
 let rolemanagementManager = [0, 0, 0, 0];
 let timerstatus = false;
-let viewupdate=false;
+let viewupdate = false;
 //let tempannouncementStatus=0;
 
 
@@ -67,11 +67,11 @@ export default class HMF01011MainView extends Component {
         this.state = {
             // isscreenloading: true,
             syncCalendar: true,
-            
+
             announcementTypetext: initannouncementTypetext,
-            
+
             announcementStatustext: initannouncementStatustext,
-           
+
             refreshing: false,
             loadmore: false,
             announcepage: 0,
@@ -81,26 +81,26 @@ export default class HMF01011MainView extends Component {
             nonPayrollBadge: [],
             announcetypelist: ['All', 'Company Announcement', 'Emergency Announcement', 'Event Announcement', 'General Announcement'],
             announcestatuslist: ['All', 'Read', 'Unread'],
-            tempannouncementType:'All',
-            initannouncementType:'All',
+            tempannouncementType: 'All',
+            initannouncementType: 'All',
             announcementType: 'All',
-            tempannouncementStatus:'All',
-            initannouncementStatus:'All',
+            tempannouncementStatus: 'All',
+            initannouncementStatus: 'All',
             announcementStatus: 'All',
 
 
             notiAnnounceMentBadge: SharedPreference.notiAnnounceMentBadge,
             notiPayslipBadge: SharedPreference.notiPayslipBadge.length,
-            nonPayslipBadge:SharedPreference.nonPayslipBadge.length,
+            nonPayslipBadge: SharedPreference.nonPayslipBadge.length,
             nonPayrollBadgeFirstTime: true,
             loadingannouncement: false,
             //  page: 0
-            select_announcement_type:0,
-            select_announcement_status:0,
-            sendlastupdate:SharedPreference.lastdatetimeinterval,
+            select_announcement_type: 0,
+            select_announcement_status: 0,
+            sendlastupdate: SharedPreference.lastdatetimeinterval,
         }
 
-        
+
         rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
         rolemanagementManager = [0, 0, 0, 0];
         managerstatus = 'N';
@@ -192,7 +192,7 @@ export default class HMF01011MainView extends Component {
     }
 
     handleBackButtonClick() {
-      
+
         return true;
     }
 
@@ -204,7 +204,7 @@ export default class HMF01011MainView extends Component {
         }
         this.setState({
             syncCalendar: autoSyncCalendarBool,
-           // nonPayslipBadge:SharedPreference.nonPayslipBadge,
+            // nonPayslipBadge:SharedPreference.nonPayslipBadge,
         })
         SharedPreference.calendarAutoSync = autoSyncCalendarBool
         // this.notificationListener(0)
@@ -222,9 +222,9 @@ export default class HMF01011MainView extends Component {
     //     // if(!viewupdate){
 
     //     //     viewupdate = true;
-            
+
     //     // }
-        
+
 
     // }
 
@@ -245,8 +245,8 @@ export default class HMF01011MainView extends Component {
         // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
         this.loadData()
-        
-        this.notificationListener(parseInt( SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
+
+        this.notificationListener(parseInt(SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
     }
 
     componentWillUnmount() {
@@ -256,7 +256,7 @@ export default class HMF01011MainView extends Component {
         SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge;
         //SharedPreference.notiPayslipBadge = this.state.notiPayslipBadge;
         // SharedPreference.nonPayslipBadge = this.state.nonPayslipBadge;
-        
+
 
         //SharedPreference.notipayslipID = 0
 
@@ -279,22 +279,22 @@ export default class HMF01011MainView extends Component {
         //             })
         //     }
         // }
-//         console.log("onLoadInAppNoti ==> ", lastTime)
-// let pullurl = PULL_NOTIFICATION_NODATE_API
-//         if (SharedPreference.lastdatetimeinterval) {
-//             // let today = new Date()
-//             // const _format = 'YYYY-MM-DD HH:mm:ss'
-//             // const newdate = moment(today).format(_format).valueOf();
-//             // SharedPreference.lastdatetimeinterval = newdate
-//             // //  SharedPreference.lastdatetimeinterval = '2018-08-22 15:07:00'
+        //         console.log("onLoadInAppNoti ==> ", lastTime)
+        // let pullurl = PULL_NOTIFICATION_NODATE_API
+        //         if (SharedPreference.lastdatetimeinterval) {
+        //             // let today = new Date()
+        //             // const _format = 'YYYY-MM-DD HH:mm:ss'
+        //             // const newdate = moment(today).format(_format).valueOf();
+        //             // SharedPreference.lastdatetimeinterval = newdate
+        //             // //  SharedPreference.lastdatetimeinterval = '2018-08-22 15:07:00'
 
-            
-//         }
+
+        //         }
         // console.log("lastdatetimeinterval ==> ", SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval)
 
         let urlPullnoti = SharedPreference.PULL_NOTIFICATION_NODATE_API
-        
-        if(SharedPreference.lastdatetimeinterval){
+
+        if (SharedPreference.lastdatetimeinterval) {
 
             urlPullnoti = SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval
         }
@@ -328,7 +328,7 @@ export default class HMF01011MainView extends Component {
                     } else if (parseInt(responseJson.status) == 401) {
 
                         this.onRegisterErrorAlertDialog()
-                        
+
                     } else if (responseJson.status == 200) {
 
                         this.timer = setTimeout(() => {
@@ -398,13 +398,13 @@ export default class HMF01011MainView extends Component {
                                 //         let tmonth = monthYear[1]
                                 //         lettempmonth = 0
                                 //         if (tyear == currentyear) {
-                                            
+
                                 //             if (tmonth == m) {
                                 //                 lettempmonth = lettempmonth + 1
                                 //             } 
 
                                 //         } else {
-                   
+
                                 //             if (tmonth == m) {
                                 //                 lettempmonth = lettempmonth + 1
                                 //             } 
@@ -420,7 +420,7 @@ export default class HMF01011MainView extends Component {
                                 // }
 
 
-                        
+
                                 //     const str = dataListArray[index];
                                 //     console.log("str ==> ", str)
                                 //     var res = str.split("|");
@@ -451,7 +451,7 @@ export default class HMF01011MainView extends Component {
 
                                 //             element.badge = element.badge + 1
 
-                                            
+
                                 //             //console.log("detail badge ==> ", element.badge)
                                 //             this.setState({
                                 //                 nonPayslipBadge : element.badge + this.state.nonPayslipBadge
@@ -479,7 +479,7 @@ export default class HMF01011MainView extends Component {
 
                                     SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge
                                 })
-                        
+
                             } else if (dataReceive.function_id == 'PHF05010') {
                                 console.log('new payslip arrive')
                                 this.setState({
@@ -496,12 +496,12 @@ export default class HMF01011MainView extends Component {
                             }
 
                         }
-                        
+
                         console.log('SharedPreference.notiAnnounceMentBadge', this.state.notiAnnounceMentBadge)
                         console.log('SharedPreference.notiPayslipBadge', this.state.notiPayslipBadge)
                         console.log('SharedPreference.nonPayslipBadge', this.state.nonPayslipBadge)
 
-                        this.notificationListener(parseInt( SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
+                        this.notificationListener(parseInt(SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
 
 
 
@@ -526,7 +526,7 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    
+
 
     _loadResourcesAsync = async () => {
         return Promise.all([
@@ -541,7 +541,7 @@ export default class HMF01011MainView extends Component {
             return;
         }
         page = 1;
-    
+
         this.setState({
             loadingtype: 3,
             isscreenloading: true,
@@ -803,7 +803,7 @@ export default class HMF01011MainView extends Component {
         }
 
         let hostApi = SharedPreference.ANNOUNCEMENT_ASC_API + '&offset=' + announcementData.length + '&limit=' + ROLL_ANNOUNCE
-        
+
         if (ascendingSort) {
 
             hostApi = SharedPreference.ANNOUNCEMENT_DSC_API + '&offset=' + announcementData.length + '&limit=' + ROLL_ANNOUNCE
@@ -1019,7 +1019,7 @@ export default class HMF01011MainView extends Component {
 
             this.props.navigation.navigate('NonPayrollList', {
                 DataResponse: data.data,
-                indexselectyear:1
+                indexselectyear: 1
             });
 
         } else if (code.NODATA == data.code) {
@@ -1031,7 +1031,7 @@ export default class HMF01011MainView extends Component {
 
             this.props.navigation.navigate('NonPayrollList', {
                 badgeArray: this.state.nonPayrollBadge,
-                indexselectyear:1
+                indexselectyear: 1
             });
 
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
@@ -1155,7 +1155,7 @@ export default class HMF01011MainView extends Component {
 
         let today = new Date();
         let url = SharedPreference.CLOCK_IN_OUT_API + SharedPreference.profileObject.employee_id + '&month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
-        if(parseInt(today.getMonth() + 1) > 9){
+        if (parseInt(today.getMonth() + 1) > 9) {
             url = SharedPreference.CLOCK_IN_OUT_API + SharedPreference.profileObject.employee_id + '&month=' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
         }
         this.APIClockInOutCallback(await RestAPI(url, SharedPreference.FUNCTIONID_CLOCK_IN_OUT), 'ClockInOutSelfView')
@@ -1331,8 +1331,8 @@ export default class HMF01011MainView extends Component {
     }
 
     onRegisterErrorAlertDialog() {
-        
-        SharedPreference.userRegisted=false;
+
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -1582,7 +1582,7 @@ export default class HMF01011MainView extends Component {
     onOpenAnnouncementDetail(item, index) {
 
         console.log('onOpenAnnouncementDetail')
-        console.log('onOpenAnnouncementItem = > ',item)
+        console.log('onOpenAnnouncementItem = > ', item)
         this.setState({
             isscreenloading: true,
             loadingtype: 3
@@ -1745,7 +1745,7 @@ export default class HMF01011MainView extends Component {
         }
     }
 
-//*********** push notification */
+    //*********** push notification */
 
 
     onOpenPayslipDetail() {
@@ -1754,7 +1754,7 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: true,
                 loadingtype: 3
             }, function () {
-               // this.setState(this.renderloadingscreen())
+                // this.setState(this.renderloadingscreen())
                 this.loadPayslipDetailfromAPI()
             });
         } else {
@@ -1823,7 +1823,7 @@ export default class HMF01011MainView extends Component {
     }
 
     settabscreen(tabnumber) {
-   
+
         if (tabnumber === 1) {
 
             if (SharedPreference.isConnected) {
@@ -1840,13 +1840,13 @@ export default class HMF01011MainView extends Component {
                 Alert.alert(
                     StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                     StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                    [{text: 'OK', onPress: () => {}}],{ cancelable: false }
+                    [{ text: 'OK', onPress: () => { } }], { cancelable: false }
                 )
                 return
             }
-            
-        } 
-        
+
+        }
+
         if (tabnumber === 2) {
 
             if (SharedPreference.isConnected) {
@@ -1858,13 +1858,13 @@ export default class HMF01011MainView extends Component {
                 Alert.alert(
                     StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                     StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                    [{text: 'OK', onPress: () => {}}],{ cancelable: false }
+                    [{ text: 'OK', onPress: () => { } }], { cancelable: false }
                 )
                 return
             }
 
         }
-        
+
         if (tabnumber === 3) {
             if (settingstatus == 'N') {
                 return
@@ -1952,7 +1952,7 @@ export default class HMF01011MainView extends Component {
             this.setState({
                 loadingtype: 0,
                 isscreenloading: true,
-                announcementType:this.state.tempannouncementType
+                announcementType: this.state.tempannouncementType
             }, function () {
                 // this.setState(this.select_search_announce())
                 //  this.select_search_announce()
@@ -1981,21 +1981,21 @@ export default class HMF01011MainView extends Component {
         this.setState({
             loadingtype: 2,
             // isscreenloading: false,
-            announcementType:this.state.tempannouncementType
+            announcementType: this.state.tempannouncementType
         }, function () {
             // this.setState(this.select_search_announce())
             this.select_search_announce()
         });
     }
 
-    cancel_select_announce_type= () => {
+    cancel_select_announce_type = () => {
 
         this.setState({
 
             isscreenloading: false,
             loadingtype: 2,
-            announcementType:this.state.initannouncementType,
-            tempannouncementType:this.state.initannouncementType
+            announcementType: this.state.initannouncementType,
+            tempannouncementType: this.state.initannouncementType
 
         }, function () {
 
@@ -2034,18 +2034,18 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    cancel_select_announce_status = ()=>{
+    cancel_select_announce_status = () => {
 
         this.setState({
             isscreenloading: false,
             loadingtype: 2,
-            announcementStatus:this.state.initannouncementStatus,
-            tempannouncementStatus:this.state.initannouncementStatus
+            announcementStatus: this.state.initannouncementStatus,
+            tempannouncementStatus: this.state.initannouncementStatus
             // isscreenloading: false,
             // loadingtype: 2
         }, function () {
             //this.setState(this.select_search_announce())
-          //  this.select_search_announce()
+            //  this.select_search_announce()
         });
     }
 
@@ -2055,8 +2055,8 @@ export default class HMF01011MainView extends Component {
         this.setState({
 
             loadingtype: 2,
-//loadingtype: 0,
-            announcementStatus:this.state.tempannouncementStatus
+            //loadingtype: 0,
+            announcementStatus: this.state.tempannouncementStatus
 
         }, function () {
             //this.setState(this.select_search_announce())
@@ -2065,22 +2065,22 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    on_select_Announcement_type(item,index) {
+    on_select_Announcement_type(item, index) {
         // select_announce_company_type = () => {
         this.setState({
-            select_announcement_type:index,
+            select_announcement_type: index,
             announcementType: item,
             announcementTypetext: item,
-            tempannouncementType:item
+            tempannouncementType: item
         }, function () {
-           // this.setState(this.select_announce_type())
-           this.select_announce_type()
+            // this.setState(this.select_announce_type())
+            this.select_announce_type()
         });
     }
 
-    on_select_Announcement_status(item,index) {
+    on_select_Announcement_status(item, index) {
 
-        console.log('on_select_Announcement_status :',item);
+        console.log('on_select_Announcement_status :', item);
 
         let temp = item;
         if (item == 'Read') {
@@ -2091,7 +2091,7 @@ export default class HMF01011MainView extends Component {
 
         // select_announce_company_type = () => {
         this.setState({
-            select_announcement_status:index,
+            select_announcement_status: index,
             announcementStatus: temp,
             announcementStatustext: item,
             tempannouncementStatus: temp
@@ -2112,7 +2112,7 @@ export default class HMF01011MainView extends Component {
 
             }, function () {
 
-               // this.setState(this.renderloadingscreen())
+                // this.setState(this.renderloadingscreen())
             });
 
         } else {
@@ -2165,12 +2165,12 @@ export default class HMF01011MainView extends Component {
 
             }, function () {
 
-               this.setState(this.renderloadingscreen())
-               
+                this.setState(this.renderloadingscreen())
+
             });
         }
 
-        console.log('tempannouncementData =>',tempannouncementData)
+        console.log('tempannouncementData =>', tempannouncementData)
     }
 
     deleteEventOnCalendar = async () => {
@@ -2179,7 +2179,7 @@ export default class HMF01011MainView extends Component {
         await this.eventCalendar._deleteEventCalendar(currentyear)
     }
 
-    onChangeFunction = async (newState) =>  {
+    onChangeFunction = async (newState) => {
         console.log("onChangeFunction ==> ", newState)
         this.setState({
             syncCalendar: newState.syncCalendar,
@@ -2217,7 +2217,7 @@ export default class HMF01011MainView extends Component {
                     />
                     <View style={{ position: 'absolute', height: 100, width: '80%', marginTop: '7%', marginLeft: '6%' }}>
                         {/* <View style={{ flex: 1, flexDirection: 'row' }}> */}
-                            {/* <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
+                        {/* <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
 
                                 <Image
 
@@ -2227,22 +2227,22 @@ export default class HMF01011MainView extends Component {
                                 />
 
                             </View> */}
-                            <View style={{ flex: 3, justifyContent: 'center', flexDirection: 'column' }}>
-                                <View style={{ flex: 1}} />
-                                <View style={{ flex: 1}}>
-                                    <Text style={[styles.userTitleText, { fontFamily: "Prompt-Bold" }]}>Welcome</Text>
-                                </View>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={styles.usernameText}>{this.state.username}</Text>
-                                </View>
-                                <View style={{ flex: 1 }} />
-                                {/* Device Info */}
-                                <View style={{ flex: 2,flexDirection: 'column'}} >
-                                <Text style={{ flex: 1}}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
+                        <View style={{ flex: 3, justifyContent: 'center', flexDirection: 'column' }}>
+                            <View style={{ flex: 1 }} />
+                            <View style={{ flex: 1.5 }}>
+                                <Text style={[styles.userTitleText, { fontFamily: "Prompt-Bold" }]}>Welcome</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.usernameText}>{this.state.username}</Text>
+                            </View>
+                            <View style={{ flex: 1 }} />
+                            {/* Device Info */}
+                            <View style={{ flex: 2, flexDirection: 'column' }} >
+                                <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
                                 {/* <Text style={{ flex: 1,fontSize:10}}>{this.state.sendlastupdate}</Text> */}
                                 {this.rendertimeInterval()}
                             </View>
-                            </View>
+                        </View>
                         {/* </View> */}
                     </View>
                 </View>
@@ -2454,13 +2454,13 @@ export default class HMF01011MainView extends Component {
     }
 
     renderannouncementheader() {
-        console.log('announcementType :',this.state.announcementStatus)
+        console.log('announcementType :', this.state.announcementStatus)
         let tempannouncementStatustext = 'All'
         if (this.state.announcementStatus == true) {
             tempannouncementStatustext = 'Read'
         } else if (this.state.announcementStatus == false) {
             tempannouncementStatustext = 'Unread'
-        } 
+        }
 
         return (
             <View style={{ flexDirection: 'column', }}>
@@ -2868,7 +2868,7 @@ export default class HMF01011MainView extends Component {
             BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
             const localNotification = new firebase.notifications.Notification()
-               
+
                 .ios.setBadge(0);
             firebase.notifications()
                 .displayNotification(localNotification)
@@ -3063,7 +3063,7 @@ export default class HMF01011MainView extends Component {
             BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
             const localNotification = new firebase.notifications.Notification()
-               
+
                 .ios.setBadge(0);
             firebase.notifications()
                 .displayNotification(localNotification)
@@ -3078,7 +3078,7 @@ export default class HMF01011MainView extends Component {
             this.setState({
 
                 isscreenloading: true,
-    
+
             })
             let data = await LoginChangePinAPI('1111', '2222', SharedPreference.FUNCTIONID_PIN)
             code = data[0]
@@ -3111,9 +3111,9 @@ export default class HMF01011MainView extends Component {
 
     onCheckPINWithChangePIN = async (PIN1, PIN2) => {
 
-       // let data = await LoginChangePinAPI(PIN1, PIN2, SharedPreference.FUNCTIONID_PIN)
+        // let data = await LoginChangePinAPI(PIN1, PIN2, SharedPreference.FUNCTIONID_PIN)
         let data = await RestAPI(SharedPreference.HANDBOOK_LIST, SharedPreference.FUNCTIONID_HANDBOOK)
-        console.log('onCheckPINWithChangePIN : ',data)
+        console.log('onCheckPINWithChangePIN : ', data)
         code = data[0]
         data = data[1]
         if (code.DOES_NOT_EXISTS == data.code) {
@@ -3125,13 +3125,13 @@ export default class HMF01011MainView extends Component {
             this.onAutenticateErrorAlertDialog()
 
         } else {
-            
+
             this.props.navigation.navigate('ChangePINScreen')
         }
 
     }
 
-    cancel_select_Announcement_type(){
+    cancel_select_Announcement_type() {
         this.setState({
 
             loadingtype: 2,
@@ -3166,8 +3166,8 @@ export default class HMF01011MainView extends Component {
                                     this.state.announcestatuslist.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
 
-                                            onPress={() => { this.on_select_Announcement_status(item,index) }}
-                                            >
+                                            onPress={() => { this.on_select_Announcement_status(item, index) }}
+                                        >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
                                                 {/* <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text> */}
                                                 <Text style={index === this.state.select_announcement_status ?
@@ -3202,11 +3202,11 @@ export default class HMF01011MainView extends Component {
                             selectedValue={this.state.tempannouncementStatus}
                             onValueChange={(itemValue, itemIndex) => this.setState({
                                 tempannouncementStatus: itemValue,
-                               // announcementStatustext: announstatus[itemValue],
+                                // announcementStatustext: announstatus[itemValue],
 
                             }, function () {
-                               // tempannouncementStatustext = announstatus[itemValue];
-                               // tempannouncementStatus = itemValue;
+                                // tempannouncementStatustext = announstatus[itemValue];
+                                // tempannouncementStatus = itemValue;
                             })}>
                             <Picker.Item label="All" value="All" />
                             <Picker.Item label="Read" value={true} />
@@ -3215,14 +3215,14 @@ export default class HMF01011MainView extends Component {
                         <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
                                 onPress={(this.cancel_select_announce_status.bind(this))}
-                                >
+                            >
                                 <Text style={styles.buttonpicker}> Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 3, justifyContent: 'center' }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
-                            onPress={(this.select_announce_status.bind(this))}
-                              //  onPress={(this.select_announce_status)}
-                                >
+                                onPress={(this.select_announce_status.bind(this))}
+                            //  onPress={(this.select_announce_status)}
+                            >
                                 <Text style={styles.buttonpicker}> OK</Text>
                             </TouchableOpacity>
 
@@ -3251,8 +3251,8 @@ export default class HMF01011MainView extends Component {
                                     this.state.announcetypelist.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
 
-                                            onPress={() => { this.on_select_Announcement_type(item,index) }}
-                                           >
+                                            onPress={() => { this.on_select_Announcement_type(item, index) }}
+                                        >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
                                                 {/* <Text style={styles.titlepicker}> {item}</Text> */}
                                                 <Text style={index === this.state.select_announcement_type ?
@@ -3287,11 +3287,11 @@ export default class HMF01011MainView extends Component {
                             selectedValue={this.state.tempannouncementType}
                             onValueChange={(itemValue, itemIndex) => this.setState({
                                 tempannouncementType: itemValue,
-                              //  announcementTypetext: annountype[itemValue],
+                                //  announcementTypetext: annountype[itemValue],
                             }, function () {
 
-                             //   initannouncementType = itemValue;
-                             //   initannouncementTypetext = annountype[itemValue];
+                                //   initannouncementType = itemValue;
+                                //   initannouncementTypetext = annountype[itemValue];
 
                             })}>
                             <Picker.Item label="All" value="All" />
@@ -3303,7 +3303,7 @@ export default class HMF01011MainView extends Component {
                         <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
                                 onPress={(this.cancel_select_announce_type.bind(this))}
-                                >
+                            >
                                 <Text style={styles.buttonpicker}> Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 3, justifyContent: 'center' }} />
@@ -3384,10 +3384,10 @@ export default class HMF01011MainView extends Component {
 
     }
     rendertimeInterval() {
-        if (SharedPreference.SERVER==='DEV') {
+        if (SharedPreference.SERVER === 'DEV') {
             return (
-                <View style={{ flex:1 }}>
-                    <Text style={{ color: 'black',fontSize:10 }}>{this.state.sendlastupdate}</Text>
+                <View style={{ flex: 1 }}>
+                    <Text style={{ color: 'black', fontSize: 10 }}>{this.state.sendlastupdate}</Text>
                 </View>
             )
         }
@@ -3405,9 +3405,7 @@ export default class HMF01011MainView extends Component {
 
         return (
             <View style={{ flex: 1 }}>
-
                 <View style={{ flex: 1, flexDirection: 'column' }}>
-                    {/* <View style={{ height: 1, }} /> */}
                     <View style={{ flex: 1 }} >
                         {this.redertabview()}
                     </View>
@@ -3453,15 +3451,10 @@ export default class HMF01011MainView extends Component {
                                 source={require('./../resource/images/setting_icon.png')}
                                 resizeMode='contain'
                             />
-
                         </TouchableOpacity>
                     </View>
                 </View>
-
                 {this.renderloadingscreen()}
-                {/* {this.rendertimeInterval()} */}
-                
-
             </View>
         );
     }

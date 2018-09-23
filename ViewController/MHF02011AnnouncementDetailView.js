@@ -135,9 +135,10 @@ export default class PaySlipActivity extends Component {
                     this.setState({
                         isscreenloading: false
                     })
+                    clearTimeout(this.timer);
                     this.props.navigation.navigate('RegisterScreen')
                     SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-
+                   
                 }
             }],
             { cancelable: false }

@@ -112,27 +112,27 @@ max = Math.round(tratio)*5
                 <Text x={shiftRight - 20} y={(rowhight * 5) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{zero}</Text>
 
                 <Rect x={shiftRight} y={((rowhight * 5) + shiftTop) - ((previous1) * rowhight * ratio)} width={barwidth} height={((previous1) * rowhight * ratio)} fill="#d77c7c" />
-                <Text x={shiftRight + 10} y={((rowhight * 5) + shiftTop) - ((previous1) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[0]}</Text>
+                <Text x={shiftRight + 10} y={((rowhight * 5) + shiftTop) - ((previous1) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#d77c7c">{listdata[0]}</Text>
                 <Rect x={shiftRight + gap1 + barwidth} y={((rowhight * 5) + shiftTop) - ((current1) * rowhight * ratio)} width={barwidth} height={((current1) * rowhight * ratio)} fill="#f20909" />
-                <Text x={shiftRight + gap1 + barwidth + 10} y={((rowhight * 5) + shiftTop) - ((current1) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[1]}</Text>
+                <Text x={shiftRight + gap1 + barwidth + 10} y={((rowhight * 5) + shiftTop) - ((current1) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#f20909">{listdata[1]}</Text>
                 <Text x={shiftRight + barwidth} y={(rowhight * 5) + shiftTop + labelbottom} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>OT 1.5</Text>
 
                 <Rect x={shiftRight + gap1 + (barwidth * 2) + gap2} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)} width={barwidth} height={((previous2) * rowhight * ratio)} fill="#d77c7c" />
-                <Text x={shiftRight + gap1 + (barwidth * 2) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[2]}</Text>
+                <Text x={shiftRight + gap1 + (barwidth * 2) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" ontFamily='Prompt-Regular' fill="#d77c7c">{listdata[2]}</Text>
                 <Rect x={shiftRight + (gap1 * 2) + (barwidth * 3) + gap2} y={((rowhight * 5) + shiftTop) - ((current2) * rowhight * ratio)} width={barwidth} height={((current2) * rowhight * ratio)} fill="#f20909" />
-                <Text x={shiftRight + (gap1 * 2) + (barwidth * 3) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((current2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[2]}</Text>
+                <Text x={shiftRight + (gap1 * 2) + (barwidth * 3) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((current2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#f20909">{listdata[3]}</Text>
                 <Text x={shiftRight + gap1 + (barwidth * 3) + gap2} y={(rowhight * 5) + shiftTop + labelbottom} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>OT 2</Text>
 
                 <Rect x={shiftRight + (gap1 * 2) + (barwidth * 4) + (gap2 * 2)} y={((rowhight * 5) + shiftTop) - ((previous3) * rowhight * ratio)} width={barwidth} height={((previous3) * rowhight * ratio)} fill="#d77c7c" />
-                <Text x={shiftRight + (gap1 * 2) + (barwidth * 4) + (gap2 * 2)+ 10} y={((rowhight * 5) + shiftTop) - ((previous3) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[4]}</Text>
+                <Text x={shiftRight + (gap1 * 2) + (barwidth * 4) + (gap2 * 2)+ 10} y={((rowhight * 5) + shiftTop) - ((previous3) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#d77c7c">{listdata[4]}</Text>
                 <Rect x={shiftRight + (gap1 * 3) + (barwidth * 5) + (gap2 * 2)} y={((rowhight * 5) + shiftTop) - ((current3) * rowhight * ratio)} width={barwidth} height={((current3) * rowhight * ratio)} fill="#f20909" />
-                <Text x={shiftRight + (gap1 * 3) + (barwidth * 5) + (gap2 * 2)+ 10} y={((rowhight * 5) + shiftTop) - ((current3) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[5]}</Text>
+                <Text x={shiftRight + (gap1 * 3) + (barwidth * 5) + (gap2 * 2)+ 10} y={((rowhight * 5) + shiftTop) - ((current3) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#f20909">{listdata[5]}</Text>
                 <Text x={shiftRight + (gap1 * 2) + (barwidth * 5) + (gap2 * 2)} y={(rowhight * 5) + shiftTop + labelbottom} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>OT 3</Text>
 
                 <Rect x={shiftRight + (gap1 * 3) + (barwidth * 6) + (gap2 * 3)} y={((rowhight * 5) + shiftTop) - ((previous4) * rowhight * ratio)} width={barwidth} height={((previous4) * rowhight * ratio)} fill="#d77c7c" />
-                <Text x={shiftRight + (gap1 * 3) + (barwidth * 6) + (gap2 * 3)+ 10} y={((rowhight * 5) + shiftTop) - ((previous4) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[6]}</Text>
+                <Text x={shiftRight + (gap1 * 3) + (barwidth * 6) + (gap2 * 3)+ 10} y={((rowhight * 5) + shiftTop) - ((previous4) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#d77c7c">{listdata[6]}</Text>
                 <Rect x={shiftRight + (gap1 * 4) + (barwidth * 7) + (gap2 * 3)} y={((rowhight * 5) + shiftTop) - ((current4) * rowhight * ratio)} width={barwidth} height={((current4) * rowhight * ratio)} fill="#f20909" />
-                <Text x={shiftRight + (gap1 * 4) + (barwidth * 7) + (gap2 * 3)+ 10} y={((rowhight * 5) + shiftTop) - ((current4) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{listdata[7]}</Text>
+                <Text x={shiftRight + (gap1 * 4) + (barwidth * 7) + (gap2 * 3)+ 10} y={((rowhight * 5) + shiftTop) - ((current4) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#f20909">{listdata[7]}</Text>
                 <Text x={shiftRight + (gap1 * 3) + (barwidth * 7) + (gap2 * 3)} y={(rowhight * 5) + shiftTop + labelbottom} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>Total</Text>
                 <Text x={shiftRight + (gap1 * 3) + (barwidth * 7) + (gap2 * 3)} y={(rowhight * 5) + shiftTop + labelbottom + 10} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>Average OT</Text>
             </Svg>

@@ -3,16 +3,16 @@ const bundleId = DeviceInfo.getBundleId();
 console.log("BUNDLE ID ======================= " + bundleId);
 // let HOST = 'https://tdemconnect.tdem.toyota-asia.com';
 let SERVER = 'DEV'
-let HOST = bundleId == "com.toyotaasia.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
-if (bundleId == "com.toyotaasia.tdemconnect") {
-   // HOST = 'https://tdemconnect.tdem.toyota-asia.com'
-    SERVER = 'PROD'
-}
-if (bundleId == "com.tdem.tdemconnect") {
-    HOST = 'https://tdemconnect.tdem.toyota-asia.com'
-    SERVER = 'PROD'
-}
-
+let HOST = bundleId == "com.tdem.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
+SERVER = 'PROD'
+// if (bundleId == "com.tdem.tdemconnect") {
+//    // HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+//     SERVER = 'PROD'
+// }
+// if (bundleId == "com.tdem.tdemconnect") {
+//     HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+//     SERVER = 'PROD'
+// }
 
 // 
 // const HOST = 'http://192.168.2.189:8080'

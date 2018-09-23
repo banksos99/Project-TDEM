@@ -149,16 +149,16 @@ android {
         }
     }
     flavorDimensions "api"
-    productFlavors {
-        dev {
-            dimension "api"
-            applicationId "com.toyotaasia.tdemconnect_dev"
-        }
-        prod {
-            dimension "api"
-            applicationId "com.toyotaasia.tdemconnect"
-        }
-    }
+//    productFlavors {
+//        dev {
+//            dimension "api"
+//            applicationId "com.tdem.tdemconnectdev"
+//        }
+//        prod {
+//            dimension "api"
+//            applicationId "com.tdem.tdemconnect"
+//        }
+//    }
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->

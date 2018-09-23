@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Image, Text, TextInput, Keyboard, TouchableOpacity, Alert, ActivityIndicator,Platform } from "react-native";
+import { View, Image, Text, TextInput, Keyboard, TouchableOpacity, Alert, ActivityIndicator, Platform } from "react-native";
 import { styles } from "./../SharedObject/MainStyles";
 import Colors from './../SharedObject/Colors';
 import RegisterAPI from './../constants/RegisterAPI';
@@ -46,13 +46,13 @@ export default class RegisterActivity extends Component {
             isLoading: false
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_REGISTER)
-        
+
         // SharedPreference.sessionOpenFirstTime = true
 
     }
 
     async getfirebasetoken() {
-console.log('getfirebasetoken')
+        console.log('getfirebasetoken')
         if (!SharedPreference.deviceInfo.firebaseToken) {
             const fcmToken = await firebase.messaging().getToken();
 
@@ -102,14 +102,14 @@ console.log('getfirebasetoken')
             let data = await RegisterAPI(this.state.username, this.state.password)
             code = data[0]
             data = data[1]
-            console.log('onRegister',data)
+            console.log('onRegister', data)
             this.setState({
                 datastatus: data.code
             })
 
             // let loginsuccess = false;
             // let autoregisterCount = 0;
-          //  console.log('get token again',data.data.detail)
+            //  console.log('get token again',data.data.detail)
             if (code.SUCCESS == data.code) {
                 this.saveAutoSyncCalendar.setAutoSyncCalendar(null)
                 // SharedPreference.profileObject = data.data
@@ -117,7 +117,7 @@ console.log('getfirebasetoken')
 
                 SharedPreference.userRegisted = true;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
-                
+
                 loginsuccess = true;
                 // SharedPreference.profileObject = await this.saveProfile.getProfile()
                 await this.onCheckPINWithChangePIN('1111', '2222')
@@ -134,7 +134,8 @@ console.log('getfirebasetoken')
                         {
                             text: 'OK', onPress: () => {
                                 this.setState({
-                                    isLoading: false
+                                    isLoading: false,
+                                    password: ''
                                 })
                             }
                         }
@@ -151,8 +152,8 @@ console.log('getfirebasetoken')
                             text: 'OK', onPress: () => {
                                 this.setState({
                                     isLoading: false,
-                                    password:''
-                                    
+                                    password: ''
+
                                 })
                             }
                         }
@@ -161,8 +162,8 @@ console.log('getfirebasetoken')
                 )
 
 
-            } else if(code.FAILED == data.code) {
-                
+            } else if (code.FAILED == data.code) {
+
                 if (data.data.detail === 'MHF00602AERR: Parameter firebase_tokens value are missing.') {
                     //get firebase token gain
                     console.log('get token again')
@@ -243,7 +244,7 @@ console.log('getfirebasetoken')
         SharedPreference.notiPayslipBadge.length = [];
         SharedPreference.nonPayslipBadge.length = [];
         SharedPreference.Handbook = []
-       // SharedPreference.profileObject = null
+        // SharedPreference.profileObject = null
         if (Platform.OS === 'android') {
             BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
@@ -259,6 +260,8 @@ console.log('getfirebasetoken')
     }
 
     onCheckPINWithChangePIN = async (PIN1, PIN2) => {
+
+        console.log("Tdem ==> onCheckPINWithChangePIN  ==> show")
 
         let data = await LoginChangePinAPI(PIN1, PIN2, SharedPreference.FUNCTIONID_PIN)
         code = data[0]
@@ -297,7 +300,7 @@ console.log('getfirebasetoken')
 
 
     onSetPin = async () => {
-console.log('onSetPin')
+        console.log('onSetPin')
         let data = await SetPinAPI(this.state.pin2, SharedPreference.FUNCTIONID_PIN)
         code = data[0]
         data = data[1]
@@ -306,11 +309,8 @@ console.log('onSetPin')
             isLoading: false
         })
 
-        // TODO 
-
-        console.log('data : ',data)
         if (code.SUCCESS == data.code) {
-            // await this.savePIN.setPin(this.state.pin2)
+            console.log("Tdem ==> onCheckPINWithChangePIN  ==> show")
             this.setState({
                 showCreatePinSuccess: true,
                 showCreatePin: false,
@@ -399,7 +399,7 @@ console.log('onSetPin')
 
         }
         this.props.navigation.navigate('HomeScreen')
-        
+
     }
 
     onClosePIN = () => {
@@ -453,8 +453,8 @@ console.log('onSetPin')
 
 
         if (this.state.pin.length == 6) {
-            console.log("this.state.pin.length",this.state.pin.length)
-            console.log("this.state.pin1.length",this.state.pin1.length)
+            console.log("this.state.pin.length", this.state.pin.length)
+            console.log("this.state.pin1.length", this.state.pin1.length)
             if (this.state.pin1.length == 0) {
                 this.setState({
                     pin1: origin,
@@ -478,8 +478,8 @@ console.log('onSetPin')
                     })
                     // this.state.pin = []
                     // this.state.pin2 = origin
-                    console.log("this.state.pin1",this.state.pin1)
-                    console.log("this.state.pin2",this.state.pin2)
+                    console.log("this.state.pin1", this.state.pin1)
+                    console.log("this.state.pin2", this.state.pin2)
                     if (this.state.pin1 == this.state.pin2) {
                         console.log("on set pin again")
                         this.onSetPin()
@@ -521,6 +521,7 @@ console.log('onSetPin')
 
     renderCreatePin() {
         if (this.state.showCreatePin == true) {
+            console.log("Register ==> this.state.showCreatePin : ", this.state.showCreatePin)
             return (
                 <View style={styles.alertDialogContainer}>
                     {/* <View style={styles.alertDialogContainer}> */}
@@ -637,13 +638,13 @@ console.log('onSetPin')
                             </TouchableOpacity>
                         </View>
                     </View>
-                    { this.renderProgressView() }
+                    {this.renderProgressView()}
                 </View>
-                        
+
                 //     </View >
                 // { this.renderProgressView() }
                 // </View >
-            
+
             )
         }
     }
@@ -741,7 +742,7 @@ console.log('onSetPin')
         }
     }
 
-    
+
     render() {
         return (
             <View style={styles.container} >

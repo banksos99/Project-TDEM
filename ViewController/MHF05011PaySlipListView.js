@@ -212,7 +212,7 @@ export default class PaySlipActivity extends Component {
     }
 
     APIInAppCallback(data) {
-        
+        console.log('payslip data',data)
         code = data[0]
         data = data[1]
 

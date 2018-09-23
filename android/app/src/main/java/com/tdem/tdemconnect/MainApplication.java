@@ -1,7 +1,8 @@
-package com.toyotaasia.tdemconnect;
+package com.tdem.tdemconnect;
 
 import android.app.Application;
 
+import com.calendarevents.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.rnziparchive.RNZipArchivePackage;
 import com.horcrux.svg.SvgPackage;
@@ -13,24 +14,7 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.calendarevents.CalendarEventsPackage;
 import me.jhen.react.BadgePackage;
-import com.rnziparchive.RNZipArchivePackage;
-import com.horcrux.svg.SvgPackage;
-import com.futurepress.staticserver.FPStaticServerPackage;
-import com.github.yamill.orientation.OrientationPackage;
-import com.rnfs.RNFSPackage;
-import io.invertase.firebase.RNFirebasePackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.calendarevents.CalendarEventsPackage;
-import com.rnziparchive.RNZipArchivePackage;
-import com.horcrux.svg.SvgPackage;
-import com.futurepress.staticserver.FPStaticServerPackage;
-import com.github.yamill.orientation.OrientationPackage;
-import com.rnfs.RNFSPackage;
-import io.invertase.firebase.RNFirebasePackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.calendarevents.CalendarEventsPackage;
+
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;

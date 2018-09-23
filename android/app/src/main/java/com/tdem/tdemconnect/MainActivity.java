@@ -1,4 +1,4 @@
-package com.toyotaasia.tdemconnect;
+package com.tdem.tdemconnect;
 
 import com.facebook.react.ReactActivity;
 

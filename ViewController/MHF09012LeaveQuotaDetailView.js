@@ -36,9 +36,9 @@ export default class LeaveQuotaActivity extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
     componentDidMount() {
-        
+
         this.settimerInAppNoti()
-      
+
     }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -61,7 +61,7 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onLoadInAppNoti = async () => {
-        
+
         // if (!SharedPreference.lastdatetimeinterval) {
         //     let today = new Date()
         //     const _format = 'YYYY-MM-DD hh:mm:ss'
@@ -90,7 +90,7 @@ export default class LeaveQuotaActivity extends Component {
             this.timer = setTimeout(() => {
                 this.onLoadInAppNoti()
             }, SharedPreference.timeinterval);
-        }else{
+        } else {
 
             this.timer = setTimeout(() => {
                 this.onLoadInAppNoti()
@@ -127,7 +127,7 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-        SharedPreference.userRegisted=false;
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -219,73 +219,73 @@ export default class LeaveQuotaActivity extends Component {
                     </View>
                 </View>
                 <ScrollView style={styles.leaveQuotaDetailContainer}>
-                {/* <View style={styles.leaveQuotaDetailContainer}> */}
+                    {/* <View style={styles.leaveQuotaDetailContainer}> */}
                     {/* container */}
-                    <View style={{marginLeft:10,marginRight:10}}>
-                    <View style={styles.leaveQuotaContainer}>
+                    <View style={{ marginLeft: 10, marginRight: 10 }}>
+                        <View style={styles.leaveQuotaContainer}>
 
-                        <View style={styles.leaveQuotaDetailItemTopContainer}>
-                            <Text style={styles.leaveQuotaDetailItemTopTitleText}>Used</Text>
-                            <View style={styles.leaveQuotaDetailItemTopCircleContainer} >
-                                <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.used}</Text>
+                            <View style={styles.leaveQuotaDetailItemTopContainer}>
+                                <Text style={styles.leaveQuotaDetailItemTopTitleText}>Used</Text>
+                                <View style={styles.leaveQuotaDetailItemTopCircleContainer} >
+                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.used}</Text>
+                                </View>
+                                <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
                             </View>
-                            <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
-                        </View>
 
-                        <View style={styles.leaveQuotaDetailItemTopContainer}>
-                            <Text style={styles.leaveQuotaDetailItemTopTitleText}>Remain</Text>
-                            <View style={[styles.leaveQuotaDetailItemTopCircleContainer, { backgroundColor: Colors.leaveCircleBlue }]} >
-                                <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.remain_quota}</Text>
+                            <View style={styles.leaveQuotaDetailItemTopContainer}>
+                                <Text style={styles.leaveQuotaDetailItemTopTitleText}>Remain</Text>
+                                <View style={[styles.leaveQuotaDetailItemTopCircleContainer, { backgroundColor: Colors.leaveCircleBlue }]} >
+                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.remain_quota}</Text>
+                                </View>
+                                <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
                             </View>
-                            <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
-                        </View>
 
-                        <View style={styles.leaveQuotaDetailItemTopContainer}>
-                            <Text style={styles.leaveQuotaDetailItemTopTitleText}>Quota</Text>
-                            <View style={[styles.leaveQuotaDetailItemTopCircleContainer, {
-                                backgroundColor:
-                                    Colors.leaveCircleGreen
-                            }]} >
-                                <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.quota}</Text>
+                            <View style={styles.leaveQuotaDetailItemTopContainer}>
+                                <Text style={styles.leaveQuotaDetailItemTopTitleText}>Quota</Text>
+                                <View style={[styles.leaveQuotaDetailItemTopCircleContainer, {
+                                    backgroundColor:
+                                        Colors.leaveCircleGreen
+                                }]} >
+                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.quota}</Text>
+                                </View>
+                                <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
                             </View>
-                            <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
-                        </View>
-                    </View >
+                        </View >
 
 
-                    <View style={[styles.leaveQuotaDetailContentContainer]}>
-                        <View style={styles.leaveQuotaDetailContentTextContainer}>
-                            <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
-                                <Text style={styles.leaveQuotaContentTitleText}>Time/Year</Text>
-                                <Text style={styles.leaveQuotaContentDescText}>{this.state.item.time_year}</Text>
+                        <View style={[styles.leaveQuotaDetailContentContainer]}>
+                            <View style={styles.leaveQuotaDetailContentTextContainer}>
+                                <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
+                                    <Text style={styles.leaveQuotaContentTitleText}>Time/Year</Text>
+                                    <Text style={styles.leaveQuotaContentDescText}>{this.state.item.time_year}</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={styles.leaveQuotaDetailContentTextContainer}>
-                            <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
-                                <Text style={styles.leaveQuotaContentTitleText}>Time/Service</Text>
-                                <Text style={styles.leaveQuotaContentDescText}>{this.state.item.time_serviceyear}</Text>
+                            <View style={styles.leaveQuotaDetailContentTextContainer}>
+                                <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
+                                    <Text style={styles.leaveQuotaContentTitleText}>Time/Service</Text>
+                                    <Text style={styles.leaveQuotaContentDescText}>{this.state.item.time_serviceyear}</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View style={styles.leaveQuotaDetailContentTextContainer}>
-                            <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
-                                <Text style={styles.leaveQuotaContentTitleText}>Effective</Text>
+                            <View style={styles.leaveQuotaDetailContentTextContainer}>
+                                <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
+                                    <Text style={styles.leaveQuotaContentTitleText}>Effective</Text>
+                                </View>
                             </View>
-                        </View>
 
-                        <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} >
-                            <Text style={styles.leaveQuotaContentGrayText}>From   </Text>
-                            <Text style={styles.leaveQuotaContentRedText}>{this.state.item.eff_from_date}</Text>
-                            <Text style={styles.leaveQuotaContentGrayText}>  To  </Text>
-                            <Text style={styles.leaveQuotaContentRedText}>{this.state.item.eff_to_date}</Text>
-                        </View>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} >
+                                <Text style={styles.leaveQuotaContentGrayText}>From   </Text>
+                                <Text style={styles.leaveQuotaContentRedText}>{this.state.item.eff_from_date}</Text>
+                                <Text style={styles.leaveQuotaContentGrayText}>  To  </Text>
+                                <Text style={styles.leaveQuotaContentRedText}>{this.state.item.eff_to_date}</Text>
+                            </View>
 
-                    </View >
-                    <View style={[styles.leaveQuotaDetailContentContainer, { flex: 1, paddingLeft: 10, paddingRight: 10, paddingTop: 15 }]}>
-                        <Text style={styles.leaveQuotaContentGrayText}>Regulation   </Text>
-                        <Text style={styles.leaveQuotaDescText}>{this.state.item.leave_regulation}</Text>
-                    </View >
-                {/* </View> */}
-                </View>
+                        </View >
+                        <View style={[styles.leaveQuotaDetailContentContainer, { flex: 1, paddingLeft: 10, paddingRight: 10, paddingTop: 15 }]}>
+                            <Text style={styles.leaveQuotaContentGrayText}>Regulation   </Text>
+                            <Text style={styles.leaveQuotaDescText}>{this.state.item.leave_regulation}</Text>
+                        </View >
+                        {/* </View> */}
+                    </View>
                 </ScrollView>
             </View >
         );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar,NetInfo,AppState,PanResponder,ViewPropTypes } from 'react-native';
+import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar, NetInfo, AppState, PanResponder, ViewPropTypes } from 'react-native';
 
 import SharedPreference from './SharedObject/SharedPreference';
 
@@ -57,9 +57,9 @@ export default class mainview extends Component {
       isLoading: false,
       sessionTimeoutBool: false,
       pageSelect: '',
-      quitdate:new Date(),
-      glass:false,
-      sessionTimeOutAlert:false
+      quitdate: new Date(),
+      glass: false,
+      sessionTimeOutAlert: false
     }
     console.log("this.props.navigation ==> ", this.props.navigation)
   }
@@ -70,7 +70,7 @@ export default class mainview extends Component {
     if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN) {
 
       if (this.state.sessionTimeoutBool == false) {
-        
+
         this.state.sessionTimeoutBool = true
         this.state.quitdate = new Date()
         Alert.alert(
@@ -94,7 +94,7 @@ export default class mainview extends Component {
     } else {
       this.setState({
         showpin: false,
-        glass:false
+        glass: false
       });
 
     }
@@ -103,44 +103,27 @@ export default class mainview extends Component {
 
 
   componentDidUpdate() {
-    console.log('mainApp => componentDidUpdate',AppState.currentState)
-
-    
-    // Alert.alert(
-    //   'update',
-    //   'update',
-    //   [{
-    //     text: 'OK', onPress: () => {
-    //       this.setState({
-    //         showpin: true,
-    //       });
-    //     }
-    //   }],
-    //   { cancelable: false }
-    // )
-
-
-
-
+    console.log('mainApp => componentDidUpdate', AppState.currentState)
   }
 
   componentWillMount() {
+    console.log("Tdem ==> componentWillMount")
 
     // this.checkUserInActive();
     this.panResponder = PanResponder.create({
 
       onStartShouldSetPanResponder: () => {
-          console.log('onStartShouldSetPanResponder'); 
-          this.resetTimer()
-          return false
-        },
-      onMoveShouldSetPanResponder:() => {
-          console.log('onMoveShouldSetPanResponder'); 
-          this.resetTimer()
-          return false
-        },
+        console.log('onStartShouldSetPanResponder');
+        this.resetTimer()
+        return false
+      },
+      onMoveShouldSetPanResponder: () => {
+        console.log('onMoveShouldSetPanResponder');
+        this.resetTimer()
+        return false
+      },
       onStartShouldSetPanResponderCapture: () => {
-        console.log('onStartShouldSetPanResponderCapture'); 
+        console.log('onStartShouldSetPanResponderCapture');
         this.resetTimer()
         return false
       },
@@ -150,10 +133,10 @@ export default class mainview extends Component {
       onShouldBlockNativeResponder: () => false,
     });
     this.timer = setTimeout(() => this.setState({
-      glass:true
+      glass: true
     }, function () {
       this.onInactivity();
-     // this.resetTimer();
+      // this.resetTimer();
     }), sessionTimeoutSec)
   }
 
@@ -168,17 +151,13 @@ export default class mainview extends Component {
   }
 
   componentWillUnmount() {
-    console.log('mainApp => componentWillUnmount')
     AppState.removeEventListener('change', this._handleAppStateChange);
     clearTimeout(this.timer);
     NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
-    console.log('app componentWillUnmount')
   }
 
   async componentDidMount() {
-
-    
-    console.log('mainApp => componentDidMount')
+    console.log('Tdem ==> componentDidMount')
     AppState.addEventListener('change', this._handleAppStateChange);
     NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     this.notificationListener();
@@ -220,7 +199,7 @@ export default class mainview extends Component {
     notificationOpen = await firebase.notifications().getInitialNotification();
     // Reset badge
     SharedPreference.notipayslipID = 0;
-      SharedPreference.notiAnnounceMentID = 0;
+    SharedPreference.notiAnnounceMentID = 0;
     if (Platform.OS === 'android') {
       BadgeAndroid.setBadge(0)
 
@@ -257,40 +236,7 @@ export default class mainview extends Component {
 
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       let diff = moment(new Date()).diff(this.state.quitdate, 'seconds')
-      console.log('show date before foreground =>', diff)
-
-      // if (diff > 300) {
-      //   if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN) {
-      //     Alert.alert(
-      //       StringText.ALERT_SESSION_TIMEOUT_TITILE,
-      //       StringText.ALERT_SESSION_TIMEOUT_DESC,
-      //       [{
-      //         text: 'OK', onPress: () => {
-      //           this.setState({
-                  
-      //             showpin: true,
-      //             failPin: 0,
-      //             pin: '',
-      //             isLoading: false,
-      //             //  showpin: true,
-      //           });
-      //         }
-      //       }],
-      //       { cancelable: false }
-      //     )
-      //   }
-        // this.setState({
-        //   isLoading: false,
-        // showpin: true,
-        // failPin: 0,
-        // pin: ''
-
-        // });
-      // }
-
     } else if (nextAppState === 'inactive') {
-
-      console.log('show date before background =>', this.state.quitdate)
 
     }
     this.setState({ appState: nextAppState });
@@ -307,7 +253,7 @@ export default class mainview extends Component {
       .notifications()
       .onNotification(notification => {
 
-        console.log('notification => ',notification)
+        console.log('notification => ', notification)
 
         // Alert.alert(
         //   'notification',
@@ -322,11 +268,11 @@ export default class mainview extends Component {
         //   { cancelable: false }
         // )
         if (Platform.OS === 'android') {
-          
+
           const localNotification = new firebase.notifications.Notification({
             sound: 'default',
             show_in_foreground: true,
-            
+
           })
             .setNotificationId(notification.notificationId)
             .setTitle(notification.title)
@@ -337,20 +283,20 @@ export default class mainview extends Component {
             .android.setSmallIcon('ic_stat_notification') // create this icon in Android Studio
             .android.setColor('#000000') // you can set a color here
             .android.setPriority(firebase.notifications.Android.Priority.High)
-            // .android.setBadge(6)
+          // .android.setBadge(6)
 
           firebase.notifications()
             .displayNotification(localNotification)
             .catch(err => console.error(err));
-        
+
 
         } else if (Platform.OS === 'ios') {
           const localNotification = new firebase.notifications.Notification()
-          //   .setNotificationId(notification.notificationId)
-          //   .setTitle(notification.title)
-          //   .setSubtitle(notification.subtitle)
-          //   .setBody(notification.body)
-          //   .setData(notification.data)
+            //   .setNotificationId(notification.notificationId)
+            //   .setTitle(notification.title)
+            //   .setSubtitle(notification.subtitle)
+            //   .setBody(notification.body)
+            //   .setData(notification.data)
             .ios.setBadge(0);
           // firebase.notifications()
           //   .displayNotification(localNotification)
@@ -399,10 +345,10 @@ export default class mainview extends Component {
                 <View style={{ flex: 7, justifyContent: 'center' }}><Text>TDEM Connect</Text></View>
               </View>
               <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text style={{ fontSize:14}}>{this.state.notiTitle}</Text>
+                <Text style={{ fontSize: 14 }}>{this.state.notiTitle}</Text>
               </View>
               <View style={{ flex: 2, marginLeft: 10 }}>
-                <Text style={{ fontSize:14}}>{this.state.notiBody}</Text>
+                <Text style={{ fontSize: 14 }}>{this.state.notiBody}</Text>
               </View>
             </View>
           </View>
@@ -512,7 +458,7 @@ export default class mainview extends Component {
         failPin: 0,
         pin: '',
         isLoading: false,
-        glass:false
+        glass: false
       })
 
     } else if (code.INVALID_AUTH_TOKEN == data.code) {
@@ -529,7 +475,7 @@ export default class mainview extends Component {
             this.setState({
               showpin: false,
               isLoading: false,
-              glass:false
+              glass: false
             })
           }
         }
@@ -549,7 +495,7 @@ export default class mainview extends Component {
             this.setState({
               showpin: false,
               isLoading: false,
-              glass:false
+              glass: false
             })
           }
         }
@@ -582,7 +528,7 @@ export default class mainview extends Component {
             this.setState({
               showpin: false,
               isLoading: false,
-              glass:false
+              glass: false
             })
           }
         }
@@ -598,10 +544,10 @@ export default class mainview extends Component {
 
       return (
         <View style={styles.alertDialogContainer}>
-          <View style={{width: Layout.window.width,height: Layout.window.height, opacity: 0.8}} />
+          <View style={{ width: Layout.window.width, height: Layout.window.height, opacity: 0.8 }} />
           {/* bg */}
           {/* <View style={styles.alertDialogContainer}> */}
-            {/* <ActivityIndicator /> */}
+          {/* <ActivityIndicator /> */}
           {/* </View> */}
         </View>
       )
@@ -611,135 +557,11 @@ export default class mainview extends Component {
   }
 
   renderPINScreen() {
+
     if (this.state.showpin) {
-
-      // return (
-      //   <View style={{flex:1,position: 'absolute',}}>
-      //       {/* <View style={styles.alertDialogContainer}>
-      //           <View style={styles.emptyDialogContainer}> */}
-
-      //       <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
-      //           <Image
-      //               style={{flex:1 }}
-
-      //               source={require('./resource/regist/regist_red.png')}
-      //           //resizeMode="cover" 
-      //           />
-      //       </View>
-
-      //       <View style={{ height: '50%', justifyContent: 'center', alignItems: 'center', }}>
-      //       {/* <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow' }}> */}
-      //               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-      //                   <Image
-      //                       style={{ width: 65, height: 65 }}
-
-      //                       source={require('./resource/regist/regist_lock_white.png')}
-      //                   //resizeMode="cover" 
-      //                   />
-      //                   <Text style={styles.registPinEnterContainer}>{this.state.pintitle}</Text>
-      //                   {this.renderImagePin()}
-      //                   <TouchableOpacity onPress={() => { this.onResetPIN() }}>
-      //                       <Text style={styles.registPinForgotContainer}>Forgot your PIN ?</Text>
-      //                   </TouchableOpacity>
-      //                   {this.renderFailPin()}
-      //               </View>
-      //           {/* </View> */}
-      //       </View>
-      //       {/* <View style={{ width: '100%' }} /> */}
-      //       <View style={{ height: '50%', width: '100%', backgroundColor: 'white' }}>
-
-      //           <View style={styles.registPinNumRowContainer}>
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(1) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>1</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(2) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>2</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(3) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>3</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-      //           </View>
-
-      //           <View style={styles.registPinNumRowContainer}>
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(4) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>4</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(5) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>5</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(6) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>6</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-      //           </View>
-
-      //           <View style={styles.registPinNumRowContainer}>
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(7) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>7</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(8) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>8</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(9) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>9</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-      //           </View>
-
-      //           <View style={styles.registPinNumRowContainer}>
-      //               <View style={styles.registPinNumContainer} />
-
-      //               <TouchableOpacity style={styles.emptyContainer}
-      //                   onPress={() => { this.setPIN(0) }}>
-      //                   <View style={styles.registPinNumContainer}>
-      //                       <Text style={styles.pinnumber}>0</Text>
-      //                   </View>
-      //               </TouchableOpacity>
-
-      //               <TouchableOpacity style={styles.registPinNumContainer}
-      //                   onPress={() => { this.setPIN('-') }}>
-      //                   <Image style={styles.pinDelete}
-      //                   source={require('./resource/images/pin_delete_red.png')}
-      //                   resizeMode="contain" />
-      //               </TouchableOpacity>
-      //           </View>
-      //       </View>
-      //       {/* </View>
-      //        </View> */}
-      //       {this.renderProgressView()}
-      //   </View>
-      //   )
-
+      console.log("Tdem ==> renderPINScreen")
       return (
-        <View style={[styles.alertDialogContainer,{backgroundColor:Colors.redColor}]}>
+        <View style={[styles.alertDialogContainer, { backgroundColor: Colors.redColor }]}>
           {/* <View style={styles.alertDialogContainer}>
              <View style={styles.emptyDialogContainer}> */}
           <View style={{ height: '50%', justifyContent: 'center', alignItems: 'center', }}>
@@ -885,19 +707,20 @@ export default class mainview extends Component {
   onLoadLoginWithPin = async (PIN) => {
     console.log("login with pin client_id ==> ", SharedPreference.profileObject)
     let data = await LoginWithPinAPI(PIN, SharedPreference.FUNCTIONID_PIN)
+    console.log("onLoadLoginWithPin ==> ", data)
     code = data[0]
     data = data[1]
 
-    console.log("onLoadLoginWithPin ==> ", data.code)
+
     this.state.quitdate = new Date()
     if (code.SUCCESS == data.code) {
 
       this.setState({
         showpin: false,
-        sessionTimeoutBool:false,
+        sessionTimeoutBool: false,
         failPin: 0,
         pin: '',
-        glass:false
+        glass: false
       })
     } else if (code.INVALID_AUTH_TOKEN == data.code) {
       Alert.alert(
@@ -911,8 +734,8 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
-              sessionTimeoutBool:false,
-              glass:false
+              sessionTimeoutBool: false,
+              glass: false
             })
           }
         }
@@ -940,8 +763,8 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
-              sessionTimeoutBool:false,
-              glass:false
+              sessionTimeoutBool: false,
+              glass: false
             })
           }
         }
@@ -960,8 +783,8 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
-              sessionTimeoutBool:false,
-              glass:false
+              sessionTimeoutBool: false,
+              glass: false
             })
           }
         }
@@ -983,8 +806,8 @@ export default class mainview extends Component {
               // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
               this.setState({
                 showpin: false,
-                sessionTimeoutBool:false,
-                glass:false
+                sessionTimeoutBool: false,
+                glass: false
               })
             }
           }],
@@ -1002,7 +825,7 @@ export default class mainview extends Component {
               let origin = this.state.failPin + 1
               this.setState({
                 failPin: origin,
-                sessionTimeoutBool:false,
+                sessionTimeoutBool: false,
                 pin: ''
               })
             }
@@ -1014,7 +837,7 @@ export default class mainview extends Component {
     }
   }
 
-  
+
 
   resetTimer() {
     console.log('resetTimer')
@@ -1023,7 +846,7 @@ export default class mainview extends Component {
     // if (this.state.showpin)
     //   this.setState({ showpin: false })
     this.timer = setTimeout(() => this.setState({
-      glass:true
+      glass: true
 
     }, function () {
       this.onInactivity();
@@ -1033,9 +856,9 @@ export default class mainview extends Component {
 
   render() {
     if (this.state.inactive) {
-const {
+      const {
       style,
-      children,
+        children,
     } = this.props;
       return (
         <View style={{ flex: 1 }}
@@ -1043,7 +866,7 @@ const {
           {...this.panResponder.panHandlers}
 
         >
-     
+
           {/* <UserInactivity
           timeForInactivity={60000}
          checkInterval={2000}
@@ -1058,9 +881,10 @@ const {
             <View style={styles.container} >
               <RootViewController pushstatus={this.state.pageSelect} />
             </View>
-            {this.rendertranscreen()}
+            {/* {this.rendertranscreen()} */}
             {this.rendernotificationlabel()}
             {this.renderPINScreen()}
+            {/* //TODO Bell */}
 
           </View>
         </View>

@@ -677,6 +677,7 @@ export default class calendarYearView extends Component {
     onPressSelectYearWhenSelectLocation(year, type) {
         this.setState({
             selectYear: year,
+            selectYearPicker:year,
             yearviewPicker: false
         })
 
@@ -690,7 +691,7 @@ export default class calendarYearView extends Component {
             selectLocation: locationShort
         })
 
-        this.state.selectLocation = locationShort
+        // this.state.selectLocation = locationShort
         this.getLocation()
 
     }
@@ -789,6 +790,7 @@ export default class calendarYearView extends Component {
                                 <Text style={styles.titlepicker}>
                                     {StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}
                                 </Text>
+                                <View style={{height:20}}/>
                                 <ScrollView style={{ height: '40%' }}>
                                     {
                                         this.state.yearsPickerArray.map((i, index) => (
@@ -796,10 +798,30 @@ export default class calendarYearView extends Component {
                                                 onPress={() => { this.onPressSelectYearWhenSelectLocation(i.label) }}
                                                 key={index + 100}>
                                                 <View style={styles.pickerViewAndroidContrianer} key={index + 200}>
-                                                    <Text style={styles.pickerViewAndroidText}> {i.label}</Text>
+                                                <Text style={i.label === this.state.selectYearPicker ?
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {i.label}</Text>
+                                                    {/* <Text style={styles.pickerViewAndroidText}> {i.label}</Text> */}
                                                 </View>
                                             </TouchableOpacity>))}
                                 </ScrollView>
+                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
+                                <View style={{ flex: 2}}></View>
+                                    <TouchableOpacity style={{ flex: 1 }}
+                                        onPress={() => {
+                                            this.setState({
+                                               
+                                                yearviewPicker: false
+                                            }, function () {
+                                               
+
+                                            })
+                                        }}>
+                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    
+                                </View>
+                            
                             </View>
                         </View>
                     </View >

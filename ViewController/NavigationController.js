@@ -139,20 +139,7 @@ export default class rootNavigation extends Component {
     }
 
     async componentWillMount() {
-
-        // if (DeviceInfo.getBundleId() == 'com.tdem.tdemconnect') {
-
-        //     SharedPreference.HOST = 'https://tdemconnect.tdem.toyota-asia.com';
-        //     SharedPreference.SERVER = 'PROD';
-
-        // } else {
-
-        //     SharedPreference.HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
-        //     SharedPreference.SERVER = 'Dev'
-        // }
-
-        // console.log("HOST ==>  body : ", SharedPreference.HOST)
-
+        console.log("NavigationController ==> componentWillMount")
         profile = await this.getProfileObject()
     }
 
@@ -173,7 +160,6 @@ export default class rootNavigation extends Component {
                 }, 300);
 
             } else {
-
                 this.setState({
                     hasPin: false
                 })
@@ -185,6 +171,7 @@ export default class rootNavigation extends Component {
 
     getProfileObject = async () => {
         SharedPreference.profileObject = await this.saveProfile.getProfile()
+        console.log("navigationController ==> ",SharedPreference.profileObject)
         if (SharedPreference.profileObject) {
             this.setState({
                 hasPin: true
@@ -209,10 +196,6 @@ export default class rootNavigation extends Component {
         }, 20000);
     };
 
-    onLoadInAppNoti() {
-        console.log('onLoadInAppNoti')
-       // this.inappTimeInterval()
-    }
     render() {
         if (this.state.hasPin == false) {
             return (
