@@ -1,7 +1,7 @@
 import { AppRegistry } from 'react-native';
 import App from './App';
 import bgMessaging from './constants/BgMessaging';
-
+import SharedPreference from './SharedObject/SharedPreference';
 
 AppRegistry.registerComponent('tdemconnect', () => App);
 

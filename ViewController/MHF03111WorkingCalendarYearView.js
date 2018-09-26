@@ -33,6 +33,7 @@ import SaveAutoSyncCalendar from "../constants/SaveAutoSyncCalendar";
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 
 import firebase from 'react-native-firebase';
+let codelocation;
 
 export default class calendarYearView extends Component {
 
@@ -57,10 +58,10 @@ export default class calendarYearView extends Component {
             //
             selectYear: this.props.navigation.getParam("selectYear", ""),
             selectDownloadYear: '',
-            selectLocation: this.props.navigation.getParam("location", "TA"),
+            selectLocation: this.props.navigation.getParam("selectLocation", ""),
 
             showYear: '',
-            showLocation: '',
+            showLocation: this.props.navigation.getParam("showLocation", ""),
 
             selectYearPicker: this.props.navigation.getParam("selectYear", ""),
             yearPickerForDownloadPDFFileView: '',
@@ -91,7 +92,7 @@ export default class calendarYearView extends Component {
         this.getYearSelect()
         this.setNewPicker()
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_WORKING_CALENDAR)
-
+        codelocation = this.props.navigation.getParam("codelocation", "");
     }
 
     componentWillMount() {
@@ -104,7 +105,7 @@ export default class calendarYearView extends Component {
     }
 
     setNewPicker() {
-        array = SharedPreference.COMPANY_LOCATION
+        // array = SharedPreference.COMPANY_LOCATION
         locationArray = []
 
         for (let index = 0; index < array.length; index++) {
@@ -115,6 +116,9 @@ export default class calendarYearView extends Component {
             })
         }
         this.state.locationPicker = locationArray
+
+        console.log('SharedPreference.COMPANY_LOCATION',SharedPreference.COMPANY_LOCATION)
+        console.log('this.state.locationPicker',this.state.locationPicker)
     }
 
     async componentDidMount() {
@@ -350,13 +354,14 @@ export default class calendarYearView extends Component {
 
         this.setState({ isLoading: true })
         await this.onLoadCalendarAPI(year, location)
+        // await this.openNewPage(this.state.selectLocation)
     }
 
     onLoadCalendarAPI = async (year, location) => {
         //////////console.log("onLoadCalendarAPI ====> year : ", year, " , location : ", location)
         //////////console.log("location : ", this.state.selectLocation)
 
-        let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + year + '&company=' + location, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
+        let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + year + '&company=' + codelocation, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
         code = data[0]
         data = data[1]
 
@@ -374,6 +379,7 @@ export default class calendarYearView extends Component {
                         this.setState({
                             isLoading: false,
                             selectYear: this.state.showYear,
+
                         })
                     }
                 }],
@@ -410,25 +416,26 @@ export default class calendarYearView extends Component {
             // //////////console.log("this.state.selectLocation : ", this.state.selectLocation)
             // showLocation = "Company"
             year = new Date().getFullYear()
+            this.state.selectYear = year;
         }
 
-        if (this.state.selectLocation == null) {
-            showLocation = await this.getFullLocation("TA")
-        } else {
+        // if (this.state.selectLocation == null) {
+        //     showLocation = await this.getFullLocation("TA")
+        // } else {
 
-            showLocation = await this.getFullLocation(this.state.selectLocation)
-        }
+        //     showLocation = await this.getFullLocation(this.state.selectLocation)
+        // }
 
-        //////////console.log("getYearView : showLocation ==> ", showLocation)
+        // console.log("getYearView : showLocation ==> ", this.state.showLocation)
         //////////console.log("getYearView : year ==> ", year)
 
         this.showAllMonthView()
         this.setState({
             yearObject: original,
-            showYear: year,
+            showYear: this.state.selectYear,
             isLoading: false,
             calendarEventData: calendarEventData,
-            showLocation: showLocation,
+            showLocation: this.state.showLocation,
             dataResponse: calendarEventData,
         })
     }
@@ -636,7 +643,7 @@ export default class calendarYearView extends Component {
     resetCalendar() {
 
         // if (this.state.connectWithServer == true) {
-        this.loadDataFromAPI(this.state.selectYearPicker, this.state.selectLocation)
+        this.loadDataFromAPI(this.state.selectYear, this.state.selectLocation)
         // } else {
         // this.getLocalYearView(this.state.selectYear)
         // }
@@ -665,7 +672,7 @@ export default class calendarYearView extends Component {
     onPressSelectYearWhenSelectPDF(year, i) {
         // //////console.log('android select year => ', year, i)
         this.setState({
-            selectYearPicker: year,
+            selectYear: year,
             yearPickerForDownloadPDFFileView: false,
             isLoadingPDF: true
         }, function () {
@@ -675,24 +682,30 @@ export default class calendarYearView extends Component {
     }
     
     onPressSelectYearWhenSelectLocation(year, type) {
+        console.log('onPressSelectYearWhenSelectLocation ', year)
         this.setState({
             selectYear: year,
-            selectYearPicker:year,
-            yearviewPicker: false
-        })
 
-        this.state.yearviewPicker = false
-        this.resetCalendar()
+            yearviewPicker: false
+        }, function () {
+
+            // this.state.yearviewPicker = false
+
+            this.resetCalendar()
+        })
     }
 
     onPressLocation(locationFull, locationShort) {
-
+        console.log('locationShort', locationShort)
         this.setState({
             selectLocation: locationShort
+        }, function () {
+
+            // this.state.selectLocation = locationShort
+            this.getLocation(locationShort)
         })
 
-        // this.state.selectLocation = locationShort
-        this.getLocation()
+
 
     }
 
@@ -719,44 +732,61 @@ export default class calendarYearView extends Component {
     }
 
     getLocation = async (location) => {
-        //////console.log("WorkingCalender ==> getLocation ==> ", location)
-        if (Platform.OS === 'ios') {
+        console.log("WorkingCalender ==> this.state.selectLocation ==> ", this.state.selectLocation)
+        // if (Platform.OS === 'ios') {
 
-            locationShort = await this.getShortLocation(this.state.selectLocation)
-            if (locationShort == undefined) {
-                locationShort = this.state.locationPicker[0].value
-            }
+        //     locationShort = await this.getShortLocation(this.state.selectLocation)
+        //     if (locationShort == undefined) {
+        //         locationShort = this.state.locationPicker[0].value
+        //     }
 
-            this.setState({
-                selectLocation: locationShort
-            })
-        } else {
-            this.setState({
-                selectLocation: location
-            })
-        }
+        //     this.setState({
+        //         selectLocation: locationShort
+        //     })
+        // } else {
+        //     this.setState({
+        //         selectLocation: location
+        //     })
+        // }
 
         //////console.log("workingCalendar ==> getLocation : ", this.state.selectLocation)
+        console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
+        console.log("this.state.selectLocation : ", this.state.selectLocation)
+        let locationdef = ''
+        for (let i = 0; i < SharedPreference.COMPANY_LOCATION.length; i++) {
+            console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION[i].value)
+            if (SharedPreference.COMPANY_LOCATION[i].value === this.state.selectLocation) {
+                
+                locationdef = SharedPreference.COMPANY_LOCATION[i].key;
+            }
+        }
+
         this.setState({
             locationPickerView: false,
             isLoading: true,
         })
 
-        await this.openNewPage(this.state.selectLocation)
+        await this.openNewPage(locationdef)
     }
 
     openNewPage = async (location) => {
         //////console.log("openNewPage ==> ", location)
-        let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + this.state.selectYear + '&company=' + location, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
+        codelocation = location;
+        console.log("selectLocation ==> ", this.state.selectLocation,'location',codelocation)
+
+        let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + this.state.selectYear + '&company=' + codelocation, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
         code = data[0]
         data = data[1]
 
         if (code.SUCCESS == data.code) {
-
-            this.props.navigation.navigate('calendarYearView2', {
+           
+            this.props.navigation.navigate('calendarYearView2', {//TODO
                 dataResponse: data,
                 selectYear: this.state.selectYear,
-                location: location
+                location: location,
+                showLocation:this.state.selectLocation,
+                selectLocation:this.state.selectLocation,
+                codelocation:codelocation
             });
         } else {
             Alert.alert(
@@ -798,7 +828,7 @@ export default class calendarYearView extends Component {
                                                 onPress={() => { this.onPressSelectYearWhenSelectLocation(i.label) }}
                                                 key={index + 100}>
                                                 <View style={styles.pickerViewAndroidContrianer} key={index + 200}>
-                                                <Text style={i.label === this.state.selectYearPicker ?
+                                                <Text style={i.label === this.state.selectYear ?
                                                     { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
                                                     { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {i.label}</Text>
                                                     {/* <Text style={styles.pickerViewAndroidText}> {i.label}</Text> */}
@@ -838,8 +868,8 @@ export default class calendarYearView extends Component {
                                 <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
                             </View>
                             <Picker
-                                selectedValue={this.state.selectYearPicker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({ selectYearPicker: itemValue })}>
+                                selectedValue={this.state.selectYear}
+                                onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
                                 {this.state.yearsPickerArray.map((i, index) => (
                                     <Picker.Item key={index} label={i.label} value={i.value} />
                                 ))}
@@ -889,15 +919,15 @@ export default class calendarYearView extends Component {
                                     {
                                         this.state.yearsPickerArray.map((i, index) => (
                                             <TouchableOpacity style={styles.button}
-                                                onPress={() => { this.onPressSelectYearWhenSelectPDF(i.label,i) }}
-                                                >
+                                                onPress={() => { this.onPressSelectYearWhenSelectPDF(i.label, i) }}
+                                            >
                                                 <View style={styles.pickerViewAndroidContrianer}>
-                                                    <Text style={styles.alertDialogBoxSelectText}> {i.label}</Text>
+                                                    <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {i.label}</Text>
                                                 </View>
                                             </TouchableOpacity>))}
                                 </ScrollView>
-                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
-                                <View style={{ flex:2}}></View>
+                                <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                                    <View style={{ flex: 2 }}></View>
                                     <TouchableOpacity style={{ flex: 1 }}
                                         onPress={() => {
                                             this.setState({
@@ -926,14 +956,14 @@ export default class calendarYearView extends Component {
                             <View style={styles.alertDialogBoxContainer}>
                                 <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
                                 <Picker
-                                    selectedValue={this.state.selectYearPicker}
-                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYearPicker: itemValue })}>
+                                    selectedValue={this.state.selectYear}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
                                     {this.state.yearsPickerArray.map((i, index) => (
                                         <Picker.Item key={index} label={i.label} value={i.value} />
                                     ))}
                                 </Picker>
                                 <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
-                                    <TouchableOpacity style={{ flex: 1 }}
+                                    <TouchableOpacity style={{ flex: 2 }}
                                         onPress={() => {
                                             this.setState({
                                                
@@ -946,7 +976,7 @@ export default class calendarYearView extends Component {
                                         <Text style={styles.buttonpicker}>Cancel</Text>
                                     </TouchableOpacity>
                                     <View style={{ flex:1}}></View>
-                                    <TouchableOpacity style={{ flex:1}}
+                                    <TouchableOpacity style={{ flex:2}}
                                         onPress={() => {
                                             //////console.log('selectYear =>: ',this.state.selectYear);
                                             this.setState({
@@ -982,12 +1012,14 @@ export default class calendarYearView extends Component {
                                 </Text>
                                 <ScrollView style={{ height: '40%' }}>
                                     {
-                                        this.state.locationPicker.map((i, index) => (
+                                        SharedPreference.COMPANY_LOCATION.map((i, index) => (
                                             <TouchableOpacity style={styles.button}
                                                 onPress={() => { this.onPressLocation(i.label, i.value) }}
                                                 key={index + 100}>
                                                 <View style={styles.pickerViewAndroidContrianer} key={index + 200}>
-                                                    <Text style={styles.pickerViewAndroidText}> {i.label}</Text>
+                                                <Text style={i.value === this.state.showLocation ?
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {i.value}</Text>
                                                 </View>
                                             </TouchableOpacity>))}
                                 </ScrollView>
@@ -1026,8 +1058,8 @@ export default class calendarYearView extends Component {
                                 <Picker
                                     selectedValue={this.state.selectLocation}
                                     onValueChange={(itemValue, itemIndex) => this.setState({ selectLocation: itemValue })}>
-                                    {this.state.locationPicker.map((i, index) => (
-                                        <Picker.Item key={index} numberOfLines={1} label={i.label} value={i.label} />
+                                    {SharedPreference.COMPANY_LOCATION.map((i, index) => (
+                                        <Picker.Item key={index} numberOfLines={1} label={i.value} value={i.value} />
                                     ))}
                                 </Picker>
 
@@ -1038,7 +1070,7 @@ export default class calendarYearView extends Component {
                                     <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}
                                         onPress={() => {
                                             this.setState({
-
+                                                selectLocation: this.state.showLocation,
                                                 locationPickerView: false
                                             }, function () {
 
@@ -1082,8 +1114,8 @@ export default class calendarYearView extends Component {
     }
 
     onloadPDFFile = async () => {
-        //////console.log("onloadPDFFile",this.state.selectYearPicker)
-        let data = await CalendarPDFAPI(this.state.selectYearPicker, this.state.selectLocation)
+        console.log("codelocation",codelocation)
+        let data = await CalendarPDFAPI(this.state.selectYear, codelocation)
         code = data[0]
         data = data[1]
 
@@ -1137,7 +1169,7 @@ export default class calendarYearView extends Component {
             const _format = 'YYYY-MM-DD hh:mm:ss'
             const newdate = moment(today).format(_format).valueOf();
             SharedPreference.lastdatetimeinterval = newdate
-        filename = "calendar_" + this.state.selectYearPicker +'-'+this.state.showLocation+'-'+ newdate+ '.pdf'
+        filename = "calendar_" + this.state.selectYear +'-'+this.state.showLocation+'-'+ newdate+ '.pdf'
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_WORKING_CALENDAR, SharedPreference.profileObject.client_token)
         //////console.log("Android ==> LoadPDFFile ==> filename  : ", filename);
         //////console.log("Android ==> LoadPDFFile ==> path  : ", RNFetchBlob.fs.dirs.DownloadDir + '/' + filename);
@@ -1332,12 +1364,12 @@ export default class calendarYearView extends Component {
 
 
     addEventOnCalendar = async () => {
-
+        // console.log("addEventOnCalendar ")
         await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
 
         let duplicateEventArray = []
 
-        // //////console.log("addEventOnCalendar ==> this.state.calendarEventData ", this.state.calendarEventData.length)
+        // console.log("addEventOnCalendar ==> this.state.calendarEventData ", this.state.calendarEventData.length)
 
         if (this.state.calendarEventData.code == 200) {
             let holidayArray = this.state.calendarEventData.data.holidays;
@@ -1489,6 +1521,7 @@ export default class calendarYearView extends Component {
     }
 
     render() {
+        console.log('showLocation =>',this.state.showLocation)
         return (
             <View style={styles.container} >
                 <View style={styles.container} >
@@ -1570,6 +1603,8 @@ export default class calendarYearView extends Component {
 
                                     this.setState({
                                         locationPickerView: true
+                                    },function(){
+                                        console.log('selectLocation =>',this.state.selectLocation)
                                     })
                                 } else {
                                     Alert.alert(

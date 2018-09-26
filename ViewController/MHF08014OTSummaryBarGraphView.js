@@ -518,7 +518,7 @@ Alert.alert(
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={{ marginLeft: 20, marginTop: 10, textAlign: 'left', color: 'black', fontSize: 18, fontWeight: 'bold' }}>Select Month and Year</Text>
+                            <Text style={styles.titlepicker}>Select Month and Year</Text>
                         </View>
                         <Picker
                             selectedValue={this.state.announcementType}
@@ -539,17 +539,17 @@ Alert.alert(
                            
                         </Picker>
                         <View style={{ flexDirection: 'row', height: 40, alignItems: 'center' }}>
-                        <TouchableOpacity style={styles.button}
+                        <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
                                 onPress={(this.selected_cancle_month)}
 
                             >
-                                <Text style={{flex:1, textAlign: 'center', color: Colors.redTextColor, fontSize: 18, width: 80, height: 30, alignItems: 'center' }}> Cancel</Text>
+                                <Text style={styles.buttonpicker}> Cancel</Text>
                             </TouchableOpacity>
                             <View style={{flex:2}}/>
-                            <TouchableOpacity style={styles.button}
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
                                 onPress={(this.select_month_ios)}
                             >
-                                <Text style={{flex:1, textAlign: 'center', color: Colors.redTextColor, fontSize: 18, width: 80, height: 30, alignItems: 'center' }}> OK</Text>
+                                <Text style={styles.buttonpicker}> OK</Text>
                             </TouchableOpacity>
                             
                         </View>

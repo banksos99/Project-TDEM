@@ -19,6 +19,7 @@ import SharedPreference from './../SharedObject/SharedPreference'
 import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+import { StackActions } from 'react-navigation';
 
 export default class calendarEventDetailView extends Component {
 
@@ -371,7 +372,12 @@ export default class calendarEventDetailView extends Component {
     }
 
     onBack() {
+        this.setState({
+        isLoading:true
+        })
+
         let year = moment(this.state.monthText).format(_formatYear)
+        // this.props.navigation.dispatch(StackActions.popToTop());
         this.props.navigation.navigate('calendarYearView', {
             selectYear: year,
             dataResponse: this.state.dataResponse,

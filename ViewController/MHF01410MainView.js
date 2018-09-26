@@ -1422,6 +1422,7 @@ export default class HMF01011MainView extends Component {
 
         let year = new Date().getFullYear()
         let company = SharedPreference.profileObject.location
+        
         if (company == null || company == undefined) {
             company = "TA"
         }
@@ -1430,15 +1431,28 @@ export default class HMF01011MainView extends Component {
 
         code = data[0]
         data = data[1]
-        console.log("calendarCallback ==> code : ", data.code)
+        console.log("calendarCallback ==> data : ", data)
 
         if (code.ERROR == data.code) {
             this.onLoadErrorAlertDialog(data, "calendar")
         } else {
+            let locationdef = '';
+            for (let i = 0; i < SharedPreference.COMPANY_LOCATION.length; i++) {
+
+                if (SharedPreference.COMPANY_LOCATION[i].key === SharedPreference.profileObject.location) {
+                    console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION[i].value)
+                    locationdef = SharedPreference.COMPANY_LOCATION[i].value;
+                }
+
+
+            }
             this.props.navigation.navigate('calendarYearView', {
                 dataResponse: data,
                 selectYear: new Date().getFullYear().toString(),
                 location: company,
+                showLocation:locationdef,
+                selectLocation:locationdef,
+                codelocation:SharedPreference.profileObject.location,
                 page: 1
             });
         }
@@ -2238,7 +2252,7 @@ export default class HMF01011MainView extends Component {
                             <View style={{ flex: 1 }} />
                             {/* Device Info */}
                             <View style={{ flex: 2, flexDirection: 'column' }} >
-                                <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
+                                <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')' + SharedPreference.countbegin}</Text>
                                 {/* <Text style={{ flex: 1,fontSize:10}}>{this.state.sendlastupdate}</Text> */}
                                 {this.rendertimeInterval()}
                             </View>
@@ -2601,7 +2615,7 @@ export default class HMF01011MainView extends Component {
                     {
                         tempannouncementData.map((item, index) => (
 
-                            <View key={item.id} style={item.attributes.read === false ? styles.announcementitemUnread : styles.announcementitemRead}>
+                            <View key={200 + index} style={item.attributes.read === false ? styles.announcementitemUnread : styles.announcementitemRead}>
 
                                 <View style={{ flex: 1 }}>
                                     <TouchableOpacity style={{ flex: 1 }}
@@ -3391,6 +3405,11 @@ export default class HMF01011MainView extends Component {
                 </View>
             )
         }
+        return (
+            <View style={{ flex: 1 }}>
+                <Text style={{ color: 'transparent', fontSize: 10 }}></Text>
+            </View>
+        )
 
     }
 

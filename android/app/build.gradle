@@ -104,11 +104,11 @@ android {
     }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.toyotaasia.tdemconnect"
+        applicationId "com.tdem.tdemconnect"
         minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 4
-        versionName "2.04"
+        targetSdkVersion 26
+        versionCode 8
+        versionName "2.08"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -149,16 +149,16 @@ android {
         }
     }
     flavorDimensions "api"
-//    productFlavors {
-//        dev {
-//            dimension "api"
-//            applicationId "com.tdem.tdemconnectdev"
-//        }
-//        prod {
-//            dimension "api"
-//            applicationId "com.tdem.tdemconnect"
-//        }
-//    }
+    productFlavors {
+        dev {
+            dimension "api"
+            applicationId "com.tdem.tdemconnectdev"
+        }
+        prod {
+            dimension "api"
+            applicationId "com.tdem.tdemconnect"
+        }
+    }
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->

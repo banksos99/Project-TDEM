@@ -217,8 +217,16 @@ export default class PaySlipActivity extends Component {
                 <WebView
                     //source={{ uri: 'https://github.com/facebook/react-native' }}
                     source={{ html: '<!DOCTYPE html><html><body><style>p{font-family: Prompt-Regular;}</style>' + content + '</body></html>' }}
-                    scalesPageToFit={(Platform.OS === 'ios') ? false : true}
-                    style={{ marginTop: 0 }}
+                    // scalesPageToFit={(Platform.OS === 'ios') ? false : true}
+                    scalesPageToFit={true}
+                    automaticallyAdjustContentInsets={true}
+
+                    // javaScriptEnabled={true}
+                    // domStorageEnabled={true}
+                    // decelerationRate="normal"
+                    // startInLoadingState={true}
+
+                    style={{ marginTop: 0}}
                 />
             </View >
 

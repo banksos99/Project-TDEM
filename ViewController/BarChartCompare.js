@@ -63,8 +63,8 @@ export default class PinActivity extends Component {
 
         let tratio =  1 / 5 * max;
 console.log('tratio',tratio);
-console.log('tratio',Math.round(tratio));
-max = Math.round(tratio)*5
+console.log('tratio',Math.ceil(tratio));
+max = Math.ceil(tratio)*5
         let step = Layout.window.width;
         let listDataPrev = this.props.listDataPrev;
         let listDataCurr = this.props.listDataCurr;

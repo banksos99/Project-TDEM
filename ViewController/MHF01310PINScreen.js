@@ -231,6 +231,7 @@ export default class PinActivity extends Component {
         data = data[1]
 
         console.log("onLoadInitialMaster : ", data)
+        console.log("profileObject : ", SharedPreference.profileObject.location)
         if (code.SUCCESS == data.code) {
             this.setState({
                 isLoading: false
@@ -245,10 +246,13 @@ export default class PinActivity extends Component {
                     SharedPreference.READ_TYPE = element.master_data
                 } else if (element.master_key == 'COMPANY_LOCATION') {
                     SharedPreference.COMPANY_LOCATION = element.master_data
+               
                 } else {
                     SharedPreference.TB_M_LEAVETYPE = element.TB_M_LEAVETYPE
                 }
             }
+            console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
+
             this.props.navigation.navigate('HomeScreen')
 
         } else {

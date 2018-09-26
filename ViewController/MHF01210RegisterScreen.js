@@ -113,13 +113,15 @@ export default class RegisterActivity extends Component {
             if (code.SUCCESS == data.code) {
                 this.saveAutoSyncCalendar.setAutoSyncCalendar(null)
                 // SharedPreference.profileObject = data.data
+                
                 // this.saveProfile.setProfile(data.data)
-
+                // SharedPreference.profileObject = await this.saveProfile.getProfile()
+                
                 SharedPreference.userRegisted = true;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
 
                 loginsuccess = true;
-                // SharedPreference.profileObject = await this.saveProfile.getProfile()
+                
                 await this.onCheckPINWithChangePIN('1111', '2222')
                 this.setState({
                     isLoading: false
@@ -334,7 +336,8 @@ export default class RegisterActivity extends Component {
     }
 
     onLoadInitialMaster = async () => {
-        //////console.log("InitialMaster ")
+        console.log("InitialMaster ")
+        console.log("profileObject ",SharedPreference.profileObject)
         let data = await RestAPI(SharedPreference.INITIAL_MASTER_API, SharedPreference.FUNCTIONID_GENERAL_INFORMATION_SHARING)
         code = data[0]
         data = data[1]
@@ -348,6 +351,9 @@ export default class RegisterActivity extends Component {
                     SharedPreference.READ_TYPE = element.master_data
                 } else if (element.master_key == 'COMPANY_LOCATION') {
                     SharedPreference.COMPANY_LOCATION = element.master_data
+                    // for(){
+
+                    // }
                 } else {
                     SharedPreference.TB_M_LEAVETYPE = element.TB_M_LEAVETYPE
                 }

@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "group:iconPro"
+      name = "iconPro">
+      <FileRef
+         location = "group:Appstore_1024.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone20@2x.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone20@3x.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone29@2x.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone29@3x.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone40@2x.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone40@3x.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone60@2x.png">
+      </FileRef>
+      <FileRef
+         location = "group:iPhone60@3x.png">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:tdemconnect.xcodeproj">
    </FileRef>

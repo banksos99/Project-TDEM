@@ -118,9 +118,11 @@ export default class EventCalendar {
 
         let alldayBool = false
 
-        if (eventObject.all_day == 'Y') {
-            alldayBool = true
-        }
+
+        // edit 2018-09-25 by oune
+        // if (eventObject.all_day == 'Y') {
+        //     alldayBool = true
+        // }
 
         title = eventObject.title
         let event = {

@@ -1,18 +1,37 @@
 import DeviceInfo from 'react-native-device-info';
 const bundleId = DeviceInfo.getBundleId();
 console.log("BUNDLE ID ======================= " + bundleId);
-// let HOST = 'https://tdemconnect.tdem.toyota-asia.com';
+let HOST = 'https://tdemconnect.tdem.toyota-asia.com';
 let SERVER = 'DEV'
-let HOST = bundleId == "com.tdem.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
-SERVER = 'PROD'
-// if (bundleId == "com.tdem.tdemconnect") {
-//    // HOST = 'https://tdemconnect.tdem.toyota-asia.com'
-//     SERVER = 'PROD'
-// }
-// if (bundleId == "com.tdem.tdemconnect") {
-//     HOST = 'https://tdemconnect.tdem.toyota-asia.com'
-//     SERVER = 'PROD'
-// }
+// let HOST = bundleId == "com.tdem.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
+// SERVER = 'PROD'
+if (bundleId == "com.tdem.tdemconnect") {
+   HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+    SERVER = 'PROD'
+}else if (bundleId == "com.tdem.tdemconnectdev") {
+    HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
+    SERVER = 'DEV'
+}
+
+// android - (Build type)
+// 1. Debug - (มี log warning + error)
+// 2. Release - (ไม่มี log พร้อมขึ้น store)
+
+// android - product flavors หรือ build variant
+// 1. Dev - (Icon, Server API)
+// 2. Prod - (Icon,Server API ของจริง)
+
+// ตัวอย่าง
+
+// react-native run-android --variant=devDebug
+// react-native run-android --variant=prodDebug
+
+// Build Release APK
+
+// ./gradlew assemble<ProductFlavor><BuildType>
+
+// ./gradlew assembleDevRelease
+// ./gradlew assembleProdRelease
 
 // 
 // const HOST = 'http://192.168.2.189:8080'
@@ -26,6 +45,8 @@ SERVER = 'PROD'
 // const VERSION = 'v1.0.65'//19-09-61 IOS: Android:
 // const VERSION = 'v1.0.68'//20-09-61 IOS: Android:
 const VERSION = 'v1.0.70'//20-09-61 IOS: Android:
+// const VERSION = 'v1.0.71'//20-09-61 IOS: Android:
+
 export default {
     HOST: HOST,
     SERVER: SERVER,
@@ -82,6 +103,7 @@ export default {
     NOTIFICATION_CATEGORY: [],
     READ_TYPE: [],
     COMPANY_LOCATION: [],
+   
     TB_M_LEAVETYPE: [],
     company: 'TMAP-EM',
     deviceInfo: {},
@@ -176,7 +198,8 @@ export default {
     SCREEN_ORGANIZ_STRUCTURE: 'MHF0C110OrgamizStructure',
 
     currentNavigator: 'home',
-    sessionTimeoutBool : false
+    sessionTimeoutBool : false,
+    countbegin:0,
     
 }
 
