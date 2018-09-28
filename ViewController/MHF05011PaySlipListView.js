@@ -57,7 +57,7 @@ export default class PaySlipActivity extends Component {
             updatedHeight: 50,
             dataSource: 0,
             selectYearArray: [currentYear - 2 , currentYear - 1,currentYear],
-            indexselectyear:2,
+            indexselectyear:this.props.navigation.getParam("indexselectyear", ""),
             DataResponse:this.props.navigation.getParam("DataResponse", ""),
             yearlistdata : [],
             inappTimeIntervalStatus:true
@@ -825,7 +825,7 @@ export default class PaySlipActivity extends Component {
                         //     rollid: rollid,
 
                         // });
-
+                        SharedPreference.notiPayslipBadge = [];
                         this.props.navigation.navigate('PayslipDetail', {
                             DataResponse: this.state.DataResponse,
                             yearlist: this.state.yearlistdata,
@@ -833,7 +833,7 @@ export default class PaySlipActivity extends Component {
                             initialmonth: 0,
                             monthselected: index,
                             selectedindex: ((this.state.indexselectyear) * 12) + index,
-                            indexselectyear: year,
+                            indexselectyear: this.state.indexselectyear,
                             Datadetail: this.state.dataSource,
                             rollid: rollid
                         });

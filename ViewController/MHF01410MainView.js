@@ -1131,6 +1131,7 @@ export default class HMF01011MainView extends Component {
             // SharedPreference.notiPayslipBadge = [];
             this.props.navigation.navigate(rount, {
                 DataResponse: data.data,
+                indexselectyear:2
             });
         } else if (code.NODATA == data.code) {
             this.props.navigation.navigate(rount, {

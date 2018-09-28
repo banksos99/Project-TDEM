@@ -1322,6 +1322,8 @@ export default class NonPayRollActivity extends Component {
                 //dataSource: data.data,
                 isLoading: false
             })
+
+            SharedPreference.nonPayslipBadge = [];
             //  this.getNonPayrollDetail()
             this.props.navigation.navigate('NonPayrollDetail', {
                 // badgeData: badgeData,

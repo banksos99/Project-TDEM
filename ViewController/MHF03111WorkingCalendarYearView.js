@@ -12,6 +12,7 @@ import {
     Platform,
     ScrollView,
     BackHandler,
+    PermissionsAndroid
 } from 'react-native';
 
 import { Calendar, LocaleConfig } from 'react-native-calendars';
@@ -136,24 +137,24 @@ export default class calendarYearView extends Component {
 
         if (autoSyncCalendarBool == null) {
             ////console.log("WorkingCalendar autoSyncCalendarBool ==> null")
+            await RNCalendarEvents.authorizationStatus().then(status => {
 
+                this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
+                this.onSynWithCalendar()
 
-
-            this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
-            this.onSynWithCalendar()
-
-
+            })
 
 
         } else {
             ////console.log("WorkingCalendar autoSyncCalendarBool ==> else")
 
             if ((SharedPreference.calendarAutoSync == true) && (this.state.page == 1)) {
-
-                this.addEventOnCalendar()
-                this.setState({
-                    isSycnCalendarFirstTime: true,
-                    isLoading: true
+                await RNCalendarEvents.authorizationStatus().then(status => {
+                    this.addEventOnCalendar()
+                    this.setState({
+                        isSycnCalendarFirstTime: true,
+                        isLoading: true
+                    })
                 })
             }
 
@@ -687,10 +688,47 @@ export default class calendarYearView extends Component {
             isLoadingPDF: true
         }, function () {
 
-            this.onloadPDFFile();
-        })
-    }
+            if (Platform.OS === 'android') {
+
+                this.requestPDFPermission()
     
+            } else {
+    
+                this.onloadPDFFile();
+    
+            }
+        })
+
+    
+    }
+
+
+    requestPDFPermission = async () => {
+        //console.log("requestPDFPermission")
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    'title': "Permission",
+                    'message': 'External Storage Permission'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                //console.log("You can use the WRITE_EXTERNAL_STORAGE")
+
+                this.setState({
+                    havePermission: true
+                })
+                this.onloadPDFFile()
+            } else {
+                this.onloadPDFFile()
+                //console.log("WRITE_EXTERNAL_STORAGE permission denied")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+    }
+
     onPressSelectYearWhenSelectLocation(year, type) {
         console.log('onPressSelectYearWhenSelectLocation ', year)
         this.setState({

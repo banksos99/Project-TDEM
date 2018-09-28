@@ -65,6 +65,7 @@ export default class PayslipDetail extends Component {
             yearArray: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
             selectedindex:this.props.navigation.getParam("selectedindex", ""),
             DataResponse: this.props.navigation.getParam("DataResponse", ""),
+            indexselectyear: this.props.navigation.getParam("indexselectyear", ""),
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_PAYSLIP_DETAIL)
      
@@ -97,15 +98,33 @@ export default class PayslipDetail extends Component {
         return true;
     }
 
+    async requestExternalStoreageRead() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                {
+                    'title': 'Cool App ...',
+                    'message': 'App needs access to external storage'
+                }
+            );
+
+            return granted == PermissionsAndroid.RESULTS.GRANTED
+        }
+        catch (err) {
+            //Handle this error
+            return false;
+        }
+    }
 
     onBack() {
-
+console.log('this.state.indexselectyear :',this.state.indexselectyear)
         SharedPreference.notipayslipID = 0
         SharedPreference.notiPayslipBadge = [];
         
         if (this.state.yearlist) {
             this.props.navigation.navigate('PayslipList', {
                 DataResponse: this.state.DataResponse,
+                indexselectyear:this.state.indexselectyear,
             })
         } else {
 
@@ -424,7 +443,7 @@ export default class PayslipDetail extends Component {
                         Authorization: FUNCTION_TOKEN
                     })
                     .then((resp) => {
-                        console.log('esp.data :', resp.data,resp.path())
+                        console.log('esp.data :', resp.data, resp.path())
 
                         RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf').then((resp) => {
 
@@ -432,7 +451,7 @@ export default class PayslipDetail extends Component {
 
                         }).catch((errorCode, errorMessage) => {
 
-console.log('errorMessage :',errorMessage)
+                            console.log('errorCode :', errorCode)
                         })
 
                         this.setState({
@@ -1214,6 +1233,7 @@ console.log('errorMessage :',errorMessage)
 
                 </View >
                 {this.renderloadingscreen()}
+                
             </View >
         );
     }

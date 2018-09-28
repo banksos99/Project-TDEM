@@ -198,7 +198,8 @@ export default class RegisterActivity extends Component {
                         {
                             text: 'OK', onPress: () => {
                                 this.setState({
-                                    isLoading: false
+                                    isLoading: false,
+                                    password: ''
                                 })
                             }
                         }
