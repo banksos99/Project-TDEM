@@ -106,7 +106,7 @@ export default class PayslipDetail extends Component {
     onBack() {
 
         SharedPreference.notipayslipID = 0
-        SharedPreference.notiPayslipBadge = [];
+        // SharedPreference.notiPayslipBadge = [];
         
         if (this.state.yearlist) {
             this.props.navigation.navigate('PayslipList', {
@@ -445,14 +445,14 @@ export default class PayslipDetail extends Component {
                     })
                     .then((resp) => {
                         console.log('esp.data :', resp.data,resp.path())
-
-                        if(FileProvider) {
-                            FileProvider.getUriForFile('com.tdem.tdemconnect.provider', resp.path())
-                                .then((contentUri) => {
-                                    console.log('contentUri', contentUri);  
-                                    RNFetchBlob.android.actionViewIntent(contentUri, 'application/pdf');
-                                });
-                        }
+                        RNFetchBlob.android.actionViewIntent(resp.path(), 'application/pdf');
+                        // if(FileProvider) {
+                        //     FileProvider.getUriForFile('com.tdem.tdemconnect.provider', resp.path())
+                        //         .then((contentUri) => {
+                        //             console.log('contentUri', contentUri);  
+                        //             RNFetchBlob.android.actionViewIntent(contentUri, 'application/pdf');
+                        //         });
+                        // }
 
                         
 
