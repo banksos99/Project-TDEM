@@ -825,7 +825,7 @@ export default class PaySlipActivity extends Component {
                         //     rollid: rollid,
 
                         // });
-                        SharedPreference.notiPayslipBadge = [];
+                        // SharedPreference.notiPayslipBadge = [];
                         this.props.navigation.navigate('PayslipDetail', {
                             DataResponse: this.state.DataResponse,
                             yearlist: this.state.yearlistdata,

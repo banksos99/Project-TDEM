@@ -26,6 +26,7 @@ import Months from "../constants/Month"
 
 let currentmonth = new Date().getMonth();
 let scale = Layout.window.width / 320;
+let netincomestr='';
 
 import Authorization from '../SharedObject/Authorization'
 import StringText from '../SharedObject/StringText';
@@ -33,6 +34,9 @@ import firebase from 'react-native-firebase';
 import RestAPI from "../constants/RestAPI"
 import PayslipPDFApi from "../constants/PayslipPDFApi"
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+
+import FileProvider from 'react-native-file-provider';
+import { DocumentDirectoryPath } from 'react-native-fs';
 
 let PAYSLIP_DOWNLOAD_API;
 
@@ -98,33 +102,16 @@ export default class PayslipDetail extends Component {
         return true;
     }
 
-    async requestExternalStoreageRead() {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                {
-                    'title': 'Cool App ...',
-                    'message': 'App needs access to external storage'
-                }
-            );
-
-            return granted == PermissionsAndroid.RESULTS.GRANTED
-        }
-        catch (err) {
-            //Handle this error
-            return false;
-        }
-    }
 
     onBack() {
-console.log('this.state.indexselectyear :',this.state.indexselectyear)
+
         SharedPreference.notipayslipID = 0
         SharedPreference.notiPayslipBadge = [];
         
         if (this.state.yearlist) {
             this.props.navigation.navigate('PayslipList', {
                 DataResponse: this.state.DataResponse,
-                indexselectyear:this.state.indexselectyear,
+                indexselectyear:this.state.indexselectyear
             })
         } else {
 
@@ -426,33 +413,48 @@ console.log('this.state.indexselectyear :',this.state.indexselectyear)
             console.log("FUNCTIONID_PAYSLIP ==> filename  : ", filename)
             console.log("FUNCTIONID_PAYSLIP ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
 
+            
+
+            let savePath = DocumentDirectoryPath + '/pdf/' + filename;
+            //let savePath = RNFetchBlob.fs.dirs.DownloadDir + '/' + filename;
+
+            console.log("FUNCTIONID_PAYSLIP ==> path  : ", savePath)
+    
             if (Platform.OS === 'android') {
                 RNFetchBlob
                     .config({
-                        addAndroidDownloads: {
-                            useDownloadManager: true,
-                            notification: false,
-                            path: RNFetchBlob.fs.dirs.DownloadDir + '/' + filename,
-                            mime: 'application/pdf',
-                            title: filename,
-                            description: 'shippingForm'
-                        }
+                        // addAndroidDownloads: {
+                        //     useDownloadManager: true,
+                        //     notification: false,
+                        //     mime: 'application/pdf',
+                        
+                            
+                        //     description: 'shippingForm'
+                        // }
+
+                         
+                        path: savePath,
+
+                       
+                        title: filename,
+                        
                     })
                     .fetch('GET', PAYSLIP_DOWNLOAD_API, {
                         'Content-Type': 'application/pdf;base64',
                         Authorization: FUNCTION_TOKEN
                     })
                     .then((resp) => {
-                        console.log('esp.data :', resp.data, resp.path())
+                        console.log('esp.data :', resp.data,resp.path())
 
-                        RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf').then((resp) => {
+                        if(FileProvider) {
+                            FileProvider.getUriForFile('com.tdem.tdemconnect.provider', resp.path())
+                                .then((contentUri) => {
+                                    console.log('contentUri', contentUri);  
+                                    RNFetchBlob.android.actionViewIntent(contentUri, 'application/pdf');
+                                });
+                        }
 
-
-
-                        }).catch((errorCode, errorMessage) => {
-
-                            console.log('errorCode :', errorCode)
-                        })
+                        
 
                         this.setState({
 
@@ -1046,11 +1048,12 @@ console.log('this.state.indexselectyear :',this.state.indexselectyear)
                 console.log('netincome : ', parseFloat(tincome - tdeduct))
                 netincome = (parseInt(parseFloat(tincome - tdeduct) * 100) / 100).toString();
                 netincome = netincome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                let aincome = netincome.split('.')
-                if (aincome[1].length == 1) {
-                    netincome = aincome[0] + '.' + aincome[1] + '0'
+                let taincome = netincome.split('.')
+                
+                if (taincome[1].length == 1) {
+                    netincomestr = taincome[0] + '.' + taincome[1] + '0'
                 } else {
-                    netincome = aincome[0] + '.' + aincome[1]
+                    netincomestr = taincome[0] + '.' + taincome[1]
                 }
 
                 
@@ -1195,7 +1198,7 @@ console.log('this.state.indexselectyear :',this.state.indexselectyear)
                             </View>
                             <View style={{ flex: 1, justifyContent: 'center', marginRight: 20 }}>
                                 <Text style={styles.payslipTextRight}>
-                                    {netincome}
+                                    {netincomestr}
                                 </Text>
                             </View>
 
@@ -1233,7 +1236,6 @@ console.log('this.state.indexselectyear :',this.state.indexselectyear)
 
                 </View >
                 {this.renderloadingscreen()}
-                
             </View >
         );
     }
