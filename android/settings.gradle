@@ -81,5 +81,9 @@ include ':react-native-firebase'
 project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
 include ':react-native-firebase'
 project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
+include ':react-native-file-provider'
+project(':react-native-file-provider').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-file-provider/android')
+
+
 
 include ':app'

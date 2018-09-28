@@ -35,6 +35,7 @@ import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.perf.RNFirebasePerformancePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 import me.jhen.react.BadgePackage;
+import com.artirigo.fileprovider.RNFileProviderPackage;
 
 // optional packages - add/remove as appropriate
 
@@ -50,6 +51,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+        new RNFileProviderPackage(),
         new BadgePackage(),
         new SvgPackage(),
         new RNZipArchivePackage(),

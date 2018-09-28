@@ -34,6 +34,9 @@ import RestAPI from "../constants/RestAPI"
 import PayslipPDFApi from "../constants/PayslipPDFApi"
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 
+import FileProvider from 'react-native-file-provider';
+import { DocumentDirectoryPath } from 'react-native-fs';
+
 let PAYSLIP_DOWNLOAD_API;
 
 export default class PayslipDetail extends Component {
@@ -407,17 +410,31 @@ export default class PayslipDetail extends Component {
             console.log("FUNCTIONID_PAYSLIP ==> filename  : ", filename)
             console.log("FUNCTIONID_PAYSLIP ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
 
+            
+
+            let savePath = DocumentDirectoryPath + '/pdf/' + filename;
+            //let savePath = RNFetchBlob.fs.dirs.DownloadDir + '/' + filename;
+
+            console.log("FUNCTIONID_PAYSLIP ==> path  : ", savePath)
+    
             if (Platform.OS === 'android') {
                 RNFetchBlob
                     .config({
-                        addAndroidDownloads: {
-                            useDownloadManager: true,
-                            notification: false,
-                            path: RNFetchBlob.fs.dirs.DownloadDir + '/' + filename,
-                            mime: 'application/pdf',
-                            title: filename,
-                            description: 'shippingForm'
-                        }
+                        // addAndroidDownloads: {
+                        //     useDownloadManager: true,
+                        //     notification: false,
+                        //     mime: 'application/pdf',
+                        
+                            
+                        //     description: 'shippingForm'
+                        // }
+
+                         
+                        path: savePath,
+
+                       
+                        title: filename,
+                        
                     })
                     .fetch('GET', PAYSLIP_DOWNLOAD_API, {
                         'Content-Type': 'application/pdf;base64',
@@ -426,14 +443,15 @@ export default class PayslipDetail extends Component {
                     .then((resp) => {
                         console.log('esp.data :', resp.data,resp.path())
 
-                        RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf').then((resp) => {
+                        if(FileProvider) {
+                            FileProvider.getUriForFile('com.tdem.tdemconnect.provider', resp.path())
+                                .then((contentUri) => {
+                                    console.log('contentUri', contentUri);  
+                                    RNFetchBlob.android.actionViewIntent(contentUri, 'application/pdf');
+                                });
+                        }
 
-
-
-                        }).catch((errorCode, errorMessage) => {
-
-console.log('errorMessage :',errorMessage)
-                        })
+                        
 
                         this.setState({
 

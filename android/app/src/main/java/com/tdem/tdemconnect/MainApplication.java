@@ -20,6 +20,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import com.artirigo.fileprovider.RNFileProviderPackage;
+
 // optional packages - add/remove as appropriate
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage; //Firebase AdMob
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage; // Firebase Analytics
@@ -52,7 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
         new MainReactPackage(),
            
           
-         
+         new RNFileProviderPackage(),
            
           
             new BadgePackage(),
