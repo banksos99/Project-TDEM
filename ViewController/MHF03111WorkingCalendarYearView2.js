@@ -31,6 +31,7 @@ import SaveProfile from "../constants/SaveProfile"
 import CalendarPDFAPI from "../constants/CalendarPDFAPI"
 import SaveAutoSyncCalendar from "../constants/SaveAutoSyncCalendar";
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+import { DocumentDirectoryPath } from 'react-native-fs';
 
 import firebase from 'react-native-firebase';
 let codelocation;
@@ -1177,19 +1178,21 @@ export default class calendarYearView extends Component {
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_WORKING_CALENDAR, SharedPreference.profileObject.client_token)
         //////console.log("Android ==> LoadPDFFile ==> filename  : ", filename);
         //////console.log("Android ==> LoadPDFFile ==> path  : ", RNFetchBlob.fs.dirs.DownloadDir + '/' + filename);
-        let pathToFile = RNFetchBlob.fs.dirs.DownloadDir + '/' + filename;
+        //let pathToFile = RNFetchBlob.fs.dirs.DownloadDir + '/' + filename;
+        let pathToFile = DocumentDirectoryPath + '/pdf/' + filename;
         if (Platform.OS === 'android') {
             this.downloadTask = RNFetchBlob
                 .config({
-                    addAndroidDownloads: {
-                        useDownloadManager: true,
-                        notification: false,
-                        path: pathToFile,
-                        mime: 'application/pdf',
-                        title: filename,
-                        description: 'Downloading'
-                    },
-
+                    // addAndroidDownloads: {
+                    //     useDownloadManager: true,
+                    //     notification: false,
+                    //     path: pathToFile,
+                    //     mime: 'application/pdf',
+                    //     title: filename,
+                    //     description: 'Downloading'
+                    // },
+                    path: pathToFile,
+                    title: filename,
 
                     timeout: 15000,
                     overwrite: true
@@ -1199,7 +1202,7 @@ export default class calendarYearView extends Component {
                     Authorization: FUNCTION_TOKEN
                 })
                 .then((resp) => {
-                   //////console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp.path);
+                   console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp.path);
                     if (this.state.isLoadingPDF == true) {
                         this.setState({ isLoadingPDF: false })
 
@@ -1208,8 +1211,8 @@ export default class calendarYearView extends Component {
                             StringText.CALENDAR_ALERT_PDF_DESC_SUCCESS_1 + filename + StringText.CALENDAR_ALERT_PDF_DESC_SUCCESS_2,
                             [{
                                 text: 'OK', onPress: () => {
-                                    //////console.log("Android ==> LoadPDFFile ==> onPress  : ", resp.data);
-                                    RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf')
+                                    console.log("Android ==> LoadPDFFile ==> onPress  : ", resp.path());
+                                    RNFetchBlob.android.actionViewIntent(resp.path(), 'application/pdf')
                                 }
                             },
                             {
