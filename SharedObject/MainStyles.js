@@ -1284,7 +1284,7 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium
 
     }, payslipDetailTextRight: {
-        fontSize: 15* scale,
+        fontSize: 14* scale,
         marginRight: 10* scale,
         color: Colors.lightGrayTextColor,
         textAlign: 'right',
@@ -1487,6 +1487,22 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium,
         fontSize: 12 * scale
     },
+    empinfoDetailText1line: {
+        marginTop:5,
+        // marginBottom:5,
+        color: Colors.grayTextColor,
+        flexWrap: 'wrap',
+        fontFamily: font_medium,
+        fontSize: 12 * scale
+    },
+    empinfoDetailText2line: {
+        // marginTop:5,
+        marginBottom:5,
+        color: Colors.grayTextColor,
+        flexWrap: 'wrap',
+        fontFamily: font_medium,
+        fontSize: 12 * scale
+    },
     empinfoDetailRedText: {
         marginTop:5,
         marginBottom:5,
@@ -1565,12 +1581,29 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         color: Colors.redTextColor,
         fontSize: 17 * scale,
-       // width: 80 * scale,
-        height: 50 ,
-       // alignItems: 'center',
+        // width: 80 * scale,
+        height: 50,
+        // alignItems: 'center',
         fontFamily: font_medium
     },
-    datapicker:{
+    buttonpickerdownloadleft: {
+        textAlign: 'left',
+        // textAlign: 'center',
+        color: Colors.redTextColor,
+        fontSize: 17 * scale,
+        marginLeft: 15,
+        fontFamily: font_medium
+    },
+    buttonpickerdownloadright: {
+        textAlign: 'right',
+        // textAlign: 'center',
+        color: Colors.redTextColor,
+        fontSize: 17 * scale,
+        marginRight: 15,
+        fontFamily: font_medium,
+        // borderWidth:1
+    },
+    datapicker: {
 
 
 

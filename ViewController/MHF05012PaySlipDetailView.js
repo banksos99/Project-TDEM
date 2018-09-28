@@ -276,10 +276,45 @@ export default class PayslipDetail extends Component {
             { cancelable: false }
         )
     }
-    onClickDownload() {
-        
-        this.onDownloadPDFFile()
 
+    onClickDownload() {
+
+        if (Platform.OS === 'android') {
+
+            this.requestPDFPermission()
+
+        } else {
+
+            this.onDownloadPDFFile()
+
+        }
+
+    }
+
+    requestPDFPermission = async () => {
+        //console.log("requestPDFPermission")
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    'title': "Permission",
+                    'message': 'External Storage Permission'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                //console.log("You can use the WRITE_EXTERNAL_STORAGE")
+
+                this.setState({
+                    havePermission: true
+                })
+                this.onDownloadPDFFile()
+            } else {
+                this.onDownloadPDFFile()
+                //console.log("WRITE_EXTERNAL_STORAGE permission denied")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
     }
 
     onDownloadPDFFile = async () => {
@@ -389,8 +424,17 @@ export default class PayslipDetail extends Component {
                         Authorization: FUNCTION_TOKEN
                     })
                     .then((resp) => {
+                        console.log('esp.data :', resp.data,resp.path())
 
-                        RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf')
+                        RNFetchBlob.android.actionViewIntent(resp.data, 'application/pdf').then((resp) => {
+
+
+
+                        }).catch((errorCode, errorMessage) => {
+
+console.log('errorMessage :',errorMessage)
+                        })
+
                         this.setState({
 
                             isscreenloading: false,
@@ -398,7 +442,7 @@ export default class PayslipDetail extends Component {
                         }, function () {
                             // this.setState(this.renderloadingscreen())
                         });
-                        
+
 
                     })
                     .catch((errorCode, errorMessage) => {
@@ -508,30 +552,7 @@ export default class PayslipDetail extends Component {
         }
     }
 
-    requestPDFPermission = async () => {
-        //console.log("requestPDFPermission")
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                    'title': "Permission",
-                    'message': 'External Storage Permission'
-                }
-            )
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                //console.log("You can use the WRITE_EXTERNAL_STORAGE")
-
-                this.setState({
-                    havePermission: true
-                })
-                this.onDownloadPDFFile()
-            } else {
-                //console.log("WRITE_EXTERNAL_STORAGE permission denied")
-            }
-        } catch (err) {
-            console.warn(err)
-        }
-    }
+    
 
     getPayslipDetailfromAPI = async () => {
 
@@ -902,12 +923,12 @@ export default class PayslipDetail extends Component {
                             {
                                 this.state.datadetail.data.detail.income.map((item, index) => (
                                     <View style={{ flex: 1, flexDirection: 'row' }} key={index}>
-                                        <View style={{ flex: 2, justifyContent: 'center' }}>
+                                        <View style={{ flex: 2, justifyContent: 'flex-start' }}>
                                             <Text style={styles.payslipDetailTextLeft}>
                                                 {item.key}
                                             </Text>
                                         </View>
-                                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                                        <View style={{ flex: 1.3, justifyContent: 'flex-start' }}>
                                             <Text style={styles.payslipDetailTextRight}>
                                                 {(Decryptfun.decrypt(item.value))}
                                             </Text>
@@ -938,10 +959,10 @@ export default class PayslipDetail extends Component {
                             {
                                 this.state.datadetail.data.detail.deduct.map((item, index) => (
                                     <View style={{ flex: 1, flexDirection: 'row' }} key={index}>
-                                        <View style={{ flex: 1, justifyContent: 'center', }}>
+                                        <View style={{ flex: 2, justifyContent: 'flex-start', }}>
                                             <Text style={styles.payslipDetailTextLeft}>{item.key}</Text>
                                         </View>
-                                        <View style={{ flex: 1, justifyContent: 'center', }}>
+                                        <View style={{ flex: 1.3, justifyContent: 'flex-start', }}>
                                             <Text style={styles.payslipDetailTextRight}>
                                                 {(Decryptfun.decrypt(item.value))}
                                             </Text>
@@ -996,12 +1017,24 @@ export default class PayslipDetail extends Component {
         let date_text = '';
         let download = false;
         if (this.state.datadetail.data) {
-            if(this.state.datadetail.data.header){
+            if (this.state.datadetail.data.header) {
                 income = (Decryptfun.decrypt(this.state.datadetail.data.header.sum_income));
                 deduct = (Decryptfun.decrypt(this.state.datadetail.data.header.sum_deduct));
-                let tincome = parseFloat(income.replace(',', ''));
-                let tdeduct = parseFloat(deduct.replace(',', ''));
-                netincome = parseInt(parseFloat(tincome - tdeduct)*100)/100  ;
+                let tincome = parseFloat(income.replace(',', '').replace(',', '').replace(',', ''));
+                let tdeduct = parseFloat(deduct.replace(',', '').replace(',', '').replace(',', ''));
+                console.log('income : ', income)
+                console.log('deduct : ', deduct)
+                console.log('netincome : ', parseFloat(tincome - tdeduct))
+                netincome = (parseInt(parseFloat(tincome - tdeduct) * 100) / 100).toString();
+                netincome = netincome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                let aincome = netincome.split('.')
+                if (aincome[1].length == 1) {
+                    netincome = aincome[0] + '.' + aincome[1] + '0'
+                } else {
+                    netincome = aincome[0] + '.' + aincome[1]
+                }
+
+                
                 let datearr = this.state.datadetail.data.header.pay_date.split('-');
                 pay_date_str = datearr[2] + ' ' + Months.monthNamesShort[parseInt(datearr[1]) - 1] + ' ' + datearr[0]
                 bank_name_str = this.state.datadetail.data.header.bank_name;
@@ -1143,7 +1176,7 @@ export default class PayslipDetail extends Component {
                             </View>
                             <View style={{ flex: 1, justifyContent: 'center', marginRight: 20 }}>
                                 <Text style={styles.payslipTextRight}>
-                                    {netincome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    {netincome}
                                 </Text>
                             </View>
 

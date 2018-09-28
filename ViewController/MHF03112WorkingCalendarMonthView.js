@@ -20,6 +20,7 @@ import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 import { StackActions } from 'react-navigation';
+let codelocation;
 
 export default class calendarEventDetailView extends Component {
 
@@ -40,11 +41,15 @@ export default class calendarEventDetailView extends Component {
             monthText: this.props.navigation.getParam("month", ""),
             dataResponse: this.props.navigation.getParam("dataResponse", ""),
             location: this.props.navigation.getParam("location", ""),
-            isLoading: false
+            isLoading: false,
+
+            showLocation: this.props.navigation.getParam("showLocation", ""),
+            selectLocation: this.props.navigation.getParam("selectLocation", ""),
+
         }
         // console.log("calendarEventDetailView ==> monthObject ==> ", this.state.monthObject)
         // console.log("calendarEventDetailView ==> monthText ==> ", this.state.monthText)
-
+        codelocation = this.props.navigation.getParam("codelocation", "")
         firebase.analytics().setCurrentScreen(SharedPreference.FUNCTIONID_CALENDAR_EVENT)
 
     }
@@ -372,17 +377,24 @@ export default class calendarEventDetailView extends Component {
     }
 
     onBack() {
+
         this.setState({
-        isLoading:true
-        })
+            isLoading: true
+
+        }, function* () {
+        });
 
         let year = moment(this.state.monthText).format(_formatYear)
         // this.props.navigation.dispatch(StackActions.popToTop());
         this.props.navigation.navigate('calendarYearView', {
             selectYear: year,
             dataResponse: this.state.dataResponse,
-            location: this.state.location
+            location: this.state.location,
+            showLocation: this.state.showLocation,
+            selectLocation: this.state.selectLocation,
+            codelocation: codelocation,
         });
+
     }
 
     getDataObject(datetime) {
@@ -709,7 +721,10 @@ export default class calendarEventDetailView extends Component {
                 monthObject: this.state.monthObject,
                 monthText: this.state.monthText,
                 dataResponse: this.state.dataResponse,
-                location: this.state.location
+                location: this.state.location,
+                showLocation: this.state.showLocation,
+                selectLocation: this.state.selectLocation,
+                codelocation: codelocation,
             });
     }
 

@@ -2252,7 +2252,7 @@ export default class HMF01011MainView extends Component {
                             <View style={{ flex: 1 }} />
                             {/* Device Info */}
                             <View style={{ flex: 2, flexDirection: 'column' }} >
-                                <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')' + SharedPreference.countbegin}</Text>
+                                <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
                                 {/* <Text style={{ flex: 1,fontSize:10}}>{this.state.sendlastupdate}</Text> */}
                                 {this.rendertimeInterval()}
                             </View>
@@ -3226,18 +3226,18 @@ export default class HMF01011MainView extends Component {
                             <Picker.Item label="Read" value={true} />
                             <Picker.Item label="Unread" value={false} />
                         </Picker>
-                        <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                        <View style={{ flexDirection: 'row', height: 50 }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_announce_status.bind(this))}
                             >
-                                <Text style={styles.buttonpicker}> Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                             </TouchableOpacity>
-                            <View style={{ flex: 3, justifyContent: 'center' }} />
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
+                            <View style={{ flex: 1 }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_announce_status.bind(this))}
                             //  onPress={(this.select_announce_status)}
                             >
-                                <Text style={styles.buttonpicker}> OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
                             </TouchableOpacity>
 
                         </View>
@@ -3307,23 +3307,23 @@ export default class HMF01011MainView extends Component {
                                 //   initannouncementType = itemValue;
                                 //   initannouncementTypetext = annountype[itemValue];
 
-                            })}>
+                                })}>
                             <Picker.Item label="All" value="All" />
                             <Picker.Item label="Company Announcement" value="Company Announcement" />
                             <Picker.Item label="Emergency Announcement" value="Emergency Announcement" />
                             <Picker.Item label="Event Announcement" value="Event Announcement" />
                             <Picker.Item label="General Announcement" value="General Announcement" />
                         </Picker>
-                        <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', }}>
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                        <View style={{ flexDirection: 'row', height: 50 }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_announce_type.bind(this))}
                             >
-                                <Text style={styles.buttonpicker}> Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                             </TouchableOpacity>
-                            <View style={{ flex: 3, justifyContent: 'center' }} />
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
+                            <View style={{ flex: 1 }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_announce_type)}>
-                                <Text style={styles.buttonpicker}> OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
                             </TouchableOpacity>
 
                         </View>

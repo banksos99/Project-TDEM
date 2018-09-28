@@ -27,6 +27,7 @@ import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 let MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 let monthstr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 let selectmonth = 0;
+let initannouncementTypetext;
 
 export default class OTSummaryBarChart extends Component {
 
@@ -531,27 +532,27 @@ Alert.alert(
                                 
                                 initannouncementTypetext = this.state.months[itemIndex];
 
-                            })}>{
+                                })}>{
                                 this.state.months.map((item, index) => (
                                     <Picker.Item label={item} value={item} key={index} />
 
                                 ))}
-                           
+
                         </Picker>
-                        <View style={{ flexDirection: 'row', height: 40, alignItems: 'center' }}>
-                        <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                        <View style={{ flexDirection: 'row', height: 50 }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.selected_cancle_month)}
 
                             >
-                                <Text style={styles.buttonpicker}> Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                             </TouchableOpacity>
-                            <View style={{flex:2}}/>
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
+                            <View style={{ flex: 1 }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_month_ios)}
                             >
-                                <Text style={styles.buttonpicker}> OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
                             </TouchableOpacity>
-                            
+
                         </View>
                     </View>
                 </View>

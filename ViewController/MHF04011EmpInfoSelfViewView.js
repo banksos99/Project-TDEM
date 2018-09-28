@@ -606,7 +606,8 @@ export default class EmpInfoDetail extends Component {
                             <Text style={styles.empinfoDetailRedText} >Latest Section</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{date_in_dept + ' (' + period_in_dept + ')'}</Text>
+                            <Text style={styles.empinfoDetailText1line}>{date_in_dept}</Text>
+                            <Text style={styles.empinfoDetailText2line}>{'(' + period_in_dept + ')'}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
@@ -615,7 +616,8 @@ export default class EmpInfoDetail extends Component {
                             <Text style={styles.empinfoDetailRedText} >Latest Position</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{date_in_position + ' (' + period_in_position + ')'}</Text>
+                            <Text style={styles.empinfoDetailText1line}>{date_in_position}</Text>
+                            <Text style={styles.empinfoDetailText2line}>{'(' + period_in_position + ')'}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />

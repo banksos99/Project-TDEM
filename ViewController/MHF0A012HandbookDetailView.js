@@ -341,7 +341,7 @@ export default class HandbookViewer extends Component {
 
             })
             .then((res) => {
-               
+                console.log('esp.data :', res.data,res.path())
                 let target = { url: Platform.OS === 'android' ? '' + res.path() : '' + res.path() }
                 this.startStreamer(target.url);
             
@@ -673,7 +673,7 @@ export default class HandbookViewer extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={{ marginLeft: 20, marginTop: 10, textAlign: 'left', color: 'black', fontSize: 18, fontWeight: 'bold' }}>Select Font</Text>
+                            <Text style={styles.titlepicker}>Select Font</Text>
                         </View>
                         <Picker
                             selectedValue={this.state.tempselectfontname}
@@ -692,17 +692,17 @@ export default class HandbookViewer extends Component {
 
                                 ))}
                         </Picker>
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                        <View style={{ flexDirection: 'row', height: 50, }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_change_font.bind(this))}
-                                >
-                                <Text style={styles.buttonpicker}> Cancel</Text>
+                            >
+                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 3, justifyContent: 'center' }} />
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }}
-                              onPress={(this.onSelecteFont.bind(this))}
-                              >
-                                <Text style={styles.buttonpicker}> OK</Text>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
+                                onPress={(this.onSelecteFont.bind(this))}
+                            >
+                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
                             </TouchableOpacity>
                         </View>
                         

@@ -597,7 +597,7 @@ export default class ClockInOutSelfView extends Component {
 
         }, function () {
             initannouncementType = tempinitannouncementType;
-            initannouncementTypetext = tempinitannouncementTypetext
+            // initannouncementTypetext = tempinitannouncementTypetext
             let tdate = initannouncementType.split(' ')
             let mdate = 0;
 
@@ -741,15 +741,16 @@ export default class ClockInOutSelfView extends Component {
                                 ))}
 
                         </Picker>
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                        <View style={{ flexDirection: 'row', height: 50, }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_change_month)}>
                                 >
-                                <Text style={styles.buttonpicker}> Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                             </TouchableOpacity>
-                            <View style={{ flex: 3, justifyContent: 'center' }} />
-                            <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-end' }} onPress={(this.select_month_clockinout.bind(this))}>
-                                <Text style={styles.buttonpicker}> OK</Text>
+                            <View style={{ flex: 1 }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
+                                onPress={(this.select_month_clockinout.bind(this))}>
+                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

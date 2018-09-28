@@ -34,7 +34,7 @@ export default {
   CALENDAR_ALERT_PDF_TITLE_SUCCESS: 'Success.',
 
   CALENDAR_ALERT_PDF_DESC_SUCCESS_1: 'Calendar ',
-  CALENDAR_ALERT_PDF_DESC_SUCCESS_2: 'has been downloaded.',
+  CALENDAR_ALERT_PDF_DESC_SUCCESS_2: ' has been downloaded.',
 
   CALENDAR_ALERT_PDF_TITLE_FAIL: 'Calendar ',
   CALENDAR_ALERT_PDF_DESC_FAIL: 'No data',

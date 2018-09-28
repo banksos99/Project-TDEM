@@ -61,7 +61,6 @@ export default class mainview extends Component {
       glass: false,
       sessionTimeOutAlert: false
     }
-    SharedPreference.countbegin = SharedPreference.countbegin + 1
     console.log("this.props.navigation ==> ", this.props.navigation)
   }
 
@@ -860,7 +859,6 @@ export default class mainview extends Component {
 
   render() {
     console.log('render =>',this.state.inactive)
-    
     if (this.state.inactive) {
     //   const {
     //   style,
@@ -868,7 +866,7 @@ export default class mainview extends Component {
     // } = this.props;
       return (
         <View style={{ flex: 1 }}
-        //   collapsable={false}
+          collapsable={false}
           {...this.panResponder.panHandlers}
 
         >
@@ -885,7 +883,7 @@ export default class mainview extends Component {
           />
           <View style={styles.container} >
             <View style={styles.container} >
-              <RootViewController />
+              <RootViewController pushstatus={this.state.pageSelect} />
             </View>
             {/* {this.rendertranscreen()} */}
             {this.rendernotificationlabel()}

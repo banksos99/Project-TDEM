@@ -44,9 +44,9 @@ if (bundleId == "com.tdem.tdemconnect") {
 // const VERSION = 'v1.0.64'//18-09-61 IOS: Android:
 // const VERSION = 'v1.0.65'//19-09-61 IOS: Android:
 // const VERSION = 'v1.0.68'//20-09-61 IOS: Android:
-const VERSION = 'v1.0.70'//20-09-61 IOS: Android:
-// const VERSION = 'v1.0.71'//20-09-61 IOS: Android:
-
+// const VERSION = 'v1.0.70'//20-09-61 IOS: Android:
+// const VERSION = 'v1.0.71'//27-09-61 IOS: Android:
+const VERSION = 'v1.0.72'//28-09-61 IOS: Android:
 export default {
     HOST: HOST,
     SERVER: SERVER,
@@ -198,8 +198,8 @@ export default {
     SCREEN_ORGANIZ_STRUCTURE: 'MHF0C110OrgamizStructure',
 
     currentNavigator: 'home',
-    sessionTimeoutBool : false,
-    countbegin:0,
-    
+    sessionTimeoutBool: false,
+    countbegin: 0,
+
 }
 

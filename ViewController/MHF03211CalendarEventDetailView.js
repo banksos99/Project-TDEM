@@ -10,7 +10,7 @@ import firebase from 'react-native-firebase';
 
 const _format = 'ddd, D MMM hh:mm A'
 const _formatAllday = 'ddd, D MMM'
-
+let codelocation;
 
 export default class calendarMonthView extends Component {
 
@@ -26,7 +26,13 @@ export default class calendarMonthView extends Component {
             date: this.props.navigation.getParam("date", ""),
             dataResponse: this.props.navigation.getParam("dataResponse", ""),
             location: this.props.navigation.getParam("location", ""),
+
+            showLocation: this.props.navigation.getParam("showLocation", ""),
+            selectLocation: this.props.navigation.getParam("selectLocation", ""),
+
+
         }
+        codelocation = this.props.navigation.getParam("codelocation", "")
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_WORKING_CALENDAR_DETAIL)
 
     }
@@ -37,7 +43,10 @@ export default class calendarMonthView extends Component {
                 month: this.state.monthText,
                 monthObject: this.state.monthObject,
                 dataResponse: this.state.dataResponse,
-                location: this.state.location
+                location: this.state.location,
+                showLocation: this.state.showLocation,
+                selectLocation: this.state.selectLocation,
+                codelocation: codelocation,
             });
     }
 

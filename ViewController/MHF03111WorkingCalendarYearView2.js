@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RNFetchBlob from 'react-native-fetch-blob'
 import Authorization from '../SharedObject/Authorization'
-
+import RNCalendarEvents from 'react-native-calendar-events';
 import {
     Text,
     View,
@@ -86,13 +86,13 @@ export default class calendarYearView extends Component {
 
 
         }
-
+        codelocation = this.props.navigation.getParam("codelocation", "");
         // ////console.log("WorkingCalendar => ",SharedPreference.calendarAutoSync)
         this.LocaleConfig()
         this.getYearSelect()
         this.setNewPicker()
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_WORKING_CALENDAR)
-        codelocation = this.props.navigation.getParam("codelocation", "");
+        
     }
 
     componentWillMount() {
@@ -133,13 +133,14 @@ export default class calendarYearView extends Component {
 
         if(autoSyncCalendarBool == null){
             ////console.log("WorkingCalendar autoSyncCalendarBool ==> null")
-
+            await RNCalendarEvents.authorizationStatus()
             this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
             this.onSynWithCalendar()
         }else{
             ////console.log("WorkingCalendar autoSyncCalendarBool ==> else")
 
             if ((SharedPreference.calendarAutoSync == true) && (this.state.page == 1)) {
+               
                 this.addEventOnCalendar()
                 this.setState({
                     isSycnCalendarFirstTime: true,
@@ -659,7 +660,11 @@ export default class calendarYearView extends Component {
                 month: datetime,
                 monthObject: monthObject,
                 dataResponse: this.state.dataResponse,
-                location: this.state.selectLocation
+                location: this.state.selectLocation,
+                showLocation:this.state.selectLocation,
+                selectLocation:this.state.selectLocation,
+                codelocation:codelocation
+                
             });
     }
 
@@ -872,8 +877,8 @@ export default class calendarYearView extends Component {
                                     <Picker.Item key={index} label={i.label} value={i.value} />
                                 ))}
                             </Picker>
-                            <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                                <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                            <View style={{ flexDirection: 'row', height: 50 }}>
+                                <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                     onPress={() => {
                                         this.setState({
 
@@ -882,16 +887,16 @@ export default class calendarYearView extends Component {
 
                                         })
                                     }}>
-                                    <Text style={styles.buttonpicker}>Cancel</Text>
+                                    <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                                 </TouchableOpacity>
-                                <View style={{ flex: 3 }}></View>
+                                <View style={{ flex: 1 }}></View>
 
-                                <TouchableOpacity style={{ flex: 2, justifyContent: 'flex-start' }}
+                                <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                     onPress={() => {
                                         this.setState({ yearviewPicker: false }),
                                             this.resetCalendar()
                                     }}>
-                                    <Text style={styles.buttonpicker}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
+                                    <Text style={styles.buttonpickerdownloadright}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -924,7 +929,7 @@ export default class calendarYearView extends Component {
                                                 </View>
                                             </TouchableOpacity>))}
                                 </ScrollView>
-                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
+                                <View style={{  flexDirection: 'row', height: 50, justifyContent:'center' }}>
                                 <View style={{ flex:2}}></View>
                                     <TouchableOpacity style={{ flex: 1 }}
                                         onPress={() => {
@@ -960,8 +965,8 @@ export default class calendarYearView extends Component {
                                         <Picker.Item key={index} label={i.label} value={i.value} />
                                     ))}
                                 </Picker>
-                                <View style={{  flexDirection: 'row', height: 50, alignItems: 'center',justifyContent:'center' }}>
-                                    <TouchableOpacity style={{ flex: 2 }}
+                                <View style={{  flexDirection: 'row', height: 50 }}>
+                                    <TouchableOpacity style={{ flex: 2 , justifyContent:'center'}}
                                         onPress={() => {
                                             this.setState({
                                                
@@ -971,10 +976,10 @@ export default class calendarYearView extends Component {
 
                                             })
                                         }}>
-                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                        <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                                     </TouchableOpacity>
                                     <View style={{ flex:1}}></View>
-                                    <TouchableOpacity style={{ flex:2}}
+                                    <TouchableOpacity style={{ flex:2,justifyContent:'center'}}
                                         onPress={() => {
                                             //////console.log('selectYear =>: ',this.state.selectYear);
                                             this.setState({
@@ -986,7 +991,7 @@ export default class calendarYearView extends Component {
                                             })
 
                                         }}>
-                                        <Text style={styles.buttonpicker}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_BUTTON}</Text>
+                                        <Text style={styles.buttonpickerdownloadright}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_BUTTON}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -1065,8 +1070,8 @@ export default class calendarYearView extends Component {
 
 
                                 {/* <View style={styles.alertDialogBox}> */}
-                                <View style={{ flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}
+                                <View style={{ flexDirection: 'row', height: 50 }}>
+                                    <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                         onPress={() => {
                                             this.setState({
 
@@ -1076,10 +1081,10 @@ export default class calendarYearView extends Component {
 
                                             })
                                         }}>
-                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                        <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
                                     </TouchableOpacity>
                                     <View style={{ flex: 1 }}></View>
-                                    <TouchableOpacity style={{ flex: 1 }}
+                                    <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                         onPress={() => {
                                             //console.log('selectYear =>: ',this.state.selectYear);
                                             // this.state.showLocation = this.state.selectLocation
@@ -1087,7 +1092,7 @@ export default class calendarYearView extends Component {
 
 
                                         }}>
-                                        <Text style={styles.buttonpicker}>{StringText.CALENDER_YEARVIEW_ALERT_LOCATION_BUTTON}</Text>
+                                        <Text style={styles.buttonpickerdownloadright}>{StringText.CALENDER_YEARVIEW_ALERT_LOCATION_BUTTON}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 {/* <View style={styles.alertDialogBox}>
@@ -1287,29 +1292,36 @@ export default class calendarYearView extends Component {
 
         if (SharedPreference.isConnected) {
 
+            await RNCalendarEvents.authorizeEventStore();
 
-            Alert.alert(
-                StringText.CALENDER_YEARVIEW_SYNC_CALENDAR_TITLE,
-                StringText.CALENDER_YEARVIEW_SYNC_CALENDAR_BUTTON,
-                [
-                    {
-                        text: 'Cancel', onPress: () => {
-                            // this.deleteEventOnCalendar()
-                        }, style: 'cancel'
-                    },
-                    {
-                        text: 'OK', onPress: () => {
-                            //////console.log("start addEventOnCalendar")
-                            this.setState({
-                                isLoading: true
-                            })
-                            this.state.isLoading = true
-                            this.addEventOnCalendar()
-                        }
-                    },
-                ],
-                { cancelable: false }
-            )
+            await RNCalendarEvents.authorizationStatus().then(status => {
+                if (status == 'authorized') {
+
+                    Alert.alert(
+                        StringText.CALENDER_YEARVIEW_SYNC_CALENDAR_TITLE,
+                        StringText.CALENDER_YEARVIEW_SYNC_CALENDAR_BUTTON,
+                        [
+                            {
+                                text: 'Cancel', onPress: () => {
+                                    // this.deleteEventOnCalendar()
+                                }, style: 'cancel'
+                            },
+                            {
+                                text: 'OK', onPress: () => {
+                                    //////console.log("start addEventOnCalendar")
+                                    this.setState({
+                                        isLoading: true
+                                    })
+                                    this.state.isLoading = true
+                                    this.addEventOnCalendar()
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
+            })
+                .catch(() => this.setState({ calendarStatus: 'error' }));
         } else {
 
             Alert.alert(
@@ -1400,7 +1412,8 @@ export default class calendarYearView extends Component {
                             if (Platform.OS === 'android') {
                                 timeEnd = daysArray[f].date + ' 23:59:00'
                             } else {
-                                timeEnd = daysArray[f].date + ' 10:59:00'
+                                // timeEnd = daysArray[f].date + ' 10:59:00'
+                                timeEnd = daysArray[f].date + ' 23:59:00'
                             }
 
                             const copy = {

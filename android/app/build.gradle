@@ -107,8 +107,9 @@ android {
         applicationId "com.tdem.tdemconnect"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 8
-        versionName "2.08"
+        // targetSdkVersion 22
+        versionCode 10
+        versionName "2.10"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
