@@ -102,7 +102,7 @@ export default class RegisterActivity extends Component {
             let data = await RegisterAPI(this.state.username, this.state.password)
             code = data[0]
             data = data[1]
-            console.log('onRegister', data)
+            console.log('onRegister', data.data)
             this.setState({
                 datastatus: data.code
             })
@@ -116,7 +116,7 @@ export default class RegisterActivity extends Component {
                 
                 // this.saveProfile.setProfile(data.data)
                 // SharedPreference.profileObject = await this.saveProfile.getProfile()
-                
+                SharedPreference.sessionTimeoutBool=false;
                 SharedPreference.userRegisted = true;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
 
@@ -130,8 +130,8 @@ export default class RegisterActivity extends Component {
             } else if (code.DOES_NOT_EXISTS == data.code) {
 
                 Alert.alert(
-                    StringText.ALERT_SESSION_AUTHORIZED_TITILE,
-                    StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                    StringText.REGISTER_INVALID_TITLE,
+                    StringText.REGISTER_INVALID_DESC,
                     [
                         {
                             text: 'OK', onPress: () => {
@@ -144,11 +144,28 @@ export default class RegisterActivity extends Component {
                     ],
                     { cancelable: false }
                 )
-            } else if (code.INVALID_USER_PASS == data.code) {
 
+            } else if (data.data.code == 'MHF00600AERR') {
                 Alert.alert(
                     data.data.code,
                     data.data.detail,
+                    [{
+                        text: 'OK', onPress: () => {
+                            let origin = this.state.failPin + 1
+                            this.setState({
+                                isLoading: false,
+                                    password: ''
+                          
+                            })
+                        }
+                    },
+                    ],
+                    { cancelable: false }
+                )
+            } else if (data.data.code === 'MSC29130AERR') {
+                Alert.alert(
+                    StringText.ALERT_USER_NOT_AUTHORIZED_TITLE,
+                    StringText.ALERT_USER_NOT_AUTHORIZED_DETAIL,
                     [
                         {
                             text: 'OK', onPress: () => {
@@ -162,6 +179,47 @@ export default class RegisterActivity extends Component {
                     ],
                     { cancelable: false }
                 )
+           
+            } else if (code.INVALID_USER_PASS == data.code) {
+
+                console.log(' erreo : ', data.data.code)
+                if (data.data.code === 'MSC29123AERR') {
+                    Alert.alert(
+                        StringText.ALERT_INVALID_USERID_TIELE,
+                        StringText.ALERT_INVALID_USERID_DETAIL,
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    this.setState({
+                                        isLoading: false,
+                                        password: ''
+
+                                    })
+                                }
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+                } else if (data.data.code === 'MSC29122AERR'){
+                    Alert.alert(
+                        StringText.ALERT_USER_LOCK_TITLE,
+                        StringText.ALERT_USER_LOCK_DETAIL,
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    this.setState({
+                                        isLoading: false,
+                                        password: ''
+
+                                    })
+                                }
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+                }
+           
+            
 
 
             } else if (code.FAILED == data.code) {
@@ -241,6 +299,7 @@ export default class RegisterActivity extends Component {
         }
 
     }
+
     componentDidMount() {
 
         SharedPreference.notiAnnounceMentBadge = 0;
@@ -271,7 +330,7 @@ export default class RegisterActivity extends Component {
         data = data[1]
 
         // console.log("LoginChangePinAPI code ==> ", data.code)
-        // console.log("LoginChangePinAPI data ==> ", data.data)
+        console.log("LoginChangePinAPI data ==> ", data)
 
         if (code.DUPLICATE_DATA == data.code) {//409
             this.onOpenPinActivity()
@@ -303,11 +362,11 @@ export default class RegisterActivity extends Component {
 
 
     onSetPin = async () => {
-        console.log('onSetPin')
+        
         let data = await SetPinAPI(this.state.pin2, SharedPreference.FUNCTIONID_PIN)
         code = data[0]
         data = data[1]
-
+        console.log('onSetPin : ',data.data.code)
         this.setState({
             isLoading: false
         })
@@ -319,7 +378,39 @@ export default class RegisterActivity extends Component {
                 showCreatePin: false,
 
             })
-
+        } else if (data.data.code == 'MSC29136AERR') {
+            Alert.alert(
+                StringText.ALERT_USER_NOT_AUTHORIZED_TITLE,
+                    StringText.ALERT_USER_NOT_AUTHORIZED_DETAIL,
+                [{
+                    text: 'OK', onPress: () => {
+                       
+                        this.setState({
+                            showCreatePin:false
+                        }, function () {
+                            
+                        })
+                    }
+                },
+                ],
+                { cancelable: false }
+            )
+        } else if (code.INVALID_AUTH_TOKEN == data.code) {
+            Alert.alert(
+                StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+                StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
+                            showCreatePin:false
+                        }, function () {
+                            
+                        })
+                    }
+                }
+                ],
+                { cancelable: false }
+            )
         } else {
             Alert.alert(
                 StringText.SERVER_ERROR_TITLE,
@@ -327,7 +418,11 @@ export default class RegisterActivity extends Component {
                 [
                     {
                         text: 'OK', onPress: () => {
-
+                            this.setState({
+                                showCreatePin:false
+                            }, function () {
+                                
+                            })
                         }
                     }
                 ],
@@ -645,7 +740,7 @@ export default class RegisterActivity extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {this.renderProgressView()}
+                    {/* {this.renderProgressView()} */}
                 </View>
 
                 //     </View >
@@ -656,21 +751,21 @@ export default class RegisterActivity extends Component {
         }
     }
 
-    renderProgressView() {
-        if (this.state.isLoading) {
-            return (
-                <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
-                    <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
+    // renderProgressView() {
+    //     if (this.state.isLoading) {
+    //         return (
+    //             <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
+    //                 <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
 
-                    </View>
+    //                 </View>
 
-                    <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
-                        <ActivityIndicator />
-                    </View>
-                </View>
-            )
-        }
-    }
+    //                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
+    //                     <ActivityIndicator />
+    //                 </View>
+    //             </View>
+    //         )
+    //     }
+    // }
 
     renderCreatePinSuccess() {
         if (this.state.showCreatePinSuccess == true) {

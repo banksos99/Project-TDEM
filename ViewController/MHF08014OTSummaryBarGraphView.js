@@ -158,7 +158,7 @@ console.log('OTSummaryBarChart DataResponse =>',DataResponse)
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -185,6 +185,7 @@ console.log('OTSummaryBarChart DataResponse =>',DataResponse)
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -209,6 +210,7 @@ console.log('OTSummaryBarChart DataResponse =>',DataResponse)
             }],
             { cancelable: false }
         )
+    }
     }
 
 

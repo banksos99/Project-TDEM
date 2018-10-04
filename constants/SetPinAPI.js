@@ -6,6 +6,7 @@ export default async function getRestAPI(pin, functionID) {
     let code = {
         SUCCESS: "200",
         INVALID_API_KEY: "100",
+        INVUSER_NO_ROLE: "101",
         INVALID_API_SIGNATURE: "102",
         FAILED: "400",
         DOES_NOT_EXISTS: "401",
@@ -38,7 +39,7 @@ export default async function getRestAPI(pin, functionID) {
     })
         .then((response) => response.json())
         .then((responseJson) => {
-            //console.log("callback success22222 : ", responseJson)
+            console.log("callback success22222 : ", responseJson)
             let object
             if (responseJson.status == code.SUCCESS) {
                 object = [code, {
@@ -46,9 +47,10 @@ export default async function getRestAPI(pin, functionID) {
                     data: responseJson.data
                 }]
             } else {
+                console.log("responseJson.errors : ", responseJson.errors)
                 object = [code, {
                     code: responseJson.status,
-                    data: responseJson.error
+                    data: responseJson.errors[0]
                 }]
             }
             return object

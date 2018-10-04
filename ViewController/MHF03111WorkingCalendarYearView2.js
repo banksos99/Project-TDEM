@@ -35,8 +35,10 @@ import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 import { DocumentDirectoryPath } from 'react-native-fs';
 
 import firebase from 'react-native-firebase';
-let codelocation;
+import Layout from "../SharedObject/Layout";
 
+let codelocation;
+let scale = Layout.window.width / 320;
 export default class calendarYearView extends Component {
 
     eventCalendar = new EventCalendar()
@@ -277,7 +279,7 @@ export default class calendarYearView extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -305,6 +307,7 @@ export default class calendarYearView extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -329,6 +332,7 @@ export default class calendarYearView extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
 
     getYearSelect() {
@@ -491,6 +495,7 @@ export default class calendarYearView extends Component {
                         disableMonthChange={true}
                         monthFormat={'MMMM'}
                         hideDayNames={false}
+                        
                         theme={{
                             
                             dayTextColor: 'white',
@@ -500,15 +505,17 @@ export default class calendarYearView extends Component {
                             'stylesheet.calendar.header': {
                                 week: {
                                     marginTop: 0,
+                                
                                     flexDirection: 'row',
                                 },
                                 header: {
                                     justifyContent: 'space-between',
                                 },
                                 monthText: {
-                                    fontSize: 12,
+                                    fontSize: 10 * scale,
                                     textAlign: 'left',
                                     color: Colors.calendarRedText,
+                                
                                 }
                             },
                         
@@ -526,17 +533,17 @@ export default class calendarYearView extends Component {
 
                             if (checkSpecialHoliday == 'Y') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.calendarBlueText }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText }}>
                                         {date.day}</Text>
                                 </View>
                             } else if (checkSpecialHoliday == 'N') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.calendarRedText }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText }}>
                                         {date.day}</Text>
                                 </View>
                             } else if (checkSpecialHoliday == 'W') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }}>
                                         {date.day}</Text>
                                 </View>
                                 //} else if ((this.state.countDay.length % 7) == 0 || (this.state.countDay.length % 7) == 1) {//Holiday
@@ -555,7 +562,7 @@ export default class calendarYearView extends Component {
                                 </View>
                             } else {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : 'black' }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }}>
                                         {date.day}</Text>
                                 </View>
                             }

@@ -46,7 +46,8 @@ if (bundleId == "com.tdem.tdemconnect") {
 // const VERSION = 'v1.0.68'//20-09-61 IOS: Android:
 // const VERSION = 'v1.0.70'//20-09-61 IOS: Android:
 // const VERSION = 'v1.0.71'//27-09-61 IOS: Android:
-const VERSION = 'v1.0.72'//28-09-61 IOS: Android:
+// const VERSION = 'v1.0.72'//30-09-61 IOS: Android:
+const VERSION = 'v1.0.73'//28-09-61 IOS: Android:
 export default {
     HOST: HOST,
     SERVER: SERVER,

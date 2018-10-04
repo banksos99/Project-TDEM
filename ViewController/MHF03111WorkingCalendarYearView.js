@@ -35,7 +35,9 @@ import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 import { DocumentDirectoryPath } from 'react-native-fs';
 
 import firebase from 'react-native-firebase';
+import Layout from "../SharedObject/Layout";
 let codelocation;
+let scale = Layout.window.width / 320;
 
 export default class calendarYearView extends Component {
 
@@ -286,7 +288,7 @@ export default class calendarYearView extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -314,30 +316,34 @@ export default class calendarYearView extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
-        SharedPreference.userRegisted=false;
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
+       
+        if (!SharedPreference.sessionTimeoutBool) {
+            SharedPreference.userRegisted = false;
 
-        Alert.alert(
-            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
-            StringText.ALERT_SESSION_AUTHORIZED_DESC,
-            [{
-                text: 'OK', onPress: () => {
+            timerstatus = false;
+            this.setState({
+                isscreenloading: false,
+            })
 
-                    page = 0
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                    this.setState({
-                        isscreenloading: false
-                    })
-                    this.props.navigation.navigate('RegisterScreen')
-                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-                }
-            }],
-            { cancelable: false }
-        )
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+
+                        page = 0
+                        SharedPreference.Handbook = []
+                        SharedPreference.profileObject = null
+                        this.setState({
+                            isscreenloading: false
+                        })
+                        this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                    }
+                }],
+                { cancelable: false }
+            )
+        }
     }
 
     getYearSelect() {
@@ -497,6 +503,7 @@ export default class calendarYearView extends Component {
                         disableMonthChange={true}
                         monthFormat={'MMMM'}
                         hideDayNames={false}
+                        
                         theme={{
                             
                             dayTextColor: 'white',
@@ -506,15 +513,17 @@ export default class calendarYearView extends Component {
                             'stylesheet.calendar.header': {
                                 week: {
                                     marginTop: 0,
+                                
                                     flexDirection: 'row',
                                 },
                                 header: {
                                     justifyContent: 'space-between',
                                 },
                                 monthText: {
-                                    fontSize: 12,
+                                    fontSize: 10 * scale,
                                     textAlign: 'left',
                                     color: Colors.calendarRedText,
+                                
                                 }
                             },
                         
@@ -532,17 +541,17 @@ export default class calendarYearView extends Component {
 
                             if (checkSpecialHoliday == 'Y') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.calendarBlueText }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText }}>
                                         {date.day}</Text>
                                 </View>
                             } else if (checkSpecialHoliday == 'N') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.calendarRedText }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText }}>
                                         {date.day}</Text>
                                 </View>
                             } else if (checkSpecialHoliday == 'W') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }}>
                                         {date.day}</Text>
                                 </View>
                                 //} else if ((this.state.countDay.length % 7) == 0 || (this.state.countDay.length % 7) == 1) {//Holiday
@@ -561,7 +570,7 @@ export default class calendarYearView extends Component {
                                 </View>
                             } else {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : 'black' }}>
+                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }}>
                                         {date.day}</Text>
                                 </View>
                             }

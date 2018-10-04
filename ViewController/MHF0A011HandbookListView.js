@@ -211,7 +211,7 @@ export default class HandbookActivity extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -238,6 +238,7 @@ export default class HandbookActivity extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -262,6 +263,7 @@ export default class HandbookActivity extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
 
     updateToken() {
@@ -395,6 +397,34 @@ export default class HandbookActivity extends Component {
         )
     }
 
+    renderChefHandbook() {
+// console.log('temphandbookData :',temphandbookData.length)
+        if (temphandbookData.length) {
+            return (
+                <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, flexDirection: 'column', }}>
+                        {/* <View style={{ flex: 1 }}> </View> */}
+                        <View style={{ flex: 10 }}>
+                            <ScrollView>
+                                {
+                                    <View style={{ flex: 1, flexDirection: 'column' }}>
+                                        {temphandbookData}
+                                    </View>
+                                }
+                            </ScrollView>
+                        </View>
+                    </View>
+                </View>
+            );
+        }
+        return (
+            <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
+                <Text style={styles.payslipDetailTextCenter}>No Result</Text>
+            </View>
+        );
+
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }} >
@@ -417,21 +447,7 @@ export default class HandbookActivity extends Component {
                         </View>
                     </View>
                 </View>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flex: 1, flexDirection: 'column', }}>
-                        {/* <View style={{ flex: 1 }}> </View> */}
-                        <View style={{ flex: 10 }}>
-                            <ScrollView>
-                                {
-                                    <View style={{ flex: 1, flexDirection: 'column' }}>
-                                        {temphandbookData}
-                                    </View>
-
-                                }
-                            </ScrollView>
-                        </View>
-                    </View>
-                </View>
+               {this.renderChefHandbook()}
             </View >
         );
     }

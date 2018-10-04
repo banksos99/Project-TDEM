@@ -6,6 +6,7 @@ export default async function getRestAPI(url, functionID) {
     let code = {
         SUCCESS: "200",
         INVALID_API_KEY: "100",
+        INVALID_USERID:"101",
         INVALID_API_SIGNATURE: "102",
         FAILED: "400",
         DOES_NOT_EXISTS: "401",

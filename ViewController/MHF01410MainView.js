@@ -173,6 +173,16 @@ export default class HMF01011MainView extends Component {
 
     }
 
+    componentDidUpdate() {
+        console.log('mainview componentDidUpdate')
+        if (!SharedPreference.userRegisted) {
+            this.props.navigation.navigate('RegisterScreen')
+            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+        }
+
+
+    }
+
     componentWillMount() {
 
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
@@ -356,9 +366,11 @@ export default class HMF01011MainView extends Component {
 
                             if (dataReceive.function_id == "PHF06010") {//if nonPayroll
 
-                                console.log('new nonpayroll arrive')
+                                console.log('new nonpayroll arrive',dataReceive.badge_count,this.state.nonPayslipBadge)
                                 this.setState({
+
                                     nonPayslipBadge: parseInt(dataReceive.badge_count) + this.state.nonPayslipBadge
+
                                 }, function () {
                                     dataReceive.data_list.map((item, i) => {
 
@@ -1201,7 +1213,7 @@ export default class HMF01011MainView extends Component {
     loadHandbooklistfromAPI = async () => {
         ////console.log("loadHandbooklistfromAPI", SharedPreference.HANDBOOK_LIST)
 
-        this.APICallback(await RestAPI(SharedPreference.HANDBOOK_LIST, SharedPreference.FUNCTIONID_HANDBOOK), 'Handbooklist')
+        this.APIHandbookCallback(await RestAPI(SharedPreference.HANDBOOK_LIST, SharedPreference.FUNCTIONID_HANDBOOK), 'Handbooklist')
         // this.props.navigation.navigate('Handbooklist');
 
     }
@@ -1276,6 +1288,37 @@ export default class HMF01011MainView extends Component {
         }
 
     }
+    APIHandbookCallback(data, rount) {
+        code = data[0]
+        data = data[1]
+        this.setState({
+            isscreenloading: false,
+        })
+
+        if (code.SUCCESS == data.code) {
+            this.props.navigation.navigate(rount, {
+                DataResponse: data.data,
+            });
+
+        } else if (code.NODATA == data.code) {
+            this.props.navigation.navigate(rount, {
+                // DataResponse: data,
+            });
+
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            this.onRegisterErrorAlertDialog()
+
+        } else if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            this.onAutenticateErrorAlertDialog()
+
+
+        } else {
+
+            this.onLoadErrorAlertDialog(data, rount)
+        }
+    }
 
 
     APIClockInOutCallback(data, rount) {
@@ -1314,41 +1357,48 @@ export default class HMF01011MainView extends Component {
 
     onAutenticateErrorAlertDialog() {
 
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
+        if (!SharedPreference.sessionTimeoutBool) {
 
-        Alert.alert(
-            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-            [{
-                text: 'OK', onPress: () => {
-                    this.signout()
-                }
-            }],
-            { cancelable: false }
-        )
+            SharedPreference.userRegisted = false;
+            timerstatus = false;
+            this.setState({
+                isscreenloading: false,
+            })
+
+            Alert.alert(
+                StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+                StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.signout()
+                    }
+                }],
+                { cancelable: false }
+            )
+        }
     }
 
     onRegisterErrorAlertDialog() {
 
-        SharedPreference.userRegisted = false;
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
+        if (!SharedPreference.sessionTimeoutBool) {
 
-        Alert.alert(
-            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
-            StringText.ALERT_SESSION_AUTHORIZED_DESC,
-            [{
-                text: 'OK', onPress: () => {
-                    this.signout()
-                }
-            }],
-            { cancelable: false }
-        )
+            SharedPreference.userRegisted = false;
+            timerstatus = false;
+            this.setState({
+                isscreenloading: false,
+            })
+
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.signout()
+                    }
+                }],
+                { cancelable: false }
+            )
+        }
     }
 
     onNodataExistErrorAlertDialog() {
@@ -1401,6 +1451,11 @@ export default class HMF01011MainView extends Component {
             isscreenloading: false,
         })
         if (code.SUCCESS == data.code) {
+            this.props.navigation.navigate('LeavequotaList', {
+                dataResponse: data,
+            });
+
+        } else if (code.NODATA == data.code) {
             this.props.navigation.navigate('LeavequotaList', {
                 dataResponse: data,
             });
@@ -1669,7 +1724,7 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: true,
                 loadingtype: 3
             }, function () {
-                this.setState(this.renderloadingscreen())
+                // this.setState(this.renderloadingscreen())
                 this.loadLeaveQuotafromAPI()
             });
         } else {

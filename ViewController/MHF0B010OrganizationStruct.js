@@ -109,8 +109,35 @@ export default class OrganizationStruct extends Component {
 
     }
 
-    onRegisterErrorAlertDialog() {
+    onAutenticateErrorAlertDialog() {
+        SharedPreference.userRegisted=false;
+        timerstatus = false;
+        this.setState({
+            isscreenloading: false,
+        })
 
+        Alert.alert(
+            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+            [{
+                text: 'OK', onPress: () => {
+                    page = 0
+                    timerstatus = false
+                    SharedPreference.Handbook = []
+                    //SharedPreference.profileObject = null
+                    //this.saveProfile.setProfile(null)
+                    this.props.navigation.navigate('RegisterScreen')
+                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                }
+            }],
+            { cancelable: false }
+        )
+
+        //console.log("error : ", error)
+    }
+
+    onRegisterErrorAlertDialog() {
+if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -136,6 +163,8 @@ export default class OrganizationStruct extends Component {
             { cancelable: false }
         )
     }
+    }
+
     checkoption(data) {
         if (data) {
             option = data
@@ -760,32 +789,7 @@ export default class OrganizationStruct extends Component {
         })
     }
 
-    onAutenticateErrorAlertDialog() {
-
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
-
-        Alert.alert(
-            StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-            StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-            [{
-                text: 'OK', onPress: () => {
-                    page = 0
-                    timerstatus = false
-                    SharedPreference.Handbook = []
-                    //SharedPreference.profileObject = null
-                    //this.saveProfile.setProfile(null)
-                    this.props.navigation.navigate('RegisterScreen')
-                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-                }
-            }],
-            { cancelable: false }
-        )
-
-        //console.log("error : ", error)
-    }
+    
 
     onLoadErrorAlertDialog(error, resource) {
 

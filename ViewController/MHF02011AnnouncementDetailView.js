@@ -16,8 +16,15 @@ import firebase from 'react-native-firebase';
 import RestAPI from "../constants/RestAPI"
 import StringText from '../SharedObject/StringText'
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+import Colors from "../SharedObject/Colors"
+import moment from 'moment'
+import Months from "./../constants/Month"
 let content;
 let title;
+let category;
+let modifly;
+let createby;
+
 export default class PaySlipActivity extends Component {
 
     constructor(props) {
@@ -32,7 +39,9 @@ export default class PaySlipActivity extends Component {
         if (DataResponse) {
             title = DataResponse.title
             content = DataResponse.content
-
+            category=DataResponse.category
+            modifly=DataResponse.attributes.create_date
+            createby=DataResponse.attributes.create_by
         }
        
     }
@@ -86,7 +95,7 @@ export default class PaySlipActivity extends Component {
 
         } else if (code.DOES_NOT_EXISTS == data.code) {
 
-            this.onRegisterErrorAlertDialog(data)
+            this.onRegisterErrorAlertDialog()
 
         } else if (code.SUCCESS == data.code) {
 
@@ -104,7 +113,7 @@ export default class PaySlipActivity extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -145,7 +154,7 @@ export default class PaySlipActivity extends Component {
         )
     }
 
-    onRegisterErrorAlertDialog(data) {
+    onRegisterErrorAlertDialog() {
 
         if (SharedPreference.userRegisted == true) {
 
@@ -189,7 +198,12 @@ export default class PaySlipActivity extends Component {
 
     render() {
         // content = `<span class="price bold some-class-name">$459.00</span>`;
-        
+        let pp = modifly.split(' ');
+        let tpp = pp[0].split('-');
+        let spp = pp[1].split(':');
+        var monthnow = new Date(tpp[0], tpp[1], tpp[2]);
+        let modidtstr = Months.dayNames[parseInt(monthnow.getDay())] + ', ' + tpp[2] + ' ' + Months.monthNames[parseInt(tpp[1])] + ' ' + tpp[0] + ' at ' + spp[0] + ':' + spp[1]
+
         return (
             <View style={{ flex: 1 }} >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
@@ -214,19 +228,43 @@ export default class PaySlipActivity extends Component {
                 {/* <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                 <ActivityIndicator />
             </View> */}
+                <View style={{ flexDirection: 'column' }}>
+                <View style={{ height: 4 }}></View>
+                    <Text style={{ marginLeft: 20, fontSize: 15,fontFamily: 'Prompt-Regular', color: Colors.calendarRedText }}>{category}</Text>
+                    <View style={{ height: 4 }}></View>
+                    <Text style={{ marginLeft: 20, fontSize: 15,fontFamily: 'Prompt-Regular' }}>{title}</Text>
+                    <View style={{ height: 20, flexDirection: 'row', alignContent: 'center' }}>
+                        <View style={{ width: 15, height: 10, }} />
+                        <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
+                            <Image
+                                style={{ width: 10, height: 10,tintColor: Colors.lightGrayTextColor }}
+                                source={require('./../resource/images/clock.png')}
+                                resizeMode='contain'
+                            />
+                        </View>
+                        <Text style={{ height: 20, fontSize: 10,marginTop: 3, color: Colors.grayColor, fontFamily: 'Prompt-Regular' }}>{modidtstr}</Text>
+                    </View>
+                    <View style={{ height: 20, flexDirection: 'row', alignContent: 'center' }}>
+                        <View style={{ width: 15, height: 10, }} />
+                        <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
+                            <Image
+                                style={{ width: 10, height: 10,tintColor: Colors.lightGrayTextColor }}
+                                source={require('./../resource/images/pen.png')}
+                                resizeMode='contain'
+                            />
+                        </View>
+                        <Text style={{ height: 20,fontSize: 10, marginTop: 5,color: Colors.grayColor, fontFamily: 'Prompt-Regular' }}>Create by : {createby}</Text>
+                    </View>
+                    <View style={{ height: 10 }}></View>
+                    <View style={{ height: 1, marginLeft: 10, marginRight: 10, backgroundColor: Colors.grayColor }}></View>
+                </View>
                 <WebView
-                    //source={{ uri: 'https://github.com/facebook/react-native' }}
-                    source={{ html: '<!DOCTYPE html><html><body><style>p{font-family: Prompt-Regular;}</style>' + content + '</body></html>' }}
+                    source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
                     // scalesPageToFit={(Platform.OS === 'ios') ? false : true}
                     scalesPageToFit={true}
                     automaticallyAdjustContentInsets={true}
-
-                    // javaScriptEnabled={true}
-                    // domStorageEnabled={true}
-                    // decelerationRate="normal"
-                    // startInLoadingState={true}
-
-                    style={{ marginTop: 0}}
+                    
+                    style={{ flex:1,marginTop: 0 ,marginRight:10,marginLeft:10}}
                 />
             </View >
 

@@ -6,6 +6,7 @@ import Layout from "./Layout";
 // import { backgroundColor } from "react-native-calendars/src/style";
 
 let scale = Layout.window.width / 320;
+
 const font_medium = "Prompt-Regular";
 const font_light = 'Prompt-Light';
 const font_thin = 'Prompt-Thin';
@@ -279,30 +280,39 @@ export const styles = StyleSheet.create({
         flex: 1, backgroundColor: 'white', flexDirection: 'row'
     },
     calendarDayContainer: {
-        flex: 1, height: 15, marginBottom: -13, marginTop: -10
-        // alignItems: 'right',
+        flex: 1, height: 10 * scale, 
+        // marginBottom: -13,
+         marginTop: -8,
+        // backgroundColor:'green',
+        justifyContent:'center',
+        alignItems: 'center',
     },
     calendarDayText: {
-        fontSize: 10,
+        fontSize: 10 * scale,
         textAlign: 'right',
     },
     calendarCurrentDayCircle: {
-        height: 15, width: 15,
+        height: 16, width: 16,
         backgroundColor: 'red',
-        borderRadius: 100,
+        borderRadius: 16,
         position: 'absolute',
-        marginLeft: 4.5,
-        marginTop:0
+
+        // marginLeft: 4,
+        marginTop: -1
 
     },
     calendarCurrentDayCicleContainer: {
         flex: 1,
-        height: 15, marginBottom: -13, marginTop: -10
+        height: 14,
+        // marginBottom: -13,
+        marginTop: -8,
+        alignItems: 'center',
+        justifyContent:'center'
     },
     calendarCurrentDayText:
-    {
-        fontSize: 10, textAlign: 'right', color: 'white'
-    },
+        {
+            fontSize: 10 * scale, textAlign: 'center', color: 'white'
+        },
     calendarTitleDialogText: {
         color: 'black',
         fontSize: 20,
@@ -768,7 +778,7 @@ export const styles = StyleSheet.create({
 
     },
     payslipitemcurrentdNet:{
-        fontSize: 12 * scale,
+        fontSize: 13 * scale,
         color: 'white',
         fontFamily: font_medium
 
@@ -1157,7 +1167,7 @@ export const styles = StyleSheet.create({
 
     }, payslipTextRight: {
         color: 'white',
-        fontSize: 16 * scale,
+        fontSize: 15 * scale,
         textAlign: 'right',
         fontFamily: font_medium
     },
@@ -1277,7 +1287,7 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium
 
     }, payslipDetailTextLeft: {
-        fontSize: 14 * scale,
+        fontSize: 13 * scale,
         marginLeft: 10 * scale,
        // textAlign: 'left',
         color: Colors.lightGrayTextColor,

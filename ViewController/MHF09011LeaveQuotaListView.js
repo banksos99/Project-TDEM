@@ -95,7 +95,7 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -122,6 +122,7 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -147,6 +148,7 @@ export default class LeaveQuotaActivity extends Component {
             { cancelable: false }
         )
     }
+    }
     
 
     onBack() {
@@ -155,23 +157,21 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     renderEmpty() {
-        return (<View style={{
-            height: 50, justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-            <Text style={{ fontFamily: font_medium }}>No Result</Text>
-        </View>)
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.payslipDetailTextCenter}>No Result</Text>
+            </View>
+        )
     }
 
     leaveQuotaListview() {
         //console.log(" this.state.dataSource  : ", this.state.dataSource.code)
         if (this.state.dataSource.code != '200') {
-            return (<View style={{
-                height: 50, justifyContent: 'center',
-                alignItems: 'center'
-            }}>
-                <Text style={{ fontFamily: font_medium }}>No Result</Text>
-            </View>)
+            return (
+                <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
+                <Text style={styles.payslipDetailTextCenter}>No Result</Text>
+            </View>
+            )
         }
 
         let dataArray = this.state.dataSource.data.years

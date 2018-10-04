@@ -27,7 +27,7 @@ import Months from "../constants/Month"
 let currentmonth = new Date().getMonth();
 let scale = Layout.window.width / 320;
 let netincomestr='';
-
+let taincome;
 import Authorization from '../SharedObject/Authorization'
 import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
@@ -230,7 +230,7 @@ export default class PayslipDetail extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -257,6 +257,7 @@ export default class PayslipDetail extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -282,6 +283,7 @@ export default class PayslipDetail extends Component {
             { cancelable: false }
         )
     }
+    }
 
     onClickDownload() {
 
@@ -298,7 +300,7 @@ export default class PayslipDetail extends Component {
     }
 
     requestPDFPermission = async () => {
-        //console.log("requestPDFPermission")
+
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -308,7 +310,6 @@ export default class PayslipDetail extends Component {
                 }
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                //console.log("You can use the WRITE_EXTERNAL_STORAGE")
 
                 this.setState({
                     havePermission: true
@@ -316,7 +317,7 @@ export default class PayslipDetail extends Component {
                 this.onDownloadPDFFile()
             } else {
                 this.onDownloadPDFFile()
-                //console.log("WRITE_EXTERNAL_STORAGE permission denied")
+
             }
         } catch (err) {
             console.warn(err)
@@ -338,24 +339,26 @@ export default class PayslipDetail extends Component {
 
             });
 
-            
-         //   console.log('PAYSLIP_DOWNLOAD_API:', PAYSLIP_DOWNLOAD_API)
 
-           this.checkDownloadStatus()
+            //   console.log('PAYSLIP_DOWNLOAD_API:', PAYSLIP_DOWNLOAD_API)
+
+            this.checkDownloadStatus()
 
         } else {
 
             Alert.alert(
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
                 StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                [{ text: 'OK', onPress: () => { 
-                    this.setState({
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
 
-                        isscreenloading: false,
-        
-                    });
+                            isscreenloading: false,
 
-                } },
+                        });
+
+                    }
+                },
                 ], { cancelable: false }
             )
 
@@ -444,8 +447,36 @@ export default class PayslipDetail extends Component {
                         Authorization: FUNCTION_TOKEN
                     })
                     .then((resp) => {
-                        console.log('esp.data :', resp.data,resp.path())
+                        console.log('esp.status :', resp.respInfo.status)
+
+                        if (resp.respInfo.status == 200) {
+                            this.setState({
+
+                                isscreenloading: false,
+    
+                            }, function () {
+                                // this.setState(this.renderloadingscreen())
+                            });
                         RNFetchBlob.android.actionViewIntent(resp.path(), 'application/pdf');
+                        }else{
+
+                            Alert.alert(
+                                StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                                StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                                [
+                                    {
+                                        text: 'OK', onPress: () => {
+                                            this.setState({
+
+                                                isscreenloading: false,
+
+                                            });
+                                        }
+                                    },
+                                ],
+                                { cancelable: false }
+                            )
+                        }
                         // if(FileProvider) {
                         //     FileProvider.getUriForFile('com.tdem.tdemconnect.provider', resp.path())
                         //         .then((contentUri) => {
@@ -456,13 +487,7 @@ export default class PayslipDetail extends Component {
 
                         
 
-                        this.setState({
-
-                            isscreenloading: false,
-
-                        }, function () {
-                            // this.setState(this.renderloadingscreen())
-                        });
+                        
 
 
                     })
@@ -635,21 +660,21 @@ export default class PayslipDetail extends Component {
                       
                     });
             
-                    Alert.alert(
-                        responseJson.errors[0].code,
-                        responseJson.errors[0].detail,
-                        [
-                            {
-                                text: 'OK', onPress: () => {
-                                    //console.log('OK Pressed') },
-                                    this.setState({
-                                        isscreenloading: false
-                                    })
-                                }
-                            }
-                        ],
-                        { cancelable: false }
-                    )
+                    // Alert.alert(
+                    //     responseJson.errors[0].code,
+                    //     responseJson.errors[0].detail,
+                    //     [
+                    //         {
+                    //             text: 'OK', onPress: () => {
+                    //                 //console.log('OK Pressed') },
+                    //                 this.setState({
+                    //                     isscreenloading: false
+                    //                 })
+                    //             }
+                    //         }
+                    //     ],
+                    //     { cancelable: false }
+                    // )
 
                 }
 
@@ -1037,30 +1062,46 @@ export default class PayslipDetail extends Component {
         let bankicon = require('./../resource/images/bankIcon/blank.png')
         let date_text = '';
         let download = false;
+        netincomestr = '0.00'
         if (this.state.datadetail.data) {
             if (this.state.datadetail.data.header) {
                 income = (Decryptfun.decrypt(this.state.datadetail.data.header.sum_income));
                 deduct = (Decryptfun.decrypt(this.state.datadetail.data.header.sum_deduct));
                 let tincome = parseFloat(income.replace(',', '').replace(',', '').replace(',', ''));
                 let tdeduct = parseFloat(deduct.replace(',', '').replace(',', '').replace(',', ''));
-                console.log('income : ', income)
-                console.log('deduct : ', deduct)
-                console.log('netincome : ', parseFloat(tincome - tdeduct))
+                // console.log('income : ', income)
+                // console.log('deduct : ', deduct)
+                // console.log('netincome : ', parseFloat(tincome - tdeduct))
                 netincome = (parseInt(parseFloat(tincome - tdeduct) * 100) / 100).toString();
-                netincome = netincome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                let taincome = netincome.split('.')
-                
-                if (taincome[1].length == 1) {
-                    netincomestr = taincome[0] + '.' + taincome[1] + '0'
+                if (netincome < 0) {
+                    netincomestr = '0.00'
                 } else {
-                    netincomestr = taincome[0] + '.' + taincome[1]
-                }
 
+                    netincome = netincome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    taincome = netincome.split('.')
+                    if (taincome.length == 2) {
+                        if (taincome[1].length == 1) {
+                            netincomestr = taincome[0] + '.' + taincome[1] + '0'
+                        } else {
+                            netincomestr = taincome[0] + '.' + taincome[1]
+                        }
+
+                    } else {
+                        netincomestr = netincomestr = taincome[0] + '.00'
+                    }
+                }
                 
+
+
+
                 let datearr = this.state.datadetail.data.header.pay_date.split('-');
                 pay_date_str = datearr[2] + ' ' + Months.monthNamesShort[parseInt(datearr[1]) - 1] + ' ' + datearr[0]
-                bank_name_str = this.state.datadetail.data.header.bank_name;
-                bank_acc_str = this.state.datadetail.data.header.bank_acc_no;
+                if (this.state.datadetail.data.header.bank_name) {
+                    bank_name_str = this.state.datadetail.data.header.bank_name;
+                }
+                if (this.state.datadetail.data.header.bank_acc_no) {
+                    bank_acc_str = this.state.datadetail.data.header.bank_acc_no;
+                }
                 sum_income_str = Decryptfun.decrypt(this.state.datadetail.data.header.sum_income);
                 sum_deduct_str = Decryptfun.decrypt(this.state.datadetail.data.header.sum_deduct);
                 download = this.state.datadetail.data.download;
@@ -1150,7 +1191,7 @@ export default class PayslipDetail extends Component {
                                 {this.previousbuttonrender()}
                             </View>
 
-                            <View style={{ flex: 7, justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={{ flex: 8, justifyContent: 'center', alignItems: 'center' }}>
 
                                 <Text style={{ fontSize: 21, color: Colors.redTextColor, textAlign: 'center', }}>
 
@@ -1193,10 +1234,10 @@ export default class PayslipDetail extends Component {
                     <View style={{ flex: 1 }}>
                         <View style={{ flex: 1, marginTop: 5, marginBottom: 5, borderRadius: 5, backgroundColor: Colors.midnightblue, flexDirection: 'row', }}>
 
-                            <View style={{ flex: 1, justifyContent: 'center', marginLeft: 20 }}>
+                            <View style={{ flex: 1, justifyContent: 'center', marginLeft: 10 * scale }}>
                                 <Text style={styles.payslipTextLeft}>NET INCOME</Text>
                             </View>
-                            <View style={{ flex: 1, justifyContent: 'center', marginRight: 20 }}>
+                            <View style={{ flex: 1, justifyContent: 'center', marginRight: 10 * scale }}>
                                 <Text style={styles.payslipTextRight}>
                                     {netincomestr}
                                 </Text>

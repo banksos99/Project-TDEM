@@ -51,10 +51,32 @@ export default class PinActivity extends Component {
                 })
                 console.log('setProfile =>',data.data)
                 this.saveProfile.setProfile(data.data)
-                
+                SharedPreference.userRegisted = true;
+                SharedPreference.sessionTimeoutBool=false;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
                 SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
                 await this.onLoadInitialMaster()
+
+            } else if (data.data.code === 'MSC29136AERR') {
+                Alert.alert(
+                    StringText.ALERT_USER_NOT_AUTHORIZED_TITLE,
+                    StringText.ALERT_USER_NOT_AUTHORIZED_DETAIL,
+                    [{
+                        text: 'OK', onPress: () => {
+                            let origin = this.state.failPin + 1
+                            this.setState({
+                                failPin: origin,
+                                pin: ''
+                            }, function () {
+                                this.saveProfile.setProfile(null)
+                                this.props.navigation.navigate('RegisterScreen')
+                                SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                            })
+                        }
+                    },
+                    ],
+                    { cancelable: false }
+                )
 
             } else if (code.INVALID_AUTH_TOKEN == data.code) {
                 Alert.alert(
@@ -132,8 +154,8 @@ export default class PinActivity extends Component {
                         //  isLoading: false
                     })
                     Alert.alert(
-                        StringText.ALERT_PIN_TITLE_NOT_CORRECT,
-                        StringText.ALERT_PIN_DESC_TOO_MANY_NOT_CORRECT,
+                        data.data.code,
+                        data.data.detail,
                         [{
                             text: 'OK', onPress: () => {
                                 // SharedPreference.profileObject = null
@@ -149,8 +171,8 @@ export default class PinActivity extends Component {
                         isLoading: false
                     })
                     Alert.alert(
-                        StringText.ALERT_PIN_TITLE_NOT_CORRECT,
-                        StringText.ALERT_PIN_DESC_NOT_CORRECT,
+                        data.data.code,
+                        data.data.detail,
                         [{
                             text: 'OK', onPress: () => {
                                 let origin = this.state.failPin + 1
@@ -376,11 +398,12 @@ export default class PinActivity extends Component {
         code = data[0]
         data = data[1]
 
-        //console.log("onLoginResetPinAPI : ", data.code)
+        console.log("onLoginResetPinAPI : ", data)
 
         if (code.SUCCESS == data.code) {
             SharedPreference.profileObject = null
             this.saveProfile.setProfile(null)
+            SharedPreference.sessionTimeoutBool=false;
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
         } else if (code.INVALID_AUTH_TOKEN == data.code) {

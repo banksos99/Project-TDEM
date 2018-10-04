@@ -122,7 +122,7 @@ export default class OrganizationStruct extends Component {
     }
 
     onAutenticateErrorAlertDialog() {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -149,7 +149,7 @@ export default class OrganizationStruct extends Component {
     }
 
     onRegisterErrorAlertDialog() {
-
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -174,6 +174,7 @@ export default class OrganizationStruct extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
     checkDataFormat(DataResponse) {
         if (DataResponse) {

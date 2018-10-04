@@ -269,7 +269,7 @@ export default class HandbookViewer extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -296,6 +296,7 @@ export default class HandbookViewer extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -320,6 +321,7 @@ export default class HandbookViewer extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
 
     downloadEpubFile(bookUrl) {

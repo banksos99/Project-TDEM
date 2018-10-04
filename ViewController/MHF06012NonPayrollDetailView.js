@@ -182,7 +182,7 @@ export default class NonpayrollDetailView extends Component {
     }
 
     onAutenticateErrorAlertDialog() {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -209,30 +209,33 @@ export default class NonpayrollDetailView extends Component {
     }
 
     onRegisterErrorAlertDialog() {
-        SharedPreference.userRegisted=false;
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
+        
+        if (!SharedPreference.sessionTimeoutBool) {
+            SharedPreference.userRegisted = false;
+            timerstatus = false;
+            this.setState({
+                isscreenloading: false,
+            })
 
-        Alert.alert(
-            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
-            StringText.ALERT_SESSION_AUTHORIZED_DESC,
-            [{
-                text: 'OK', onPress: () => {
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
 
-                    page = 0
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                    this.setState({
-                        isscreenloading: false
-                    })
-                    this.props.navigation.navigate('RegisterScreen')
-                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-                }
-            }],
-            { cancelable: false }
-        )
+                        page = 0
+                        SharedPreference.Handbook = []
+                        SharedPreference.profileObject = null
+                        this.setState({
+                            isscreenloading: false
+                        })
+                        this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                    }
+                }],
+                { cancelable: false }
+            )
+        }
     }
 
 
@@ -264,7 +267,7 @@ export default class NonpayrollDetailView extends Component {
                     const detail = item.tran_detail;
                     const money = item.nonpay_amt
                     var decodedString = Decrypt.decrypt(money)
-                    subDetail.push(this.renderSection(detail, decodedString))
+                    subDetail.push(this.renderSection(detail, decodedString,keyindex))
                 }
                 detail.push(subDetail);
                 detail.push(<View style={{ height: 1, backgroundColor: 'gray', marginLeft: 20, marginRight: 20 }} key={keyindex}></View>
@@ -289,9 +292,9 @@ export default class NonpayrollDetailView extends Component {
         );
     }
 
-    renderSection(detail, money) {
+    renderSection(detail, money,index) {
         return (
-            <View style={{marginLeft:20,marginRight:20}}>
+            <View style={{marginLeft:20,marginRight:20}} key={100+index}>
                 <View style={styles.nonPayRollLeftContainer}>
                     <Text style={styles.nonPayRolldateDetailText}>{detail}</Text>
                 </View>

@@ -100,7 +100,7 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -127,6 +127,7 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
@@ -151,6 +152,7 @@ export default class LeaveQuotaActivity extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
     checkParameter() {
         const format = 'DD/MM/YYYY'

@@ -154,7 +154,7 @@ export default class OTSummaryLineChart extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -181,6 +181,7 @@ export default class OTSummaryLineChart extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -205,6 +206,7 @@ export default class OTSummaryLineChart extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
 
     renderloadingscreen() {

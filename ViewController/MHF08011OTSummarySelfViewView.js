@@ -142,7 +142,7 @@ export default class OTSummaryDetail extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -169,6 +169,7 @@ export default class OTSummaryDetail extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -193,6 +194,7 @@ export default class OTSummaryDetail extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
 
 
@@ -368,18 +370,18 @@ export default class OTSummaryDetail extends Component {
 
                 console.log('data :', data)
 
-                Alert.alert(
-                    data.data[0].code,
-                    data.data[0].detail,
-                    [
-                        {
-                            text: 'OK', onPress: () => {
-                                console.log('OK Pressed')
-                            }
-                        }
-                    ],
-                    { cancelable: false }
-                )
+                // Alert.alert(
+                //     data.data[0].code,
+                //     data.data[0].detail,
+                //     [
+                //         {
+                //             text: 'OK', onPress: () => {
+                //                 console.log('OK Pressed')
+                //             }
+                //         }
+                //     ],
+                //     { cancelable: false }
+                // )
 
                 this.setState({
 
@@ -758,8 +760,8 @@ export default class OTSummaryDetail extends Component {
         }
         return (
 
-            <View style={{ flex: 16, backgroundColor: 'white', alignItems: 'center' }} key={1000}>
-                <Text style={styles.otsummarynoresulttext}> No Result</Text>
+            <View style={{ flex: 16, backgroundColor: 'white', alignItems: 'center',justifyContent:'center' }} key={1000}>
+                <Text style={styles.payslipDetailTextCenter}> No Result</Text>
             </View>
 
         )

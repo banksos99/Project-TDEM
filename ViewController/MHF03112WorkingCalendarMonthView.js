@@ -195,7 +195,7 @@ export default class calendarEventDetailView extends Component {
     }
 
     onAutenticateErrorAlertDialog(error) {
-
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -222,6 +222,7 @@ export default class calendarEventDetailView extends Component {
     }
 
     onRegisterErrorAlertDialog(data) {
+        if (!SharedPreference.sessionTimeoutBool) {
         SharedPreference.userRegisted=false;
         timerstatus = false;
         this.setState({
@@ -246,6 +247,7 @@ export default class calendarEventDetailView extends Component {
             }],
             { cancelable: false }
         )
+    }
     }
 
     getDataOnView() {
@@ -457,7 +459,7 @@ export default class calendarEventDetailView extends Component {
     onPressToday() {//TODO
         ////console.log("onPressToday")
         this.setState({ isLoading: true })
-        this.onLoadCalendarAPI(new Date().getFullYear(), this.state.location)
+        this.onLoadCalendarAPI(new Date().getFullYear(), codelocation)
     }
 
     renderProgressView() {
@@ -476,13 +478,13 @@ export default class calendarEventDetailView extends Component {
 
     onLoadCalendarAPI = async (year, location) => {
 
-        ////console.log("onLoadCalendarAPI ==> year : ", year, " , location : ", location)
+        console.log("onLoadCalendarAPI ==> year : ", year, " , location : ", location)
 
         let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + year + '&company=' + location, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
         code = data[0]
         data = data[1]
 
-        ////console.log("calendarCallback : ", data.code)
+        console.log("calendarCallback : ", data.code)
 
         if (code.SUCCESS == data.code) {
             let monthArray = data.data.holidays
