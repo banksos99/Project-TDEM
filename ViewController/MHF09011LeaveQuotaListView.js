@@ -8,7 +8,8 @@ import {
     Image,
     FlatList,
     BackHandler,
-    Alert
+    Alert,
+    PanResponder
 } from 'react-native';
 
 import { styles } from "./../SharedObject/MainStyles"
@@ -20,6 +21,8 @@ import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 export default class LeaveQuotaActivity extends Component {
+
+    panResponder = {};
 
     constructor(props) {
         super(props);
@@ -34,8 +37,20 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     componentDidMount() {
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
     }
 
     componentWillUnmount() {
@@ -152,8 +167,9 @@ export default class LeaveQuotaActivity extends Component {
     
 
     onBack() {
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
+        this.props.navigation.goBack();
     }
 
     renderEmpty() {
@@ -323,7 +339,10 @@ export default class LeaveQuotaActivity extends Component {
 
     render() {
         return (
-            <View style={styles.container} >
+            <View style={styles.container}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 {/* <View style={styles.navContainer}>
                     <TouchableOpacity onPress={(this.onBack.bind(this))}>
                         <Image

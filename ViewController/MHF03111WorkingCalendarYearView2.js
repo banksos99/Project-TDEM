@@ -12,7 +12,8 @@ import {
     Platform,
     ScrollView,
     BackHandler,
-    PermissionsAndroid
+    PermissionsAndroid,
+    PanResponder
 } from 'react-native';
 
 import { Calendar, LocaleConfig } from 'react-native-calendars';
@@ -44,9 +45,23 @@ export default class calendarYearView extends Component {
     eventCalendar = new EventCalendar()
     SaveProfile = new SaveProfile()
     saveAutoSyncCalendar = new SaveAutoSyncCalendar()
-
+    panResponder = {};
     constructor(props) {
         super(props);
+
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+        
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -123,6 +138,7 @@ export default class calendarYearView extends Component {
     }
 
     async componentDidMount() {
+       
         ////console.log("WorkingCalendar ==> componentDidMount")
 
         this.getYearSelect()
@@ -154,10 +170,18 @@ export default class calendarYearView extends Component {
 
         }
 
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
 
     }
+    componentDidUpdate() {
 
+        // if (this.state.selectLocation != SharedPreference.selectLocationCalendar) {
+        //     console.log('WorkingCalendar ==> componentDidUpdate', SharedPreference.selectLocationCalendar)
+        //     SharedPreference.selectLocationCalendar = this.state.selectLocation
+
+        // }
+
+    }
     componentWillUnmount() {
 
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -531,7 +555,22 @@ export default class calendarYearView extends Component {
                             // //////////console.log("selectedDateMonth =====> : ", selectedDateMonth)
                             // //////////console.log("checkSpecialHoliday =====> ", checkSpecialHoliday)
 
-                            if (checkSpecialHoliday == 'Y') {
+                            if ((this.state.today.getDate() == date.day) && ((this.state.today.getMonth() + 1) == date.month)
+                                && (this.state.today.getFullYear() == date.year)) {
+                                return <View style={styles.calendarCurrentDayCicleContainer}>
+                                    <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : '#adf0c9' }]} />
+                                    {/* <Text style={styles.calendarCurrentDayText}> */}
+                                    <Text style=
+                                        {checkSpecialHoliday == 'Y' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText } :
+                                            checkSpecialHoliday == 'N' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText } :
+                                                { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }
+                                        }
+                                    >
+                                        {date.day}
+
+                                    </Text>
+                                </View>
+                            } else if (checkSpecialHoliday == 'Y') {
                                 return <View style={styles.calendarDayContainer}>
                                     <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText }}>
                                         {date.day}</Text>
@@ -551,15 +590,15 @@ export default class calendarYearView extends Component {
                                 //                <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.redTextColor }}>
                                 //                  {date.day}</Text>
                                 //s        </View>
-                            } else if ((this.state.today.getDate() == date.day) && ((this.state.today.getMonth() + 1) == date.month)
-                                && (this.state.today.getFullYear() == date.year)) {
-                                return <View style={styles.calendarCurrentDayCicleContainer}>
-                                    <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : 'red' }]} />
-                                    <Text style={styles.calendarCurrentDayText}>
-                                        {date.day}
-                                        
-                                        </Text>
-                                </View>
+                                // } else if ((this.state.today.getDate() == date.day) && ((this.state.today.getMonth() + 1) == date.month)
+                                //     && (this.state.today.getFullYear() == date.year)) {
+                                //     return <View style={styles.calendarCurrentDayCicleContainer}>
+                                //         <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : '#adf0c9' }]} />
+                                //         <Text style={styles.calendarCurrentDayText}>
+                                //             {date.day}
+
+                                //             </Text>
+                                //     </View>
                             } else {
                                 return <View style={styles.calendarDayContainer}>
                                     <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }}>
@@ -704,7 +743,7 @@ export default class calendarYearView extends Component {
     }
     
     onPressSelectYearWhenSelectLocation(year, type) {
-        console.log('onPressSelectYearWhenSelectLocation ', year)
+        // console.log('onPressSelectYearWhenSelectLocation ', year)
         this.setState({
             selectYear: year,
 
@@ -718,7 +757,7 @@ export default class calendarYearView extends Component {
     }
 
     onPressLocation(locationFull, locationShort) {
-        console.log('locationShort', locationShort)
+        // console.log('locationShort', locationShort)
         this.setState({
             selectLocation: locationShort
         }, function () {
@@ -754,7 +793,7 @@ export default class calendarYearView extends Component {
     }
 
     getLocation = async (location) => {
-        console.log("WorkingCalender ==> this.state.selectLocation ==> ", this.state.selectLocation)
+        // console.log("WorkingCalender ==> this.state.selectLocation ==> ", this.state.selectLocation)
         // if (Platform.OS === 'ios') {
 
         //     locationShort = await this.getShortLocation(this.state.selectLocation)
@@ -772,11 +811,11 @@ export default class calendarYearView extends Component {
         // }
 
         //////console.log("workingCalendar ==> getLocation : ", this.state.selectLocation)
-        console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
-        console.log("this.state.selectLocation : ", this.state.selectLocation)
+        // console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
+        // console.log("this.state.selectLocation : ", this.state.selectLocation)
         let locationdef = ''
         for (let i = 0; i < SharedPreference.COMPANY_LOCATION.length; i++) {
-            console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION[i].value)
+            // console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION[i].value)
             if (SharedPreference.COMPANY_LOCATION[i].value === this.state.selectLocation) {
                 
                 locationdef = SharedPreference.COMPANY_LOCATION[i].key;
@@ -792,21 +831,28 @@ export default class calendarYearView extends Component {
     }
 
     openNewPage = async (location) => {
-        console.log("selectLocation 222 ==> ", this.state.selectLocation,'location',location)
+        // console.log("selectLocation 222 ==> ", this.state.selectLocation,'location',location)
         codelocation = location;
         let data = await RestAPI(SharedPreference.CALENDER_YEAR_API + this.state.selectYear + '&company=' + codelocation, SharedPreference.FUNCTIONID_WORKING_CALENDAR)
         code = data[0]
         data = data[1]
 
         if (code.SUCCESS == data.code) {
+            this.setState({
+                
+                isLoading:false
+            })
+
+            // this.props.navigation.goBack();
 
             this.props.navigation.navigate('calendarYearView', {//TODO change
-                dataResponse: data,
+                dataResponse2: data,
                 selectYear: this.state.selectYear,
                 location: location,
                 showLocation:this.state.selectLocation,
                 selectLocation:this.state.selectLocation,
-                codelocation:codelocation
+                codelocation:codelocation,
+                
             });
         } else {
             Alert.alert(
@@ -1131,11 +1177,12 @@ export default class calendarYearView extends Component {
 
     onBack() {
         this.props.navigation.navigate('HomeScreen');
+
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     onloadPDFFile = async () => {
-        console.log("codelocation",codelocation)
+        // console.log("codelocation",codelocation)
         let data = await CalendarPDFAPI(this.state.selectYear, codelocation)
         code = data[0]
         data = data[1]
@@ -1242,7 +1289,7 @@ export default class calendarYearView extends Component {
                     Authorization: FUNCTION_TOKEN
                 })
                 .then((resp) => {
-                   console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp.path);
+                //    console.log("Android ==> LoadPDFFile ==> Load Success  : ", resp.path);
                     if (this.state.isLoadingPDF == true) {
                         this.setState({ isLoadingPDF: false })
 
@@ -1251,7 +1298,7 @@ export default class calendarYearView extends Component {
                             StringText.CALENDAR_ALERT_PDF_DESC_SUCCESS_1 + filename + StringText.CALENDAR_ALERT_PDF_DESC_SUCCESS_2,
                             [{
                                 text: 'OK', onPress: () => {
-                                    console.log("Android ==> LoadPDFFile ==> onPress  : ", resp.path());
+                                    // console.log("Android ==> LoadPDFFile ==> onPress  : ", resp.path());
                                     RNFetchBlob.android.actionViewIntent(resp.path(), 'application/pdf')
                                 }
                             },
@@ -1577,7 +1624,10 @@ export default class calendarYearView extends Component {
 
     render() {
         return (
-            <View style={styles.container} >
+            <View style={styles.container}
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+             >
                 <View style={styles.container} >
                     <View style={styles.navContainer}>
                         <TouchableOpacity style={styles.navLeftContainer} onPress={(this.onBack.bind(this))}>

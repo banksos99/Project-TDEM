@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
     Image,
     ActivityIndicator,
-    BackHandler,NetInfo,Alert
+    BackHandler,NetInfo,Alert,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -41,9 +42,26 @@ const tabbuttonColorDis = Colors.DisableGray;
 
 export default class EmpInfoDetail extends Component {
 
+    panResponder = {};
+
     constructor(props) {
 
         super(props);
+
+        this.panResponder = PanResponder.create({
+            
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+        
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
         this.state = {
@@ -89,7 +107,9 @@ export default class EmpInfoDetail extends Component {
     }
 
     componentDidMount() {
-        this.settimerInAppNoti()
+
+        
+        // this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
         
@@ -120,9 +140,9 @@ export default class EmpInfoDetail extends Component {
 
         } else {
 
-            this.props.navigation.navigate('HomeScreen');
+            // this.props.navigation.navigate('HomeScreen');
             SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
-
+            this.props.navigation.goBack();
         }
 
     }
@@ -533,7 +553,7 @@ export default class EmpInfoDetail extends Component {
                 <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10 }}>
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Hirring</Text>
+                            <Text style={styles.empinfoDetailRedText} >Hiring</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailText}>{hiring_date}</Text>
@@ -826,7 +846,7 @@ export default class EmpInfoDetail extends Component {
                             ))}
                         <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
                             <View style={{ height: 40 * scale, width: 120 * scale, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.DisableGray }}>
-                                <Text style={{ color: Colors.redTextColor, fontFamily: 'Prompt-Medium' }}> HIRRING</Text>
+                                <Text style={{ color: Colors.redTextColor, fontFamily: 'Prompt-Medium' }}> HIRING</Text>
                             </View>
                         </View>
                     </ScrollView>
@@ -864,7 +884,10 @@ export default class EmpInfoDetail extends Component {
         }
 
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 ,backgroundColor:Colors.backgroundcolor}}
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+             >
 
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />

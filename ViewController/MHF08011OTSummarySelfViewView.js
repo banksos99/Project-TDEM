@@ -14,7 +14,8 @@ import {
     Platform,
     ActivityIndicator,
     Alert,
-    BackHandler, NetInfo
+    BackHandler, NetInfo,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -24,6 +25,7 @@ import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
 import firebase from 'react-native-firebase';
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+import Layout from '../SharedObject/Layout';
 
 //monthNames
 let MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -34,6 +36,21 @@ export default class OTSummaryDetail extends Component {
     constructor(props) {
 
         super(props);
+
+        this.panResponder = PanResponder.create({
+
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         let ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
@@ -76,8 +93,9 @@ export default class OTSummaryDetail extends Component {
     }
 
     componentDidMount() {
+       
         selectmonth = 0;
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
@@ -205,7 +223,7 @@ export default class OTSummaryDetail extends Component {
             let titems = [];
             for (let i = 0; i < DataResponse.detail.items.length; i++) {
 
-                // console.log('tosummary data : ', DataResponse.detail.items[i])
+                console.log('tosummary data : ', DataResponse.detail.items[i])
                 let x15 = DataResponse.detail.items[i].x15.split('.');
                 let x20 = DataResponse.detail.items[i].x20.split('.');
                 let x30 = DataResponse.detail.items[i].x30.split('.');
@@ -339,6 +357,7 @@ export default class OTSummaryDetail extends Component {
                 this.onRegisterErrorAlertDialog(data)
 
             } else if (code.SUCCESS == data.code) {
+                console.log('tosummary data : ', data.data.detail.items)
                 let titems = [];
                 for (let i = 0; i < data.data.detail.items.length; i++) {
                     let x15 = data.data.detail.items[i].x15.split('.');
@@ -483,8 +502,9 @@ export default class OTSummaryDetail extends Component {
     }
 
     onBack() {
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
+        this.props.navigation.goBack();
     }
 
     select_month() {
@@ -779,18 +799,24 @@ export default class OTSummaryDetail extends Component {
         let ot_meals = 0;
 
         if (this.state.headerdataSource.total_ot_hr) {
+            let tempot = this.state.headerdataSource.total_ot_hr.split('.');
+            total_ot = tempot[0] + '.' + tempot[1][0]
 
-            total_ot = this.state.headerdataSource.total_ot_hr;
         }
         if (this.state.headerdataSource.ot_hr) {
-
-            ot_15 = this.state.headerdataSource.ot_hr.ot_x15;
+            let tempot = this.state.headerdataSource.ot_hr.ot_x15.split('.');
+            ot_15 = tempot[0] + '.' + tempot[1][0]
+         
         }
         if (this.state.headerdataSource.ot_hr) {
-            ot_20 = this.state.headerdataSource.ot_hr.ot_x20;
+            let tempot = this.state.headerdataSource.ot_hr.ot_x20.split('.');
+            ot_20 = tempot[0] + '.' + tempot[1][0]
+          
         }
         if (this.state.headerdataSource.ot_hr) {
-            ot_30 = this.state.headerdataSource.ot_hr.ot_x30;
+            let tempot = this.state.headerdataSource.ot_hr.ot_x30.split('.');
+            ot_30 = tempot[0] + '.' + tempot[1][0]
+        
         }
         if (this.state.headerdataSource.ot_meals) {
             ot_meals = this.state.headerdataSource.ot_meals;
@@ -798,7 +824,10 @@ export default class OTSummaryDetail extends Component {
 
         return (
             // this.state.dataSource.map((item, index) => (
-            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }} >
+            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }} 
+            collapsable={true}
+                {...this.panResponder.panHandlers}
+                >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
@@ -819,15 +848,29 @@ export default class OTSummaryDetail extends Component {
                     </View>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'column', }}>
+                    <View style={{ flex: 2, margin: 5, }} >
+                        <View style={{ height: '100%', width: '100%', position: 'absolute' }}>
+                            <View style={{ flex: 1, flexDirection: 'row', backgroundColor: Colors.backgroundcolor, borderRadius: 5, }}>
+                                <View style={{ flex: 4 }} >
+                                </View>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+                                    <Image
+                                        style={{ width: 20, height: 30, tintColor: Colors.redTextColor }}
+                                        source={require('./../resource/images/dropdown.png')}
+                                    // resizeMode='contain'
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
+                            onPress={(this.select_month.bind(this))}
+                        >
 
-                    <TouchableOpacity style={{ flex: 2, backgroundColor: Colors.calendarLocationBoxColor, margin: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}
-                        onPress={(this.select_month.bind(this))}
-                    >
+                            <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
 
-                        <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
+                        </TouchableOpacity>
 
-                    </TouchableOpacity>
-
+                    </View>
                     <View style={{ flex: 2 }}>
                         <View style={{ flex: 1, backgroundColor: Colors.lightblue, marginLeft: 15, marginRight: 15, marginTop: 2, marginBottom: 2, borderRadius: 5, flexDirection: 'row', }}>
 
@@ -902,7 +945,7 @@ export default class OTSummaryDetail extends Component {
                             </View>
                             <View style={{ flex: 1, backgroundColor: Colors.pink, marginLeft: 3, marginTop: 5, marginBottom: 5, borderRadius: 5, flexDirection: 'column' }}>
                                 <View style={{ flex: 1, justifyContent: 'center', marginLeft: 5 }}>
-                                    <Text style={styles.otsummarydetailboldtext}>OT Meals</Text>
+                                    <Text style={styles.otsummarydetailboldtext}>OT Meal</Text>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'center', marginLeft: 5 }}>
                                     <Text style={styles.otsummarydetailtext}>No.</Text>

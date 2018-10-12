@@ -33,7 +33,6 @@ export default class PinActivity extends Component {
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_PIN)
         
-
     }
 
     onLoadLoginWithPin = async (PIN) => {
@@ -41,18 +40,22 @@ export default class PinActivity extends Component {
         if (SharedPreference.isConnected) {
 
             let data = await LoginWithPinAPI(PIN, SharedPreference.FUNCTIONID_PIN)
-            console.log('onLoadLoginWithPin =>',data)
+
             code = data[0]
             data = data[1]
-
+            console.log('onLoadLoginWithPin =>', data)
             if (code.SUCCESS == data.code) {
                 this.setState({
+                    pintitle: 'Enter your PIN',
+                    pin: '',
+                    failPin: 0,
+                    savePin: '',
                     // isLoading: false
                 })
-                console.log('setProfile =>',data.data)
+                console.log('setProfile =>', data.data)
                 this.saveProfile.setProfile(data.data)
                 SharedPreference.userRegisted = true;
-                SharedPreference.sessionTimeoutBool=false;
+                SharedPreference.sessionTimeoutBool = false;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
                 SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
                 await this.onLoadInitialMaster()
@@ -148,14 +151,29 @@ export default class PinActivity extends Component {
                     }
                     ],
                     { cancelable: false })
-            } else {
+            } else if (data.data.code === 'MSC29130AERR') {
+                Alert.alert(
+                    StringText.ALERT_USER_NOT_AUTHORIZED_TITLE,
+                    StringText.ALERT_USER_NOT_AUTHORIZED_DETAIL,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.saveProfile.setProfile(null)
+                                this.props.navigation.navigate('RegisterScreen')
+                                SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            } else if (data.data.code === 'MSC29133AERR') {
                 if (this.state.failPin == 4) {
                     this.setState({
-                        //  isLoading: false
+                        isLoading: false
                     })
                     Alert.alert(
-                        data.data.code,
-                        data.data.detail,
+                        StringText.ALERT_PIN_TITLE_NOT_CORRECT,
+                        StringText.ALERT_PIN_DESC_TOO_MANY_NOT_CORRECT,
                         [{
                             text: 'OK', onPress: () => {
                                 // SharedPreference.profileObject = null
@@ -167,26 +185,52 @@ export default class PinActivity extends Component {
                         { cancelable: false }
                     )
                 } else {
+                    let origin = this.state.failPin + 1
                     this.setState({
-                        isLoading: false
+                        isLoading: false,
+                        failPin: origin,
+                        pin: ''
                     })
                     Alert.alert(
-                        data.data.code,
-                        data.data.detail,
+                        StringText.ALERT_PIN_TITLE_NOT_CORRECT,
+                        StringText.ALERT_PIN_DESC_NOT_CORRECT,
                         [{
                             text: 'OK', onPress: () => {
-                                let origin = this.state.failPin + 1
-                                this.setState({
-                                    failPin: origin,
-                                    pin: ''
-                                })
+                                // let origin = this.state.failPin + 1
+                                // this.setState({
+                                //     failPin: origin,
+                                //     pin: ''
+                                // })
                             }
                         },
                         ],
                         { cancelable: false }
                     )
                 }
+            } else {
+
+                this.setState({
+                    isLoading: false
+                })
+                Alert.alert(
+                    data.data.code,
+                    data.data.detail,
+                    [{
+                        text: 'OK', onPress: () => {
+                            let origin = this.state.failPin + 1
+                            this.setState({
+                                failPin: origin,
+                                pin: ''
+                            })
+                        }
+                    },
+                    ],
+                    { cancelable: false }
+                )
+
             }
+
+
         } else {
 
             Alert.alert(
@@ -239,11 +283,13 @@ export default class PinActivity extends Component {
     componentWillMount() {
 
         SharedPreference.currentNavigator = SharedPreference.SCREEN_PIN
-
+        
     }
 
     componentWillUnmount() {
-
+        this.setState({
+            isLoading: false
+         })
     }
 
     onLoadInitialMaster = async () => {
@@ -588,8 +634,12 @@ export default class PinActivity extends Component {
                     </View>
 
                     <View style={styles.registPinNumRowContainer}>
-                        <View style={styles.registPinNumContainer} />
-
+                       
+                        <View style={styles.emptyContainer}>
+                            <View style={styles.registPinNumContainer}>
+                                <Text style={[styles.pinnumber,{color:Colors.redColor}]}>0</Text>
+                            </View>
+                        </View>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(0) }}>
                             <View style={styles.registPinNumContainer}>

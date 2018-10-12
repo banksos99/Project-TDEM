@@ -35,7 +35,7 @@ export default {
   calendarRedDotColor:'#f20909',
 
   calendarBlueDotColor:'#0d47a1',
-  calendarBlueText:'#0d47a1',
+  calendarBlueText:'#000cff',
   calendarRedText:'#f20909',
   calendarGrayText:'#fafafa',
   calendarGrayBackgroundColor:'#fafafa',

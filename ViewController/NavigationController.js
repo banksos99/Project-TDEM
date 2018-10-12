@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import {
-    createSwitchNavigator,
+    Animated,Easing
+} from "react-native";
+
+import {
+    createStackNavigator,
 } from 'react-navigation';
 import DeviceInfo from 'react-native-device-info';
 
@@ -46,8 +50,7 @@ import EmployeeList from "./MHF0B012EmployeeList"
 import ChangePINScreen from "./ChangePINScreen"
 import SharedPreference from "../SharedObject/SharedPreference"
 
-
-const AppNavigatorPin = createSwitchNavigator({
+const AppNavigatorPin = createStackNavigator({
     RegisterScreen: { screen: registerScreen },
     PinScreen: { screen: pinScreen },
     HomeScreen: { screen: homeScreen },
@@ -73,6 +76,7 @@ const AppNavigatorPin = createSwitchNavigator({
     AnnouncementDetail: { screen: announcementdetail },
     ChangePINScreen: { screen: ChangePINScreen },
     EmployeeList: { screen: EmployeeList },
+
 }, {
         initialRouteName: 'PinScreen',
         headerMode: 'none',
@@ -86,7 +90,7 @@ const AppNavigatorPin = createSwitchNavigator({
     }
 );
 
-const AppNavigatorRegister = createSwitchNavigator({
+const AppNavigatorRegister = createStackNavigator({
     RegisterScreen: { screen: registerScreen },
     PinScreen: { screen: pinScreen },
     HomeScreen: { screen: homeScreen },
@@ -200,18 +204,21 @@ export default class rootNavigation extends Component {
         if (this.state.hasPin == false) {
             return (
                 <AppNavigatorRegister
-                    onNavigationStateChange={(prevState, currentState) => {
-                        // console.log("AppNavigatorRegister ==> prevState = ", prevState)
-                        // console.log("AppNavigatorRegister ==> currentState = ", currentState)
-                    }} />
+                    // onNavigationStateChange
+                    // ={(prevState, currentState) => {
+                    //     console.log("AppNavigatorRegister ==> prevState = ", prevState)
+                    //     console.log("AppNavigatorRegister ==> currentState = ", currentState)
+                    // }} 
+                    />
             );
         } else {
             return (
                 <AppNavigatorPin
-                    onNavigationStateChange={(prevState, currentState) => {
+                    // onNavigationStateChange={(prevState, currentState) => {
                         // console.log("AppNavigatorRegister ==> prevState = ", prevState)
                         // console.log("AppNavigatorRegister ==> currentState = ", currentState)
-                    }} />
+                    // }} 
+                    />
             );
         }
 

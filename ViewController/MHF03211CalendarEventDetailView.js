@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Image, BackHandler } from "react-native";
+import { View, Text, TouchableOpacity, Image, BackHandler,PanResponder } from "react-native";
 
 import { styles } from "./../SharedObject/MainStyles"
 import Colors from "./../SharedObject/Colors"
@@ -13,9 +13,24 @@ const _formatAllday = 'ddd, D MMM'
 let codelocation;
 
 export default class calendarMonthView extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
+
+        this.panResponder = PanResponder.create({
+            
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             type: this.props.navigation.getParam("type", ""),
@@ -104,12 +119,18 @@ export default class calendarMonthView extends Component {
     render() {
         let eventObject = this.state.eventObject
         if (eventObject == 'undefined' || eventObject == null) {
-            return (<View style={styles.calendarEventItemLeftView}>
+            return (<View style={styles.calendarEventItemLeftView}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <Text >No Data</Text>
             </View>)
         } else {
             return (
-                <View style={styles.container}>
+                <View style={styles.container} key={1}
+                    collapsable={true}
+                    {...this.panResponder.panHandlers}
+                >
                     <View style={styles.navContainer}>
                         <TouchableOpacity style={styles.navLeftContainer} onPress={(this.onBackPrevious.bind(this))}>
                             <Image

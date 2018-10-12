@@ -57,7 +57,7 @@ export default async function changePin(oldPin, newPin, functionID) {
             } else {
                 object = [code, {
                     code: responseJson.status,
-                    data: responseJson.data
+                    data: responseJson.errors[0]
                 }]
             }
             // //console.log("changePin ==> callback object : ", JSON.stringify(object))

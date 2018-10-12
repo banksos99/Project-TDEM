@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, BackHandler,Alert } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, BackHandler,Alert,PanResponder } from "react-native";
 import { styles } from "./../SharedObject/MainStyles"
 import { Calendar } from 'react-native-calendars';
 import Colors from "./../SharedObject/Colors"
@@ -23,9 +23,23 @@ import { StackActions } from 'react-navigation';
 let codelocation;
 
 export default class calendarEventDetailView extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
+
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             countDay: [],
@@ -55,7 +69,7 @@ export default class calendarEventDetailView extends Component {
     }
 
     componentDidMount() {
-
+       
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
         this.settimerInAppNoti()
@@ -374,6 +388,8 @@ export default class calendarEventDetailView extends Component {
                     _markedDates: original
                 })
                 this.state._markedDates = original
+
+                console.log('this.state._markedDates =>',this.state._markedDates)
             }
         }
     }
@@ -409,7 +425,7 @@ export default class calendarEventDetailView extends Component {
     }
 
     onDaySelect = (day) => {
-        //////////console.log('this.state._markedDates : ', this.state._markedDates);
+        console.log('this.state._markedDates : ',day);
         if (!this.state._markedDates) {
             return
         }
@@ -420,6 +436,7 @@ export default class calendarEventDetailView extends Component {
         if (this.state._markedDates[_selectedDay]) {
             marked = !this.state._markedDates[_selectedDay].marked;
             selected = !this.state._markedDates[_selectedDay].selected;
+            
         }
         const original = this.state._markedDates[_selectedDay];
         const copy = {
@@ -442,18 +459,23 @@ export default class calendarEventDetailView extends Component {
         })
 
         if (this.state.selectedDay == _selectedDay) {
-            //////////console.log("_selectedDay =========>  viewSection false : " + _selectedDay);
+            console.log("_selectedDay =========>  viewSection false : " + _selectedDay);
             this.setState({
                 viewSection: false,
                 selectedDay: "",
             });
         } else {
-            //////////console.log("_selectedDay =========>  viewSection true : " + _selectedDay);
+            console.log("_selectedDay =========>  viewSection true : " + _selectedDay);
             this.setState({
                 viewSection: true,
                 selectedDay: _selectedDay,
+            },function(){
+                console.log('onDaySelect this.state._markedDates =>',this.state._markedDates)
             });
         }
+
+        
+
     }
 
     onPressToday() {//TODO
@@ -744,7 +766,8 @@ export default class calendarEventDetailView extends Component {
             markedDates={this.state._markedDates}
             markingType={'multi-dot'}
             theme={{
-                todayTextColor: Colors.redTextColor,
+                // todayTextColor: Colors.redTextColor,
+                todayTextColor: '#adf0c9',
                 dayTextColor: 'black'
             }}
         />)
@@ -762,7 +785,10 @@ export default class calendarEventDetailView extends Component {
     render() {
         var today = new Date();
         return (
-            <View style={styles.container} >
+            <View style={styles.container} 
+            collapsable={true}
+                {...this.panResponder.panHandlers}
+                >
                 <View style={styles.centerContainer} >
                     <View style={styles.navContainer}>
                         <TouchableOpacity style={styles.navLeftContainer} onPress={(this.onBack.bind(this))}>

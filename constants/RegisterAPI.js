@@ -65,7 +65,7 @@ export default async function getRestAPI(username, password) {
             } else {
                 object = [code, {
                     code: responseJson.status,
-                    data: responseJson.data
+                    data: responseJson.errors[0]
                 }]
             }
             return object

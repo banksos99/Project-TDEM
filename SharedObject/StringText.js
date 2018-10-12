@@ -117,7 +117,7 @@ export default {
   ALERT_USER_NOT_AUTHORIZED_TITLE: 'User is not authorized',
   ALERT_USER_NOT_AUTHORIZED_DETAIL: 'User is not authorized to access the system.',
 
-  ALERT_USER_LOCK_TITLE: 'User acount locked',
+  ALERT_USER_LOCK_TITLE: 'User account locked',
   ALERT_USER_LOCK_DETAIL: 'Incorrect password was entered more then 5 times.To unlock your account please contact Helpdesk.',
 
 };

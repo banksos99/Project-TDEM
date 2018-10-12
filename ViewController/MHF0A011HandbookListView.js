@@ -12,7 +12,8 @@ import {
     FlatList,
     Platform,
     BackHandler,
-    Alert
+    Alert,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -133,9 +134,23 @@ let FUNCTION_TOKEN;
 // }
 
 export default class HandbookActivity extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
+        this.panResponder = PanResponder.create({
+
+            onStartShouldSetPanResponder: () => {
+                
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+
+                SharedPreference.Sessiontimeout = 0
+
+                return false
+            }
+        })
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             temparray: [],
@@ -149,13 +164,18 @@ export default class HandbookActivity extends Component {
     }
 
     componentDidMount() {
-        this.settimerInAppNoti()
+
+        
+        // this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentWillUnmount() {
         clearTimeout(this.timer);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        this.setState({
+            isscreenloading: false,
+        })
     }
 
     handleBackButtonClick() {
@@ -273,24 +293,16 @@ export default class HandbookActivity extends Component {
     }
 
     checkDataFormat(DataResponse) {
-        
-       if (dataSource.length == 0) {
 
-            if (DataResponse) {
+        if (DataResponse) {
 
-                console.log('Handbookctivity DataResponse :', DataResponse)
-                // dataSource = DataResponse.data;
-                dataSource = DataResponse;
-
-            } else {
-          
-                dataSource = inappdata.dataSource.data.detail.items;
-
-            }
-
+            console.log('Handbookctivity DataResponse :', DataResponse)
+            // dataSource = DataResponse.data;
+            dataSource = DataResponse;
             this.createShelfHandbook();
         }
-   }
+
+    }
 
 
     onBack() {
@@ -427,7 +439,10 @@ export default class HandbookActivity extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 }}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>

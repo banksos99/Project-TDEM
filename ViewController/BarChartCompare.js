@@ -42,17 +42,28 @@ export default class PinActivity extends Component {
     }
     
     render() {
-
+        console.log('ิbarchart this.props.datalist', this.props.datalist);
         let current1 = this.props.datalist.request_month.avgX15;
         let current2 = this.props.datalist.request_month.avgX20;
         let current3 = this.props.datalist.request_month.avgX30;
         let current4 = this.props.datalist.request_month.avgTotal;
-
+        
+           
+        
         let previous1 = this.props.datalist.previous_month.avgX15;
         let previous2 = this.props.datalist.previous_month.avgX20;
         let previous3 = this.props.datalist.previous_month.avgX30;
         let previous4 = this.props.datalist.previous_month.avgTotal;
-
+        if (this.props.datalist.previous_month.maxIndividual == 0 && this.props.datalist.request_month.maxIndividual == 0) {
+            current1 = ''
+            current2 = ''
+            current3 = ''
+            current4 = ''
+            previous1 = ''
+            previous2 = ''
+            previous3 = ''
+            previous4 = ''
+        }
         let listdata = [previous1, current1, previous2, current2, previous3, current3, previous4, current4,];
         let max = 0;
         for (let i = 0; i < listdata.length; i++) {
@@ -61,15 +72,15 @@ export default class PinActivity extends Component {
             }
         }
 
-        let tratio =  1 / 5 * max;
-console.log('tratio',tratio);
-console.log('tratio',Math.ceil(tratio));
-max = Math.ceil(tratio)*5
+        let tratio = 1 / 5 * max;
+        console.log('tratio', tratio);
+        console.log('tratio', Math.ceil(tratio));
+        max = Math.ceil(tratio) * 5
         let step = Layout.window.width;
         let listDataPrev = this.props.listDataPrev;
         let listDataCurr = this.props.listDataCurr;
 
-        let shiftdown = 50 * scale
+        let shiftdown = 20 * scale
         let shiftRight = 70 * scale
         let linecolor = Colors.redTextColor;
 
@@ -77,7 +88,7 @@ max = Math.ceil(tratio)*5
         let ratio = 5 / max;
         console.log('max',max);
         console.log('ratio',ratio);
-        let shiftTop = 25 * scale;
+        let shiftTop = 35 * scale;
 
         let barwidth = 20 * scale;
         let gap1 = 5 * scale;
@@ -104,6 +115,8 @@ max = Math.ceil(tratio)*5
                 <Line x1={shiftRight} y1={(rowhight * 4) + shiftTop} x2={linewidth} y2={(rowhight * 4) + shiftTop} stroke='lightgray' strokeWidth="1" />
                 <Line x1={shiftRight} y1={(rowhight * 5) + shiftTop} x2={linewidth} y2={(rowhight * 5) + shiftTop} stroke='lightgray' strokeWidth="1" />
 
+                <Text x={shiftRight - 20} y={15} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>Hour(s)</Text>
+
                 <Text x={shiftRight - 20} y={(rowhight * 0) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{this.twodigi(5 / 5 * max)}</Text>
                 <Text x={shiftRight - 20} y={(rowhight * 1) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{this.twodigi(4 / 5 * max)}</Text>
                 <Text x={shiftRight - 20} y={(rowhight * 2) + shiftTop} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>{this.twodigi(3 / 5 * max)}</Text>
@@ -117,8 +130,10 @@ max = Math.ceil(tratio)*5
                 <Text x={shiftRight + gap1 + barwidth + 10} y={((rowhight * 5) + shiftTop) - ((current1) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#f20909">{listdata[1]}</Text>
                 <Text x={shiftRight + barwidth} y={(rowhight * 5) + shiftTop + labelbottom} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>OT 1.5</Text>
 
-                <Rect x={shiftRight + gap1 + (barwidth * 2) + gap2} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)} width={barwidth} height={((previous2) * rowhight * ratio)} fill="#d77c7c" />
-                <Text x={shiftRight + gap1 + (barwidth * 2) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" ontFamily='Prompt-Regular' fill="#d77c7c">{listdata[2]}</Text>
+                {/* <Rect x={shiftRight + gap1 + (barwidth * 2) + gap2} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)} width={barwidth} height={((previous2) * rowhight * ratio)} fill="#d77c7c" />
+                <Text x={shiftRight + gap1 + (barwidth * 2) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" ontFamily='Prompt-Regular' fill="#d77c7c">{listdata[2]}</Text> */}
+                <Rect x={shiftRight + (gap1 * 1) + (barwidth * 2) + gap2} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)} width={barwidth} height={((previous2) * rowhight * ratio)} fill="#d77c7c" />
+                <Text x={shiftRight + (gap1 * 1) + (barwidth * 2) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((previous2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#d77c7c">{listdata[2]}</Text>
                 <Rect x={shiftRight + (gap1 * 2) + (barwidth * 3) + gap2} y={((rowhight * 5) + shiftTop) - ((current2) * rowhight * ratio)} width={barwidth} height={((current2) * rowhight * ratio)} fill="#f20909" />
                 <Text x={shiftRight + (gap1 * 2) + (barwidth * 3) + gap2+ 10} y={((rowhight * 5) + shiftTop) - ((current2) * rowhight * ratio)-5} fill='#555555' textAnchor="middle" fontSize="10" fontFamily='Prompt-Regular' fill="#f20909">{listdata[3]}</Text>
                 <Text x={shiftRight + gap1 + (barwidth * 3) + gap2} y={(rowhight * 5) + shiftTop + labelbottom} fill='#555555' textAnchor="middle" fontFamily='Prompt-Regular'>OT 2</Text>

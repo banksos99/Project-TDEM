@@ -42,7 +42,7 @@ export default async function loginWithPinAPI(pin, functionID) {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("SharedPreference.REGISTER_API ==>  : ", SharedPreference.REGISTER_API)
+                console.log("responseJson ==>  : ",responseJson)
                 let object
                 if (responseJson.status == code.SUCCESS) {
                     SharedPreference.profileObject = responseJson.data
@@ -63,7 +63,7 @@ export default async function loginWithPinAPI(pin, functionID) {
                 } else {
                     object = [code, {
                         code: responseJson.status,
-                        data: responseJson.data
+                        data: responseJson.errors[0]
                     }]
                 }
                 return object

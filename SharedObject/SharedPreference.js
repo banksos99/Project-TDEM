@@ -12,7 +12,7 @@ if (bundleId == "com.tdem.tdemconnect") {
     HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
     SERVER = 'DEV'
 }
-
+console.log("HOST ======================= " + HOST);
 // android - (Build type)
 // 1. Debug - (มี log warning + error)
 // 2. Release - (ไม่มี log พร้อมขึ้น store)
@@ -47,7 +47,10 @@ if (bundleId == "com.tdem.tdemconnect") {
 // const VERSION = 'v1.0.70'//20-09-61 IOS: Android:
 // const VERSION = 'v1.0.71'//27-09-61 IOS: Android:
 // const VERSION = 'v1.0.72'//30-09-61 IOS: Android:
-const VERSION = 'v1.0.73'//28-09-61 IOS: Android:
+// const VERSION = 'v1.0.73'//28-09-61 IOS: Android:
+// const VERSION = 'v1.0.74'//04-10-61 IOS: Android:
+const VERSION = 'v1.0.75'//04-10-61 IOS: Android:
+
 export default {
     HOST: HOST,
     SERVER: SERVER,
@@ -201,6 +204,7 @@ export default {
     currentNavigator: 'home',
     sessionTimeoutBool: false,
     countbegin: 0,
-
+    selectLocationCalendar:'default',
+    Sessiontimeout:0
 }
 

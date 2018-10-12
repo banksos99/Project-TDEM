@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar, NetInfo, AppState, PanResponder, ViewPropTypes } from 'react-native';
+import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar, NetInfo, AppState, ViewPropTypes,BackHandler } from 'react-native';
 
 import SharedPreference from './SharedObject/SharedPreference';
 
 import RootViewController from './ViewController/NavigationController';
 import SavePIN from "./constants/SavePIN";
 import SaveProfile from "./constants/SaveProfile"
-
+import SaveTOKEN from "./constants/SaveToken"
 import LoginResetPinAPI from "./constants/LoginResetPinAPI";
 
 import DeviceInfo from 'react-native-device-info';
@@ -23,7 +23,9 @@ import LoginWithPinAPI from "./constants/LoginWithPinAPI"
 import PropTypes from 'prop-types';
 // import registerScreen from "./ViewController/MHF01210RegisterScreen";
 var BadgeAndroid = require('react-native-android-badge')
-let sessionTimeoutSec = 300000;
+let sessionTimeoutSec = 10000;
+let countsession = 0;
+let begin = false;
 
 export default class mainview extends Component {
 
@@ -37,7 +39,9 @@ export default class mainview extends Component {
 
   savePIN = new SavePIN()
   saveProfile = new SaveProfile()
-  panResponder = {};
+  saveToken = new SaveTOKEN()
+
+  // panResponder = {};
 
   constructor(props) {
     super(props);
@@ -55,7 +59,7 @@ export default class mainview extends Component {
       failPin: 0,
       savePin: '',
       isLoading: false,
-      sessionTimeoutBool: false,
+      // sessionTimeoutBool: false,
       pageSelect: '',
       quitdate: new Date(),
       glass: false,
@@ -64,15 +68,18 @@ export default class mainview extends Component {
     console.log("this.props.navigation ==> ", this.props.navigation)
   }
 
-  onInactivity = (timeWentInactive) => {
-    console.log("onInactivity ", timeWentInactive)
+  onInactivityTime = () => {
+
+    this.resetTimer();
+
+    // console.log("onInactivity ", timeWentInactive)
     // if (timeWentInactive != null) {
     if (SharedPreference.currentNavigator == SharedPreference.SCREEN_MAIN) {
 
-      if (this.state.sessionTimeoutBool == false) {
+      if (SharedPreference.sessionTimeoutBool == false) {
 
-        this.state.sessionTimeoutBool = true
-        this.state.quitdate = new Date()
+        SharedPreference.sessionTimeoutBool = true
+        // this.state.quitdate = new Date()
         Alert.alert(
           StringText.ALERT_SESSION_TIMEOUT_TITILE,
           StringText.ALERT_SESSION_TIMEOUT_DESC,
@@ -98,56 +105,51 @@ export default class mainview extends Component {
       });
 
     }
-    // }
   }
-
+// }
 
   componentDidUpdate() {
-    console.log('mainApp => componentDidUpdate', AppState.currentState)
+    // console.log('mainApp => componentDidUpdate', AppState.currentState)
   }
 
   componentWillMount() {
     console.log("Tdem ==> componentWillMount")
 
+   
     // this.checkUserInActive();
-    this.panResponder = PanResponder.create({
+    // this.panResponder = PanResponder.create({
 
-      onStartShouldSetPanResponder: () => {
-        console.log('onStartShouldSetPanResponder');
-        this.resetTimer()
-        return false
-      },
-      onMoveShouldSetPanResponder: () => {
-        console.log('onMoveShouldSetPanResponder');
-        this.resetTimer()
-        return false
-      },
-      onStartShouldSetPanResponderCapture: () => {
-        console.log('onStartShouldSetPanResponderCapture');
-        this.resetTimer()
-        return false
-      },
-      // onStartShouldSetPanResponderCapture: () => false,
-      onMoveShouldSetPanResponderCapture: () => false,
-      onPanResponderTerminationRequest: () => true,
-      onShouldBlockNativeResponder: () => false,
-    });
-    this.timer = setTimeout(() => this.setState({
-      glass: true
-    }, function () {
-      this.onInactivity();
-      // this.resetTimer();
-    }), sessionTimeoutSec)
-  }
+    //   onStartShouldSetPanResponder: () => {
+    //     console.log('onStartShouldSetPanResponder');
+    //     // this.clearsessiontimeout()
+    //     this.resetTimer()
+    //     return false
+    //   },
+    //   onMoveShouldSetPanResponder: () => {
+    //     console.log('onMoveShouldSetPanResponder');
+    //     // this.clearsessiontimeout()
+    //     this.resetTimer()
+    //     return false
+    //   },
+    //   onStartShouldSetPanResponderCapture: () => {
+    //     console.log('onStartShouldSetPanResponderCapture');
+    //     // this.clearsessiontimeout()
+    //     this.resetTimer()
+    //     return false
+    //   },
+    //   // onStartShouldSetPanResponderCapture: () => false,
+    //   onMoveShouldSetPanResponderCapture: () => false,
+    //   onPanResponderTerminationRequest: () => true,
+    //   onShouldBlockNativeResponder: () => false,
+    // });
+    // this.timer = setTimeout(() => this.setState({
+    //   glass: true
+    // }, function () {
 
-  onStartShouldSetPanResponder() {
-    this.resetTimer()
-    return true
-  }
+    //     this.onInactivityTime();
+      
+    // }), sessionTimeoutSec)
 
-  onMoveShouldSetPanResponder() {
-    this.resetTimer()
-    return true
   }
 
   componentWillUnmount() {
@@ -158,6 +160,19 @@ export default class mainview extends Component {
   }
 
   async componentDidMount() {
+
+    if (Platform.OS === 'android') {
+      let first = await this.saveToken.getToken()
+      if (first) {
+        console.log('first => yes')
+      } else {
+        this.saveToken.setToken('1')
+        BackHandler.exitApp()
+        console.log('first = > no')
+      }
+    }
+
+
     console.log('Tdem ==> componentDidMount')
     AppState.addEventListener('change', this._handleAppStateChange);
     NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
@@ -234,11 +249,43 @@ export default class mainview extends Component {
 
   //check application active
   _handleAppStateChange = (nextAppState) => {
+    console.log('his.state.appState =>', this.state.appState)
 
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-      let diff = moment(new Date()).diff(this.state.quitdate, 'seconds')
-    } else if (nextAppState === 'inactive') {
+    if (Platform.OS === 'android') {
 
+      if (nextAppState === 'background') {
+
+        this.state.quitdate = new Date()
+        console.log('inactive =>', this.state.quitdate)
+
+      } else if (nextAppState === 'active') {
+
+        if (SharedPreference.userRegisted) {
+          let diff = moment(new Date()).diff(this.state.quitdate, 'seconds');
+          console.log('diff =>', parseInt(diff))
+          SharedPreference.Sessiontimeout = SharedPreference.Sessiontimeout + parseInt(diff);
+          console.log('SharedPreference.sessionTimeoutSec =>', SharedPreference.Sessiontimeout)
+
+        }
+
+      }
+
+    } else {
+
+      if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('active =>', new Date(), this.state.quitdate)
+        if (SharedPreference.userRegisted) {
+          let diff = moment(new Date()).diff(this.state.quitdate, 'seconds');
+          console.log('diff =>', parseInt(diff))
+          SharedPreference.Sessiontimeout = SharedPreference.Sessiontimeout + parseInt(diff);
+          console.log('SharedPreference.sessionTimeoutSec =>', SharedPreference.Sessiontimeout)
+
+        }
+
+      } else if (nextAppState === 'inactive') {
+        this.state.quitdate = new Date()
+        console.log('inactive =>', this.state.quitdate)
+      }
     }
     this.setState({ appState: nextAppState });
   }
@@ -275,15 +322,15 @@ export default class mainview extends Component {
             show_in_foreground: true,
 
           })
-            .setNotificationId(notification.notificationId)
-            .setTitle(notification.title)
-            .setSubtitle(notification.subtitle)
-            .setBody(notification.body)
-            .setData(notification.data)
+            // .setNotificationId(notification.notificationId)
+            // .setTitle(notification.title)
+            // .setSubtitle(notification.subtitle)
+            // .setBody(notification.body)
+            // .setData(notification.data)
             .android.setChannelId('channelId') // e.g. the id you chose above
-            .android.setSmallIcon('ic_stat_notification') // create this icon in Android Studio
-            .android.setColor('#000000') // you can set a color here
-            .android.setPriority(firebase.notifications.Android.Priority.High)
+            // .android.setSmallIcon('ic_stat_notification') // create this icon in Android Studio
+            // .android.setColor('#000000') // you can set a color here
+            // .android.setPriority(firebase.notifications.Android.Priority.High)
           // .android.setBadge(6)
 
           firebase.notifications()
@@ -561,7 +608,7 @@ export default class mainview extends Component {
 
   renderPINScreen() {
 
-    if (this.state.showpin) {
+    if (this.state.showpin && SharedPreference.userRegisted) {
       console.log("Tdem ==> renderPINScreen")
       return (
         <View style={[styles.alertDialogContainer, { backgroundColor: Colors.redColor }]}>
@@ -652,7 +699,11 @@ export default class mainview extends Component {
             </View>
 
             <View style={styles.registPinNumRowContainer}>
-              <View style={styles.registPinNumContainer} />
+              <View style={styles.emptyContainer}>
+                <View style={styles.registPinNumContainer}>
+                  <Text style={[styles.pinnumber, { color: Colors.redColor }]}>0</Text>
+                </View>
+              </View>
 
               <TouchableOpacity style={styles.emptyContainer}
                 onPress={() => { this.setPIN(0) }}>
@@ -716,11 +767,12 @@ export default class mainview extends Component {
 
 
     this.state.quitdate = new Date()
-    if (code.SUCCESS == data.code) {
 
+    if (code.SUCCESS == data.code) {
+      SharedPreference.sessionTimeoutBool = false,
       this.setState({
         showpin: false,
-        sessionTimeoutBool: false,
+        
         failPin: 0,
         pin: '',
         glass: false
@@ -737,7 +789,7 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
-              sessionTimeoutBool: false,
+              // sessionTimeoutBool: false,
               glass: false
             })
           }
@@ -751,7 +803,22 @@ export default class mainview extends Component {
 
     } else if (code.DOES_NOT_EXISTS == data.code) {
 
-      this.onRegisterErrorAlertDialog()
+      SharedPreference.userRegisted = false;
+      timerstatus = false;
+      this.setState({
+        isscreenloading: false,
+      })
+
+      Alert.alert(
+        StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+        StringText.ALERT_SESSION_AUTHORIZED_DESC,
+        [{
+          text: 'OK', onPress: () => {
+            this.signout()
+          }
+        }],
+        { cancelable: false }
+      )
 
 
     } else if ((code.INTERNAL_SERVER_ERROR == data.code) || (code.ERROR == data.code)) {
@@ -766,7 +833,7 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
-              sessionTimeoutBool: false,
+              // sessionTimeoutBool: false,
               glass: false
             })
           }
@@ -786,14 +853,32 @@ export default class mainview extends Component {
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,
-              sessionTimeoutBool: false,
+              // sessionTimeoutBool: false,
               glass: false
             })
           }
         }
-        ],
-        { cancelable: false })
-    } else {
+        ],{ cancelable: false })
+
+      } else if (data.data.code === 'MSC29136AERR') {
+        Alert.alert(
+            StringText.ALERT_USER_NOT_AUTHORIZED_TITLE,
+            StringText.ALERT_USER_NOT_AUTHORIZED_DETAIL,
+            [{
+                    text: 'OK', onPress: () => {
+                      this.saveProfile.setProfile(null)
+                      SharedPreference.gotoRegister = true
+                      this.setState({
+                        showpin: false,
+                        glass: false
+                      })
+                    }
+                }
+            ],
+            { cancelable: false }
+        )
+        
+    } else if (data.data.code === 'MSC29133AERR') {
       if (this.state.failPin == 4) {
         this.setState({
           isLoading: false
@@ -809,7 +894,7 @@ export default class mainview extends Component {
               // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
               this.setState({
                 showpin: false,
-                sessionTimeoutBool: false,
+                // sessionTimeoutBool: false,
                 glass: false
               })
             }
@@ -817,33 +902,51 @@ export default class mainview extends Component {
           { cancelable: false }
         )
       } else {
+        let origin = this.state.failPin + 1
         this.setState({
-          isLoading: false
+          isLoading: false,
+          failPin: origin,
+          pin: ''
         })
         Alert.alert(
           StringText.ALERT_PIN_TITLE_NOT_CORRECT,
           StringText.ALERT_PIN_DESC_NOT_CORRECT,
           [{
             text: 'OK', onPress: () => {
-              let origin = this.state.failPin + 1
-              this.setState({
-                failPin: origin,
-                sessionTimeoutBool: false,
-                pin: ''
-              })
+              // let origin = this.state.failPin + 1
+              // this.setState({
+              //   failPin: origin,
+              //   // sessionTimeoutBool: false,
+              //   pin: ''
+              // })
             }
           },
           ],
           { cancelable: false }
         )
       }
+    } else {
+      Alert.alert(
+        StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+        StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+        [{
+          text: 'OK', onPress: () => {
+            this.setState({
+
+              pin: '',
+              isLoading: false
+            })
+
+          }
+        }], { cancelable: false }
+      )
     }
   }
 
 
 
   resetTimer() {
-    console.log('resetTimer')
+    console.log('resetTimer',countsession)
     clearTimeout(this.timer)
     // this.checkUserInActive();
     // if (this.state.showpin)
@@ -852,22 +955,35 @@ export default class mainview extends Component {
       glass: true
 
     }, function () {
-      this.onInactivity();
-      this.resetTimer();
+      // if(countsession == 4){
+
+        this.onInactivityTime();
+      //   countsession = 0;
+
+      // }else{
+
+      //   countsession = countsession + 1;
+      //   console.log('countsession =>',countsession);
+      // }
+      
     }), sessionTimeoutSec)
   }
 
+clearsessiontimeout(){
+  countsession = 0;
+
+}
   render() {
-    console.log('render =>',this.state.inactive)
+    // console.log('render =>',this.state.inactive)
     if (this.state.inactive) {
     //   const {
     //   style,
     //     children,
     // } = this.props;
       return (
-        <View style={{ flex: 1 }}
-          collapsable={false}
-          {...this.panResponder.panHandlers}
+        <View style={{ flex: 1,backgroundColor:'white' }}
+          // collapsable={false}
+          // {...this.panResponder.panHandlers}
 
         >
 
@@ -883,7 +999,7 @@ export default class mainview extends Component {
           />
           <View style={styles.container} >
             <View style={styles.container} >
-              <RootViewController pushstatus={this.state.pageSelect} />
+              <RootViewController  />
             </View>
             {/* {this.rendertranscreen()} */}
             {this.rendernotificationlabel()}

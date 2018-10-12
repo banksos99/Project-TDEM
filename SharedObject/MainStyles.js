@@ -257,7 +257,7 @@ export const styles = StyleSheet.create({
         height: 60, marginLeft: 10, marginRight: 10,
     },
     calendarCoverTitleBox: {
-        width: 120,
+        width: 170,
         marginTop: 10,
         marginBottom: 10,
         backgroundColor: Colors.calendarLocationBoxColor,
@@ -305,14 +305,26 @@ export const styles = StyleSheet.create({
         flex: 1,
         height: 14,
         // marginBottom: -13,
-        marginTop: -8,
+        marginTop: -10,
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
-    calendarCurrentDayText:
-        {
-            fontSize: 10 * scale, textAlign: 'center', color: 'white'
-        },
+    calendarCurrentDayText: {
+
+        fontSize: 10 * scale, textAlign: 'center', color: 'black'
+    },
+    calendarCurrentDayTextBlue: {
+
+        fontSize: 10 * scale, textAlign: 'center', color: 'blue'
+    },
+    calendarCurrentDayTextRed: {
+
+        fontSize: 10 * scale, textAlign: 'center', color: 'red'
+    },
+    calendarCurrentDayTextBlack: {
+
+        fontSize: 10 * scale, textAlign: 'center', color: 'black'
+    },
     calendarTitleDialogText: {
         color: 'black',
         fontSize: 20,
@@ -684,11 +696,11 @@ export const styles = StyleSheet.create({
         , marginTop: 10, marginBottom: 10
     },
     leaveQuotaDetailItemTopCircleText: {
-        textAlign: 'center', fontSize: 20*scale, color: 'white',
+        textAlign: 'center', fontSize: 18 * scale, color: 'white',
         fontFamily: font_medium
     },
     leaveQuotaDetailItemTopDescText: {
-        fontSize: 15*scale, color: Colors.grayText, fontFamily: font_light//TODO
+        fontSize: 15 * scale, color: Colors.grayText, fontFamily: font_light//TODO
     },
     pinnumber: {
         flex: 1,
@@ -1000,7 +1012,12 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium
 
     },
+    otsummarydetailtext:{
 
+        color: Colors.grayTextColor,
+        fontSize: 12 * scale,
+        fontFamily: font_medium
+    },
     otsummaryheaderredtext: {
         color: Colors.redTextColor,
         fontSize: 17 * scale,
@@ -1332,7 +1349,7 @@ export const styles = StyleSheet.create({
         color: "white"
     },
     pinCreateSuccessDescText: {
-        fontSize: 13,
+        fontSize: 13 * scale,
         color: Colors.grayText
     },
     pinImage: {
@@ -1362,22 +1379,22 @@ export const styles = StyleSheet.create({
     settinglefttext: {
         textAlign: 'left',
         color: Colors.GrayTextColor,
-        fontSize: 15,
-        marginLeft: 10,
+        fontSize: 14 * scale,
+        marginLeft: 10 * scale,
         fontFamily: font_medium
     },
     settingleftredtext: {
         textAlign: 'left',
         color: Colors.redTextColor,
-        fontSize: 15,
+        fontSize: 14* scale,
         marginLeft: 10,
         fontFamily: font_medium
     },
     settingrighttext: {
         textAlign: 'right',
         color: Colors.GrayTextColor,
-        fontSize: 15,
-        marginRight: 10,
+        fontSize: 14 * scale,
+        marginRight: 10 * scale,
         fontFamily: font_medium
     },
     pinFailBoxContainer: {

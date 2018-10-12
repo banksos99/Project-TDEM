@@ -11,7 +11,8 @@ import {
     Platform,
     ActivityIndicator,
     Alert,
-    BackHandler
+    BackHandler,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -31,6 +32,8 @@ let initannouncementTypetext;
 
 export default class OTSummaryBarChart extends Component {
 
+    panResponder = {};
+    
     constructor(props) {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -65,21 +68,23 @@ export default class OTSummaryBarChart extends Component {
             org_code: this.props.navigation.getParam("org_code", "")
 
         }
-
+        selectmonth = 0;
         this.checkDataFormat(this.props.navigation.getParam("DataResponse", ""));
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_OT_SUMMARY_MANAGER)
 
     }
 
     checkDataFormat(DataResponse) {
+        let today = new Date();
+        date = today.getDate() + "/" + parseInt(today.getMonth() + 1) + "/" + today.getFullYear();
+        this.state.initialyear = today.getFullYear();
+        this.state.initialmonth = parseInt(today.getMonth() - 1);
+        this.state.announcementTypetext = MONTH_LIST[this.state.initialmonth + 1] + ' ' + this.state.initialyear;
 
         if (DataResponse) {
-console.log('OTSummaryBarChart DataResponse =>',DataResponse)
-            let today = new Date();
-            date = today.getDate() + "/" + parseInt(today.getMonth() + 1) + "/" + today.getFullYear();
-            this.state.initialyear = today.getFullYear();
-            this.state.initialmonth = parseInt(today.getMonth() - 1);
-            this.state.announcementTypetext = MONTH_LIST[this.state.initialmonth + 1] + ' ' + this.state.initialyear;
+            console.log('OTSummaryBarChart DataResponse =>', DataResponse)
+            
+
             for (let i = this.state.initialmonth + 13; i > this.state.initialmonth; i--) {
 
                 if (i === 11) {
@@ -97,7 +102,19 @@ console.log('OTSummaryBarChart DataResponse =>',DataResponse)
     }
 
     componentDidMount() {
-        this.settimerInAppNoti()
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+        // this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -310,7 +327,14 @@ console.log('OTSummaryBarChart DataResponse =>',DataResponse)
             //     org_name:this.state.org_name
             // });
 
+        } else if (code.NODATA == data.code) {
 
+            //console.log('data  :', data.data)
+            this.setState({
+                isscreenloading: false,
+                // tdataSource: data.data
+
+            })
         } else {
 
             this.onLoadErrorAlertDialog(data)
@@ -359,7 +383,8 @@ console.log('OTSummaryBarChart DataResponse =>',DataResponse)
 
     onBack() {
 
-        this.props.navigation.navigate('OrganizationOTStruct');
+        // this.props.navigation.navigate('OrganizationOTStruct');
+        this.props.navigation.goBack();
     }
     select_month() {
 
@@ -586,11 +611,23 @@ Alert.alert(
     }
 
     renderdetail() {
+
         let year = date.substring(2, 4);
         let month = parseInt(date.substring(4, 6));
 
-        let premonth = monthstr[parseInt(this.state.tdataSource.previous_month.month - 1)] + ' - ' + this.state.tdataSource.previous_month.year.substring(2, 4);
-        let curmonth = monthstr[parseInt(this.state.tdataSource.request_month.month - 1)] + ' - ' + this.state.tdataSource.request_month.year.substring(2, 4);
+        let premonth = 0;
+        let curmonth = 0;
+        let manpower1 = 0;
+        let manpower2 = 0;
+        console.log('this.state.tdataSource =>',this.state.tdataSource)
+        // if (this.state.tdataSource.length) {
+            premonth = monthstr[parseInt(this.state.tdataSource.previous_month.month - 1)] + ' - ' + this.state.tdataSource.previous_month.year.substring(2, 4);
+            curmonth = monthstr[parseInt(this.state.tdataSource.request_month.month - 1)] + ' - ' + this.state.tdataSource.request_month.year.substring(2, 4);
+            manpower1 = this.state.tdataSource.previous_month.manPower;
+            manpower2 = this.state.tdataSource.request_month.manPower
+        // }
+
+        
 
         return (
             <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -620,15 +657,15 @@ Alert.alert(
                     <View style={{ flex: 1 }} />
 
                     <View style={{ flex: 3, justifyContent: 'center' }}>
-                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>Man Power</Text>
+                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>Manpower</Text>
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <Text style={{ textAlign: 'center', color: '#d77c7c', fontFamily: 'Prompt-Regular' }}>{this.state.tdataSource.previous_month.manPower}</Text>
+                        <Text style={{ textAlign: 'center', color: '#d77c7c', fontFamily: 'Prompt-Regular' }}>{manpower1}</Text>
                     </View>
                     <View style={{ flex: 2 }}>
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <Text style={{ textAlign: 'center', color: '#f20909', fontFamily: 'Prompt-Regular' }}>{this.state.tdataSource.request_month.manPower}</Text>
+                        <Text style={{ textAlign: 'center', color: '#f20909', fontFamily: 'Prompt-Regular' }}>{manpower2}</Text>
                     </View>
                     <View style={{ flex: 2 }}>
                     </View>
@@ -645,7 +682,10 @@ Alert.alert(
 
         return (
             // this.state.dataSource.map((item, index) => (
-            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }} >
+            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
@@ -667,13 +707,38 @@ Alert.alert(
                 </View>
                 <View style={{ flex: 1, flexDirection: 'column', }}>
 
-                    <TouchableOpacity style={{ flex: 2, backgroundColor: Colors.calendarLocationBoxColor, margin: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}
+                    {/* <TouchableOpacity style={{ flex: 2, backgroundColor: Colors.calendarLocationBoxColor, margin: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}
                         onPress={(this.select_month.bind(this))}
                     >
 
                         <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
 
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+
+                    <View style={{  margin: 5, }} >
+                        <View style={{ height: '100%', width: '100%', position: 'absolute' }}>
+                            <View style={{ flex: 2, flexDirection: 'row', backgroundColor: Colors.backgroundcolor, borderRadius: 5, }}>
+                                <View style={{ flex: 4 }} >
+                                </View>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+                                    <Image
+                                        style={{ width: 20, height: 30, tintColor: Colors.redTextColor }}
+                                        source={require('./../resource/images/dropdown.png')}
+                                    // resizeMode='contain'
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
+                            onPress={(this.select_month.bind(this))}
+                        >
+
+                            <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
+
+                        </TouchableOpacity>
+
+                    </View>
+
                     <View style={{ flex: 3, backgroundColor: Colors.calendarLocationBoxColor }}>
                         {this.renderdetail()}
                     </View>

@@ -7,7 +7,8 @@ import {
     Image, WebView,
     BackHandler,
     Platform,
-    Alert
+    Alert,
+    PanResponder
 } from 'react-native';
 
 import { styles } from "./../SharedObject/MainStyles"
@@ -26,9 +27,21 @@ let modifly;
 let createby;
 
 export default class PaySlipActivity extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.checkDataFormat(this.props.navigation.getParam("DataResponse", ""));
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_ANNOUCEMENT_DETAIL)
@@ -47,7 +60,8 @@ export default class PaySlipActivity extends Component {
     }
 
     componentDidMount() {
-        this.settimerInAppNoti()
+       
+        // this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
     // componentWillMount() {
@@ -192,20 +206,25 @@ export default class PaySlipActivity extends Component {
     onBack() {
         
         SharedPreference.notiAnnounceMentID = 0
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
+        this.props.navigation.goBack()
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
     render() {
         // content = `<span class="price bold some-class-name">$459.00</span>`;
+        console.log('modifly =>',modifly)
         let pp = modifly.split(' ');
         let tpp = pp[0].split('-');
         let spp = pp[1].split(':');
-        var monthnow = new Date(tpp[0], tpp[1], tpp[2]);
-        let modidtstr = Months.dayNames[parseInt(monthnow.getDay())] + ', ' + tpp[2] + ' ' + Months.monthNames[parseInt(tpp[1])] + ' ' + tpp[0] + ' at ' + spp[0] + ':' + spp[1]
+        var monthnow = new Date(tpp[0], parseInt(tpp[1])-1, tpp[2]);
+        let modidtstr = Months.dayNames[parseInt(monthnow.getDay())] + ', ' + tpp[2] + ' ' + Months.monthNames[parseInt(tpp[1])-1] + ' ' + tpp[0] + ' at ' + spp[0] + ':' + spp[1]
 
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 ,backgroundColor:'white'}}
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+            >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
@@ -258,14 +277,27 @@ export default class PaySlipActivity extends Component {
                     <View style={{ height: 10 }}></View>
                     <View style={{ height: 1, marginLeft: 10, marginRight: 10, backgroundColor: Colors.grayColor }}></View>
                 </View>
-                <WebView
-                    source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
-                    // scalesPageToFit={(Platform.OS === 'ios') ? false : true}
-                    scalesPageToFit={true}
-                    automaticallyAdjustContentInsets={true}
-                    
-                    style={{ flex:1,marginTop: 0 ,marginRight:10,marginLeft:10}}
-                />
+                <View style={{ flex: 1, marginTop: 0, marginRight: 10, marginLeft: 10 }}>
+                    {/* <WebView
+                        // source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
+                        source={{ html:  content}}
+                        scalesPageToFit={(Platform.OS === 'ios') ? true : false}
+                        // scalesPageToFit={false}
+                        automaticallyAdjustContentInsets={true}
+                        javaScriptEnabledAndroid={true}
+                        style={{ flex: 1, marginTop: 0}}
+                    /> */}
+                    <WebView
+                    // ref={WEBVIEW_REF}
+                    automaticallyAdjustContentInsets={false}
+                    source={{html:  content}}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    decelerationRate="normal"
+                    // startInLoadingState={true}
+                    scalesPageToFit={false}
+                  />
+                </View >
             </View >
 
         );

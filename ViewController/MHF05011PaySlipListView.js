@@ -7,7 +7,7 @@ import {
     Image,
     ActivityIndicator,
     Alert,
-    BackHandler, NetInfo
+    BackHandler, NetInfo,PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -44,10 +44,29 @@ let currentYear = new Date().getFullYear()
 
 export default class PaySlipActivity extends Component {
 
-    constructor(props) {
-        super(props);
-        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    panResponder = {};
 
+    constructor(props) {
+
+        super(props);
+
+        this.panResponder = PanResponder.create({
+
+            onStartShouldSetPanResponder: () => {
+                
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+        
         this.state = {
             isscreenloading: false,
             loadingtype: 0,
@@ -71,7 +90,7 @@ export default class PaySlipActivity extends Component {
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
 
         if (this.state.DataResponse) {
             this.state.yearlistdata = []
@@ -380,169 +399,6 @@ export default class PaySlipActivity extends Component {
 
     }
 
-
-    // createcomponent(i) {
-
-    //     let havedata;
-
-    //     if (dataSource.years) {
-
-    //         if (tempdatabody) {
-
-    //             for (let j = 0; j < tempdatabody.length; j++) {
-
-    //                 if (tempdatabody[j].month_no === i + 1) {
-
-    //                     havedata = tempdatabody[j]
-
-    //                     //console.log('payslip data =>',dataSource.years[indexselectyear].detail,indexselectyear)
-    //                     console.log('payslip data =>',havedata,this.state.indexselectyear)
-    //                     break
-
-    //                 }
-
-    //             }
-
-    //             if (i > this.state.currentmonth && this.state.indexselectyear == 2) {
-
-
-
-    //             } else if (havedata) {
-
-    //                 let netsalary = 0;
-    //                 let pay_date;
-
-    //                 if (havedata.net_salary) {
-    //                     netsalary = Dcryptfun.decrypt(havedata.net_salary)
-    //                 }
-
-    //                 if (havedata.pay_date) {
-
-    //                     teatlist = havedata.pay_date.split('-')
-
-    //                     pay_date = teatlist[2] + ' ' + Month.monthNamesShort[teatlist[1] - 1] + ' ' + teatlist[0]
-
-    //                 }
-
-    //                 return (
-
-    //                     //have data
-    //                     <View style={i === this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //                         styles.payslipitemlast :
-    //                         i > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdisable : styles.payslipitem} key={i}>
-    //                         <TouchableOpacity style={{ width: '100%', height: '100%' }}
-    //                             onPress={() => { this.onDetail(this.state.indexselectyear, i) }}
-    //                         >
-    //                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-    //                                 <Text style={i === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemmoneyred : styles.payslipitemdetail}>
-    //                                     {Month.monthNamesShort[i]}
-    //                                 </Text>
-    //                             </View>
-    //                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    //                                 <Text style={i === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemmoneyred : styles.payslipincome}>
-    //                                     {(netsalary)}
-    //                                 </Text>
-    //                             </View>
-    //                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-    //                                 <Text style={i === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemmoneyred : styles.payslipitemdetail}>
-    //                                     {pay_date}
-    //                                 </Text>
-    //                             </View>
-    //                         </TouchableOpacity>
-    //                         {/* <View style={styles.badgeIconpayslip}>
-    //                             <Text style={{color:'white'}}>18</Text>
-    //                         </View> */}
-    //                     </View>
-    //                 )
-    //             }
-
-    //             let net = '0.00';
-
-    //             if (this.state.currentmonth < i && this.state.indexselectyear === 2) {
-
-    //                 net = '';
-
-    //                 return (
-    //                     <View style={i === this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //                         styles.payslipitemlast :
-    //                         styles.payslipitemdisable}
-    //                         key={i}>
-
-
-    //                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-    //                             <Text style={i === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemmoneyred : styles.payslipitemdetail}>{Month.monthNamesShort[i]}</Text>
-    //                         </View>
-    //                         <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
-    //                             <Text style={i === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemmoneyred : styles.payslipitemdetail}>{net}</Text>
-    //                         </View>
-    //                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-
-    //                         </View>
-
-    //                     </View>
-    //                 );
-
-
-    //             }
-    //             return (
-    //                 <View style={i === this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //                     styles.payslipitemlast :
-    //                     styles.payslipitemdisable}
-    //                     key={i}>
-    //                     <TouchableOpacity style={{ width: '100%',height:'100%' }}
-    //                         onPress={() => { this.onNoDataDetail(this.state.indexselectyear, i) }}
-    //                     >
-    //                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-    //                             <Text style={i === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemmoneyred : styles.payslipitemdetail}>{Month.monthNamesShort[i]}</Text>
-    //                         </View>
-    //                         <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
-    //                             <Text style={i === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemmoneyred : styles.payslipitemdetail}>{net}</Text>
-    //                         </View>
-    //                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-
-    //                         </View>
-    //                     </TouchableOpacity>
-    //                 </View>
-    //             );
-
-    //         }
-    //     }
-
-    //     return (
-    //         <View style={i === this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //             styles.payslipitemlast :
-    //             styles.payslipitemdisable}
-    //             key={i}>
-    //             <TouchableOpacity style={{ width: '100%',height:'100%' }}
-    //                 onPress={() => {
-    //                     this.onLoadAlertDialog()
-    //                 }}
-    //             >
-    //                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-    //                     <Text style={i > this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //                         styles.payslipitemdetailHide :
-    //                         i === this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //                             styles.payslipitemcurrentdetail : styles.payslipitemdetail}>
-    //                         {Month.monthNamesShort[i]}
-    //                     </Text>
-    //                 </View>
-    //                 <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
-    //                     <Text style={i > this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //                         styles.payslipitemdetailHide :
-    //                         i === this.state.currentmonth && this.state.indexselectyear === 2 ?
-    //                             styles.payslipitemcurrentdetail : styles.payslipitemdetail}>
-    //                         0.00
-    //                     </Text>
-    //                 </View>
-    //                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-
-    //                 </View>
-    //             </TouchableOpacity>
-    //         </View>
-    //     )
-
-    // }
-
     onLoadAlertDialog() {
         // ////console.log("onLoadAlertDialog")
         Alert.alert(
@@ -558,38 +414,8 @@ export default class PaySlipActivity extends Component {
         )
     }
 
-    // createPayslipItem() {
-
-    //     console.log('dataSource.years =>',dataSource.years)
-
-    //     payslipItems = [];
-
-    //     for (let i = 0; i < 12; i++) {
-
-    //         temparray.push(
-
-    //             this.createcomponent(i)
-
-    //         )
-    //         if (i % 3 === 2) {
-
-    //             payslipItems.push(
-
-    //                 <View style={{ flex: 1, flexDirection: 'row' }} key={i}>
-    //                     {temparray}
-    //                 </View>
-
-    //             )
-
-    //             temparray = []
-    //         }
-    //     }
-    // }
-
 
     expand_collapse_Function = () => {
-
-        // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
         if (this.state.expand == false) {
 
@@ -614,80 +440,10 @@ export default class PaySlipActivity extends Component {
     onBack() {
         // this.props.navigator.pop();
         SharedPreference.notiPayslipBadge = [];
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
-        // this.props.navigation.pop();
+        this.props.navigation.goBack();
     }
-
-    // onNoDataDetail(year, index) {
-    //     Alert.alert(
-    //         'no data',
-    //         'no data',
-    //         [
-    //             {
-    //                 text: 'OK', onPress: () => {
-    //                     //console.log('OK Pressed') },
-    //                 }
-    //             }
-    //         ],
-    //         { cancelable: false }
-    //     )
-
-
-    // }
-    // onDetail(year, index) {
-
-    //     // pay_date_str = dataSource.years[this.state.indexselectyear].detail[index].pay_date;
-
-
-    //     this.setState({
-
-    //         isscreenloading: true,
-    //         loadingtype: 3
-
-    //     }, function () {
-    //         // //console.log(this.state.indexselectyear)
-    //         // this.setState(this.renderloadingscreen())
-
-    //         this.getPayslipDetailfromAPI(this.state.selectYearArray[year], index)
-
-    //     });
-
-    //     // this.props.navigation.navigate('PaySlipDetail');
-
-    // }
-    // savedata() {
-
-    //     tempdatadetail = []
-    //     tempdatabody = []
-
-    //     if (dataSource.years) {
-
-    //         console.log('tempdatadetail => ', dataSource.years)
-    //         console.log('indexselectyear => ', this.state.selectYearArray[this.state.indexselectyear])
-
-    //         for (let i = 0; i < dataSource.years.length; i++) {
-    //             console.log('dataSource.years[i].year: => ', dataSource.years[i].year, this.state.selectYearArray[this.state.indexselectyear])
-    //             if (dataSource.years[i].year == this.state.selectYearArray[this.state.indexselectyear]) {
-
-    //                 tempdatadetail = dataSource.years[i].header
-    //                // tempdatabody = dataSource.years[i].detail
-    //                //console.log('dataSource.years : => ', tempdatadetail)
-    //                 // exemption = Dcryptfun.decrypt(tempdatadetail.exemption);
-    //                 // income_acc = Dcryptfun.decrypt(tempdatadetail.income_acc);
-    //                 // tax_acc = Dcryptfun.decrypt(tempdatadetail.tax_acc);
-    //                 // social_fund = Dcryptfun.decrypt(tempdatadetail.social_fund);
-    //                 // emp_pf_year = Dcryptfun.decrypt(tempdatadetail.emp_pf_year);
-    //                 // com_pf_year = Dcryptfun.decrypt(tempdatadetail.com_pf_year);
-
-    //                 break
-    //             }
-
-    //         }
-
-    //     }
-
-    // }
 
     onCurrentYear() {
 
@@ -1050,6 +806,7 @@ export default class PaySlipActivity extends Component {
  
         if (this.state.yearlistdata.length) {
             console.log('yearlistdata =>', this.state.yearlistdata)
+            console.log('indexselectyear =>', this.state.indexselectyear)
             // let netsalary =  this.state.yearlistdata[(this.state.yearselected * 12) + 5].netsalary
             // console.log('netsalary =>', netsalary)
             // console.log('client_secret =>', SharedPreference.profileObject.client_secret)
@@ -1393,7 +1150,10 @@ export default class PaySlipActivity extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 }} 
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+            >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>

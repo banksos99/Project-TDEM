@@ -8,7 +8,8 @@ import {
     Image,
     Alert,
     ActivityIndicator,
-    BackHandler,NetInfo
+    BackHandler,NetInfo,
+    PanResponder
 
 } from 'react-native';
 
@@ -26,10 +27,21 @@ let option = 0;
 let org_code = '';
 let beginlebel = 0;
 export default class OrganizationStruct extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
-
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
         this.state = {
             // isConnected: true,
             isscreenloading:false,
@@ -55,7 +67,8 @@ export default class OrganizationStruct extends Component {
     }
 
     componentDidMount() {
-        this.settimerInAppNoti()
+       
+        // this.settimerInAppNoti()
        
     }
 
@@ -63,6 +76,9 @@ export default class OrganizationStruct extends Component {
         
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         clearTimeout(this.timer);
+        this.setState({
+            isscreenloading: false,
+        })
         // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
     // handleConnectivityChange = isConnected => {
@@ -251,29 +267,36 @@ export default class OrganizationStruct extends Component {
     // }
 
     onBack() {
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
+        this.props.navigation.goBack();
     }
 
     onClickOrgStruct(item, index) {
         
         console.log('org_code :', item.org_code)
         console.log('org_name :', item.org_name)
+        console.log('next_level :', item.next_level)
+        console.log('org_level :', item.org_level)
+        if ((item.next_level == 'false')&&(parseInt(item.org_level) != 40)) {
+            return
+        }
 
-        if (item.org_name === 'N/A') {
+        // if (item.org_name === 'N/A') {
 
-            Alert.alert(
-                'No Data',
-                'No data found',
-                [{
-                    text: 'OK', onPress: () => {
-                        //console.log("onLoadErrorAlertDialog")
-                    }
-                }],
-                { cancelable: false }
-            )
+        //     Alert.alert(
+        //         'No Data',
+        //         'No data found',
+        //         [{
+        //             text: 'OK', onPress: () => {
+        //                 //console.log("onLoadErrorAlertDialog")
+        //             }
+        //         }],
+        //         { cancelable: false }
+        //     )
 
-        } else if (parseInt(item.org_code) == 0) {
+        // } else 
+        if (parseInt(item.org_code) == 0) {
 
             // *** select emp info detail
             this.setState({
@@ -293,9 +316,6 @@ export default class OrganizationStruct extends Component {
             console.log('item => :', item)
             console.log('level => :', item.org_level)
          if (parseInt(item.org_level) === 40){
-
-
-
 
             // *** select employee list
 
@@ -457,9 +477,9 @@ export default class OrganizationStruct extends Component {
 
         code = data[0]
         data = data[1]
-        // console.log('APICallback data :', data)
+        console.log('APICallback data :', data)
         if (code.SUCCESS == data.code) {
-            console.log('APICallback :', data.data)
+            // console.log('APICallback :', data.data)
             // console.log('dataSource :', dataSource.length)
             // console.log('index_org_code :', this.state.index_org_code)
             // if (data.data.org_lst) {
@@ -489,7 +509,7 @@ export default class OrganizationStruct extends Component {
                                             org_code: 0,
                                             org_name: item.employee_name,
                                             org_level: parseInt(dataSource[i].org_level) + 10,
-                                            next_level: 'false',
+                                            next_level: 'emp',
                                             emp_id: item.employee_id,
                                             position: item.employee_position,
                                             expand: 0,
@@ -508,7 +528,8 @@ export default class OrganizationStruct extends Component {
                                     if (!data.data[j].org_lst[i].org_code) {
                                         console.log('data null')
                                         Orgname = 'N/A'
-                                        Orglevel = parseInt(dataSource[i].org_level) + 10;
+                                        // Orglevel = parseInt(dataSource[i].org_level) + 10;
+                                        Orglevel = Orglevel;
                                     }
 
                                     temparr.push({
@@ -627,6 +648,18 @@ export default class OrganizationStruct extends Component {
         } else if (code.DOES_NOT_EXISTS == data.code) {
 
             this.onRegisterErrorAlertDialog()
+
+        } else if (code.INTERNAL_SERVER_ERROR == data.code) {
+
+            this.setState({
+                isscreenloading: false,
+            })
+            Alert.alert(
+                data.data.code,
+                data.data.detail, [{ text: 'OK', onPress: () => { } }],
+                { cancelable: false }
+            )
+
 
         } else {
 
@@ -870,7 +903,10 @@ export default class OrganizationStruct extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 ,backgroundColor:Colors.backgroundcolor}} 
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+            >
 
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
@@ -878,7 +914,7 @@ export default class OrganizationStruct extends Component {
 
                         <View style={{ flex: 1, justifyContent: 'center', }}>
                             <View style={{ width: '100%', justifyContent: 'center', position: 'absolute', }}>
-                                <Text style={styles.navTitleTextTop}>Organization Structure</Text>
+                                <Text style={styles.navTitleTextTop}>Organization</Text>
                             </View>
                             <TouchableOpacity
                                 onPress={(this.onBack.bind(this))}>
@@ -922,7 +958,7 @@ export default class OrganizationStruct extends Component {
                                                     </View>
                                                     <Image
 
-                                                        style={item.next_level === 'false' ? { height: 0, width: 0 } : { height: 40, width: 40 }}
+                                                        style={item.next_level != 'true' ? { height: 0, width: 0 } : { height: 40, width: 40 }}
                                                         source={item.expand === 0 ?
                                                             require('./../resource/images/Expand.png') :
                                                             require('./../resource/images/Collapse.png')}

@@ -105,6 +105,7 @@ export default class NonpayrollActivity extends Component {
                     this.state.isLoading = false
                     console.log("ChangePIN ==> pintitle2 ==> ", StringText.CHANGE_PIN_ENTER_NEW_PIN_2_TITLE)
                 }, 300);
+                
             } else if (this.state.newpin2 == 0) {
                 this.setState({
                     isLoading: true,
@@ -212,8 +213,8 @@ export default class NonpayrollActivity extends Component {
                                     source={require('../resource/regist/regist_lock_green.png')}
                                     resizeMode="cover" />
                                 <Text style={styles.pinCreateSuccessTitleText}>Create PIN Successfully</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.You can use</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>this PIN to log in next time.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>You can use this PIN to log in next time.</Text>
                             </View>
                         </View>
 
@@ -235,8 +236,9 @@ export default class NonpayrollActivity extends Component {
             pin1: [],
             pin2: [],
         })
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
+        this.props.navigation.goBack();
     }
 
     renderImagePin() {

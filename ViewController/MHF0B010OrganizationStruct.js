@@ -8,7 +8,8 @@ import {
     Image,
     Alert,
     ActivityIndicator,
-    BackHandler,NetInfo
+    BackHandler,NetInfo,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -26,9 +27,21 @@ let option = 0;
 let org_code = '';
 let beginlebel = 0;
 export default class OrganizationStruct extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
         this.state = {
             // isConnected: true,
             isscreenloading:false,
@@ -39,7 +52,8 @@ export default class OrganizationStruct extends Component {
     }
 
     componentDidMount() {
-        this.settimerInAppNoti()
+        
+        // this.settimerInAppNoti()
        
     }
     componentWillMount() {
@@ -51,6 +65,9 @@ export default class OrganizationStruct extends Component {
         
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         clearTimeout(this.timer);
+        this.setState({
+            isscreenloading: false,
+        })
         // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     }
     // handleConnectivityChange = isConnected => {
@@ -110,7 +127,7 @@ export default class OrganizationStruct extends Component {
     }
 
     onAutenticateErrorAlertDialog() {
-        SharedPreference.userRegisted=false;
+        SharedPreference.userRegisted = false;
         timerstatus = false;
         this.setState({
             isscreenloading: false,
@@ -137,32 +154,34 @@ export default class OrganizationStruct extends Component {
     }
 
     onRegisterErrorAlertDialog() {
-if (!SharedPreference.sessionTimeoutBool) {
-        SharedPreference.userRegisted=false;
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
 
-        Alert.alert(
-            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
-            StringText.ALERT_SESSION_AUTHORIZED_DESC,
-            [{
-                text: 'OK', onPress: () => {
+        if (!SharedPreference.sessionTimeoutBool) {
+            
+            SharedPreference.userRegisted = false;
+            timerstatus = false;
+            this.setState({
+                isscreenloading: false,
+            })
 
-                    page = 0
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                    this.setState({
-                        isscreenloading: false
-                    })
-                    this.props.navigation.navigate('RegisterScreen')
-                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-                }
-            }],
-            { cancelable: false }
-        )
-    }
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+
+                        page = 0
+                        SharedPreference.Handbook = []
+                        SharedPreference.profileObject = null
+                        this.setState({
+                            isscreenloading: false
+                        })
+                        this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                    }
+                }],
+                { cancelable: false }
+            )
+        }
     }
 
     checkoption(data) {
@@ -205,17 +224,24 @@ if (!SharedPreference.sessionTimeoutBool) {
     }
 
     onBack() {
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
+        this.props.navigation.goBack();
     }
 
     onOrgStruct = async (item, index) => {
 
+        console.log('onOrgStruct')
+
+        if (!item.org_code) {
+            return
+        }
+
         if (SharedPreference.isConnected) {
-            
-                let url = SharedPreference.ORGANIZ_STRUCTURE_API + item.org_code
-                this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
-            
+
+            let url = SharedPreference.ORGANIZ_STRUCTURE_API + item.org_code
+            this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_ORGANIZ_STRUCTURE))
+
         } else {
 
             Alert.alert(
@@ -294,7 +320,8 @@ if (!SharedPreference.sessionTimeoutBool) {
                                     if (!data.data[j].org_lst[i].org_code) {
                                         console.log('data null')
                                         Orgname = 'N/A'
-                                        Orglevel = parseInt(dataSource[i].org_level) + 10;
+                                        Orglevel = Orglevel;
+                                        // Orglevel = parseInt(dataSource[i].org_level) + 10;
                                     }
 
                                     temparr.push({
@@ -536,8 +563,13 @@ if (!SharedPreference.sessionTimeoutBool) {
 
             } else {
                 // *** select employee list
-                //console.log('load empinfo  :', item)
-
+                console.log('load empinfo  :', parseInt(item.org_code) )
+                // if ((item.next_level == 'false')&&(parseInt(item.org_level) != 40)) {
+                //     return
+                // }
+                if (! parseInt(item.org_code)) {
+                    return
+                }
 
                 this.setState({
 
@@ -722,6 +754,8 @@ if (!SharedPreference.sessionTimeoutBool) {
 
     loadOTBarChartfromAPI = async () => {
 
+       
+
         if (SharedPreference.isConnected) {
 
             let today = new Date();
@@ -752,16 +786,24 @@ if (!SharedPreference.sessionTimeoutBool) {
 
 
     APIDetailCallback(data, path) {
-        //console.log('data  :', data)
+        console.log('APIDetailCallback data  :', data[1].data.code)
         code = data[0]
         data = data[1]
-
+        console.log('---------')
         if (code.SUCCESS == data.code) {
             this.props.navigation.navigate(path, {
                 DataResponse: data.data,
                 org_name: this.state.org_name,
                 org_code: this.state.org_code
             });
+
+        } else if (data.data.code == 'MSTD0059AERR') {
+
+            // this.props.navigation.navigate(path, {
+            //     DataResponse: data.data,
+            //     org_name: this.state.org_name,
+            //     org_code: this.state.org_code
+            // });
 
         } else if (code.NODATA == data.code) {
 
@@ -829,7 +871,10 @@ if (!SharedPreference.sessionTimeoutBool) {
 
     render() {
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1,backgroundColor:Colors.backgroundcolor }} 
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+            >
 
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
@@ -837,7 +882,7 @@ if (!SharedPreference.sessionTimeoutBool) {
 
                         <View style={{ flex: 1, justifyContent: 'center', }}>
                             <View style={{ width: '100%', justifyContent: 'center', position: 'absolute', }}>
-                                <Text style={styles.navTitleTextTop}>Organization Structure</Text>
+                                <Text style={styles.navTitleTextTop}>Organization</Text>
                             </View>
                             <TouchableOpacity
                                 onPress={(this.onBack.bind(this))}>

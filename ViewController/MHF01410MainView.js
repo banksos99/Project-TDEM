@@ -3,7 +3,7 @@ import {
     View, Text, TouchableOpacity, Picker,
     Image, Switch, ActivityIndicator, ScrollView,
     RefreshControl, Alert, NetInfo,
-    Platform, Dimensions, BackHandler, StatusBar
+    Platform, Dimensions, BackHandler, StatusBar,PanResponder
 } from "react-native";
 import { styles } from "../SharedObject/MainStyles";
 import Colors from "../SharedObject/Colors"
@@ -49,8 +49,9 @@ let rolemanagementManager = [0, 0, 0, 0];
 let timerstatus = false;
 let viewupdate = false;
 //let tempannouncementStatus=0;
+let sessionTimeoutSec = 10000;
 
-
+let readyExit = false
 import moment from 'moment'
 
 import Authorization from "../SharedObject/Authorization";
@@ -61,9 +62,23 @@ export default class HMF01011MainView extends Component {
     saveProfile = new SaveProfile()
     saveTimeNonPayroll = new SaveTimeNonPayroll()
     eventCalendar = new EventCalendar()
-
+    panResponder = {};
     constructor(props) {
         super(props);
+
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.state = {
             // isscreenloading: true,
             syncCalendar: true,
@@ -98,6 +113,7 @@ export default class HMF01011MainView extends Component {
             select_announcement_type: 0,
             select_announcement_status: 0,
             sendlastupdate: SharedPreference.lastdatetimeinterval,
+            Sessiontimeout:0
         }
 
 
@@ -174,31 +190,107 @@ export default class HMF01011MainView extends Component {
     }
 
     componentDidUpdate() {
-        console.log('mainview componentDidUpdate')
-        if (!SharedPreference.userRegisted) {
-            this.props.navigation.navigate('RegisterScreen')
-            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-        }
-
-
+        // console.log('mainview componentDidUpdate')
+        // if (!SharedPreference.userRegisted) {
+        //     this.props.navigation.navigate('RegisterScreen')
+        //     SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+        // }
     }
 
     componentWillMount() {
 
+    
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
+
         // this.interval = setInterval(() => {
-        //     this.setState({
-        //         isscreenloading: false
-        //     })
+            this.setState({
+                isscreenloading: false
+            })
         // }, 1000);
         // this.notificationListener();
+
+        if (SharedPreference.nonPayslipBadge.length) {
+            this.setState({
+                nonPayslipBadge: 0
+            })
+        }
+        if (SharedPreference.notiPayslipBadge.length) {
+            this.setState({
+                notiPayslipBadge: 0
+            })
+        }
+
         if (Platform.OS !== 'android') return
+
         BackHandler.addEventListener('hardwareBackPress', () => {
-            //   this.props.navigation.navigate('HomeScreen');
+
             BackHandler.exitApp()
+            
+            // console.log('readyExit',readyExit)
+            // //   this.props.navigation.navigate('HomeScreen');
+            // if (readyExit == true) {
+            //     readyExit = false
+            //     BackHandler.exitApp()
+                
+            // } else {
+            //     readyExit = true
+                
+            //     this.setState({
+            //         isscreenloading:true
+            //         // nonPayslipBadge:SharedPreference.nonPayslipBadge,
+            //     })
+            //     // Alert.alert(
+            //     //     'Confirm Exit',
+            //     //     'Are you sure you eant to exit?',
+            //     //     [{
+            //     //         text: 'cancel', onPress: () => {
+
+            //     //             // BackHandler.exitApp()
+            //     //             readyExit = false
+            //     //         }
+            //     //     }],
+            //     //     { cancelable: false }
+            //     // )
+            // }
+
             return true
         })
         // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+        
+
+        
+    }
+    resetTimer() {
+        // console.log('resetTimer',countsession)
+      
+        this.timersession = setTimeout(() => this.setState({
+            // glass: true
+        }, function () {
+            if (!SharedPreference.sessionTimeoutBool) {
+                SharedPreference.sessionTimeoutBool = true
+                Alert.alert(
+
+                    StringText.ALERT_SESSION_TIMEOUT_TITILE,
+                    StringText.ALERT_SESSION_TIMEOUT_DESC,
+                    [{
+                        text: 'OK', onPress: () => {
+                            // this.setState({
+                         
+                            this.props.navigation.navigate('PinScreen')
+                            SharedPreference.userRegisted = false;
+                            page = 0
+                            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                            //showpin: true,
+                            // });
+                        }
+                    }],
+                    { cancelable: false }
+                )
+            }
+            //   this.onInactivityTime();
+
+        }), sessionTimeoutSec)
     }
 
     handleBackButtonClick() {
@@ -219,7 +311,7 @@ export default class HMF01011MainView extends Component {
         SharedPreference.calendarAutoSync = autoSyncCalendarBool
         // this.notificationListener(0)
         this.onLoadInAppNoti()
-
+        this.onloadSessiontimeout();
     }
 
     // componentWillUpdate() {
@@ -239,8 +331,6 @@ export default class HMF01011MainView extends Component {
     // }
 
     componentDidMount() {
-        // console.log('mainview => componentDidMount')
-        //this.inappTimeInterval()
 
         if (SharedPreference.notipayslipID) {
 
@@ -260,47 +350,52 @@ export default class HMF01011MainView extends Component {
     }
 
     componentWillUnmount() {
-        // console.log('mainview => componentWillUnmount')
+        console.log('mainview => componentWillUnmount')
         clearTimeout(this.timer);
+        clearTimeout(this.timersession);
 
         SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge;
-        //SharedPreference.notiPayslipBadge = this.state.notiPayslipBadge;
-        // SharedPreference.nonPayslipBadge = this.state.nonPayslipBadge;
 
-
-        //SharedPreference.notipayslipID = 0
-
-        //SharedPreference.notiAnnounceMentID = 0
     }
 
+    onloadSessiontimeout = async () => {
+        SharedPreference.Sessiontimeout = SharedPreference.Sessiontimeout + 1
+
+        if (SharedPreference.Sessiontimeout >= 300) {
+            
+            Alert.alert(
+                StringText.ALERT_SESSION_TIMEOUT_TITILE,
+                StringText.ALERT_SESSION_TIMEOUT_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+
+                        SharedPreference.Sessiontimeout = 0
+                        this.props.navigation.navigate('PinScreen')
+                        page = 0
+                        SharedPreference.userRegisted = false;
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+
+                    }
+                }], { cancelable: false }
+            )
+
+        } else {
+            this.setState({
+                Sessiontimeout:SharedPreference.Sessiontimeout
+            })
+            this.timersession = setTimeout(() => {
+                clearTimeout(this.timersession)
+                this.onloadSessiontimeout()
+            }, 1000);
+
+        }
+        console.log('onloadSessiontimeout', SharedPreference.Sessiontimeout)
+
+
+    }
+
+
     onLoadInAppNoti = async () => {
-
-        // let lastTime = await this.saveTimeNonPayroll.getTimeStamp()
-
-        // if ((lastTime == null) || (lastTime == undefined)) {
-
-        //     if (this.state.nonPayrollBadgeFirstTime == true) {
-        //         let today = new Date()
-        //         const _format = 'YYYY-MM-DD hh:mm:ss'
-        //         const newdate = moment(today).format(_format).valueOf();
-        //         lastTime = newdate,
-        //             this.setState({
-        //                 nonPayrollBadgeFirstTime: false
-        //             })
-        //     }
-        // }
-        //         console.log("onLoadInAppNoti ==> ", lastTime)
-        // let pullurl = PULL_NOTIFICATION_NODATE_API
-        //         if (SharedPreference.lastdatetimeinterval) {
-        //             // let today = new Date()
-        //             // const _format = 'YYYY-MM-DD HH:mm:ss'
-        //             // const newdate = moment(today).format(_format).valueOf();
-        //             // SharedPreference.lastdatetimeinterval = newdate
-        //             // //  SharedPreference.lastdatetimeinterval = '2018-08-22 15:07:00'
-
-
-        //         }
-        // console.log("lastdatetimeinterval ==> ", SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval)
 
         let urlPullnoti = SharedPreference.PULL_NOTIFICATION_NODATE_API
 
@@ -312,9 +407,9 @@ export default class HMF01011MainView extends Component {
         this.setState({
             sendlastupdate: SharedPreference.lastdatetimeinterval
         })
-        console.log("urlPullnoti ==> ", urlPullnoti)
+     
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, 1, SharedPreference.profileObject.client_token)
-        console.log("FUNCTION_TOKEN ==> ", FUNCTION_TOKEN)
+    
         return fetch(urlPullnoti, {
 
             method: 'GET',
@@ -326,9 +421,7 @@ export default class HMF01011MainView extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                // console.log("onLoadInAppNoti")
-                console.log("responseJson ==> ", responseJson)
-                console.log("firebase token ==> ", SharedPreference.deviceInfo.firebaseToken)
+
                 try {
 
                     if (responseJson.status == 403) {
@@ -354,22 +447,22 @@ export default class HMF01011MainView extends Component {
 
                             // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
                             notiAnnounceMentBadge: parseInt(0),
-                            nonPayslipBadge: parseInt(0),
-                            nonPayslipBadge: parseInt(0),
+                            // nonPayslipBadge: parseInt(0),
+                            // notiPayslipBadge: parseInt(0),
                         })
 
                         this.notificationListener(0);
 
                         for (let index = 0; index < dataArray.length; index++) {
                             const dataReceive = dataArray[index];
-                            // //console.log("element ==> ", dataReceive.function_id)
+                
 
                             if (dataReceive.function_id == "PHF06010") {//if nonPayroll
 
-                                console.log('new nonpayroll arrive',dataReceive.badge_count,this.state.nonPayslipBadge)
+       
                                 this.setState({
 
-                                    nonPayslipBadge: parseInt(dataReceive.badge_count) + this.state.nonPayslipBadge
+                                    nonPayslipBadge: parseInt(dataReceive.badge_count) + SharedPreference.nonPayslipBadge.length
 
                                 }, function () {
                                     dataReceive.data_list.map((item, i) => {
@@ -379,112 +472,12 @@ export default class HMF01011MainView extends Component {
 
                                     })
                                 })
-                                console.log('nonPayslipBadge', SharedPreference.nonPayslipBadge)
-
-
-                                // dataListArray = dataReceive.data_list
-                                // // //console.log("dataListArray ==> ", dataListArray)
-                                // let dataCustomArray = [
-                                //     {
-                                //         "year": currentyear - 1,
-                                //         "detail": monthArray
-                                //     },
-                                //     {
-                                //         "year": currentyear,
-                                //         "detail": monthArray
-                                //     },
-                                // ]
-                                // let monthlist1 = [];
-                                // let monthlist2 = [];
-
-                                // for (let m = 0; m < 12; m++) {
-
-                                //     let currentyear = new Date().getFullYear();
-                                //     let monthArray = []
-
-                                //     for (let j = 0; j < dataListArray.length; j++) {
-
-                                //         var res = dataListArray[j].split("|");
-                                //         var monthYear = res[1].split("-");
-                                //         let tyear = monthYear[0]
-                                //         let tmonth = monthYear[1]
-                                //         lettempmonth = 0
-                                //         if (tyear == currentyear) {
-
-                                //             if (tmonth == m) {
-                                //                 lettempmonth = lettempmonth + 1
-                                //             } 
-
-                                //         } else {
-
-                                //             if (tmonth == m) {
-                                //                 lettempmonth = lettempmonth + 1
-                                //             } 
-
-
-                                //         }
-
-                                //     }
-
-                                //     console.log("dataCustomArray ==> ", dataCustomArray)
-
-
-                                // }
-
-
-
-                                //     const str = dataListArray[index];
-                                //     console.log("str ==> ", str)
-                                //     var res = str.split("|");
-                                //     // //console.log("res ==> ", res[1])
-                                //     var data = res[1]
-
-                                //     var monthYear = data.split("-");
-                                //     // //console.log("dataListArray ==> monthYear ==> ", monthYear)
-
-                                //     var year = monthYear[0]
-                                //     var month = monthYear[1]
-
-                                //     for (let index = 0; index < dataCustomArray.length; index++) {
-                                //         const data = dataCustomArray[index];
-                                //         console.log("dataCustomArray data ==> ", year)
-                                //         console.log("dataCustomArray year ==> ", dataCustomArray[index].year)
-
-                                //         if (year == dataCustomArray[index].year) {
-
-                                //             const detail = data.detail
-                                //             console.log("detail ==> ", detail)
-                                //             // //console.log("month select  ==> ", month)
-
-                                //             let element = detail.find((p) => {
-                                //                 return p.month === JSON.parse(month)
-                                //             });
-                                //             // //console.log("element ==> ", element)
-
-                                //             element.badge = element.badge + 1
-
-
-                                //             //console.log("detail badge ==> ", element.badge)
-                                //             this.setState({
-                                //                 nonPayslipBadge : element.badge + this.state.nonPayslipBadge
-                                //             })
-
-                                //         }
-                                //     }
-                                // }
-
-                                // console.log('data nonpayroll Array =>', dataCustomArray)
-                                // this.setState({
-                                //     nonPayrollBadge: dataCustomArray
-                                // })  
+                               
 
                             } else if (dataReceive.function_id == "PHF02010") {
 
-                                console.log("announcement badge ==> ", dataReceive.badge_count)
-
                                 this.setState({
 
-                                    // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
                                     notiAnnounceMentBadge: parseInt(dataReceive.badge_count)
 
                                 }, function () {
@@ -493,25 +486,21 @@ export default class HMF01011MainView extends Component {
                                 })
 
                             } else if (dataReceive.function_id == 'PHF05010') {
-                                console.log('new payslip arrive')
+          
                                 this.setState({
-                                    notiPayslipBadge: parseInt(dataReceive.badge_count) + this.state.notiPayslipBadge
+                                    notiPayslipBadge: parseInt(dataReceive.badge_count) + SharedPreference.notiPayslipBadge.length
                                 }, function () {
                                     dataReceive.data_list.map((item, i) => {
 
                                         SharedPreference.notiPayslipBadge.push(item)
-                                        // = dataReceive.data_list
+        
 
                                     })
                                 })
-                                console.log('notiPayslipBadge', SharedPreference.notiPayslipBadge)
+               
                             }
 
                         }
-
-                        console.log('SharedPreference.notiAnnounceMentBadge', this.state.notiAnnounceMentBadge)
-                        console.log('SharedPreference.notiPayslipBadge', this.state.notiPayslipBadge)
-                        console.log('SharedPreference.nonPayslipBadge', this.state.nonPayslipBadge)
 
                         this.notificationListener(parseInt(SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
 
@@ -520,7 +509,9 @@ export default class HMF01011MainView extends Component {
                     } else {
 
                         this.timer = setTimeout(() => {
+
                             this.onLoadInAppNoti()
+
                         }, SharedPreference.timeinterval);
 
                     }
@@ -982,7 +973,7 @@ export default class HMF01011MainView extends Component {
                 tempannouncementData[index].attributes.read = true
             }
             //console.log('APIAnnouncementDetailCallback ==> data ==> ', data.data)
-
+            clearTimeout(this.timersession)
             this.props.navigation.navigate(rount, {
                 DataResponse: data.data,
             });
@@ -1017,7 +1008,9 @@ export default class HMF01011MainView extends Component {
         code = data[0]
         data = data[1]
         //console.log("loadNonpayrollfromAPI  ==> data : ", data.data)
-
+        this.setState({
+            isscreenloading: false,
+        })
         if (code.SUCCESS == data.code) {
             // let today = new Date()
             // const _format = 'YYYY-MM-DD hh:mm:ss'
@@ -1028,19 +1021,24 @@ export default class HMF01011MainView extends Component {
             //     dataResponse: data.data,
             //     badgeArray: this.state.nonPayrollBadge
             // });
-
+           
             this.props.navigation.navigate('NonPayrollList', {
                 DataResponse: data.data,
                 indexselectyear: 1
             });
 
+            this.setState({
+                nonPayslipBadge : 0
+            })
+          
+
         } else if (code.NODATA == data.code) {
 
-            let today = new Date()
-            const _format = 'YYYY-MM-DD hh:mm:ss'
-            const nowDateTime = moment(today).format(_format).valueOf();
-            this.saveTimeNonPayroll.setTimeStamp(nowDateTime)
-
+            // let today = new Date()
+            // const _format = 'YYYY-MM-DD hh:mm:ss'
+            // const nowDateTime = moment(today).format(_format).valueOf();
+            // this.saveTimeNonPayroll.setTimeStamp(nowDateTime)
+          
             this.props.navigation.navigate('NonPayrollList', {
                 badgeArray: this.state.nonPayrollBadge,
                 indexselectyear: 1
@@ -1086,7 +1084,7 @@ export default class HMF01011MainView extends Component {
                 }, function () {
                     ////console.log('status : ', this.state.dataSource.status);
                     if (this.state.dataSource.status === 200) {
-
+                      
                         this.props.navigation.navigate('PayslipDetail', {
                             // DataResponse:dataSource,
                             yearlist: 0,
@@ -1141,13 +1139,22 @@ export default class HMF01011MainView extends Component {
         console.log('datadetail => ', data)
         if (code.SUCCESS == data.code) {
             // SharedPreference.notiPayslipBadge = [];
+            // clearTimeout(this.timersession)
             this.props.navigation.navigate(rount, {
                 DataResponse: data.data,
-                indexselectyear:2
+                indexselectyear: 2
             });
+            
+            this.setState({
+                notiPayslipBadge: 0,
+            })
+
+
         } else if (code.NODATA == data.code) {
+    
             this.props.navigation.navigate(rount, {
                 //  DataResponse: data.data,
+                indexselectyear:2
             });
 
         } else if (code.DOES_NOT_EXISTS == data.code) {
@@ -1184,13 +1191,17 @@ export default class HMF01011MainView extends Component {
         let data = await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY)
         code = data[0]
         data = data[1]
-
+        this.setState({
+            isscreenloading: false,
+        })
         if (code.SUCCESS == data.code) {
+            
             this.props.navigation.navigate('OTSummarySelfView', {
                 DataResponse: data.data,
             });
 
         } else if (code.NODATA == data.code) {
+         
             this.props.navigation.navigate('OTSummarySelfView', {
                 // DataResponse: data.data,
             });
@@ -1269,10 +1280,25 @@ export default class HMF01011MainView extends Component {
             isscreenloading: false,
         })
         if (code.SUCCESS == data.code) {
+           
             this.props.navigation.navigate(rount, {
                 DataResponse: data.data,
                 Option: option
             });
+        } else if (code.NODATA == data.code) {
+
+            Alert.alert(
+
+                data.data.code,
+                data.data.detail,
+    
+                [{
+                    text: 'OK', onPress: () => {
+                        //console.log('OK Pressed')
+                    }
+                }],
+                { cancelable: false }
+            )
 
         } else if (code.DOES_NOT_EXISTS == data.code) {
 
@@ -1296,11 +1322,13 @@ export default class HMF01011MainView extends Component {
         })
 
         if (code.SUCCESS == data.code) {
+           
             this.props.navigation.navigate(rount, {
                 DataResponse: data.data,
             });
 
         } else if (code.NODATA == data.code) {
+          
             this.props.navigation.navigate(rount, {
                 // DataResponse: data,
             });
@@ -1329,11 +1357,13 @@ export default class HMF01011MainView extends Component {
         })
 
         if (code.SUCCESS == data.code) {
+            
             this.props.navigation.navigate(rount, {
                 DataResponse: data,
             });
 
         } else if (code.NODATA == data.code) {
+      
             this.props.navigation.navigate(rount, {
                 // DataResponse: data,
             });
@@ -1357,9 +1387,11 @@ export default class HMF01011MainView extends Component {
 
     onAutenticateErrorAlertDialog() {
 
-        if (!SharedPreference.sessionTimeoutBool) {
+        if (SharedPreference.Sessiontimeout) {
 
-            SharedPreference.userRegisted = false;
+            SharedPreference.Sessiontimeout = 0
+            clearTimeout(this.timersession)
+            SharedPreference.userRegisted = true;
             timerstatus = false;
             this.setState({
                 isscreenloading: false,
@@ -1382,7 +1414,7 @@ export default class HMF01011MainView extends Component {
 
         if (!SharedPreference.sessionTimeoutBool) {
 
-            SharedPreference.userRegisted = false;
+            SharedPreference.userRegisted = true;
             timerstatus = false;
             this.setState({
                 isscreenloading: false,
@@ -1451,11 +1483,13 @@ export default class HMF01011MainView extends Component {
             isscreenloading: false,
         })
         if (code.SUCCESS == data.code) {
+
             this.props.navigation.navigate('LeavequotaList', {
                 dataResponse: data,
             });
 
         } else if (code.NODATA == data.code) {
+           
             this.props.navigation.navigate('LeavequotaList', {
                 dataResponse: data,
             });
@@ -1488,7 +1522,9 @@ export default class HMF01011MainView extends Component {
         code = data[0]
         data = data[1]
         console.log("calendarCallback ==> data : ", data)
-
+        this.setState({
+            isscreenloading: false,
+        })
         if (code.ERROR == data.code) {
             this.onLoadErrorAlertDialog(data, "calendar")
         } else {
@@ -1502,6 +1538,7 @@ export default class HMF01011MainView extends Component {
 
 
             }
+          
             this.props.navigation.navigate('calendarYearView', {
                 dataResponse: data,
                 selectYear: new Date().getFullYear().toString(),
@@ -1528,7 +1565,7 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: true,
                 loadingtype: 3
             }, function () {
-                this.setState(this.renderloadingscreen())
+                // this.setState(this.renderloadingscreen())
                 this.loadOrgStructerfromAPI()
             });
 
@@ -2385,7 +2422,7 @@ export default class HMF01011MainView extends Component {
                                     <Text style={styles.mainmenuTextname}>Pay Slip</Text>
                                 </View>
                                 {/* notiPayslipBadge */}
-                                <View style={this.state.notiPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={this.state.notiPayslipBadge ? { color: 'white' } : { color: 'transparent' }}>{this.state.notiPayslipBadge}</Text></View>
+                                <View style={ this.state.notiPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={ this.state.notiPayslipBadge ? { color: 'white' } : { color: 'transparent' }}>{ this.state.notiPayslipBadge}</Text></View>
 
                             </View>
                         </TouchableOpacity>
@@ -2843,8 +2880,6 @@ export default class HMF01011MainView extends Component {
                             </View>
                         </TouchableOpacity>
 
-
-
                     </View>
 
                 </View>
@@ -2894,7 +2929,7 @@ export default class HMF01011MainView extends Component {
 
                         <Text style={styles.settinglefttext}>Application Name</Text>
                     </View>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <View style={{ flex: 1.5, justifyContent: 'center' }}>
                         <Text style={styles.settingrighttext}>TDEM Connect</Text>
 
                     </View>
@@ -2905,7 +2940,7 @@ export default class HMF01011MainView extends Component {
 
                         <Text style={styles.settinglefttext}>Application Version</Text>
                     </View>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <View style={{ flex: 1.5, justifyContent: 'center' }}>
                         <Text style={styles.settingrighttext}>{SharedPreference.deviceInfo.appVersion}</Text>
 
                     </View>
@@ -2932,8 +2967,8 @@ export default class HMF01011MainView extends Component {
         this.state.loadingannouncement = false
         timerstatus = false
         SharedPreference.Handbook = []
-        // SharedPreference.profileObject = null
-        // this.saveProfile.setProfile(null)
+        SharedPreference.profileObject = null
+        this.saveProfile.setProfile(null)
         if (Platform.OS === 'android') {
             BadgeAndroid.setBadge(0)
         } else if (Platform.OS === 'ios') {
@@ -2947,6 +2982,7 @@ export default class HMF01011MainView extends Component {
         this.setState({
             isscreenloading: false
         })
+      
         this.props.navigation.navigate('RegisterScreen')
         SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
     }
@@ -3050,6 +3086,7 @@ export default class HMF01011MainView extends Component {
             this.setState({
                 isscreenloading: false
             })
+            
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
 
@@ -3065,6 +3102,7 @@ export default class HMF01011MainView extends Component {
             this.setState({
                 isscreenloading: false
             })
+            
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
             // Alert.alert(
@@ -3101,6 +3139,7 @@ export default class HMF01011MainView extends Component {
             this.setState({
                 isscreenloading: false
             })
+            
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
             // Alert.alert(
@@ -3162,7 +3201,12 @@ export default class HMF01011MainView extends Component {
                 this.onAutenticateErrorAlertDialog()
 
             } else {
+                this.setState({
 
+                    isscreenloading: false,
+    
+                })
+              
                 this.props.navigation.navigate('ChangePINScreen')
             }
 
@@ -3195,7 +3239,7 @@ export default class HMF01011MainView extends Component {
             this.onAutenticateErrorAlertDialog()
 
         } else {
-
+            
             this.props.navigation.navigate('ChangePINScreen')
         }
 
@@ -3457,7 +3501,7 @@ export default class HMF01011MainView extends Component {
         if (SharedPreference.SERVER === 'DEV') {
             return (
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'black', fontSize: 10 }}>{this.state.sendlastupdate}</Text>
+                    <Text style={{ color: 'black', fontSize: 10 }}>{this.state.sendlastupdate}''{this.state.Sessiontimeout}</Text>
                 </View>
             )
         }
@@ -3477,9 +3521,15 @@ export default class HMF01011MainView extends Component {
             badgeBG = 'red'
             badgeText = 'white'
         }
-
+        const {
+              style,
+            children,
+            } = this.props;
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: 'white' }}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <View style={{ flex: 1, flexDirection: 'column' }}>
                     <View style={{ flex: 1 }} >
                         {this.redertabview()}

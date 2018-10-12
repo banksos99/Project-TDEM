@@ -8,7 +8,8 @@ import {
     Image,
     ActivityIndicator,
     Alert,
-    BackHandler
+    BackHandler,
+    PanResponder
 } from 'react-native';
 
 import { styles } from "./../SharedObject/MainStyles"
@@ -23,9 +24,28 @@ import moment from 'moment'
 import firebase from 'react-native-firebase';
 import Month from '../constants/Month';
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+
 export default class NonpayrollDetailView extends Component {
+
+    panResponder = {};
+
     constructor(props) {
         super(props);
+
+        this.panResponder = PanResponder.create({
+            
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
            
@@ -45,8 +65,10 @@ export default class NonpayrollDetailView extends Component {
     }
 
     componentDidMount() {
+
+        
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
     }
 
     // componentWillMount() {
@@ -310,14 +332,17 @@ export default class NonpayrollDetailView extends Component {
         // this.props.navigation.navigate('NonPayrollList', {
         //     dataResponse: this.state.datalist,
         // })
-console.log()
-        this.props.navigation.navigate('NonPayrollList', {
-            DataResponse:this.state.DataResponse,
-            dataResponse: this.state.datalist,
-            selectYear: this.state.selectYear,
-            badgeData: this.state.badgeData,
-            indexselectyear:this.state.indexselectyear
-        });
+        // console.log()
+        //         this.props.navigation.navigate('NonPayrollList', {
+        //             DataResponse:this.state.DataResponse,
+        //             dataResponse: this.state.datalist,
+        //             selectYear: this.state.selectYear,
+        //             badgeData: this.state.badgeData,
+        //             indexselectyear:this.state.indexselectyear
+        //         });
+    
+        this.props.navigation.goBack();
+
     }
 
 
@@ -339,7 +364,10 @@ console.log()
 
     render() {
         return (
-            <View style={styles.container} >
+            <View style={styles.container}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <View style={styles.container} >
                     <View style={styles.navContainer}>
                         <TouchableOpacity style={styles.navLeftContainer}

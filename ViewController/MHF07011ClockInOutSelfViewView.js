@@ -17,7 +17,9 @@ import {
     Alert,
     moment,
     BackHandler,
-    NetInfo
+    NetInfo,
+    PanResponder,
+    Animated
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -42,9 +44,26 @@ let DataResponse=[];
 
 export default class ClockInOutSelfView extends Component {
 
+    panResponder = {};
+
     constructor(props) {
 
         super(props);
+        
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
         let ds = new ListView.DataSource({
@@ -103,9 +122,23 @@ export default class ClockInOutSelfView extends Component {
     }
 
     componentDidMount() {
+
+        
+
+        //     onStartShouldSetPanResponder: () => {
+        //         SharedPreference.Sessiontimeout = 0
+        //         return false
+        //     },
+        //     onStartShouldSetPanResponderCapture: () => {
+
+        //         SharedPreference.Sessiontimeout = 0
+
+        //         return false
+        //     }
+        // })
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
     }
 
     componentWillUnmount() {
@@ -369,9 +402,9 @@ export default class ClockInOutSelfView extends Component {
 
         } else {
 
-            this.props.navigation.navigate('HomeScreen');
+            // this.props.navigation.navigate('HomeScreen');
             SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
-
+            this.props.navigation.goBack();
         }
 
     }
@@ -861,7 +894,10 @@ export default class ClockInOutSelfView extends Component {
 
         return (
             // this.state.dataSource.map((item, index) => (
-            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }} >
+            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }} 
+            collapsable={true}
+                {...this.panResponder.panHandlers}
+                >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
@@ -887,14 +923,36 @@ export default class ClockInOutSelfView extends Component {
                         <Text style={{ flex: 1, marginLeft: 20, color: 'white', fontFamily: 'Prompt-Regular' }}>{this.state.employee_name}</Text>
                         <Text style={{ flex: 1, marginLeft: 20, color: 'white', fontFamily: 'Prompt-Regular' }}>{this.state.employee_position}</Text>
                     </View>
-                    <TouchableOpacity style={{ backgroundColor: Colors.calendarLocationBoxColor, margin: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}
+                    {/* <TouchableOpacity style={{ backgroundColor: Colors.calendarLocationBoxColor, margin: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}
                         onPress={(this.select_month.bind(this))}
                     >
 
                         <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
 
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+                    <View style={{ margin: 5, }} >
+                        <View style={{ height: '100%', width: '100%', position: 'absolute' }}>
+                            <View style={{ flex: 1, flexDirection: 'row', backgroundColor: Colors.backgroundcolor, borderRadius: 5, }}>
+                                <View style={{ flex: 4 }} >
+                                </View>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+                                    <Image
+                                        style={{ width: 20, height: 30, tintColor: Colors.redTextColor }}
+                                        source={require('./../resource/images/dropdown.png')}
+                                    // resizeMode='contain'
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
+                            onPress={(this.select_month.bind(this))}
+                        >
 
+                            <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
+
+                        </TouchableOpacity>
+
+                    </View>
 
 
                     <View style={{ flex: 12, marginLeft: 5, marginRight: 5, marginTop: 2, marginBottom: 2 }}>

@@ -7,7 +7,8 @@ import {
     ListView,
     Image,
     BackHandler,
-    Alert
+    Alert,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -26,6 +27,20 @@ export default class OTSummaryLineChart extends Component {
     constructor(props) {
 
         super(props);
+
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
         let ds = new ListView.DataSource({
@@ -89,7 +104,8 @@ export default class OTSummaryLineChart extends Component {
     }
 
     componentDidMount() {
-        this.settimerInAppNoti()
+       
+        // this.settimerInAppNoti()
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -104,7 +120,8 @@ export default class OTSummaryLineChart extends Component {
     }
 
     onBack() {
-        this.props.navigation.navigate('OrganizationOTStruct');
+        // this.props.navigation.navigate('OrganizationOTStruct');
+        this.props.navigation.goBack();
     }
 
     settimerInAppNoti() {
@@ -302,7 +319,10 @@ export default class OTSummaryLineChart extends Component {
         }
         return (
             // this.state.dataSource.map((item, index) => (
-            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }} >
+            <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>

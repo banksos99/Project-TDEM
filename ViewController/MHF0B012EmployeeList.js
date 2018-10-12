@@ -11,7 +11,8 @@ import {
     Image,
     Alert,
     ActivityIndicator,
-    BackHandler,NetInfo
+    BackHandler,NetInfo,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -28,9 +29,21 @@ let dataSource = [];
 let option = 0;
 
 export default class OrganizationStruct extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             //employee_name,
@@ -67,15 +80,22 @@ export default class OrganizationStruct extends Component {
        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     }
+
     componentDidMount() {
-        this.settimerInAppNoti()
+       
+        // this.settimerInAppNoti()
        
     }
+
     componentWillUnmount() {
         clearTimeout(this.timer);
-       BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-       NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        this.setState({
+            isscreenloading: false,
+        })
     }
+    
     handleConnectivityChange = isConnected => {
         this.setState({ isConnected });
     };
@@ -159,33 +179,36 @@ export default class OrganizationStruct extends Component {
     }
 
     onRegisterErrorAlertDialog() {
+
         if (!SharedPreference.sessionTimeoutBool) {
-        SharedPreference.userRegisted=false;
-        timerstatus = false;
-        this.setState({
-            isscreenloading: false,
-        })
+            
+            SharedPreference.userRegisted = false;
+            timerstatus = false;
+            this.setState({
+                isscreenloading: false,
+            })
 
-        Alert.alert(
-            StringText.ALERT_SESSION_AUTHORIZED_TITILE,
-            StringText.ALERT_SESSION_AUTHORIZED_DESC,
-            [{
-                text: 'OK', onPress: () => {
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
 
-                    page = 0
-                    SharedPreference.Handbook = []
-                    SharedPreference.profileObject = null
-                    this.setState({
-                        isscreenloading: false
-                    })
-                    this.props.navigation.navigate('RegisterScreen')
-                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-                }
-            }],
-            { cancelable: false }
-        )
+                        page = 0
+                        SharedPreference.Handbook = []
+                        SharedPreference.profileObject = null
+                        this.setState({
+                            isscreenloading: false
+                        })
+                        this.props.navigation.navigate('RegisterScreen')
+                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                    }
+                }],
+                { cancelable: false }
+            )
+        }
     }
-    }
+
     onBack() {
         this.props.navigation.navigate('OrgStructure');
     }
@@ -278,7 +301,9 @@ export default class OrganizationStruct extends Component {
 
             this.onLoadErrorAlertDialog(data)
         }
-
+        this.setState({
+            isscreenloading: false,
+        })
     }
 
     onLoadErrorAlertDialog(error) {
@@ -330,7 +355,10 @@ export default class OrganizationStruct extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 ,backgroundColor:Colors.backgroundcolor}}
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+             >
 
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />

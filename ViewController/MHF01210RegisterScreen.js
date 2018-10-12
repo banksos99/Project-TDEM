@@ -124,14 +124,16 @@ export default class RegisterActivity extends Component {
                 
                 await this.onCheckPINWithChangePIN('1111', '2222')
                 this.setState({
-                    isLoading: false
+                    isLoading: false,
+                    password:'',
+                    username:''
                 })
 
             } else if (code.DOES_NOT_EXISTS == data.code) {
 
                 Alert.alert(
-                    StringText.REGISTER_INVALID_TITLE,
-                    StringText.REGISTER_INVALID_DESC,
+                    StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                    StringText.ALERT_SESSION_AUTHORIZED_DESC,
                     [
                         {
                             text: 'OK', onPress: () => {
@@ -301,11 +303,27 @@ export default class RegisterActivity extends Component {
     }
 
     componentDidMount() {
-
+console.log('register componentDidMount')
         SharedPreference.notiAnnounceMentBadge = 0;
         SharedPreference.notiPayslipBadge.length = [];
         SharedPreference.nonPayslipBadge.length = [];
         SharedPreference.Handbook = []
+
+        this.setState({
+            keyboardHeight: 0,
+            pin: [],
+            pin1: [],
+            pin2: [],
+            showCreatePin: false,
+            showCreatePinSuccess: false,
+            pintitle: 'Create Pin',
+            username: '',
+            password: '',
+            versionCode: "Version : " + SharedPreference.deviceInfo.appVersion,
+            datastatus: 0,
+            isLoading: false
+        })
+
         // SharedPreference.profileObject = null
         if (Platform.OS === 'android') {
             BadgeAndroid.setBadge(0)
@@ -317,7 +335,6 @@ export default class RegisterActivity extends Component {
                 .displayNotification(localNotification)
                 .catch(err => console.error(err));
         }
-
 
     }
 
@@ -364,15 +381,27 @@ export default class RegisterActivity extends Component {
     onSetPin = async () => {
         
         let data = await SetPinAPI(this.state.pin2, SharedPreference.FUNCTIONID_PIN)
+        console.log('onSetPin : ',data)
         code = data[0]
         data = data[1]
-        console.log('onSetPin : ',data.data.code)
+        
         this.setState({
-            isLoading: false
+            isLoading: false,
+            keyboardHeight: 0,
+            pin: [],
+            pin1: [],
+            pin2: [],
+            pintitle: 'Create Pin',
+            username: '',
+            password: '',
+            versionCode: "Version : " + SharedPreference.deviceInfo.appVersion,
+            datastatus: 0,
+      
         })
 
         if (code.SUCCESS == data.code) {
             console.log("Tdem ==> onCheckPINWithChangePIN  ==> show")
+           
             this.setState({
                 showCreatePinSuccess: true,
                 showCreatePin: false,
@@ -396,21 +425,25 @@ export default class RegisterActivity extends Component {
                 { cancelable: false }
             )
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
-            Alert.alert(
-                StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
-                StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
-                [{
-                    text: 'OK', onPress: () => {
-                        this.setState({
-                            showCreatePin:false
-                        }, function () {
-                            
-                        })
+
+            if (!SharedPreference.sessionTimeoutBool) {
+
+                Alert.alert(
+                    StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+                    StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+                    [{
+                        text: 'OK', onPress: () => {
+                            this.setState({
+                                showCreatePin: false
+                            }, function () {
+
+                            })
+                        }
                     }
-                }
-                ],
-                { cancelable: false }
-            )
+                    ],
+                    { cancelable: false }
+                )
+            }
         } else {
             Alert.alert(
                 StringText.SERVER_ERROR_TITLE,
@@ -506,11 +539,25 @@ export default class RegisterActivity extends Component {
 
     onClosePIN = () => {
         this.setState({
-            showCreatePin: false,
+            keyboardHeight: 0,
             pin: [],
             pin1: [],
             pin2: [],
+            showCreatePin: false,
+            showCreatePinSuccess: false,
+            pintitle: 'Create Pin',
+            username: '',
+            password: '',
+            versionCode: "Version : " + SharedPreference.deviceInfo.appVersion,
+            datastatus: 0,
+            isLoading: false
         })
+        // this.setState({
+        //     showCreatePin: false,
+        //     pin: [],
+        //     pin1: [],
+        //     pin2: [],
+        // })
     }
 
 
@@ -614,6 +661,24 @@ export default class RegisterActivity extends Component {
 
     onOpenPinActivity() {
         //////console.log("PinScreen")
+        this.setState({
+            keyboardHeight: 0,
+            pin: [],
+            pin1: [],
+            pin2: [],
+            showCreatePin: false,
+            showCreatePinSuccess: false,
+            pintitle: 'Create Pin',
+            username: '',
+            password: '',
+            versionCode: "Version : " + SharedPreference.deviceInfo.appVersion,
+            datastatus: 0,
+            isLoading: false,
+      
+            
+            showCreatePinSuccess: false
+        })
+    
         this.props.navigation.navigate('PinScreen')
     }
 
@@ -723,7 +788,11 @@ export default class RegisterActivity extends Component {
                         </View>
 
                         <View style={styles.registPinNumRowContainer}>
-                            <View style={styles.registPinNumContainer} />
+                            <View style={styles.emptyContainer}>
+                                <View style={styles.registPinNumContainer}>
+                                    <Text style={[styles.pinnumber, { color: Colors.redColor }]}>0</Text>
+                                </View>
+                            </View>
 
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(0) }}>
@@ -784,8 +853,8 @@ export default class RegisterActivity extends Component {
                                     source={require('../resource/regist/regist_lock_green.png')}
                                     resizeMode="cover" />
                                 <Text style={styles.pinCreateSuccessTitleText}>Create PIN Successfully</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.You can use</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>this PIN to log in next time.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}>You can use this PIN to log in next time.</Text>
                             </View>
                         </View>
 
@@ -876,6 +945,7 @@ export default class RegisterActivity extends Component {
                                 selectionColor='black'
                                 style={styles.registText}
                                 placeholder="User ID"
+                                value={this.state.username}
                                 placeholderTextColor={Colors.lightGrayTextColor}
                                 onChangeText={(username) => this.setState({ username })} />
 

@@ -13,7 +13,8 @@ import {
     PermissionsAndroid,
     Alert,
     BackHandler,
-    NetInfo
+    NetInfo,
+    PanResponder
 } from 'react-native';
 
 import Colors from "../SharedObject/Colors"
@@ -42,9 +43,25 @@ let PAYSLIP_DOWNLOAD_API;
 
 export default class PayslipDetail extends Component {
 
+    panResponder = {};
+
     constructor(props) {
 
         super(props);
+
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
         this.state = {
@@ -79,7 +96,6 @@ export default class PayslipDetail extends Component {
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     
-        this.settimerInAppNoti()
     }
  
     componentWillUnmount() {
@@ -115,8 +131,9 @@ export default class PayslipDetail extends Component {
             })
         } else {
 
-            this.props.navigation.navigate('HomeScreen');
-            SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
+            // this.props.navigation.navigate('HomeScreen');
+          
+            this.props.navigation.goBack();
         }
 
     }
@@ -533,7 +550,7 @@ export default class PayslipDetail extends Component {
 
                         if (resp.respInfo.status == 200) {
 
-                            RNFetchBlob.ios.openDocument(resp.path());
+                            
 
                             this.setState({
 
@@ -541,7 +558,7 @@ export default class PayslipDetail extends Component {
 
                             }, function () {
                                 // this.setState(this.renderloadingscreen())
-                                
+                                RNFetchBlob.ios.openDocument(resp.path());
                             });
 
                             
@@ -1069,10 +1086,10 @@ export default class PayslipDetail extends Component {
                 deduct = (Decryptfun.decrypt(this.state.datadetail.data.header.sum_deduct));
                 let tincome = parseFloat(income.replace(',', '').replace(',', '').replace(',', ''));
                 let tdeduct = parseFloat(deduct.replace(',', '').replace(',', '').replace(',', ''));
-                // console.log('income : ', income)
-                // console.log('deduct : ', deduct)
-                // console.log('netincome : ', parseFloat(tincome - tdeduct))
-                netincome = (parseInt(parseFloat(tincome - tdeduct) * 100) / 100).toString();
+                console.log('income : ', parseFloat(tincome) * 100)
+                console.log('deduct : ', parseFloat(tdeduct) * 100)
+                console.log('netincome : ', ((parseFloat(tincome) * 100) - (parseFloat(tdeduct) * 100)))
+                netincome = parseInt((((parseFloat(tincome) * 100) - (parseFloat(tdeduct) * 100)))) / 100.0//(parseInt(parseFloat(tincome - tdeduct) * 100) / 100).toString();
                 if (netincome < 0) {
                     netincomestr = '0.00'
                 } else {
@@ -1091,9 +1108,6 @@ export default class PayslipDetail extends Component {
                     }
                 }
                 
-
-
-
                 let datearr = this.state.datadetail.data.header.pay_date.split('-');
                 pay_date_str = datearr[2] + ' ' + Months.monthNamesShort[parseInt(datearr[1]) - 1] + ' ' + datearr[0]
                 if (this.state.datadetail.data.header.bank_name) {
@@ -1149,7 +1163,10 @@ export default class PayslipDetail extends Component {
         }
         console.log('download status : ', download)
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 }}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>

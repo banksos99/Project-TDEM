@@ -7,7 +7,8 @@ import {
     Image,
     ActivityIndicator,
     Alert,
-    BackHandler, NetInfo
+    BackHandler, NetInfo,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -43,8 +44,26 @@ let currentYear = new Date().getFullYear()
 
 export default class NonPayRollActivity extends Component {
 
+
+    panResponder = {};
+    
     constructor(props) {
         super(props);
+
+        this.panResponder = PanResponder.create({
+            
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
         this.state = {
@@ -67,10 +86,10 @@ export default class NonPayRollActivity extends Component {
     }
 
     componentDidMount() {
-
+       
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
 
         if (this.state.DataResponse) {
             this.state.yearlistdata = []
@@ -624,9 +643,10 @@ export default class NonPayRollActivity extends Component {
     onBack() {
         // this.props.navigator.pop();
         SharedPreference.nonPayslipBadge = [];
-        this.props.navigation.navigate('HomeScreen');
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
-        // this.props.navigation.pop();
+        this.props.navigation.goBack();
+
     }
 
     // onNoDataDetail(year, index) {
@@ -1360,7 +1380,9 @@ export default class NonPayRollActivity extends Component {
             //this.convertDateTime(data.data.detail[0].pay_date)
             this.setState({
                 //dataSource: data.data,
-                isLoading: false
+                loadingtype: 0,
+                isscreenloading: false,
+                
             })
 
             // SharedPreference.nonPayslipBadge = [];
@@ -1421,7 +1443,10 @@ export default class NonPayRollActivity extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1 }} 
+            collapsable={true}
+                {...this.panResponder.panHandlers}
+                >
                 <View style={[styles.navContainer, { flexDirection: 'column' }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>

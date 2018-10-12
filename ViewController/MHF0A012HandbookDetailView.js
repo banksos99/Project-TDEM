@@ -20,7 +20,8 @@ import {
     Alert,
     BackHandler,
     Dimensions,
-    AsyncStorage
+    AsyncStorage,
+    PanResponder
 } from 'react-native';
 
 import { Epub, Streamer } from 'epubjs-rn';
@@ -45,9 +46,24 @@ let HandbookMarkList = [];
 const Uri = require("epubjs/lib/utils/url");
 
 export default class HandbookViewer extends Component {
-
+    panResponder = {};
     constructor(props) {
         super(props);
+        this.panResponder = PanResponder.create({
+
+            onStartShouldSetPanResponder: () => {
+                
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+
+                SharedPreference.Sessiontimeout = 0
+
+                return false
+            }
+        })
+
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             flow: "paginated", // paginated || scrolled-continuous
@@ -139,7 +155,19 @@ export default class HandbookViewer extends Component {
     }
 
     componentDidMount()  {
-        this.settimerInAppNoti()
+        // this.panResponder = PanResponder.create({
+        //     onStartShouldSetPanResponder: () => {
+        //         SharedPreference.Sessiontimeout = 0
+        //         return true
+        //     },
+        //     onStartShouldSetPanResponderCapture: () => {
+   
+        //         SharedPreference.Sessiontimeout = 0
+  
+        //         return false
+        //     }
+        // })
+        // this.settimerInAppNoti()
         this.downloadEpubFile(SharedPreference.HANDBOOK_DOWNLOAD + this.state.handbook_file);
 
         //console.log('SharedPreference.profileObject =====>' + JSON.stringify(SharedPreference.profileObject));
@@ -440,8 +468,8 @@ export default class HandbookViewer extends Component {
 
         if (this.state.typeTOC) {
 
-            this.props.navigation.navigate('Handbooklist');
-
+            // this.props.navigation.navigate('Handbooklist');
+            this.props.navigation.goBack();
         } else {
             this.setState({
                 typeTOC: 1,
@@ -840,7 +868,12 @@ export default class HandbookViewer extends Component {
     render() {
         
         return (
-            <View style={{
+            <View
+            
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+            
+            style={{
 
                 position: 'absolute',
                 top: 0,

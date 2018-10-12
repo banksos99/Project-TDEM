@@ -7,7 +7,8 @@ import {
     Image,
     BackHandler,
     ScrollView,
-    Alert
+    Alert,
+    PanResponder
 } from 'react-native';
 
 import Colors from "./../SharedObject/Colors"
@@ -20,6 +21,8 @@ import RestAPI from "../constants/RestAPI"
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 export default class LeaveQuotaActivity extends Component {
 
+    panResponder = {};
+    
     constructor(props) {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -36,8 +39,19 @@ export default class LeaveQuotaActivity extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
     componentDidMount() {
-
-        this.settimerInAppNoti()
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return true
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+        // this.settimerInAppNoti()
 
     }
     componentWillUnmount() {
@@ -200,15 +214,19 @@ export default class LeaveQuotaActivity extends Component {
     }
 
     onBack() {
-        this.props.navigation.navigate('LeavequotaList',
-            {
-                dataResponse: this.state.dataResponse,
-                selectYear: this.state.selectYear
-            });
+        this.props.navigation.goBack();
+        // this.props.navigation.navigate('LeavequotaList',
+        //     {
+        //         dataResponse: this.state.dataResponse,
+        //         selectYear: this.state.selectYear
+        //     });
     }
     render() {
         return (
-            <View style={styles.container} >
+            <View style={styles.container}
+                collapsable={true}
+                {...this.panResponder.panHandlers}
+            >
                 <View style={styles.navContainer}>
                     <TouchableOpacity style={styles.navLeftContainer} onPress={(this.onBack.bind(this))}>
                         <Image
