@@ -17,14 +17,14 @@ import RestAPI from "./../constants/RestAPI"
 import firebase from 'react-native-firebase';
 import Layout from "../SharedObject/Layout";
 
-import SaveAutoSyncCalendar from "./../constants/SaveAutoSyncCalendar";
+// import SaveAutoSyncCalendar from "./../constants/SaveAutoSyncCalendar";
 var BadgeAndroid = require('react-native-android-badge')
 
 let scale = Layout.window.width / 320;
 let countgettokenFB = 0;
 
 export default class RegisterActivity extends Component {
-    saveAutoSyncCalendar = new SaveAutoSyncCalendar()
+    // saveAutoSyncCalendar = new SaveAutoSyncCalendar()
     savePIN = new SavePIN()
     saveProfile = new SaveProfile()
     saveToken = new SaveTOKEN()
@@ -111,7 +111,7 @@ export default class RegisterActivity extends Component {
             // let autoregisterCount = 0;
             //  console.log('get token again',data.data.detail)
             if (code.SUCCESS == data.code) {
-                this.saveAutoSyncCalendar.setAutoSyncCalendar(null)
+                // this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
                 // SharedPreference.profileObject = data.data
                 
                 // this.saveProfile.setProfile(data.data)

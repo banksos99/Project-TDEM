@@ -213,7 +213,7 @@ export default class PaySlipActivity extends Component {
 
     render() {
         // content = `<span class="price bold some-class-name">$459.00</span>`;
-        console.log('modifly =>',modifly)
+        console.log('modifly =>',content)
         let pp = modifly.split(' ');
         let tpp = pp[0].split('-');
         let spp = pp[1].split(':');
@@ -278,16 +278,20 @@ export default class PaySlipActivity extends Component {
                     <View style={{ height: 1, marginLeft: 10, marginRight: 10, backgroundColor: Colors.grayColor }}></View>
                 </View>
                 <View style={{ flex: 1, marginTop: 0, marginRight: 10, marginLeft: 10 }}>
-                    {/* <WebView
-                        // source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
-                        source={{ html:  content}}
-                        scalesPageToFit={(Platform.OS === 'ios') ? true : false}
-                        // scalesPageToFit={false}
-                        automaticallyAdjustContentInsets={true}
-                        javaScriptEnabledAndroid={true}
-                        style={{ flex: 1, marginTop: 0}}
-                    /> */}
                     <WebView
+                        // source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
+                        source={{ html: '<p><style><"font-size: 13px;">TST 01เทส th</p>' }}
+                        // source={{ html: content }}
+                        scalesPageToFit={(Platform.OS === 'ios') ? true : false}
+                        automaticallyAdjustContentInsets={false}
+                        // scalesPageToFit={false}
+                        javaScriptEnabled={true}
+                        domStorageEnabled={true}
+                        decelerationRate="normal"
+                        // scrollEnabled={true}
+                    // style={{ flex: 1, marginTop: 0}}
+                    />
+                    {/* <WebView
                     // ref={WEBVIEW_REF}
                     automaticallyAdjustContentInsets={false}
                     source={{html:  content}}
@@ -296,7 +300,7 @@ export default class PaySlipActivity extends Component {
                     decelerationRate="normal"
                     // startInLoadingState={true}
                     scalesPageToFit={false}
-                  />
+                  /> */}
                 </View >
             </View >
 

@@ -49,7 +49,8 @@ console.log("HOST ======================= " + HOST);
 // const VERSION = 'v1.0.72'//30-09-61 IOS: Android:
 // const VERSION = 'v1.0.73'//28-09-61 IOS: Android:
 // const VERSION = 'v1.0.74'//04-10-61 IOS: Android:
-const VERSION = 'v1.0.75'//04-10-61 IOS: Android:
+// const VERSION = 'v1.0.75'//04-10-61 IOS: Android:
+const VERSION = 'v1.0.76'//04-10-61 IOS: Android:
 
 export default {
     HOST: HOST,
@@ -112,6 +113,7 @@ export default {
     company: 'TMAP-EM',
     deviceInfo: {},
     calendarAutoSync: true,
+    autoSyncCalendarBool:true,
     // MANAGER_STATUS:true,
     notipayslipID: 0,
     notiAnnounceMentID: 0,

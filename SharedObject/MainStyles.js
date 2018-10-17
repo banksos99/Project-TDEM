@@ -280,7 +280,7 @@ export const styles = StyleSheet.create({
         flex: 1, backgroundColor: 'white', flexDirection: 'row'
     },
     calendarDayContainer: {
-        flex: 1, height: 10 * scale, 
+        flex: 1, height: 14, 
         // marginBottom: -13,
          marginTop: -8,
         // backgroundColor:'green',
@@ -305,7 +305,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         height: 14,
         // marginBottom: -13,
-        marginTop: -10,
+        marginTop: -8,
         alignItems: 'center',
         justifyContent: 'center'
     },

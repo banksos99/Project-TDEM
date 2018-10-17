@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.tdem.tdemconnectdev"
 
-android:versionCode="15"
-android:versionName="2.15">
+android:versionCode="86"
+android:versionName="1.86">
 
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.INTERNET" />

@@ -300,15 +300,15 @@ export default class HMF01011MainView extends Component {
 
     loadData = async () => {
 
-        let autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
-        if (autoSyncCalendarBool == null) {
-            autoSyncCalendarBool = true
+        SharedPreference.autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
+        if (SharedPreference.autoSyncCalendarBool == null) {
+            SharedPreference.autoSyncCalendarBool = true
         }
         this.setState({
-            syncCalendar: autoSyncCalendarBool,
+            syncCalendar: false,
             // nonPayslipBadge:SharedPreference.nonPayslipBadge,
         })
-        SharedPreference.calendarAutoSync = autoSyncCalendarBool
+        // SharedPreference.calendarAutoSync = autoSyncCalendarBool
         // this.notificationListener(0)
         this.onLoadInAppNoti()
         this.onloadSessiontimeout();
@@ -389,7 +389,7 @@ export default class HMF01011MainView extends Component {
             }, 1000);
 
         }
-        console.log('onloadSessiontimeout', SharedPreference.Sessiontimeout)
+        // console.log('onloadSessiontimeout', SharedPreference.Sessiontimeout)
 
 
     }
@@ -1536,7 +1536,6 @@ export default class HMF01011MainView extends Component {
                     locationdef = SharedPreference.COMPANY_LOCATION[i].value;
                 }
 
-
             }
           
             this.props.navigation.navigate('calendarYearView', {
@@ -2283,19 +2282,22 @@ export default class HMF01011MainView extends Component {
     deleteEventOnCalendar = async () => {
         console.log("YearView ==> deleteEventCalendar")
         let currentyear = new Date().getFullYear();
-        await this.eventCalendar._deleteEventCalendar(currentyear)
+        await this.eventCalendar._deleteEventFromCalendar(currentyear)
+
+        // await this.eventCalendar._deleteAllEvent(currentyear)
     }
 
     onChangeFunction = async (newState) => {
+        SharedPreference.autoSyncCalendarBool = newState;
         console.log("onChangeFunction ==> ", newState)
         this.setState({
-            syncCalendar: newState.syncCalendar,
+            // syncCalendar: newState.syncCalendar,
             isscreenloading: true
         });
-        SharedPreference.calendarAutoSync = newState.syncCalendar
-        this.saveAutoSyncCalendar.setAutoSyncCalendar(newState.syncCalendar)
+        // SharedPreference.calendarAutoSync = newState.syncCalendar
+        this.saveAutoSyncCalendar.setAutoSyncCalendar(newState)
 
-        if (newState.syncCalendar == false) {
+        if (newState == false) {
             await this.deleteEventOnCalendar()//TODO bell
         }
 
@@ -2890,6 +2892,15 @@ export default class HMF01011MainView extends Component {
     rendersettingview() {
         ////console.log("rendersettingview ==> this.state.syncCalendar : 1 ", this.state.syncCalendar)
         ////console.log("rendersettingview ==> SharedPreference.calendarAutoSync : 2 ", SharedPreference.calendarAutoSync)
+        //         let autoSyncCalendarBool = this.saveAutoSyncCalendar.getAutoSyncCalendar()
+
+        //         let syncstatus = true;
+        //         if(autoSyncCalendarBool === false){
+        //             syncstatus = false;
+        //         }
+        
+        // let syncstatus = SharedPreference.autoSyncCalendarBool;
+        console.log('syncstatus =>',SharedPreference.autoSyncCalendarBool)
 
         return (
             <View style={{ flex: 1, flexDirection: 'column', }}>
@@ -2918,8 +2929,8 @@ export default class HMF01011MainView extends Component {
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Switch
-                            onValueChange={(value) => this.onChangeFunction({ syncCalendar: value })}
-                            value={this.state.syncCalendar}
+                            onValueChange={(value) => this.onChangeFunction( value)}
+                            value={SharedPreference.autoSyncCalendarBool}
                         />
                     </View>
                 </View>
@@ -3086,7 +3097,8 @@ export default class HMF01011MainView extends Component {
             this.setState({
                 isscreenloading: false
             })
-            
+            this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
+            await this.deleteEventOnCalendar()//TODO bell
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
 

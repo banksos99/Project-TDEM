@@ -48,7 +48,6 @@ export default class calendarYearView extends Component {
     panResponder = {};
     constructor(props) {
         super(props);
-
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => {
                 SharedPreference.Sessiontimeout = 0
@@ -61,7 +60,8 @@ export default class calendarYearView extends Component {
                 return false
             }
         })
-        
+
+        console.log('calendar constructor =>')
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -94,7 +94,7 @@ export default class calendarYearView extends Component {
             locationPicker: '',
             today: new Date(),
             dataResponse: this.props.navigation.getParam("dataResponse", ""),
-
+            dataResponse2: this.props.navigation.getParam("dataResponse2", ""),
             havePermission: false,
             changeData: false,
             newPage: false,
@@ -103,7 +103,6 @@ export default class calendarYearView extends Component {
             page: this.props.navigation.getParam("page", 2),
             isSycnCalendarFirstTime: false,
 
-
         }
         codelocation = this.props.navigation.getParam("codelocation", "");
         // ////console.log("WorkingCalendar => ",SharedPreference.calendarAutoSync)
@@ -111,10 +110,50 @@ export default class calendarYearView extends Component {
         this.getYearSelect()
         this.setNewPicker()
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_WORKING_CALENDAR)
-        
+
+    }
+
+
+
+
+    componentDidUpdate() {
+
+        // this.state = {
+        //     dataResponse2: this.props.navigation.getParam("dataResponse2", ""),
+
+        // }
+
+        // console.log('WorkingCalendar ==> componentDidUpdate', this.state.dataResponse2)
+        // if (this.state.selectLocation != SharedPreference.selectLocationCalendar) {
+            
+
+        //     SharedPreference.selectLocationCalendar = this.state.selectLocation
+        //     if (this.state.dataResponse2) {
+
+        //         // this.props.navigation.navigate('calendarYearView2', {//TODO change
+        //         //     dataResponse: data,
+        //         //     selectYear: this.state.selectYear,
+        //         //     location: location,
+        //         //     showLocation: this.state.selectLocation,
+        //         //     selectLocation: this.state.selectLocation,
+        //         //     codelocation: codelocation,
+
+        //         // });
+        //     }
+        // }
+
+        // if (this.state.selectLocation != SharedPreference.selectLocationCalendar) {
+            
+        //     SharedPreference.selectLocationCalendar = this.state.selectLocation
+
+        // }
+
+
+
     }
 
     componentWillMount() {
+        console.log('WorkingCalendar ==> componentWillMount', SharedPreference.selectLocationCalendar)
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -138,8 +177,8 @@ export default class calendarYearView extends Component {
     }
 
     async componentDidMount() {
-       
-        ////console.log("WorkingCalendar ==> componentDidMount")
+
+        console.log("WorkingCalendar ==> componentDidMount")
 
         this.getYearSelect()
         ////console.log("WorkingCalendar ==> componentDidMount ==> finish getYearSelect")
@@ -148,42 +187,46 @@ export default class calendarYearView extends Component {
         ////console.log("WorkingCalendar ==> componentDidMount ==> finish getYearView")
 
         let autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
-        ////console.log("WorkingCalendar 1==> ",autoSyncCalendarBool)
+        SharedPreference.autoSyncCalendarBool = false
+        
+
         ////console.log("WorkingCalendar 2==> ",SharedPreference.calendarAutoSync)
 
-        if(autoSyncCalendarBool == null){
-            ////console.log("WorkingCalendar autoSyncCalendarBool ==> null")
-            await RNCalendarEvents.authorizationStatus()
-            this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
-            this.onSynWithCalendar()
-        }else{
-            ////console.log("WorkingCalendar autoSyncCalendarBool ==> else")
+        if(autoSyncCalendarBool != false){
 
-            if ((SharedPreference.calendarAutoSync == true) && (this.state.page == 1)) {
-               
-                this.addEventOnCalendar()
-                this.setState({
-                    isSycnCalendarFirstTime: true,
-                    isLoading: true
-                })
-            }
+            SharedPreference.autoSyncCalendarBool = true
+
+            this.onAutoSynWithCalendar()
 
         }
+
+        console.log("WorkingCalendar 1==> ",SharedPreference.autoSyncCalendarBool)
+
+        // if(autoSyncCalendarBool == null){
+        //     ////console.log("WorkingCalendar autoSyncCalendarBool ==> null")
+        //     await RNCalendarEvents.authorizationStatus()
+        //     this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
+        //     this.onSynWithCalendar()
+        // }else{
+        //     ////console.log("WorkingCalendar autoSyncCalendarBool ==> else")
+
+        //     if ((SharedPreference.calendarAutoSync == true) && (this.state.page == 1)) {
+               
+        //         this.addEventOnCalendar()
+        //         this.setState({
+        //             isSycnCalendarFirstTime: true,
+        //             isLoading: true
+        //         })
+        //     }
+
+        // }
 
         // this.settimerInAppNoti()
 
     }
-    componentDidUpdate() {
 
-        // if (this.state.selectLocation != SharedPreference.selectLocationCalendar) {
-        //     console.log('WorkingCalendar ==> componentDidUpdate', SharedPreference.selectLocationCalendar)
-        //     SharedPreference.selectLocationCalendar = this.state.selectLocation
-
-        // }
-
-    }
     componentWillUnmount() {
-
+        console.log("WorkingCalendar ==> componentWillUnmount")
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
         clearTimeout(this.timer);
@@ -358,6 +401,26 @@ export default class calendarYearView extends Component {
         )
     }
     }
+
+
+    // async function requestCameraPermission() {
+    // try {
+    //     const granted = await PermissionsAndroid.request(
+    //         PermissionsAndroid.PERMISSIONS.CAMERA,
+    //         {
+    //             'title': 'Cool Photo App Camera Permission',
+    //             'message': 'Cool Photo App needs access to your camera ' +
+    //                 'so you can take awesome pictures.'
+    //         }
+    //     )
+    //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //         console.log("You can use the camera")
+    //     } else {
+    //         console.log("Camera permission denied")
+    //     }
+    // } catch (err) {
+    //     console.warn(err)
+    // }
 
     getYearSelect() {
         let yearCount = 3 //user can choose  3 year ==>last year ,current year ,next year
@@ -552,8 +615,8 @@ export default class calendarYearView extends Component {
                             this.state.countDay.push(date.day);
                             const selectedDateMonth = moment(date.dateString).format(_format);
                             let checkSpecialHoliday = this.checkSpecialHoliday(selectedDateMonth);
-                            // //////////console.log("selectedDateMonth =====> : ", selectedDateMonth)
-                            // //////////console.log("checkSpecialHoliday =====> ", checkSpecialHoliday)
+                            // console.log("selectedDateMonth =====> : ", selectedDateMonth)
+                            // console.log("checkSpecialHoliday =====> ", checkSpecialHoliday)
 
                             if ((this.state.today.getDate() == date.day) && ((this.state.today.getMonth() + 1) == date.month)
                                 && (this.state.today.getFullYear() == date.year)) {
@@ -561,9 +624,9 @@ export default class calendarYearView extends Component {
                                     <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : '#adf0c9' }]} />
                                     {/* <Text style={styles.calendarCurrentDayText}> */}
                                     <Text style=
-                                        {checkSpecialHoliday == 'Y' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText } :
-                                            checkSpecialHoliday == 'N' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText } :
-                                                { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }
+                                        {checkSpecialHoliday == 'Y' ? { fontSize: 10 * scale, textAlign: 'center', color: Colors.calendarBlueText } :
+                                            checkSpecialHoliday == 'N' ? { fontSize: 10 * scale, textAlign: 'center', color:  Colors.calendarRedText } :
+                                                { fontSize: 10 * scale, textAlign: 'center', color:'black' }
                                         }
                                     >
                                         {date.day}
@@ -590,21 +653,32 @@ export default class calendarYearView extends Component {
                                 //                <Text style={{ fontSize: 10, textAlign: 'right', color: state === 'disabled' ? 'white' : Colors.redTextColor }}>
                                 //                  {date.day}</Text>
                                 //s        </View>
-                                // } else if ((this.state.today.getDate() == date.day) && ((this.state.today.getMonth() + 1) == date.month)
-                                //     && (this.state.today.getFullYear() == date.year)) {
-                                //     return <View style={styles.calendarCurrentDayCicleContainer}>
-                                //         <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : '#adf0c9' }]} />
-                                //         <Text style={styles.calendarCurrentDayText}>
-                                //             {date.day}
 
-                                //             </Text>
-                                //     </View>
                             } else {
                                 return <View style={styles.calendarDayContainer}>
                                     <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }}>
                                         {date.day}</Text>
                                 </View>
                             }
+
+                            // if ((this.state.today.getDate() == date.day) && ((this.state.today.getMonth() + 1) == date.month)
+                            //     && (this.state.today.getFullYear() == date.year)) {
+                            //     return <View style={styles.calendarCurrentDayCicleContainer}>
+                            //         <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : '#adf0c9' }]} />
+                            //         <Text style={checkSpecialHoliday == 'Y' ?
+                            //             styles.calendarCurrentDayTextblue :
+                            //             checkSpecialHoliday == 'N' ?
+                            //                 styles.calendarCurrentDayTextred :
+                            //                 styles.calendarCurrentDayTextblack}>
+                            //             {date.day}
+                            //         </Text>
+                            //     </View>
+                            // } else {
+                            //     return <View style={styles.calendarDayContainer}>
+                            //         <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }}>
+                            //             {date.day}</Text>
+                            //     </View>
+                            // }
                         }}
                     />
                 </TouchableOpacity>
@@ -743,7 +817,7 @@ export default class calendarYearView extends Component {
     }
     
     onPressSelectYearWhenSelectLocation(year, type) {
-        // console.log('onPressSelectYearWhenSelectLocation ', year)
+        console.log('onPressSelectYearWhenSelectLocation ', year)
         this.setState({
             selectYear: year,
 
@@ -757,7 +831,7 @@ export default class calendarYearView extends Component {
     }
 
     onPressLocation(locationFull, locationShort) {
-        // console.log('locationShort', locationShort)
+        console.log('locationShort', locationShort)
         this.setState({
             selectLocation: locationShort
         }, function () {
@@ -793,7 +867,7 @@ export default class calendarYearView extends Component {
     }
 
     getLocation = async (location) => {
-        // console.log("WorkingCalender ==> this.state.selectLocation ==> ", this.state.selectLocation)
+        console.log("WorkingCalender ==> this.state.selectLocation ==> ", this.state.selectLocation)
         // if (Platform.OS === 'ios') {
 
         //     locationShort = await this.getShortLocation(this.state.selectLocation)
@@ -811,11 +885,11 @@ export default class calendarYearView extends Component {
         // }
 
         //////console.log("workingCalendar ==> getLocation : ", this.state.selectLocation)
-        // console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
-        // console.log("this.state.selectLocation : ", this.state.selectLocation)
+        console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
+        console.log("this.state.selectLocation : ", this.state.selectLocation)
         let locationdef = ''
         for (let i = 0; i < SharedPreference.COMPANY_LOCATION.length; i++) {
-            // console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION[i].value)
+            console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION[i].value)
             if (SharedPreference.COMPANY_LOCATION[i].value === this.state.selectLocation) {
                 
                 locationdef = SharedPreference.COMPANY_LOCATION[i].key;
@@ -842,17 +916,13 @@ export default class calendarYearView extends Component {
                 
                 isLoading:false
             })
-
-            // this.props.navigation.goBack();
-
             this.props.navigation.navigate('calendarYearView', {//TODO change
-                dataResponse2: data,
+                dataResponse: data,
                 selectYear: this.state.selectYear,
                 location: location,
                 showLocation:this.state.selectLocation,
                 selectLocation:this.state.selectLocation,
-                codelocation:codelocation,
-                
+                codelocation:codelocation
             });
         } else {
             Alert.alert(
@@ -985,6 +1055,7 @@ export default class calendarYearView extends Component {
                                     {
                                         this.state.yearsPickerArray.map((i, index) => (
                                             <TouchableOpacity style={styles.button}
+                                            key ={200 + index}
                                                 onPress={() => { this.onPressSelectYearWhenSelectPDF(i.label,i) }}
                                                 >
                                                 <View style={styles.pickerViewAndroidContrianer}>
@@ -1081,7 +1152,7 @@ export default class calendarYearView extends Component {
                                         SharedPreference.COMPANY_LOCATION.map((i, index) => (
                                             <TouchableOpacity style={styles.button}
                                                 onPress={() => { this.onPressLocation(i.label, i.value) }}
-                                                key={index + 100}>
+                                                key={index + 300}>
                                                 <View style={styles.pickerViewAndroidContrianer} key={index + 200}>
                                                 <Text style={i.value === this.state.showLocation ?
                                                     { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
@@ -1177,7 +1248,6 @@ export default class calendarYearView extends Component {
 
     onBack() {
         this.props.navigation.navigate('HomeScreen');
-
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
@@ -1378,6 +1448,61 @@ export default class calendarYearView extends Component {
         }
     }
 
+    onAutoSynWithCalendar = async () => {
+
+        if (SharedPreference.isConnected) {
+
+            await RNCalendarEvents.authorizeEventStore();
+
+            await RNCalendarEvents.authorizationStatus().then(status => {
+                if (status == 'authorized') {
+
+                    Alert.alert(
+                        StringText.CALENDER_YEARVIEW_SYNC_CALENDAR_TITLE,
+                        StringText.CALENDER_YEARVIEW_SYNC_CALENDAR_BUTTON,
+                        [
+                            {
+                                text: 'Cancel', onPress: () => {
+                                    // this.deleteEventOnCalendar()
+                                    this.saveAutoSyncCalendar.setAutoSyncCalendar(false);
+                                    SharedPreference.autoSyncCalendarBool = false;
+                                }, style: 'cancel'
+                            },
+                            {
+                                text: 'OK', onPress: () => {
+                                    //////console.log("start addEventOnCalendar")
+                                    this.setState({
+                                        isLoading: true
+                                    })
+                                    this.state.isLoading = true
+                                    this.addEventOnCalendar()
+                                    this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
+                                    SharedPreference.autoSyncCalendarBool = true;
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
+            })
+                .catch(() => this.setState({ calendarStatus: 'error' }));
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
+                            isscreenloading: false,
+                        });
+                    }
+                },
+                ], { cancelable: false }
+            )
+        }
+    }
+
     onSynWithCalendar = async () => {
 
         if (SharedPreference.isConnected) {
@@ -1394,6 +1519,8 @@ export default class calendarYearView extends Component {
                             {
                                 text: 'Cancel', onPress: () => {
                                     // this.deleteEventOnCalendar()
+                                    // this.saveAutoSyncCalendar.setAutoSyncCalendar(false);
+                                    // SharedPreference.autoSyncCalendarBool = false;
                                 }, style: 'cancel'
                             },
                             {
@@ -1404,6 +1531,8 @@ export default class calendarYearView extends Component {
                                     })
                                     this.state.isLoading = true
                                     this.addEventOnCalendar()
+                                    // this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
+                                    // SharedPreference.autoSyncCalendarBool = true;
                                 }
                             },
                         ],
@@ -1455,96 +1584,106 @@ export default class calendarYearView extends Component {
 
     }
 
-
-
-
     deleteEventCalendar = async () => {
-        await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
+        // await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
 
     }
 
 
     addEventOnCalendar = async () => {
 
-        await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
-
+        // await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
+// await this.eventCalendar._deleteAllEvent(this.state.selectYear)
         let duplicateEventArray = []
 
         // //////console.log("addEventOnCalendar ==> this.state.calendarEventData ", this.state.calendarEventData.length)
 
         if (this.state.calendarEventData.code == 200) {
             let holidayArray = this.state.calendarEventData.data.holidays;
-            // //////console.log("addEventOnCalendar ==> holidayArray ", holidayArray.length)
+            console.log("addEventOnCalendar ==> holidayArray ", holidayArray.length)
+
+            await this.eventCalendar._onSyncCalendarEvent(holidayArray,this.state.showLocation)
             // for (let index = 0; index < holidayArray.length; index++) {
-            for (let index = 0; index < holidayArray.length; index++) {
-                const daysArray = holidayArray[index].days
-                for (let f = 0; f < daysArray.length; f++) {
-                    const eventDetailArray = daysArray[f].events;
-                    for (let k = 0; k < eventDetailArray.length; k++) {
-                        let eventObject = eventDetailArray[k]
-                        if (eventObject.date == null) {
-                            const copy = {
-                                ...eventObject, date: daysArray[f].date
-                            };
-                            eventObject = copy
-                        }
+            // for (let index = 0; index < holidayArray.length; index++) { // 12 month
 
-                        if (eventObject.time_start == null) {
-                            let timeStart = daysArray[f].date + ' 00:00:01'
-                            const copy = {
-                                ...eventObject, time_start: timeStart
-                            };
-                            eventObject = copy
-                        }
+            //     const daysArray = holidayArray[index].days
 
-                        if (eventObject.time_end == null) {
-                            let timeEnd
-                            if (Platform.OS === 'android') {
-                                timeEnd = daysArray[f].date + ' 23:59:00'
-                            } else {
-                                // timeEnd = daysArray[f].date + ' 10:59:00'
-                                timeEnd = daysArray[f].date + ' 23:59:00'
-                            }
+            //     for (let f = 0; f < daysArray.length; f++) {// 30 day
 
-                            const copy = {
-                                ...eventObject, time_end: timeEnd
-                            };
-                            eventObject = copy
-                        }
+            //         const eventDetailArray = daysArray[f].events;
 
-                        if (eventObject.description == null) {
-                            const copy = {
-                                ...eventObject, description: "description"
-                            };
-                            eventObject = copy
-                        }
+            //         for (let k = 0; k < eventDetailArray.length; k++) { // event
 
-                        if (eventObject.event_id != null) {
+            //             let eventObject = eventDetailArray[k]
+                        
+            //             if (eventObject.date == null) {
+            //                 const copy = {
+            //                     ...eventObject, date: daysArray[f].date
+            //                 };
+            //                 eventObject = copy
+            //             }
 
-                            if (duplicateEventArray.length == 0) {
-                                duplicateEventArray.push(eventObject.event_id)
-                                await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
-                            } else {
-                                let data = await this.checkDuplicateEventCalendar(duplicateEventArray, eventObject.event_id)
-                                let checkFlag = data[0]
-                                duplicateEventArray = data[1]
-                                if (checkFlag == false) {
-                                    await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
-                                }
-                            }
-                        } else {
-                            await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
-                        }
-                        //////console.log("==============Success==============")
-                    }
-                }
-            }
+            //             if (eventObject.time_start == null) {
+            //                 let timeStart = daysArray[f].date + ' 00:00:01'
+            //                 const copy = {
+            //                     ...eventObject, time_start: timeStart
+            //                 };
+            //                 eventObject = copy
+            //             }
+
+            //             if (eventObject.time_end == null) {
+            //                 let timeEnd
+            //                 if (Platform.OS === 'android') {
+            //                     timeEnd = daysArray[f].date + ' 23:59:00'
+            //                 } else {
+            //                     // timeEnd = daysArray[f].date + ' 10:59:00'
+            //                     timeEnd = daysArray[f].date + ' 23:59:00'
+            //                 }
+
+            //                 const copy = {
+            //                     ...eventObject, time_end: timeEnd
+            //                 };
+            //                 eventObject = copy
+            //             }
+
+            //             if (eventObject.description == null) {
+            //                 const copy = {
+            //                     ...eventObject, description: "description"
+            //                 };
+            //                 eventObject = copy
+            //             }
+
+            //             if (eventObject.event_id != null) {
+
+            //                 if (duplicateEventArray.length == 0) {
+            //                     duplicateEventArray.push(eventObject.event_id)
+            //                     await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
+
+            //                 } else {
+                                
+            //                     let data = await this.checkDuplicateEventCalendar(duplicateEventArray, eventObject.event_id)
+            //                     let checkFlag = data[0]
+            //                     duplicateEventArray = data[1]
+            //                     if (checkFlag == false) {
+            //                         await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
+            //                     }
+            //                 }
+
+            //             } else {
+
+            //                 await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
+
+            //             }
+            //             //////console.log("==============Success==============")
+            //         }
+            //     }
+            // }
 
             this.setState({
                 isLoading: false
             })
 
-            if (this.state.isSycnCalendarFirstTime == false) {
+            // if (this.state.isSycnCalendarFirstTime == false) {
                 Alert.alert(
                     StringText.CALENDAR_ALERT_SYNC_CALENDAR_TITLE_SUCCESS,
                     StringText.CALENDAR_ALERT_SYNC_CALENDAR_DESC_SUCCESS,
@@ -1559,7 +1698,7 @@ export default class calendarYearView extends Component {
                     ],
                     { cancelable: false }
                 )
-            }
+            // }
 
         } else {
 
@@ -1624,10 +1763,10 @@ export default class calendarYearView extends Component {
 
     render() {
         return (
-            <View style={styles.container}
+            <View style={styles.container} 
             collapsable={true}
             {...this.panResponder.panHandlers}
-             >
+            >
                 <View style={styles.container} >
                     <View style={styles.navContainer}>
                         <TouchableOpacity style={styles.navLeftContainer} onPress={(this.onBack.bind(this))}>

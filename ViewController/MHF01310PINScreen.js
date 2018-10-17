@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Image, Text, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { View, Image, Text, TouchableOpacity, Alert, ActivityIndicator,Platform } from "react-native";
 import { styles } from "./../SharedObject/MainStyles";
 import Colors from "./../SharedObject/Colors"
 import StringText from './../SharedObject/StringText'
@@ -10,7 +10,7 @@ import RestAPI from "../constants/RestAPI"
 import SaveProfile from "../constants/SaveProfile"
 import LoginWithPinAPI from "../constants/LoginWithPinAPI"
 import LoginResetPinAPI from "../constants/LoginResetPinAPI"
-import SaveAutoSyncCalendar from "../constants/SaveAutoSyncCalendar";
+// import SaveAutoSyncCalendar from "../constants/SaveAutoSyncCalendar";
 import firebase from 'react-native-firebase';
 import Layout from "../SharedObject/Layout";
 
@@ -20,7 +20,7 @@ export default class PinActivity extends Component {
 
     savePIN = new SavePIN()
     saveProfile = new SaveProfile()
-    saveAutoSyncCalendar = new SaveAutoSyncCalendar()
+    // saveAutoSyncCalendar = new SaveAutoSyncCalendar()
 
     constructor(props) {
         super(props);
@@ -57,7 +57,7 @@ export default class PinActivity extends Component {
                 SharedPreference.userRegisted = true;
                 SharedPreference.sessionTimeoutBool = false;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
-                SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
+                // SharedPreference.calendarAutoSync = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
                 await this.onLoadInitialMaster()
 
             } else if (data.data.code === 'MSC29136AERR') {
@@ -220,6 +220,7 @@ export default class PinActivity extends Component {
                             let origin = this.state.failPin + 1
                             this.setState({
                                 failPin: origin,
+                                isLoading: false,
                                 pin: ''
                             })
                         }
@@ -254,32 +255,53 @@ export default class PinActivity extends Component {
     }
 
     onLoadAppInfo = async () => {
-        console.log('onLoadAppInfo')
+        
         let data = await RestAPI(SharedPreference.APPLICATION_INFO_API, "1")
         code = data[0]
         data = data[1]
+        
         if (code.SUCCESS == data.code) {
             let appversion = '1.0.0'
-            if (data.data.force_update === 'Y') {
-                Alert.alert(
-                    'New Version Available',
-                    'This is a newer version available for download! Please update the app by visiting the Apple Store',
-                    [
-                        {
-                            text: 'Update', onPress: () => {
-                                //console.log('OK Pressed') },
+            if (Platform.OS === 'android') {
+
+                if (data.data.android.force_update === 'Y') {
+                    Alert.alert(
+                        'New Version Available',
+                        'This is a newer version available for download! Please update the app by visiting the Play Store',
+                        [
+                            {
+                                text: 'Update', onPress: () => {
+                                    //console.log('OK Pressed') },
+                                }
                             }
-                        }
-                    ],
-                    { cancelable: false }
-                )
+                        ],
+                        { cancelable: false }
+                    )
 
+                }
+            } else {
+                console.log('onLoadAppInfo', data.data.ios.force_update)
+                if (data.data.ios.force_update === 'Y') {
+                    Alert.alert(
+                        'New Version Available',
+                        'This is a newer version available for download! Please update the app by visiting the Apple Store',
+                        [
+                            {
+                                text: 'Update', onPress: () => {
+                                    //console.log('OK Pressed') },
+                                }
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+
+                }
             }
-
         }
 
         this.props.navigation.navigate('HomeScreen')
     }
+
     componentWillMount() {
 
         SharedPreference.currentNavigator = SharedPreference.SCREEN_PIN
@@ -321,7 +343,9 @@ export default class PinActivity extends Component {
             }
             console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
 
-            this.props.navigation.navigate('HomeScreen')
+            await this.onLoadAppInfo()
+
+            // this.props.navigation.navigate('HomeScreen')
 
         } else {
             Alert.alert(
