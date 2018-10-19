@@ -198,8 +198,8 @@ console.log('componentDidUpdate')
 
             SharedPreference.autoSyncCalendarBool = true
 
+            // this.onAutoSynWithCalendarNoAlert()
             this.onAutoSynWithCalendar()
-
         }
 
         // console.log("WorkingCalendar 1==> ",SharedPreference.autoSyncCalendarBool)
@@ -1619,6 +1619,45 @@ console.log('componentDidUpdate')
         }
     }
 
+    onAutoSynWithCalendarNoAlert = async () => {
+
+        if (SharedPreference.isConnected) {
+
+            // await RNCalendarEvents.authorizeEventStore();
+            await RNCalendarEvents.authorizeEventStore()
+
+            await RNCalendarEvents.authorizationStatus().then(status => {
+                console.log('dsadasdadsadasd', status)
+                if (status == 'authorized') {
+
+                    this.setState({
+                        isLoading: true
+                    })
+
+                    this.addEventOnCalendar()
+                    this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
+                    SharedPreference.autoSyncCalendarBool = true;
+
+                }
+            })
+                .catch(() => this.setState({ calendarStatus: 'error' }));
+        } else {
+
+            Alert.alert(
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
+                            isscreenloading: false,
+                        });
+                    }
+                },
+                ], { cancelable: false }
+            )
+        }
+    }
+
     onAutoSynWithCalendar = async () => {
 
         if (SharedPreference.isConnected) {
@@ -1780,8 +1819,6 @@ console.log('componentDidUpdate')
 
     addEventOnCalendar = async () => {
 
-        // await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
-// await this.eventCalendar._deleteAllEvent(this.state.selectYear)
         let duplicateEventArray = []
 
         // //////console.log("addEventOnCalendar ==> this.state.calendarEventData ", this.state.calendarEventData.length)
@@ -1790,7 +1827,7 @@ console.log('componentDidUpdate')
             let holidayArray = this.state.calendarEventData.data.holidays;
             console.log("addEventOnCalendar ==> holidayArray ", holidayArray.length)
 
-            await this.eventCalendar._onSyncCalendarEvent(holidayArray,this.state.showLocation)
+            await this.eventCalendar._onSyncCalendarEvent(holidayArray, this.state.showLocation)
             // for (let index = 0; index < holidayArray.length; index++) {
             // for (let index = 0; index < holidayArray.length; index++) { // 12 month
 
@@ -1803,7 +1840,7 @@ console.log('componentDidUpdate')
             //         for (let k = 0; k < eventDetailArray.length; k++) { // event
 
             //             let eventObject = eventDetailArray[k]
-                        
+
             //             if (eventObject.date == null) {
             //                 const copy = {
             //                     ...eventObject, date: daysArray[f].date
@@ -1848,7 +1885,7 @@ console.log('componentDidUpdate')
             //                     await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
 
             //                 } else {
-                                
+
             //                     let data = await this.checkDuplicateEventCalendar(duplicateEventArray, eventObject.event_id)
             //                     let checkFlag = data[0]
             //                     duplicateEventArray = data[1]
@@ -1872,20 +1909,20 @@ console.log('componentDidUpdate')
             })
 
             // if (this.state.isSycnCalendarFirstTime == false) {
-                Alert.alert(
-                    StringText.CALENDAR_ALERT_SYNC_CALENDAR_TITLE_SUCCESS,
-                    StringText.CALENDAR_ALERT_SYNC_CALENDAR_DESC_SUCCESS,
-                    [
-                        {
-                            text: StringText.CALENDAR_ALERT_SYNC_CALENDAR_BUTTON_SUCCESS, onPress: () => {
-                                this.setState({
-                                    isLoading: false
-                                })
-                            }
-                        },
-                    ],
-                    { cancelable: false }
-                )
+            Alert.alert(
+                StringText.CALENDAR_ALERT_SYNC_CALENDAR_TITLE_SUCCESS,
+                StringText.CALENDAR_ALERT_SYNC_CALENDAR_DESC_SUCCESS,
+                [
+                    {
+                        text: StringText.CALENDAR_ALERT_SYNC_CALENDAR_BUTTON_SUCCESS, onPress: () => {
+                            this.setState({
+                                isLoading: false
+                            })
+                        }
+                    },
+                ],
+                { cancelable: false }
+            )
             // }
 
         } else {

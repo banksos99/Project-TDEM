@@ -333,9 +333,9 @@ export default class mainview extends Component {
             // .android.setPriority(firebase.notifications.Android.Priority.High)
           // .android.setBadge(6)
 
-          firebase.notifications()
-            .displayNotification(localNotification)
-            .catch(err => console.error(err));
+          // firebase.notifications()
+          //   .displayNotification(localNotification)
+          //   .catch(err => console.error(err));
 
 
         } else if (Platform.OS === 'ios') {
@@ -623,7 +623,7 @@ export default class mainview extends Component {
               <Text style={styles.registPinEnterContainer}>{this.state.pintitle}</Text>
               {this.renderImagePin()}
               <TouchableOpacity onPress={() => { this.onResetPIN() }}>
-                <Text style={styles.registPinForgotContainer}>Forgot your PIN ?</Text>
+                <Text style={styles.registPinForgotContainer}>Forgot your PIN?</Text>
               </TouchableOpacity>
               {this.renderFailPin()}
             </View>

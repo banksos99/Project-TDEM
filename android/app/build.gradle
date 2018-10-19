@@ -108,8 +108,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         // targetSdkVersion 22
-        versionCode 86
-        versionName "1.86"
+        versionCode 87
+        versionName "1.87"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

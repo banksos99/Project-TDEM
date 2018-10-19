@@ -201,6 +201,7 @@ export default class rootNavigation extends Component {
     };
 
     render() {
+        console.log('app.je render',this.state.hasPin)
         if (this.state.hasPin == false) {
             return (
                 <AppNavigatorRegister

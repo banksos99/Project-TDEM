@@ -54,7 +54,7 @@ export default class HandbookViewer extends Component {
             onStartShouldSetPanResponder: () => {
                 
                 SharedPreference.Sessiontimeout = 0
-                return true
+                return false
             },
             onStartShouldSetPanResponderCapture: () => {
 
@@ -1011,7 +1011,7 @@ console.log('onLocationsReady')
                        
                         Alert.alert(
                             'SAVE',
-                            'Do you want a save Marker',
+                            'Do you want a save Marker?',
                             [
                                 {
                                     text: 'OK', onPress: () => {

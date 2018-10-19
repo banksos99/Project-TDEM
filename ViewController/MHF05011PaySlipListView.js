@@ -757,7 +757,7 @@ export default class PaySlipActivity extends Component {
                             <Text style={styles.payslipAnnoualRight} numberOfLines={1}>{emp_pf_year}</Text>
                         </View>
                         <View style={{ flex: 1, marginLeft: 10, marginRight: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={styles.payslipAnnoualLeft}>Company Povident Fund</Text>
+                            <Text style={styles.payslipAnnoualLeft}>Company Provident Fund</Text>
                             <Text style={styles.payslipAnnoualRight} numberOfLines={1}>{com_pf_year}</Text>
                         </View>
                     </View>

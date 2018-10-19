@@ -142,7 +142,7 @@ export default class HandbookActivity extends Component {
             onStartShouldSetPanResponder: () => {
                 
                 SharedPreference.Sessiontimeout = 0
-                return true
+                return false
             },
             onStartShouldSetPanResponderCapture: () => {
 

@@ -572,20 +572,22 @@ export default class PinActivity extends Component {
 
                 <View style={{ height: '50%', justifyContent: 'center', alignItems: 'center', }}>
           
-                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                            <Image
-                                style={{ width: 65, height: 65 }}
-
-                                source={require('../resource/regist/regist_lock_white.png')}
-                            //resizeMode="cover" 
-                            />
-                            <Text style={styles.registPinEnterContainer}>{this.state.pintitle}</Text>
-                            {this.renderImagePin()}
-                            <TouchableOpacity onPress={() => { this.onResetPIN() }}>
-                                <Text style={styles.registPinForgotContainer}>Forgot your PIN ?</Text>
-                            </TouchableOpacity>
-                            {this.renderFailPin()}
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ height: 50, width: '100%' }}>
                         </View>
+                        <Image
+                            style={{ width: 65, height: 65 }}
+
+                            source={require('../resource/regist/regist_lock_white.png')}
+                        //resizeMode="cover" 
+                        />
+                        <Text style={styles.registPinEnterContainer}>{this.state.pintitle}</Text>
+                        {this.renderImagePin()}
+                        <TouchableOpacity onPress={() => { this.onResetPIN() }}>
+                            <Text style={styles.registPinForgotContainer}>Forgot your PIN?</Text>
+                        </TouchableOpacity>
+                        {this.renderFailPin()}
+                    </View>
                     {/* </View> */}
                 </View>
                 {/* <View style={{ width: '100%' }} /> */}
@@ -674,9 +676,11 @@ export default class PinActivity extends Component {
                         <TouchableOpacity style={styles.registPinNumContainer}
                             onPress={() => { this.setPIN('-') }}>
                             <Image style={styles.pinDelete}
-                            source={require('../resource/images/pin_delete_red.png')}
-                            resizeMode="contain" />
+                                source={require('../resource/images/pin_delete_red.png')}
+                                resizeMode="contain" />
                         </TouchableOpacity>
+                    </View>
+                    <View style={{ height: 50, width: '100%' }}>
                     </View>
                 </View>
                 {/* </View>

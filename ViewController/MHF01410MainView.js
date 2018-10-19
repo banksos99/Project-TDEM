@@ -69,7 +69,7 @@ export default class HMF01011MainView extends Component {
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => {
                 SharedPreference.Sessiontimeout = 0
-                return true
+                return false
             },
             onStartShouldSetPanResponderCapture: () => {
    
@@ -3004,7 +3004,7 @@ export default class HMF01011MainView extends Component {
 
             Alert.alert(
                 'Sign Out',
-                'Do you want to sign out ?',
+                'Do you want to sign out?',
                 [
                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
                     { text: 'OK', onPress: () => { this.on_confire_signout() } },

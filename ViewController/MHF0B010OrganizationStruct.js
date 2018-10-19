@@ -33,7 +33,7 @@ export default class OrganizationStruct extends Component {
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => {
                 SharedPreference.Sessiontimeout = 0
-                return true
+                return false
             },
             onStartShouldSetPanResponderCapture: () => {
    

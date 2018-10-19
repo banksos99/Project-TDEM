@@ -33,7 +33,7 @@ export default class PaySlipActivity extends Component {
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => {
                 SharedPreference.Sessiontimeout = 0
-                return true
+                return false
             },
             onStartShouldSetPanResponderCapture: () => {
    
@@ -279,8 +279,8 @@ export default class PaySlipActivity extends Component {
                 </View>
                 <View style={{ flex: 1, marginTop: 0, marginRight: 10, marginLeft: 10 }}>
                     <WebView
-                        // source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
-                        source={{ html: '<p><style><"font-size: 13px;">TST 01เทส th</p>' }}
+                        source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
+                        // source={{ html: '<p><style><"font-size: 13px;">TST 01เทส th</p>' }}
                         // source={{ html: content }}
                         scalesPageToFit={(Platform.OS === 'ios') ? true : false}
                         automaticallyAdjustContentInsets={false}

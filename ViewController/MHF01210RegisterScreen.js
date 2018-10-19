@@ -113,20 +113,20 @@ export default class RegisterActivity extends Component {
             if (code.SUCCESS == data.code) {
                 // this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
                 // SharedPreference.profileObject = data.data
-                
+
                 // this.saveProfile.setProfile(data.data)
                 // SharedPreference.profileObject = await this.saveProfile.getProfile()
-                SharedPreference.sessionTimeoutBool=false;
+                SharedPreference.sessionTimeoutBool = false;
                 SharedPreference.userRegisted = true;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
 
                 loginsuccess = true;
-                
+
                 await this.onCheckPINWithChangePIN('1111', '2222')
                 this.setState({
                     isLoading: false,
-                    password:'',
-                    username:''
+                    password: '',
+                    username: ''
                 })
 
             } else if (code.DOES_NOT_EXISTS == data.code) {
@@ -156,8 +156,8 @@ export default class RegisterActivity extends Component {
                             let origin = this.state.failPin + 1
                             this.setState({
                                 isLoading: false,
-                                    password: ''
-                          
+                                password: ''
+
                             })
                         }
                     },
@@ -181,47 +181,41 @@ export default class RegisterActivity extends Component {
                     ],
                     { cancelable: false }
                 )
-           
-            } else if (code.INVALID_USER_PASS == data.code) {
 
-                console.log(' erreo : ', data.data.code)
-                if (data.data.code === 'MSC29123AERR') {
-                    Alert.alert(
-                        StringText.ALERT_INVALID_USERID_TIELE,
-                        StringText.ALERT_INVALID_USERID_DETAIL,
-                        [
-                            {
-                                text: 'OK', onPress: () => {
-                                    this.setState({
-                                        isLoading: false,
-                                        password: ''
+            } else if (data.data.code === 'MSC29123AERR') {
+                Alert.alert(
+                    StringText.ALERT_INVALID_USERID_TIELE,
+                    StringText.ALERT_INVALID_USERID_DETAIL,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.setState({
+                                    isLoading: false,
+                                    password: ''
 
-                                    })
-                                }
+                                })
                             }
-                        ],
-                        { cancelable: false }
-                    )
-                } else if (data.data.code === 'MSC29122AERR'){
-                    Alert.alert(
-                        StringText.ALERT_USER_LOCK_TITLE,
-                        StringText.ALERT_USER_LOCK_DETAIL,
-                        [
-                            {
-                                text: 'OK', onPress: () => {
-                                    this.setState({
-                                        isLoading: false,
-                                        password: ''
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            } else if (data.data.code === 'MSC29122AERR') {
+                Alert.alert(
+                    StringText.ALERT_USER_LOCK_TITLE,
+                    StringText.ALERT_USER_LOCK_DETAIL,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.setState({
+                                    isLoading: false,
+                                    password: ''
 
-                                    })
-                                }
+                                })
                             }
-                        ],
-                        { cancelable: false }
-                    )
-                }
-           
-            
+                        }
+                    ],
+                    { cancelable: false }
+                )
 
 
             } else if (code.FAILED == data.code) {
@@ -273,7 +267,10 @@ export default class RegisterActivity extends Component {
                     [
                         {
                             text: 'OK', onPress: () => {
-                                console.log('OK Pressed')
+                                this.setState({
+                                    isLoading: false,
+                                    password: ''
+                                })
                             }
                         }
                     ],
@@ -714,7 +711,7 @@ console.log('register componentDidMount')
                             {this.renderImagePin()}
 
                             <TouchableOpacity onPress={() => { this.onResetPin.bind(this) }}>
-                                <Text style={styles.registPinForgotContainer}>Reset PIN ?</Text>
+                                <Text style={styles.registPinForgotContainer}>Reset PIN?</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
