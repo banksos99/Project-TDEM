@@ -104,7 +104,7 @@ export default class EventCalendar {
                 const eventID = array[index];
                 // console.log("1 deleteEventCalendar ==> Success : ", array[index]);
                 await RNCalendarEvents.removeEvent(eventID).then(event => {
-                    console.log("2 deleteEventCalendar ==> Success : ", eventID);
+                    console.log("2 deleteEventCalendar ==> Success : ", eventID,index);
                 })
                     .catch(error => {
                         console.log("deleteEventCalendar ==> Error ");
@@ -112,7 +112,7 @@ export default class EventCalendar {
             }
         }
 
-        listIDEventAdder = [];
+        // listIDEventAdder = [];
 
         this.setEventIDFromDevice(listIDEventAdder)
 
@@ -217,9 +217,9 @@ export default class EventCalendar {
                     if (fulfilled === 'authorized') {
                         RNCalendarEvents.saveEvent(title, event).then(id => {
                             listIDEventAdder.push(id)
-                            console.log('listIDEventAdder => ',this.state.listIDEventAdder)
+                            console.log('listIDEventAdder => ',listIDEventAdder)
                             this.setEventIDFromDevice(listIDEventAdder)
-                            
+                            SharedPreference.add_event = SharedPreference.add_event + 1;
                             // this.addDataToEventID(id)
                             // console.log("1addEventsToCalendar ==> success ==> ID  : ", id);
                         }, error => {
@@ -239,7 +239,8 @@ export default class EventCalendar {
                           
                         // this.addDataToEventID(id)
                         listIDEventAdder.push(id)
-                        console.log("2addEventsToCalendar ==> success ==> ID  : ", id,' =>',listIDEventAdder);
+                        console.log("2addEventsToCalendar ==> success ==> ID  : ",' =>',listIDEventAdder.length);
+                        SharedPreference.add_event = SharedPreference.add_event + 1;
                         this.setEventIDFromDevice(listIDEventAdder)
                
                     },
@@ -324,13 +325,16 @@ export default class EventCalendar {
 
         if (array) {
 
-            console.log('_onSyncCalendarEvent array => ', array)
-            console.log('_onSyncCalendarEvent array => ', array.length)
+            // console.log('_onSyncCalendarEvent array => ', array)
+            // console.log('_onSyncCalendarEvent array => ', array.length)
+            SharedPreference.del_event = 0;
+
             for (let index = 0; index < array.length; index++) {
                 const eventID = array[index];
                 // console.log("1 deleteEventCalendar ==> Success : ", array[index]);
                 await RNCalendarEvents.removeEvent(eventID).then(event => {
-                    console.log("2 deleteEventCalendar ==> Success : ", eventID);
+                    console.log("2 deleteEventCalendar ==> Success : ", eventID, index);
+                    SharedPreference.del_event = SharedPreference.del_event + 1;
                 })
                     .catch(error => {
                         console.log("deleteEventCalendar ==> Error ");
@@ -338,10 +342,10 @@ export default class EventCalendar {
             }
         }
 
-        listIDEventAdder = [];
+        // listIDEventAdder = [];
 
         this.setEventIDFromDevice(listIDEventAdder)
-
+        SharedPreference.add_event = 0;
         for (let index = 0; index < holidayArray.length; index++) { // 12 month
 
             const daysArray = holidayArray[index].days

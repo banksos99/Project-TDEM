@@ -207,6 +207,8 @@ export default {
     sessionTimeoutBool: false,
     countbegin: 0,
     selectLocationCalendar:'default',
-    Sessiontimeout:0
+    Sessiontimeout:0,
+    del_event:0,
+    add_event:0
 }
 

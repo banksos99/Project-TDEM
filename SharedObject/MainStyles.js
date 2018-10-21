@@ -517,12 +517,12 @@ export const styles = StyleSheet.create({
     },
     userTitleText: {
         fontSize: scale * 15,
-        color: Colors.grayTextColor,
+        color: 'white',
         fontFamily: font_medium
     },
     usernameText: {
         fontSize: scale * 13,
-        color: Colors.grayTextColor,
+        color: 'white',//Colors.grayTextColor,
         fontFamily: font_medium
 
     },

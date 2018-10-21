@@ -170,7 +170,7 @@ export default class calendarMonthView extends Component {
                                 style={styles.calendarEventDetailIcon}
                                 source={require('../resource/images/calendar/calendar_location.png')}
                             />
-                            <Text style={[styles.calendarEventHeaderText, { color: 'black' }]}>Bang Bo</Text>
+                            <Text style={[styles.calendarEventHeaderText, { color: 'black' }]}>{this.state.showLocation}</Text>
 
                         </View>
                     </View>

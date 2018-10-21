@@ -55,6 +55,7 @@ let readyExit = false
 import moment from 'moment'
 
 import Authorization from "../SharedObject/Authorization";
+import Layout from "../SharedObject/Layout";
 
 export default class HMF01011MainView extends Component {
 
@@ -362,22 +363,25 @@ export default class HMF01011MainView extends Component {
         SharedPreference.Sessiontimeout = SharedPreference.Sessiontimeout + 1
 
         if (SharedPreference.Sessiontimeout >= 300) {
-            
-            Alert.alert(
-                StringText.ALERT_SESSION_TIMEOUT_TITILE,
-                StringText.ALERT_SESSION_TIMEOUT_DESC,
-                [{
-                    text: 'OK', onPress: () => {
 
-                        SharedPreference.Sessiontimeout = 0
-                        this.props.navigation.navigate('PinScreen')
-                        page = 0
-                        SharedPreference.userRegisted = false;
-                        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+            if (SharedPreference.userRegisted) {
+                Alert.alert(
+                    StringText.ALERT_SESSION_TIMEOUT_TITILE,
+                    StringText.ALERT_SESSION_TIMEOUT_DESC,
+                    [{
+                        text: 'OK', onPress: () => {
+                            if (SharedPreference.userRegisted) {
+                                SharedPreference.Sessiontimeout = 0
+                                this.props.navigation.navigate('PinScreen')
+                                page = 0
+                                SharedPreference.userRegisted = false;
+                                SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                            }
+                        }
+                    }], { cancelable: false }
+                )
+            }
 
-                    }
-                }], { cancelable: false }
-            )
 
         } else {
             this.setState({
@@ -2283,7 +2287,10 @@ export default class HMF01011MainView extends Component {
         console.log("YearView ==> deleteEventCalendar")
         let currentyear = new Date().getFullYear();
         await this.eventCalendar._deleteEventFromCalendar(currentyear)
-
+        this.setState({
+            isscreenloading: false
+        })
+        
         // await this.eventCalendar._deleteAllEvent(currentyear)
     }
 
@@ -2299,11 +2306,22 @@ export default class HMF01011MainView extends Component {
 
         if (newState == false) {
             await this.deleteEventOnCalendar()//TODO bell
+            Alert.alert(
+                'Success',
+                'Unsync calendar',
+                [
+                    { text: 'OK', onPress: () => { } },
+                ],
+                { cancelable: false }
+            )
+        }else{
+            this.setState({
+                isscreenloading: false
+            })
+
         }
 
-        this.setState({
-            isscreenloading: false
-        })
+       
     }
 
 
@@ -2320,7 +2338,7 @@ export default class HMF01011MainView extends Component {
                 {/* <View style={styles.mainmenutabbarstyle} /> */}
                 <View style={styles.mainscreen}>
                     <Image
-                        style={{ flex: 1 }}
+                        style={{ width:'100%',height:200 }}
                         source={require('./../resource/images/mainscreen.png')}
                     // resizeMode="contain" 
                     />
@@ -2973,7 +2991,7 @@ export default class HMF01011MainView extends Component {
     }
 
     signout() {
-
+        SharedPreference.userRegisted = false
         page = 0
         this.state.loadingannouncement = false
         timerstatus = false
@@ -3098,8 +3116,11 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: false
             })
             this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
+
             await this.deleteEventOnCalendar()//TODO bell
+
             this.props.navigation.navigate('RegisterScreen')
+
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
 
         } else if (code.INVALID_USER_PASS == data.code) {

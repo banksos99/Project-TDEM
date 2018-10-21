@@ -14,7 +14,8 @@ import {
     BackHandler,
     PermissionsAndroid,
     PanResponder,
-    AppState
+    AppState,
+    AsyncStorage
 } from 'react-native';
 
 import { Calendar, LocaleConfig } from 'react-native-calendars';
@@ -181,6 +182,11 @@ console.log('componentDidUpdate')
     async componentDidMount() {
 
         console.log("WorkingCalendar ==> componentDidMount")
+        let array = await this.getEventIDFromDevice()
+        if(array){
+            SharedPreference.add_event = array.length;
+        }
+        
 
         this.getYearSelect()
         ////console.log("WorkingCalendar ==> componentDidMount ==> finish getYearSelect")
@@ -194,12 +200,17 @@ console.log('componentDidUpdate')
 
         ////console.log("WorkingCalendar 2==> ",SharedPreference.calendarAutoSync)
 
-        if(autoSyncCalendarBool != false){
+        if (autoSyncCalendarBool != false && autoSyncCalendarBool != true) {
 
             SharedPreference.autoSyncCalendarBool = true
 
             // this.onAutoSynWithCalendarNoAlert()
             this.onAutoSynWithCalendar()
+
+        } else if (autoSyncCalendarBool == true) {
+
+            this.onAutoSynWithCalendarNoAlert()
+
         }
 
         // console.log("WorkingCalendar 1==> ",SharedPreference.autoSyncCalendarBool)
@@ -230,7 +241,19 @@ console.log('componentDidUpdate')
         }
         
     }
-  
+  getEventIDFromDevice(){
+        // return await AsyncStorage.getItem(this.state.calendarName);
+
+        return AsyncStorage.getItem(SharedPreference.CALENDAR_NAME)
+        .then(json => {
+            return JSON.parse(json);
+        })
+        .catch(error => { console.log('Load Highlights failed! ' + error)
+            let value =  JSON.parse("{}");
+            return value;
+        });
+
+    }
     _handleAppStateChange = async (nextAppState) => {
         let autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
         if(autoSyncCalendarBool == null){
@@ -1742,7 +1765,7 @@ console.log('componentDidUpdate')
                                     this.setState({
                                         isLoading: true
                                     })
-                                    this.state.isLoading = true
+                                    // this.state.isLoading = true
                                     this.addEventOnCalendar()
                                     // this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
                                     // SharedPreference.autoSyncCalendarBool = true;
@@ -2002,13 +2025,19 @@ console.log('componentDidUpdate')
                         </TouchableOpacity>
                         <Text style={styles.navTitleText}>Calendar</Text>
                         <View style={styles.navRightContainer}>
-                            <TouchableOpacity onPress={this.onSynWithCalendar.bind(this)}
-                            //style={{justifyContent:'center'}}
+                            <TouchableOpacity 
+                            // onPress={this.onSynWithCalendar.bind(this)}
+                            // style={{backgroundColor:'blue'}}
+                            disabled={true}
                             >
-                                <Image
+                                {/* <Image
                                     style={styles.navRightButton}
                                     source={require('../resource/images/calendar_sync.png')}
-                                />
+                                /> */}
+                                {/* <View style={{width:'100%',height:'100%',position: 'absolute'}}>
+                                <Text style={{fontSize:8}}>del:{SharedPreference.del_event}</Text>
+                                <Text style={{fontSize:8}}>add:{SharedPreference.add_event}</Text>
+                                </View> */}
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => {
