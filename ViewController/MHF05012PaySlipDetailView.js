@@ -1090,9 +1090,10 @@ export default class PayslipDetail extends Component {
                 console.log('deduct : ', parseFloat(tdeduct) * 100)
                 console.log('netincome : ', ((parseFloat(tincome) * 100) - (parseFloat(tdeduct) * 100)))
                 netincome = parseInt((((parseFloat(tincome) * 100) - (parseFloat(tdeduct) * 100)))) / 100.0//(parseInt(parseFloat(tincome - tdeduct) * 100) / 100).toString();
-                if (netincome < 0) {
-                    netincomestr = '0.00'
-                } else {
+                // if (netincome < 0) {
+                //     netincomestr = '0.00'
+                // } else
+                 {
 
                     netincome = netincome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     taincome = netincome.split('.')

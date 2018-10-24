@@ -70,27 +70,28 @@ export default class calendarEventDetailView extends Component {
 
     componentDidMount() {
        
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        
         // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
-        this.settimerInAppNoti()
+        // this.settimerInAppNoti()
 
     }
-
+    componentWillMount() {
+        
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        this.getDataOnView()
+    }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        clearTimeout(this.timer);
+        // clearTimeout(this.timer);
     }
 
     handleBackButtonClick() {
-        this.onBack()
+        
+        this.props.navigation.goBack();
         return true;
     }
 
-    componentWillMount() {
-        this.getDataOnView()
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-
-    }
+    
 
     settimerInAppNoti() {
         this.timer = setTimeout(() => {
@@ -396,22 +397,24 @@ export default class calendarEventDetailView extends Component {
 
     onBack() {
 
-        this.setState({
-            isLoading: true
+        // this.setState({
+        //     isLoading: true
 
-        }, function* () {
-        });
-
-        let year = moment(this.state.monthText).format(_formatYear)
+        // }, function* () {
+            
+        // });
+        this.props.navigation.goBack();
+        // let year = moment(this.state.monthText).format(_formatYear)
         // this.props.navigation.dispatch(StackActions.popToTop());
-        this.props.navigation.navigate('calendarYearView', {
-            selectYear: year,
-            dataResponse: this.state.dataResponse,
-            location: this.state.location,
-            showLocation: this.state.showLocation,
-            selectLocation: this.state.selectLocation,
-            codelocation: codelocation,
-        });
+        
+        // this.props.navigation.navigate('calendarYearView', {
+        //     selectYear: year,
+        //     dataResponse: this.state.dataResponse,
+        //     location: this.state.location,
+        //     showLocation: this.state.showLocation,
+        //     selectLocation: this.state.selectLocation,
+        //     codelocation: codelocation,
+        // });
 
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Image, Text, TouchableOpacity, Alert, ActivityIndicator,Platform } from "react-native";
+import { View, Image, Text, TouchableOpacity, Alert, ActivityIndicator,Platform ,PanResponder} from "react-native";
 import { styles } from "./../SharedObject/MainStyles";
 import Colors from "./../SharedObject/Colors"
 import StringText from './../SharedObject/StringText'
@@ -24,6 +24,19 @@ export default class PinActivity extends Component {
 
     constructor(props) {
         super(props);
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => {
+                SharedPreference.Sessiontimeout = 0
+                return false
+            },
+            onStartShouldSetPanResponderCapture: () => {
+   
+                SharedPreference.Sessiontimeout = 0
+  
+                return false
+            }
+        })
+
         this.state = {
             pintitle: 'Enter your PIN',
             pin: '',
@@ -557,7 +570,10 @@ export default class PinActivity extends Component {
     render() {
         
         return (
-            <View style={{flex:1,backgroundColor: Colors.redColor }}>
+            <View style={{flex:1,backgroundColor: Colors.redColor }}
+            collapsable={true}
+            {...this.panResponder.panHandlers}
+            >
                 {/* <View style={styles.alertDialogContainer}>
                     <View style={styles.emptyDialogContainer}> */}
 

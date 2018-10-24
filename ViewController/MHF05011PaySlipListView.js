@@ -815,73 +815,73 @@ export default class PaySlipActivity extends Component {
             if (tpay1) {
                 let apay1 = tpay1.split('-'); pay1 = apay1[2] + ' ' + Month.monthNamesShort[apay1[1] - 1] + ' ' + apay1[0]; net1 = Dcryptfun.decrypt(tnet1);
                 let anet1 = net1.split('.');
-                if (parseInt(anet1[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net1 = 0;
+                // if (parseInt(anet1[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net1 = '0.00';
             }
             let tnet2 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 1].netsalary; let tpay2 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 1].paydate;
             if (tpay2) {
                 let apay2 = tpay2.split('-'); pay2 = apay2[2] + ' ' + Month.monthNamesShort[apay2[1] - 1] + ' ' + apay2[0]; net2 = Dcryptfun.decrypt(tnet2);
                 let anet2 = net2.split('.');
-                if (parseInt(anet2[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net2 = '0.00';
+                // if (parseInt(anet2[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net2 = '0.00';
             }
             let tnet3 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 2].netsalary; let tpay3 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 2].paydate;
             if (tpay3) {
                 let apay3 = tpay3.split('-'); pay3 = apay3[2] + ' ' + Month.monthNamesShort[apay3[1] - 1] + ' ' + apay3[0]; net3 = Dcryptfun.decrypt(tnet3);
                 let anet3 = net3.split('.');
-                if (parseInt(anet3[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net3 = '0.00';
+                // if (parseInt(anet3[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net3 = '0.00';
             }
             let tnet4 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 3].netsalary; let tpay4 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 3].paydate;
             if (tpay4) {
                 let apay4 = tpay4.split('-'); pay4 = apay4[2] + ' ' + Month.monthNamesShort[apay4[1] - 1] + ' ' + apay4[0]; net4 = Dcryptfun.decrypt(tnet4);
                 let anet4 = net4.split('.');
-                if (parseInt(anet4[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net4 = '0.00';
+                // if (parseInt(anet4[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net4 = '0.00';
             }
             let tnet5 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 4].netsalary; let tpay5 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 4].paydate;
             if (tpay5) {
                 let apay5 = tpay5.split('-'); pay5 = apay5[2] + ' ' + Month.monthNamesShort[apay5[1] - 1] + ' ' + apay5[0]; net5 = Dcryptfun.decrypt(tnet5);
                 let anet5 = net5.split('.');
-                if (parseInt(anet5[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net5 = '0.00';
+                // if (parseInt(anet5[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net5 = '0.00';
             }
             let tnet6 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 5].netsalary; let tpay6 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 5].paydate;
             if (tpay6) {
                 let apay6 = tpay6.split('-'); pay6 = apay6[2] + ' ' + Month.monthNamesShort[apay6[1] - 1] + ' ' + apay6[0]; net6 = Dcryptfun.decrypt(tnet6);
                 let anet6 = net6.split('.');
-                if (parseInt(anet6[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net6 = '0.00';
+                // if (parseInt(anet6[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net6 = '0.00';
             }
             let tnet7 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 6].netsalary; let tpay7 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 6].paydate;
             if (tpay7) {
                 let apay7 = tpay7.split('-'); pay7 = apay7[2] + ' ' + Month.monthNamesShort[apay7[1] - 1] + ' ' + apay7[0]; net7 = Dcryptfun.decrypt(tnet7);
                 let anet7 = net7.split('.');
-                if (parseInt(anet7[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net7 = '0.00';
+                // if (parseInt(anet7[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net7 = '0.00';
             }
             let tnet8 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 7].netsalary; let tpay8 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 7].paydate;
             if (tpay8) {
                 let apay8 = tpay8.split('-'); pay8 = apay8[2] + ' ' + Month.monthNamesShort[apay8[1] - 1] + ' ' + apay8[0]; net8 = Dcryptfun.decrypt(tnet8);
                 let anet8 = net8.split('.');
-                if (parseInt(anet8[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net8 = '0.00';
+                // if (parseInt(anet8[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net8 = '0.00';
             }
             let tnet9 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 8].netsalary; let tpay9 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 8].paydate;
             if (tpay9) {
                 let apay9 = tpay9.split('-'); pay9 = apay9[2] + ' ' + Month.monthNamesShort[apay9[1] - 1] + ' ' + apay9[0]; net9 = Dcryptfun.decrypt(tnet9);
                 let anet9 = net9.split('.');
-                if (parseInt(anet9[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net9 = '0.00';
+                // if (parseInt(anet9[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net9 = '0.00';
             }
             let tnet10 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 9].netsalary; let tpay10 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 9].paydate;
             if (tpay10) {
                 let apay10 = tpay10.split('-'); pay10 = apay10[2] + ' ' + Month.monthNamesShort[apay10[1] - 1] + ' ' + apay10[0]; net10 = Dcryptfun.decrypt(tnet10);
                 let anet10 = net10.split('.');
-                if (parseInt(anet10[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net10 = '0.00';
+                // if (parseInt(anet10[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net10 = '0.00';
             }
             let tnet11 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 10].netsalary; let tpay11 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 10].paydate;
             if (tpay11) {
                 let apay11 = tpay11.split('-'); pay11 = apay11[2] + ' ' + Month.monthNamesShort[apay11[1] - 1] + ' ' + apay11[0]; net11 = Dcryptfun.decrypt(tnet11);
                 let anet11 = net11.split('.');
-                if (parseInt(anet11[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net11 = '0.00';
+                // if (parseInt(anet11[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net11 = '0.00';
             }
             let tnet12 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 11].netsalary; let tpay12 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 11].paydate;
             if (tpay12) {
                 let apay12 = tpay12.split('-'); pay12 = apay12[2] + ' ' + Month.monthNamesShort[apay12[1] - 1] + ' ' + apay12[0]; net12 = Dcryptfun.decrypt(tnet12);
                 let anet12 = net12.split('.');
-                if (parseInt(anet12[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net12 = '0.00';
+                // if (parseInt(anet12[0].replace(',', '').replace(',', '').replace(',', '')) < 0) net12 = '0.00';
             }
 
         

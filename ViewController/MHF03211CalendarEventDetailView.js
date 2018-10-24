@@ -53,28 +53,29 @@ export default class calendarMonthView extends Component {
     }
 
     onBackPrevious() {
-        this.props.navigation.navigate('calendarMonthView',
-            {
-                month: this.state.monthText,
-                monthObject: this.state.monthObject,
-                dataResponse: this.state.dataResponse,
-                location: this.state.location,
-                showLocation: this.state.showLocation,
-                selectLocation: this.state.selectLocation,
-                codelocation: codelocation,
-            });
+        this.props.navigation.goBack();
+        // this.props.navigation.navigate('calendarMonthView',
+        //     {
+        //         month: this.state.monthText,
+        //         monthObject: this.state.monthObject,
+        //         dataResponse: this.state.dataResponse,
+        //         location: this.state.location,
+        //         showLocation: this.state.showLocation,
+        //         selectLocation: this.state.selectLocation,
+        //         codelocation: codelocation,
+        //     });
     }
 
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
-    // componentWillUnmount() {
-    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
 
     handleBackButtonClick() {
-        this.onBack()
+        this.props.navigation.goBack();
         return true;
     }
 

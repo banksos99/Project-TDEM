@@ -200,13 +200,14 @@ export default class HMF01011MainView extends Component {
 
     componentWillMount() {
 
-    
+        page = 0;
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN
+        SharedPreference.Sessiontimeout = 0;
 
         // this.interval = setInterval(() => {
-            this.setState({
-                isscreenloading: false
-            })
+        this.setState({
+            isscreenloading: false
+        })
         // }, 1000);
         // this.notificationListener();
 
@@ -2089,7 +2090,7 @@ export default class HMF01011MainView extends Component {
     select_announce_type = () => {
 
         this.setState({
-            loadingtype: 2,
+            loadingtype: 3,
             // isscreenloading: false,
             announcementType: this.state.tempannouncementType
         }, function () {
@@ -2103,7 +2104,7 @@ export default class HMF01011MainView extends Component {
         this.setState({
 
             isscreenloading: false,
-            loadingtype: 2,
+            loadingtype: 3,
             announcementType: this.state.initannouncementType,
             tempannouncementType: this.state.initannouncementType
 
@@ -2148,7 +2149,7 @@ export default class HMF01011MainView extends Component {
 
         this.setState({
             isscreenloading: false,
-            loadingtype: 2,
+            loadingtype: 3,
             announcementStatus: this.state.initannouncementStatus,
             tempannouncementStatus: this.state.initannouncementStatus
             // isscreenloading: false,
@@ -2164,7 +2165,7 @@ export default class HMF01011MainView extends Component {
 
         this.setState({
 
-            loadingtype: 2,
+            loadingtype: 3,
             //loadingtype: 0,
             announcementStatus: this.state.tempannouncementStatus
 
@@ -2305,15 +2306,26 @@ export default class HMF01011MainView extends Component {
         this.saveAutoSyncCalendar.setAutoSyncCalendar(newState)
 
         if (newState == false) {
-            await this.deleteEventOnCalendar()//TODO bell
+
             Alert.alert(
-                'Success',
-                'Unsync calendar',
+                'Unsync Calendar',
+                'Do you want to Unsync Calendar to your device?',
                 [
-                    { text: 'OK', onPress: () => { } },
+                    {
+                        text: 'Cancel', onPress: () => {
+                            this.setState({
+                                isscreenloading: false
+                            }, function () {
+                                SharedPreference.autoSyncCalendarBool = true
+                            })
+                        }
+                    },
+                    { text: 'OK', onPress: () => { this.ondeleteEventcalendar() } },
                 ],
                 { cancelable: false }
             )
+            
+
         }else{
             this.setState({
                 isscreenloading: false
@@ -2321,9 +2333,40 @@ export default class HMF01011MainView extends Component {
 
         }
 
-       
+
     }
 
+    ondeleteEventcalendar = async () => {
+
+        await this.deleteEventOnCalendar()//TODO bell
+
+        this.setState({
+            isscreenloading: true,
+            loadingtype: 2
+        }, function () {
+            this.onsyncAlert();
+        })
+        // Alert.alert(
+        //     'Success',
+        //     'Unsync calendar',
+        //     [
+        //         { text: 'OK', onPress: () => {  this.setState({
+        //             isscreenloading: false
+        //         })} },
+        //     ],
+        //     { cancelable: false }
+        // )
+
+    }
+
+    onsyncAlert = () => {
+        this.setState({}, () => {
+            setTimeout(() => {
+                this.setState({ loadingtype: 3,isscreenloading: false, }, () => {
+                });
+            }, 100);
+        });
+    }
 
     /*************************************************************** */
     /*************************   render class ********************** */
@@ -2992,7 +3035,6 @@ export default class HMF01011MainView extends Component {
 
     signout() {
         SharedPreference.userRegisted = false
-        page = 0
         this.state.loadingannouncement = false
         timerstatus = false
         SharedPreference.Handbook = []
@@ -3011,7 +3053,9 @@ export default class HMF01011MainView extends Component {
         this.setState({
             isscreenloading: false
         })
-      
+        page = 0
+        clearTimeout(this.timer);
+        clearTimeout(this.timersession);
         this.props.navigation.navigate('RegisterScreen')
         SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
     }
@@ -3025,7 +3069,7 @@ export default class HMF01011MainView extends Component {
                 'Do you want to sign out?',
                 [
                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                    { text: 'OK', onPress: () => { this.on_confire_signout() } },
+                    { text: 'OK', onPress: () => { this.on_confirm_signout() } },
                 ],
                 { cancelable: false }
             )
@@ -3042,17 +3086,16 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    on_confire_signout() {
+    on_confirm_signout() {
 
         clearTimeout(this.timer);
 
         this.setState({
             isscreenloading: true
+        }, function () {
+            this.loadSignOutAPI()
         })
         //TODO Bell
-
-        this.loadSignOutAPI()
-
     }
 
 
@@ -3099,29 +3142,34 @@ export default class HMF01011MainView extends Component {
         code = data[0]
         data = data[1]
 
-        this.setState({
-            isscreenloading: false,
-        })
-
+        // this.setState({
+        //     isscreenloading: false,
+        // })
+// console.log('loadSignOutAPI',data)
         if (code.SUCCESS == data.code) {
             this.state.loadingannouncement = false;
-            page = 0
+            
             timerstatus = false
             SharedPreference.Handbook = []
             announcementData = []
             tempannouncementData = []
             SharedPreference.profileObject = null
             this.saveProfile.setProfile(null)
-            this.setState({
-                isscreenloading: false
-            })
+            
             this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
 
             await this.deleteEventOnCalendar()//TODO bell
-
+            clearTimeout(this.timer);
+            clearTimeout(this.timersession);
             this.props.navigation.navigate('RegisterScreen')
 
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+
+            page = 0
+
+            // this.setState({
+            //     isscreenloading: false
+            // })
 
         } else if (code.INVALID_USER_PASS == data.code) {
 
@@ -3132,12 +3180,14 @@ export default class HMF01011MainView extends Component {
             tempannouncementData = []
             // SharedPreference.profileObject = null
             // this.saveProfile.setProfile(null)
-            this.setState({
-                isscreenloading: false
-            })
+
             
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+
+            // this.setState({
+            //     isscreenloading: false
+            // })
             // Alert.alert(
             //     data.data.code,
             //     data.data.detail,
@@ -3281,7 +3331,7 @@ export default class HMF01011MainView extends Component {
     cancel_select_Announcement_type() {
         this.setState({
 
-            loadingtype: 2,
+            loadingtype: 3,
             isscreenloading: false,
 
         })
@@ -3291,7 +3341,7 @@ export default class HMF01011MainView extends Component {
 
         this.setState({
 
-            loadingtype: 2,
+            loadingtype: 3,
             isscreenloading: false,
 
         })
@@ -3468,6 +3518,18 @@ export default class HMF01011MainView extends Component {
                     </View>
                 </View>
             )
+
+        } else if (this.state.loadingtype == 2) {
+
+            return (
+                <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
+                    <View style={{ width: '80%', backgroundColor: 'white',borderRadius:10 }}>
+                        <View style={{ height: 100, width: '100%', justifyContent: 'center',alignItems:'center' }}>
+                            <Text style={{ fontSize: 15 }}>Unsync Success</Text>
+                        </View>
+                    </View>
+                </View>
+              );
 
         }
         return (

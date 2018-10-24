@@ -15,7 +15,8 @@ import {
     PermissionsAndroid,
     PanResponder,
     AppState,
-    AsyncStorage
+    AsyncStorage,
+    Modal
 } from 'react-native';
 
 import { Calendar, LocaleConfig } from 'react-native-calendars';
@@ -88,6 +89,7 @@ export default class calendarYearView extends Component {
             yearPickerForDownloadPDFFileView: '',
             yearsPickerView: '',
             locationPickerView: '',
+            syncSuccess: '',
 
             isLoading: true,
             calendarEventData: '',
@@ -161,7 +163,7 @@ console.log('componentDidUpdate')
     }
 
     handleBackButtonClick() {
-        this.onBack()
+        this.props.navigation.goBack();
         return true;
     }
 
@@ -1436,12 +1438,38 @@ console.log('componentDidUpdate')
                     </View >
                 )
             }
+        }else if(this.state.syncSuccess){
+
+            return (
+                <View style={styles.alertDialogContainer}>
+                        {/* bg */}
+                        <View style={styles.alertDialogBackgroudAlpha} />
+                        {/* bg */}
+                        <View style={[styles.alertDialogContainer,{borderRadius:10}]}>
+                            <View style={[styles.alertDialogBoxContainer,{borderRadius:10}]}>
+                            <View style={{height:100, justifyContent:'center',alignItems:'center'}}>
+                                <Text  style={{fontSize:15}}>Sync Success</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View >
+              );
+
         }
     }
 
+    onsyncAlert = () => {
+        this.setState({}, () => {
+            setTimeout(() => {
+                this.setState({ syncSuccess: false }, () => {
+                });
+            }, 100);
+        });
+    }
 
     onBack() {
-        this.props.navigation.navigate('HomeScreen');
+        this.props.navigation.goBack();
+        // this.props.navigation.navigate('HomeScreen');
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
@@ -1928,24 +1956,28 @@ console.log('componentDidUpdate')
             // }
 
             this.setState({
-                isLoading: false
+                isLoading: false,
+                syncSuccess:true
+            },function(){
+                this.onsyncAlert()
             })
 
             // if (this.state.isSycnCalendarFirstTime == false) {
-            Alert.alert(
-                StringText.CALENDAR_ALERT_SYNC_CALENDAR_TITLE_SUCCESS,
-                StringText.CALENDAR_ALERT_SYNC_CALENDAR_DESC_SUCCESS,
-                [
-                    {
-                        text: StringText.CALENDAR_ALERT_SYNC_CALENDAR_BUTTON_SUCCESS, onPress: () => {
-                            this.setState({
-                                isLoading: false
-                            })
-                        }
-                    },
-                ],
-                { cancelable: false }
-            )
+                
+            // Alert.alert(
+            //     StringText.CALENDAR_ALERT_SYNC_CALENDAR_TITLE_SUCCESS,
+            //     StringText.CALENDAR_ALERT_SYNC_CALENDAR_DESC_SUCCESS,
+            //     [
+            //         {
+            //             text: StringText.CALENDAR_ALERT_SYNC_CALENDAR_BUTTON_SUCCESS, onPress: () => {
+            //                 this.setState({
+            //                     isLoading: false
+            //                 })
+            //             }
+            //         },
+            //     ],
+            //     { cancelable: false }
+            // )
             // }
 
         } else {

@@ -519,6 +519,8 @@ export default class EmpInfoDetail extends Component {
     renderCurrentJobDetail() {
 
         let hiring_date = '-'
+        let hiring_date_emp = '-'
+        let service_years = '-'
         let position = '-'
         let org_group = '-'
         let org_division = '-'
@@ -533,6 +535,8 @@ export default class EmpInfoDetail extends Component {
         if (empinfodetail.career_paths) {
             let cc = empinfodetail.career_paths[0];
             if (cc.hiring_date) hiring_date = this.convertdate(cc.hiring_date);
+            if (cc.hiring_date_emp) hiring_date_emp = this.convertdate(cc.hiring_date_emp);
+            if (cc.service_years) service_years = cc.service_years;
             if (cc.position) position = cc.position
             if (cc.org_group) org_group = cc.org_group
             if (cc.org_division) org_division = cc.org_division
@@ -556,7 +560,8 @@ export default class EmpInfoDetail extends Component {
                             <Text style={styles.empinfoDetailRedText} >Hiring</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{hiring_date}</Text>
+                            <Text style={styles.empinfoDetailText1line}>{hiring_date_emp}</Text>
+                            <Text style={styles.empinfoDetailText2line}>{'(' + service_years + ')'}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />

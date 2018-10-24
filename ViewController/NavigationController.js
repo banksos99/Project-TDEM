@@ -80,11 +80,15 @@ const AppNavigatorPin = createStackNavigator({
 }, {
         initialRouteName: 'PinScreen',
         headerMode: 'none',
+        navigationOptions: {
+            gesturesEnabled: false,
+        },
         transitionConfig: () => ({
             transitionSpec: {
                 duration: 0,
                 timing: Animated.timing,
-                easing: Easing.step0
+                easing: Easing.step0,
+                
             }
         })
     }
@@ -119,11 +123,15 @@ const AppNavigatorRegister = createStackNavigator({
 }, {
         initialRouteName: 'RegisterScreen',
         headerMode: 'none',
+        navigationOptions: {
+            gesturesEnabled: false,
+        },
         transitionConfig: () => ({
             transitionSpec: {
                 duration: 0,
                 timing: Animated.timing,
-                easing: Easing.step0
+                easing: Easing.step0,
+                
             }
         })
     }
