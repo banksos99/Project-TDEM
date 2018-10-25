@@ -700,12 +700,12 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium
     },
     leaveQuotaDetailItemTopCircleContainer: {
-        width: 60, height: 60, backgroundColor: Colors.leaveCircleRed,
-        justifyContent: 'center', alignItems: 'center', borderRadius: 60
-        , marginTop: 10, marginBottom: 10
+        width: 60*scale, height: 60*scale, backgroundColor: Colors.leaveCircleRed,
+        justifyContent: 'center', alignItems: 'center', borderRadius: 60*scale
+        , marginTop: 10*scale, marginBottom: 10*scale
     },
     leaveQuotaDetailItemTopCircleText: {
-        textAlign: 'center', fontSize: 17 * scale, color: 'white',
+        textAlign: 'center', fontSize: 18 * scale, color: 'white',
         fontFamily: font_medium
     },
     leaveQuotaDetailItemTopDescText: {
