@@ -696,13 +696,13 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     leaveQuotaDetailItemTopTitleText: {
-        fontSize: 16*scale, color: Colors.grayTextColor,
+        fontSize: 16 * scale, color: Colors.grayTextColor,
         fontFamily: font_medium
     },
     leaveQuotaDetailItemTopCircleContainer: {
-        width: 60*scale, height: 60*scale, backgroundColor: Colors.leaveCircleRed,
-        justifyContent: 'center', alignItems: 'center', borderRadius: 60*scale
-        , marginTop: 10*scale, marginBottom: 10*scale
+        width: 58 * scale, height: 58 * scale, backgroundColor: Colors.leaveCircleRed,
+        justifyContent: 'center', alignItems: 'center', borderRadius: 58 * scale
+        , marginTop: 10 * scale, marginBottom: 10 * scale
     },
     leaveQuotaDetailItemTopCircleText: {
         textAlign: 'center', fontSize: 18 * scale, color: 'white',
