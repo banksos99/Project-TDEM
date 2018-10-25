@@ -2354,7 +2354,8 @@ export default class HMF01011MainView extends Component {
         console.log("YearView ==> deleteEventCalendar")
         let currentyear = new Date().getFullYear();
         // await this.eventCalendar._deleteEventFromCalendar(currentyear)
-        await this.eventCalendar._deleteAllEvent(currentyear)
+        await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
+        // await this.eventCalendar._deleteAllEvent(currentyear)
         this.setState({
             isscreenloading: false
         })
@@ -2384,7 +2385,7 @@ export default class HMF01011MainView extends Component {
                 {/* <View style={styles.mainmenutabbarstyle} /> */}
                 <View style={styles.mainscreen}>
                     <Image
-                        style={{ width:'100%',height:200 }}
+                        style={{ width:'100%',height:'100%' }}
                         source={require('./../resource/images/mainscreen.png')}
                     // resizeMode="contain" 
                     />
@@ -2964,7 +2965,7 @@ export default class HMF01011MainView extends Component {
         //         }
         
         // let syncstatus = SharedPreference.autoSyncCalendarBool;
-        console.log('syncstatus =>',SharedPreference.autoSyncCalendarBool)
+        // console.log('syncstatus =>',SharedPreference.autoSyncCalendarBool)
 
         return (
             <View style={{ flex: 1, flexDirection: 'column', }}>

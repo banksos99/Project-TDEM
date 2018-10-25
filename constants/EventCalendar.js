@@ -52,6 +52,65 @@ export default class EventCalendar {
 
     }
 
+    _recursiveDeleteAllEvent = async (selectYear) => {
+
+        // let array = await this.getEventIDFromDevice()
+        // this._recursiveDeleteEvent(array);
+        let currentyear = new Date().getFullYear();
+        let startTime = (currentyear - 1) + '-12-30T01:01:00.000Z'
+        let endTime = (currentyear + 1) + '-01-01T01:01:00.000Z'
+
+        // console.log("deleteEventFromCalendar ==> startTime ==> ", startTime)
+        // console.log("deleteEventFromCalendar ==> endTime ==> ", endTime)
+
+        RNCalendarEvents.fetchAllEvents(startTime, endTime)
+            .then(events => {
+
+                // for (let i = 0 ; i < events.length;i++) {
+                //     console.log("_recursiveDeleteAllEvent notes : ", events[i]);
+
+
+                // }
+
+                this._recursiveDeleteEvent(events);
+            })
+            .catch(error => {
+                // handle error
+                // console.log("RNCalendarEvents ==> error ==> ", error)
+            });
+    }
+
+    _recursiveDeleteEvent(events) {
+
+        if (events.length) {
+
+            const eventID = events[0].id;
+
+            RNCalendarEvents.removeFutureEvents(eventID).then(event => {
+
+                if (events[0].notes === 'TDEMAutoSync') {
+                    let temp = events.splice(0, 1)
+                    setTimeout(() => {
+                        this._recursiveDeleteEvent(events);
+                    }, 100);
+
+                }else{
+
+                    let temp = events.splice(0, 1)
+                }
+                
+            })
+                .catch(error => {
+
+                });
+
+        } else {
+            console.log("_recursiveDeleteEvent ==> error : ");
+            return
+        }
+
+    }
+
     _deleteAllEvent = async (selectYear) => {
         let startTime = (selectYear - 1) + '-12-30T01:01:00.000Z'
         let endTime = (selectYear + 1) + '-01-01T01:01:00.000Z'
@@ -64,24 +123,28 @@ export default class EventCalendar {
                 // handle events
                 // console.log("deleteEventFromCalendar ==> evnets ==> ", events.length)
 
-                for (let index = 0; index < events.length; index++) {
-                    const element = events[index];
-                    // console.log("deleteEventFromCalendar delete ==> ", element)
-                    // console.log("deleteEventFromCalendar ==> eventID : ", element.description)
-                    let desc = element.description
-                    // var checkFile = desc.indexOf("TDEM")
-                    // console.log("deleteEventFromCalendar ==> checkFile ==> ", checkFile)
+                // for (let index = 0; index < events.length; index++) {
+                //     const element = events[index];
+                //     console.log("deleteEventFromCalendar delete ==> ", element)
+                //     // console.log("deleteEventFromCalendar ==> eventID : ", element.description)
+                //     let desc = element.description
+                //     // var checkFile = desc.indexOf("TDEM")
+                //     // console.log("deleteEventFromCalendar ==> checkFile ==> ", checkFile)
 
-                    // if (checkFile > -1) {
-                    RNCalendarEvents.removeEvent(element.id).then(event => {
-                        console.log("deleteEventFromCalendar ==> Success ==> id ==> ",
-                            element.id, " ==> event ==> ", event);
-                    })
-                        .catch(error => {
-                            // console.log("deleteEventFromCalendar ==> Error ==> ", error);
-                        });
-                    // }
-                }
+                //     // if (checkFile > -1) {
+                //     RNCalendarEvents.removeEvent(element.id).then(event => {
+                //         console.log("deleteEventFromCalendar ==> Success ==> id ==> ",
+                //             element.id, " ==> event ==> ", event);
+                //     })
+                //         .catch(error => {
+                //             // console.log("deleteEventFromCalendar ==> Error ==> ", error);
+                //         });
+                //     // }
+                // }
+
+
+
+
             })
             .catch(error => {
                 // handle error
@@ -97,8 +160,7 @@ export default class EventCalendar {
 
         if (array) {
 
-            // console.log('_onSyncCalendarEvent array => ', array)
-            // console.log('_onSyncCalendarEvent array => ', array.length)
+
             for (let index = 0; index < array.length; index++) {
                 const eventID = array[index];
                 console.log("1 deleteEventCalendar ==> Success : ", array[index]);
@@ -206,7 +268,8 @@ export default class EventCalendar {
             endDate: momentEnd + "Z",
             location: location,
             allDay: alldayBool,
-            description: 'TDEM : ' + eventObject.description
+            description: 'TDEM : ' + eventObject.description,
+            notes:'TDEMAutoSync'
         }
         // console.log("Timezone ==> ", DeviceInfo.getTimezone());   //   'America/New_York'
         // console.log("eventObject add caledar event : ", event)
@@ -320,28 +383,28 @@ export default class EventCalendar {
     }
 
     _onSyncCalendarEvent = async(holidayArray,location)=>{
-        console.log('_onSyncCalendarEvent')
+
         let array = await this.getEventIDFromDevice()
 
-        if (array) {
+        await this._recursiveDeleteAllEvent(array)
 
-            // console.log('_onSyncCalendarEvent array => ', array)
-            // console.log('_onSyncCalendarEvent array => ', array.length)
-            SharedPreference.del_event = 0;
+        // if (array) {
 
-            for (let index = 0; index < array.length; index++) {
-                const eventID = array[index];
-                // console.log("1 deleteEventCalendar ==> Success : ", array[index]);
-                // await RNCalendarEvents.removeEvent(eventID).then(event => {
-                await RNCalendarEvents.removeFutureEvents(eventID).then(event => {
-                    // console.log("2 deleteEventCalendar ==> Success : ", eventID, index);
-                    SharedPreference.del_event = SharedPreference.del_event + 1;
-                })
-                    .catch(error => {
-                        // console.log("deleteEventCalendar ==> Error ");
-                    });
-            }
-        }
+        //     SharedPreference.del_event = 0;
+
+        //     for (let index = 0; index < array.length; index++) {
+        //         const eventID = array[index];
+        //         // console.log("1 deleteEventCalendar ==> Success : ", array[index]);
+        //         // await RNCalendarEvents.removeEvent(eventID).then(event => {
+        //         await RNCalendarEvents.removeFutureEvents(eventID).then(event => {
+        //             // console.log("2 deleteEventCalendar ==> Success : ", eventID, index);
+        //             SharedPreference.del_event = SharedPreference.del_event + 1;
+        //         })
+        //             .catch(error => {
+        //                 // console.log("deleteEventCalendar ==> Error ");
+        //             });
+        //     }
+        // }
 
         // listIDEventAdder = [];
 
