@@ -51,7 +51,9 @@ console.log("HOST ======================= " + HOST);
 // const VERSION = 'v1.0.74'//04-10-61 IOS: Android:
 // const VERSION = 'v1.0.75'//04-10-61 IOS: Android:
 // const VERSION = 'v1.0.76'//22-10-61 IOS: Android:
-const VERSION = 'v1.0.77'//04-10-61 IOS: Android:
+// const VERSION = 'v1.0.77'//24-10-61 IOS: Android:
+// const VERSION = 'v1.0.78'//04-10-61 IOS: Android:
+const VERSION = 'v1.0.79'//04-10-61 IOS: Android:
 export default {
     HOST: HOST,
     SERVER: SERVER,

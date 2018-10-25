@@ -1392,11 +1392,11 @@ export default class HMF01011MainView extends Component {
 
     onAutenticateErrorAlertDialog() {
 
-        if (SharedPreference.Sessiontimeout) {
+        if (SharedPreference.userRegisted) {
 
             SharedPreference.Sessiontimeout = 0
             clearTimeout(this.timersession)
-            SharedPreference.userRegisted = true;
+            SharedPreference.userRegisted = false;
             timerstatus = false;
             this.setState({
                 isscreenloading: false,
@@ -1419,7 +1419,7 @@ export default class HMF01011MainView extends Component {
 
         if (!SharedPreference.sessionTimeoutBool) {
 
-            SharedPreference.userRegisted = true;
+            SharedPreference.userRegisted = false;
             timerstatus = false;
             this.setState({
                 isscreenloading: false,
@@ -2284,16 +2284,7 @@ export default class HMF01011MainView extends Component {
         console.log('tempannouncementData =>', tempannouncementData)
     }
 
-    deleteEventOnCalendar = async () => {
-        console.log("YearView ==> deleteEventCalendar")
-        let currentyear = new Date().getFullYear();
-        await this.eventCalendar._deleteEventFromCalendar(currentyear)
-        this.setState({
-            isscreenloading: false
-        })
-        
-        // await this.eventCalendar._deleteAllEvent(currentyear)
-    }
+    
 
     onChangeFunction = async (newState) => {
         SharedPreference.autoSyncCalendarBool = newState;
@@ -2356,6 +2347,18 @@ export default class HMF01011MainView extends Component {
         //     ],
         //     { cancelable: false }
         // )
+
+    }
+    
+    deleteEventOnCalendar = async () => {
+        console.log("YearView ==> deleteEventCalendar")
+        let currentyear = new Date().getFullYear();
+        // await this.eventCalendar._deleteEventFromCalendar(currentyear)
+        await this.eventCalendar._deleteAllEvent(currentyear)
+        this.setState({
+            isscreenloading: false
+        })
+
 
     }
 

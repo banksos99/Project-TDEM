@@ -433,32 +433,41 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         // textAlign: 'left',
         color: Colors.redTextColor,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: font_medium
     },
     calendarEventText: {
         alignSelf: 'center',
         flex: 1,
         fontSize: 16,
         textAlign: 'left',
+        fontFamily: font_medium
     },
     calendarEventTimeText: {
         fontSize: 15,
         // textAlign: 'left',
         color: Colors.grayTextColor,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: font_medium
     },
     calendarEventTimeDetialText: {
         fontSize: 13,
         color: Colors.lightGrayTextColor,
-        textAlign: 'left'
+        textAlign: 'right',
+        marginRight: 30,
+        fontFamily: font_medium
     },
     calendarEventTimeAlldayDetialText: {
         fontSize: 13,
         color: Colors.lightGrayTextColor,
+        textAlign: 'right',
+        marginRight: 30,
+        fontFamily: font_medium
     },
     calendarEventContainer: {
         flexDirection: 'column',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        
     },
     calendarEventViewContainer: {
         flexDirection: 'row',
@@ -696,7 +705,7 @@ export const styles = StyleSheet.create({
         , marginTop: 10, marginBottom: 10
     },
     leaveQuotaDetailItemTopCircleText: {
-        textAlign: 'center', fontSize: 18 * scale, color: 'white',
+        textAlign: 'center', fontSize: 17 * scale, color: 'white',
         fontFamily: font_medium
     },
     leaveQuotaDetailItemTopDescText: {

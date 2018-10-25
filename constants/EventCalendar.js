@@ -20,7 +20,6 @@ export default class EventCalendar {
         await AsyncStorage.removeItem(this.state.calendarName);
     }
 
-
     _deleteEventCalendar = async (selectYear) => {
         let array = await this.getEventIDFromDevice()
         let currentyear = new Date().getFullYear();
@@ -102,19 +101,20 @@ export default class EventCalendar {
             // console.log('_onSyncCalendarEvent array => ', array.length)
             for (let index = 0; index < array.length; index++) {
                 const eventID = array[index];
-                // console.log("1 deleteEventCalendar ==> Success : ", array[index]);
-                await RNCalendarEvents.removeEvent(eventID).then(event => {
-                    console.log("2 deleteEventCalendar ==> Success : ", eventID,index);
+                console.log("1 deleteEventCalendar ==> Success : ", array[index]);
+                await RNCalendarEvents.removeFutureEvents(eventID).then(event => {
+                // await RNCalendarEvents.removeEvent(eventID).then(event => {
+                    // console.log("2 deleteEventCalendar ==> Success : ", eventID,index);
                 })
                     .catch(error => {
-                        console.log("deleteEventCalendar ==> Error ");
+                        // console.log("deleteEventCalendar ==> Error ");
                     });
             }
         }
 
         // listIDEventAdder = [];
 
-        this.setEventIDFromDevice(listIDEventAdder)
+        // this.setEventIDFromDevice(listIDEventAdder)
 
         // for (let index = 0; index < array.length; index++) {
         //     RNCalendarEvents.removeEvent(array[index]).then(event => {
@@ -221,9 +221,9 @@ export default class EventCalendar {
                             this.setEventIDFromDevice(listIDEventAdder)
                             SharedPreference.add_event = SharedPreference.add_event + 1;
                             // this.addDataToEventID(id)
-                            // console.log("1addEventsToCalendar ==> success ==> ID  : ", id);
+                            console.log("1addEventsToCalendar ==> success ==> ID  : ", id);
                         }, error => {
-                            // console.log("1addEventsToCalendar ==> error ==> error  : ", error);
+                            console.log("1addEventsToCalendar ==> error ==> error  : ", error);
                         }).catch(error => {
                             console.warn(error);
                         });
@@ -239,7 +239,7 @@ export default class EventCalendar {
                           
                         // this.addDataToEventID(id)
                         listIDEventAdder.push(id)
-                        console.log("2addEventsToCalendar ==> success ==> ID  : ",' =>',listIDEventAdder.length);
+                        console.log("2addEventsToCalendar ==> success ==> ID  : ",' =>',event,listIDEventAdder.length);
                         SharedPreference.add_event = SharedPreference.add_event + 1;
                         this.setEventIDFromDevice(listIDEventAdder)
                
@@ -332,20 +332,25 @@ export default class EventCalendar {
             for (let index = 0; index < array.length; index++) {
                 const eventID = array[index];
                 // console.log("1 deleteEventCalendar ==> Success : ", array[index]);
-                await RNCalendarEvents.removeEvent(eventID).then(event => {
-                    console.log("2 deleteEventCalendar ==> Success : ", eventID, index);
+                // await RNCalendarEvents.removeEvent(eventID).then(event => {
+                await RNCalendarEvents.removeFutureEvents(eventID).then(event => {
+                    // console.log("2 deleteEventCalendar ==> Success : ", eventID, index);
                     SharedPreference.del_event = SharedPreference.del_event + 1;
                 })
                     .catch(error => {
-                        console.log("deleteEventCalendar ==> Error ");
+                        // console.log("deleteEventCalendar ==> Error ");
                     });
             }
         }
 
         // listIDEventAdder = [];
 
-        this.setEventIDFromDevice(listIDEventAdder)
+        // this.setEventIDFromDevice(listIDEventAdder)
+
         SharedPreference.add_event = 0;
+
+        let duplicateEventArray=[]
+
         for (let index = 0; index < holidayArray.length; index++) { // 12 month
 
             const daysArray = holidayArray[index].days
@@ -394,32 +399,37 @@ export default class EventCalendar {
                         };
                         eventObject = copy
                     }
-                    await this._addEventsToCalendar(eventObject, location);
-                    // if (eventObject.event_id != null) {
+                    // await this._addEventsToCalendar(eventObject, location);
+                    if (eventObject.event_id != null) {
 
-                    //     if (duplicateEventArray.length == 0) {
-                    //         duplicateEventArray.push(eventObject.event_id)
-                    //         await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
-
-                    //     } else {
+                        if (duplicateEventArray.length == 0) {
+                            duplicateEventArray.push(eventObject.event_id)
+                            // await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
+                            await this._addEventsToCalendar(eventObject, location);
+                        } else {
                             
-                    //         let data = await this.checkDuplicateEventCalendar(duplicateEventArray, eventObject.event_id)
-                    //         let checkFlag = data[0]
-                    //         duplicateEventArray = data[1]
-                    //         if (checkFlag == false) {
-                    //             await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
-                    //         }
-                    //     }
+                            let data = await this.checkDuplicateEventCalendar(duplicateEventArray, eventObject.event_id)
+                            let checkFlag = data[0]
+                            duplicateEventArray = data[1]
+                            if (checkFlag == false) {
+                                // await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
+                                await this._addEventsToCalendar(eventObject, location);
+                            }
+                        }
 
-                    // } else {
+                    } else {
 
-                    //     await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
+                        // await this.eventCalendar.synchronizeCalendar(eventObject, this.state.showLocation);
+                        await this._addEventsToCalendar(eventObject, location);
+                    }
 
-                    // }
+
                     //////console.log("==============Success==============")
                 }
             }
         }
+        
+
    //save event ID
         
     //    let tarray = await this.getEventIDFromDevice()
@@ -427,4 +437,26 @@ export default class EventCalendar {
         // await AsyncStorage.setItem(this.state.calendarName, this.state.listIDEventAdder);
         
     }
+    
+    checkDuplicateEventCalendar = async (duplicateEventArray, newEventID) => {
+        ////////console.log("checkDuplicateEventCalendar ==> checkDuplication ==> ", duplicateEventArray)
+        ////////console.log("checkDuplicateEventCalendar ==> newEventID ==> ", newEventID)
+        let checkFlag = false
+        for (let index = 0; index < duplicateEventArray.length; index++) {
+            const eventID = duplicateEventArray[index];
+            if (eventID == newEventID) {
+                checkFlag = true
+            }
+        }
+
+        ////////console.log("checkDuplicateEventCalendar ==> checkFlag ==> ", checkFlag)
+        if (checkFlag == false) {
+            duplicateEventArray.push(newEventID)
+            return [checkFlag, duplicateEventArray]
+        }
+
+        return [checkFlag, duplicateEventArray]
+
+    }
+
 }

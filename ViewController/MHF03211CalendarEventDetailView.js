@@ -89,7 +89,7 @@ export default class calendarMonthView extends Component {
                     <View style={{ width: '40%', paddingLeft: 10 }}>
                         <Text style={styles.calendarEventTimeText}>Start</Text>
                     </View>
-                    <View style={{ width: '60%' }}>
+                    <View style={{ width: '60%' , }}>
                         <Text style={styles.calendarEventTimeDetialText}>{moment(eventObject[0].time_start).format(_format)}</Text>
                     </View>
                 </View>
@@ -97,7 +97,7 @@ export default class calendarMonthView extends Component {
                     <View style={{ width: '40%', paddingLeft: 10 }}>
                         <Text style={styles.calendarEventTimeText}>End</Text>
                     </View>
-                    <View style={{ width: '60%' }}>
+                    <View style={{ width: '60%',  }}>
                         <Text style={styles.calendarEventTimeDetialText}>{moment(eventObject[0].time_end).format(_format)}
                         </Text>
                     </View>
@@ -106,10 +106,10 @@ export default class calendarMonthView extends Component {
         } else {
             return (<View style={styles.calendarEventContainer}>
                 <View style={styles.calendarEventViewContainer}>
-                    <View style={{ width: '70%' }}>
+                    <View style={{ width: '40%' }}>
                         <Text style={styles.calendarEventTimeText}>All Day</Text>
                     </View>
-                    <View style={{ width: '30%', marginRight: 10 }}>
+                    <View style={{ width: '60%', }}>
                         <Text style={styles.calendarEventTimeAlldayDetialText}>{moment(this.state.date).format(_formatAllday)}</Text>
                     </View>
                 </View>
