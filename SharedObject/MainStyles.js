@@ -257,7 +257,7 @@ export const styles = StyleSheet.create({
         height: 60, marginLeft: 10, marginRight: 10,
     },
     calendarCoverTitleBox: {
-        width: 170,
+        width: 250,
         marginTop: 10,
         marginBottom: 10,
         backgroundColor: Colors.calendarLocationBoxColor,

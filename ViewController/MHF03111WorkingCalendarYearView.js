@@ -2149,7 +2149,7 @@ console.log('componentDidUpdate')
                                 }
                             }}>
                                 <View style={styles.calendarCoverTitleBox}>
-                                    <Text style={styles.calendarLocationText}>{this.state.showLocation}</Text>
+                                    <Text style={styles.calendarLocationText}>'WWWWWWWWWWWWWWWWWWWWWWWWWWWWW'</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>

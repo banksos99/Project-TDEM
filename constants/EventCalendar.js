@@ -86,29 +86,31 @@ export default class EventCalendar {
 
             const eventID = events[0].id;
 
-            RNCalendarEvents.removeFutureEvents(eventID).then(event => {
+            console.log("_recursiveDeleteEvent ==> notes : ", events[0].notes);
 
-                if (events[0].notes === 'TDEMAutoSync') {
+            if (events[0].notes === 'TDEMAutoSync') {
+
+                RNCalendarEvents.removeFutureEvents(eventID).then(event => {
+
                     let temp = events.splice(0, 1)
                     setTimeout(() => {
                         this._recursiveDeleteEvent(events);
                     }, 100);
 
-                }else{
+                })
+                    .catch(error => {
 
-                    let temp = events.splice(0, 1)
-                }
-                
-            })
-                .catch(error => {
+                    });
 
-                });
+            } else {
 
+                let temp = events.splice(0, 1)
+                this._recursiveDeleteEvent(events);
+            }
         } else {
             console.log("_recursiveDeleteEvent ==> error : ");
             return
         }
-
     }
 
     _deleteAllEvent = async (selectYear) => {
