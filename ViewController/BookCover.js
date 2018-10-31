@@ -108,7 +108,9 @@ export default class HandBookCover extends Component {
     render() {
         return (
             <Image source={{ uri: this.state.url }}
-                style={{ width: '100%', height: '100%' }} />
+                style={{ width: '80%', height: '100%' ,backgroundColor:'white'}}
+                resizeMode="contain" 
+                 />
 
         );
     }

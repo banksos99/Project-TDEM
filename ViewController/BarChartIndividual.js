@@ -50,21 +50,20 @@ export default class PinActivity extends Component {
         // let listData = [6, 30, 20, 40];
 
         let previousmax = this.props.datalist.previous_month.maxIndividual;
-        if(previousmax == 0){
-            previousmax='';
+        if (previousmax == 0) {
+            previousmax = '0';
         }
         let currencemax = this.props.datalist.request_month.maxIndividual;
-        if(currencemax == 0){
-            currencemax='';
+        if (currencemax == 0) {
+            currencemax = '0';
         }
         let previouemin = this.props.datalist.previous_month.minIndividual;
-        if(previouemin == 0){
-            previouemin
-            ='';
+        if (previouemin == 0) {
+            previouemin = '0';
         }
         let currencemin = this.props.datalist.request_month.minIndividual;
-        if(currencemin == 0){
-            currencemin='';
+        if (currencemin == 0) {
+            currencemin = '0';
         }
         let listdata = [previousmax, currencemax, previouemin, currencemin]
 

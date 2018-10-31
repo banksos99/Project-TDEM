@@ -945,14 +945,15 @@ export default class OrganizationStruct extends Component {
                                                     <View style={{ flex: 1, flexDirection: 'column' }}>
                                                         <View style={{ flex: 1, justifyContent: 'center' }} >
                                                             <Text style={item.expand === 0 ?
-                                                                { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular' } :
+                                                                item.org_code === 0 ? { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.blueTextColor, fontFamily: 'Prompt-Regular' } :
+                                                                    { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular' } :
                                                                 { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}>
                                                                 {/* {item.org_name + ' ('+item.org_level+')'} */}
                                                                 {item.org_name}
                                                             </Text>
                                                         </View>
                                                         <View style={item.org_code === 0 ? { height: 20, justifyContent: 'center' } : { height: 0, justifyContent: 'center' }} >
-                                                            <Text style={{ marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
+                                                            <Text style={{ marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.thingrayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
                                                             >{item.position}</Text>
                                                         </View>
                                                     </View>

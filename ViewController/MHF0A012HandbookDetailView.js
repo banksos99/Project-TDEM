@@ -486,7 +486,7 @@ export default class HandbookViewer extends Component {
     }
 
     _onPress(item) {
-        //console.log('item :', item)
+        console.log('item :', item.href)
         this.setState({
             showTOC: 0,
             location: item.href,
@@ -823,11 +823,13 @@ export default class HandbookViewer extends Component {
                             <TouchableOpacity style={styles.button}
                                 onPress={() => this._onPress(item)}
                                 key={index + 100}>
-                                <View style={{ justifyContent: 'center', height: 40, marginLeft: 20, marginRight: 20 }}>
+                                <View style={{ justifyContent: 'center', height: 40, marginLeft: 10, marginRight: 10 }}>
                                     {/* <View style={{ flex: 1, ustifyContent: 'center', flexDirection: 'column' }}> */}
-                                    <Text style={styles.epubTocText} numberOfLines={1}> {item.label.replace('\n','')}</Text>
+                                    <Text style={styles.epubTocText} numberOfLines={1}> {item.label.replace('\n', '')}</Text>
                                     {/* <Text style={styles.epubHighlighttitleText} numberOfLines={1}> {item.title}</Text> */}
                                     {/* </View> */}
+                                    
+
                                 </View>
                                 <View style={{ height: 1, backgroundColor: Colors.calendarLocationBoxColor }}>
                                 </View>
@@ -940,22 +942,44 @@ export default class HandbookViewer extends Component {
                         //                         }
                         
                     }}
-
                     onLocationsReady={(locations) => {
-console.log('onLocationsReady')
-                        this.setState({ 
-                            sliderDisabled: false 
-                        
+                        console.log('onLocationsReady')
+                        this.setState({
+                            sliderDisabled: false
+
                         });
 
                     }}
 
                     onReady={(book) => {
-                        console.log('onReady')
+
+                        console.log('onReady toc', book.navigation.toc)
+                        let temptable = []
+                        for (let i = 0; i < book.navigation.toc.length; i++) {
+                            temptable.push({
+                                label: book.navigation.toc[i].label,
+                                href: book.navigation.toc[i].href
+                            })
+                            for (let j = 0; j < book.navigation.toc[i].subitems.length; j++) {
+                                temptable.push({
+                                    label: '   ' + book.navigation.toc[i].subitems[j].label,
+                                    href: book.navigation.toc[i].subitems[j].href
+
+                                })
+                            }
+
+                        }
+
+                        console.log('onReady', temptable)
+
+                        // book.navigation.toc.map((item, index) => (
+
+                        // ))
+
                         // add old highlight
                         for (let i = 0; i < HandbookHighlightList.length; i++) {
 
-                           
+
                             this.epub.rendition.highlight(HandbookHighlightList[i], {});
 
                         }
@@ -963,7 +987,7 @@ console.log('onLocationsReady')
                         this.setState({
                             book: book,
                             title: book.package.metadata.title,
-                            toc: book.navigation.toc,
+                            toc: temptable,
                             isscreenloading: false,
                             calHeight: parseInt(Dimensions.get('window').height * 0.85)
                         });
@@ -1011,7 +1035,7 @@ console.log('onLocationsReady')
                        
                         Alert.alert(
                             'SAVE',
-                            'Do you want a save Marker?',
+                            'Do you want to save Highlight?',
                             [
                                 {
                                     text: 'OK', onPress: () => {

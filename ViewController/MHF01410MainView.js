@@ -3,7 +3,8 @@ import {
     View, Text, TouchableOpacity, Picker,
     Image, Switch, ActivityIndicator, ScrollView,
     RefreshControl, Alert, NetInfo,
-    Platform, Dimensions, BackHandler, StatusBar,PanResponder
+    Platform, Dimensions, BackHandler, StatusBar,PanResponder,
+    SafeAreaView
 } from "react-native";
 import { styles } from "../SharedObject/MainStyles";
 import Colors from "../SharedObject/Colors"
@@ -233,12 +234,13 @@ export default class HMF01011MainView extends Component {
             // if (readyExit == true) {
             //     readyExit = false
             //     BackHandler.exitApp()
-                
+
             // } else {
             //     readyExit = true
-                
+
             //     this.setState({
-            //         isscreenloading:true
+            //         isscreenloading:true,
+            // loadingtype:4
             //         // nonPayslipBadge:SharedPreference.nonPayslipBadge,
             //     })
             //     // Alert.alert(
@@ -363,7 +365,7 @@ export default class HMF01011MainView extends Component {
     onloadSessiontimeout = async () => {
         SharedPreference.Sessiontimeout = SharedPreference.Sessiontimeout + 1
 
-        if (SharedPreference.Sessiontimeout >= 300) {
+        if (SharedPreference.Sessiontimeout >= 1800) {
 
             if (SharedPreference.userRegisted) {
                 Alert.alert(
@@ -2353,9 +2355,17 @@ export default class HMF01011MainView extends Component {
     deleteEventOnCalendar = async () => {
         console.log("YearView ==> deleteEventCalendar")
         let currentyear = new Date().getFullYear();
-        // await this.eventCalendar._deleteEventFromCalendar(currentyear)
-        await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
-        // await this.eventCalendar._deleteAllEvent(currentyear)
+        
+        if (Platform.OS === 'android') {
+
+            await this.eventCalendar._deleteEventFromCalendar(currentyear)
+            // await this.eventCalendar._deleteAllEvent(currentyear)
+            // await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
+        } else {
+
+            await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
+        }
+
         this.setState({
             isscreenloading: false
         })
@@ -2381,11 +2391,12 @@ export default class HMF01011MainView extends Component {
 
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <View style={styles.mainmenutabbarstyle} />
+                <View style={{height: 0,
+                backgroundColor: Colors.calendarRedText}} />
                 {/* <View style={styles.mainmenutabbarstyle} /> */}
                 <View style={styles.mainscreen}>
                     <Image
-                        style={{ width:'100%',height:'100%' }}
+                        style={{ width:'100%',height:'100%',backgroundColor:'white' }}
                         source={require('./../resource/images/mainscreen.png')}
                     // resizeMode="contain" 
                     />
@@ -2836,7 +2847,7 @@ export default class HMF01011MainView extends Component {
 
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <View style={styles.mainmenutabbarstyle} />
+                <View style={{backgroundColor: Colors.calendarRedText}} />
                 <View style={{ height: 50, flexDirection: 'row', backgroundColor: '#F20909', }}>
 
                     <View style={{ flex: 5, justifyContent: 'center' }}>
@@ -2968,8 +2979,8 @@ export default class HMF01011MainView extends Component {
         // console.log('syncstatus =>',SharedPreference.autoSyncCalendarBool)
 
         return (
-            <View style={{ flex: 1, flexDirection: 'column', }}>
-                <View style={styles.mainmenutabbarstyle} />
+            <View style={{ flex: 1, flexDirection: 'column',backgroundColor:'white' }}>
+                <View style={{backgroundColor: Colors.calendarRedText}} />
                 <View style={{ height: 50, flexDirection: 'row', backgroundColor: '#F20909', }}>
 
                     <View style={{ flex: 5, justifyContent: 'center' }}>
@@ -3535,7 +3546,20 @@ export default class HMF01011MainView extends Component {
                 </View>
               );
 
+        }else if (this.state.loadingtype == 4) {
+
+            return (
+                <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
+                    <View style={{ width: '80%', backgroundColor: 'white',borderRadius:10 }}>
+                        <View style={{ height: 100, width: '100%', justifyContent: 'center',alignItems:'center' }}>
+                            <Text style={{ fontSize: 15 }}>Confirm Exit</Text>
+                        </View>
+                    </View>
+                </View>
+              );
+
         }
+
         return (
             <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                 <ActivityIndicator />
@@ -3547,7 +3571,7 @@ export default class HMF01011MainView extends Component {
     renderloadingscreen() {
         if (this.state.isscreenloading) {
             return (
-                <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
+                <View style={{ height: Layout.window.height, width: '100%', position: 'absolute', }}>
                     <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
                     </View>
                     {this.renderpickerview()}
@@ -3625,7 +3649,7 @@ export default class HMF01011MainView extends Component {
             children,
             } = this.props;
         return (
-            <View style={{ flex: 1, backgroundColor: 'white' }}
+            <SafeAreaView style={{ flex: 1, backgroundColor: Colors.calendarRedText }}
                 collapsable={true}
                 {...this.panResponder.panHandlers}
             >
@@ -3634,7 +3658,7 @@ export default class HMF01011MainView extends Component {
                         {this.redertabview()}
                     </View>
                     <View style={{ height: 1, backgroundColor: Colors.lightGrayTextColor }} />
-                    <View style={{ height: 50, flexDirection: 'row', }} >
+                    <View style={{ height: 50, flexDirection: 'row',backgroundColor:'white'}} >
                         <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} onPress={() => { this.settabscreen(0) }}>
                             <Image
                                 style={page === 0 ?
@@ -3679,7 +3703,7 @@ export default class HMF01011MainView extends Component {
                     </View>
                 </View>
                 {this.renderloadingscreen()}
-            </View>
+            </SafeAreaView>
         );
     }
 }

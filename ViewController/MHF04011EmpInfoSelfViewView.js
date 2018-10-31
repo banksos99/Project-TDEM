@@ -956,7 +956,7 @@ export default class EmpInfoDetail extends Component {
                         <View style={{ flex: 1, flexDirection: 'column' }}>
                             <TouchableOpacity style={{ flex: 1 }} onPress={(this.onShowProfileView.bind(this))}>
                                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.profileTextColor }}>
-                                    <Text style={{ color: this.state.careerTextColor, fontFamily: 'Prompt-Medium' }}>CAREER PATH</Text>
+                                    <Text style={{ color: this.state.careerTextColor, fontFamily: 'Prompt-Medium' }}>CAREER INFO</Text>
                                 </View>
 
                             </TouchableOpacity>

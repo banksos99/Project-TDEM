@@ -59,6 +59,7 @@ export default {
   TextNormalRed: '#F20909',
   lineNormal:'#E0E0E0',
 
-  BackgroundGray:'#FAFAFA'
+  BackgroundGray:'#FAFAFA',
+  TextColor:'#616161'
 
 };

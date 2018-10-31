@@ -75,7 +75,7 @@ export default class LineChart extends Component {
         }
         //console.log('dmax value :', tmax)
         let max = 200;
-        let shiftdown = 50 * scale
+        let shiftdown = 40 * scale
         let shiftRight = 70 * scale
         let ratio = (200 / Math.floor(tmax));
         let over = (parseInt((tmax / 6)/10) + 1 )*10;
@@ -105,7 +105,7 @@ export default class LineChart extends Component {
         let s2 = '#symbol'
         let vbox = '0 0' + lwidth + lheight;
 
-        let bottomlabel = 260;
+        let bottomlabel = 265;
         let rowhight = (max / 6);
 
         let p1 = (rowhight * 6) + shiftdown;
@@ -316,24 +316,25 @@ export default class LineChart extends Component {
        }
     }
 */
+        let screenwidth = 350 * scale
         return (
-            <Svg height="300" width="350">
+            <Svg height="300" width={screenwidth}>
 
-                <Line x1={shiftRight} y1={(rowhight * 0) + shiftdown} x2='350' y2={(rowhight * 0) + shiftdown} stroke='lightgray' strokeWidth="1" />
-                <Line x1={shiftRight} y1={(rowhight * 1) + shiftdown} x2='350' y2={(rowhight * 1) + shiftdown} stroke='lightgray' strokeWidth="1" />
-                <Line x1={shiftRight} y1={(rowhight * 2) + shiftdown} x2='350' y2={(rowhight * 2) + shiftdown} stroke='lightgray' strokeWidth="1" />
-                <Line x1={shiftRight} y1={(rowhight * 3) + shiftdown} x2='350' y2={(rowhight * 3) + shiftdown} stroke='lightgray' strokeWidth="1" />
-                <Line x1={shiftRight} y1={(rowhight * 4) + shiftdown} x2='350' y2={(rowhight * 4) + shiftdown} stroke='lightgray' strokeWidth="1" />
-                <Line x1={shiftRight} y1={(rowhight * 5) + shiftdown} x2='350' y2={(rowhight * 5) + shiftdown} stroke='lightgray' strokeWidth="1" />
-                <Line x1={shiftRight} y1={(rowhight * 6) + shiftdown} x2='350' y2={(rowhight * 6) + shiftdown} stroke='lightgray' strokeWidth="1" />
+                <Line x1={shiftRight} y1={(rowhight * 0) + shiftdown} x2={screenwidth} y2={(rowhight * 0) + shiftdown} stroke='lightgray' strokeWidth="1" />
+                <Line x1={shiftRight} y1={(rowhight * 1) + shiftdown} x2={screenwidth} y2={(rowhight * 1) + shiftdown} stroke='lightgray' strokeWidth="1" />
+                <Line x1={shiftRight} y1={(rowhight * 2) + shiftdown} x2={screenwidth} y2={(rowhight * 2) + shiftdown} stroke='lightgray' strokeWidth="1" />
+                <Line x1={shiftRight} y1={(rowhight * 3) + shiftdown} x2={screenwidth} y2={(rowhight * 3) + shiftdown} stroke='lightgray' strokeWidth="1" />
+                <Line x1={shiftRight} y1={(rowhight * 4) + shiftdown} x2={screenwidth} y2={(rowhight * 4) + shiftdown} stroke='lightgray' strokeWidth="1" />
+                <Line x1={shiftRight} y1={(rowhight * 5) + shiftdown} x2={screenwidth} y2={(rowhight * 5) + shiftdown} stroke='lightgray' strokeWidth="1" />
+                <Line x1={shiftRight} y1={(rowhight * 6) + shiftdown} x2={screenwidth} y2={(rowhight * 6) + shiftdown} stroke='lightgray' strokeWidth="1" />
 
-                <Text x="50" y={(rowhight * 0) + 50} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 6 / ratio)}</Text>
-                <Text x="50" y={(rowhight * 1) + 50} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 5 / ratio)}</Text>
-                <Text x="50" y={(rowhight * 2) + 50} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 4 / ratio)}</Text>
-                <Text x="50" y={(rowhight * 3) + 50} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 3 / ratio)}</Text>
-                <Text x="50" y={(rowhight * 4) + 50} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 2 / ratio)}</Text>
-                <Text x="50" y={(rowhight * 5) + 50} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 1 / ratio)}</Text>
-                <Text x="50" y={(rowhight * 6) + 50} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 0)}</Text>
+                <Text x="50" y={(rowhight * 0) + shiftdown} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 6 / ratio)}</Text>
+                <Text x="50" y={(rowhight * 1) + shiftdown} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 5 / ratio)}</Text>
+                <Text x="50" y={(rowhight * 2) + shiftdown} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 4 / ratio)}</Text>
+                <Text x="50" y={(rowhight * 3) + shiftdown} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 3 / ratio)}</Text>
+                <Text x="50" y={(rowhight * 4) + shiftdown} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 2 / ratio)}</Text>
+                <Text x="50" y={(rowhight * 5) + shiftdown} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 1 / ratio)}</Text>
+                <Text x="50" y={(rowhight * 6) + shiftdown} fill='#555555' textAnchor="end" fontFamily='Prompt-Regular'>{Math.floor(rowhight * 0)}</Text>
 
 
                 <Line x1={(w * 1) + shiftRight} y1={p1} x2={(w * 2) + shiftRight} y2={p2} stroke={linecolor} strokeWidth="1" />

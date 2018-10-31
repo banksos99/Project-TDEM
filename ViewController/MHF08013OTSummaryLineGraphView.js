@@ -346,7 +346,7 @@ export default class OTSummaryLineChart extends Component {
 
                 </View>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>Total Overtime History</Text>
+                    <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>Total Average Overtime History</Text>
                     <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>{this.state.org_name}</Text>
                 </View>
                 <View style={{ flex: 8, }}>

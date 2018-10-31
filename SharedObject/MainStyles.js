@@ -10,7 +10,7 @@ let scale = Layout.window.width / 320;
 const font_medium = "Prompt-Regular";
 const font_light = 'Prompt-Light';
 const font_thin = 'Prompt-Thin';
-
+const font_bold = 'Prompt-Bold';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -141,6 +141,23 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.navColor
 
     },
+    navContainer1: {
+
+        ...Platform.select({
+            ios: {
+                height: 90,
+            },
+            android: {
+                height: 70,
+            }
+        }),
+        // paddingTop: 20,
+
+        width: Layout.window.width,
+
+        backgroundColor: Colors.navColor
+
+    },
     detailContainer: {
         flex: 1,
         backgroundColor: 'white',
@@ -160,6 +177,21 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'flex-start'
     },
+    navLeftContainer1: {
+        ...Platform.select({
+            ios: {
+                paddingTop: 40,
+            },
+            android: {
+                paddingTop: 20,
+            }
+        }),
+        // paddingTop: 20,//title
+        flexDirection: 'row',
+        position: 'absolute',
+        alignSelf: 'flex-start'
+    },
+
     navTitleText: {
         ...Platform.select({
             ios: {
@@ -227,15 +259,23 @@ export const styles = StyleSheet.create({
         height: 45,
     },
     calendarMonthTextLeftContainer: {
-        flexDirection: 'row',
-        position: 'absolute',
-        alignSelf: 'flex-start',
+        flex:1,
+        alignItems: 'center',
+        justifyContent:'center',
+        marginTop:-2
+        // flexDirection: 'row',
+        // position: 'absolute',
+        // alignSelf: 'flex-start',
         // zIndex: '10',
     },
     calendarMonthTextRightContainer: {
-        flexDirection: 'row',
-        position: 'absolute',
-        alignSelf: 'flex-end',
+        flex:2.7,
+        alignItems: 'center',
+        justifyContent:'center',
+        
+        // flexDirection: 'row',
+        // position: 'absolute',
+        // alignSelf: 'flex-end',
         // zIndex: '10',
     },
     calendarMonthText: {
@@ -244,18 +284,31 @@ export const styles = StyleSheet.create({
         color: Colors.calendarRedText
     },
     calendarYearText: {
-        fontSize: 40,
-        textAlign: 'left',
+        fontSize: 35,
+        textAlign: 'center',
+        justifyContent:'center',
         color: Colors.redTextColor,
     },
     calendarLocationText: {
-        fontSize: 18,
-        textAlign: 'right',
+        fontSize: 14 * scale,
+        textAlign: 'center',
+        justifyContent:'center',
         color: Colors.redTextColor,
     },
+
     calendarTitleBox: {
-        height: 60, marginLeft: 10, marginRight: 10,
+        height: 40,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 5,
+        marginBottom: 5,
+        backgroundColor: Colors.calendarLocationBoxColor,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: Colors.calendarLocationBorderBoxColor,
+        flexDirection: 'row'
     },
+
     calendarCoverTitleBox: {
         width: 250,
         marginTop: 10,
@@ -700,9 +753,9 @@ export const styles = StyleSheet.create({
         fontFamily: font_medium
     },
     leaveQuotaDetailItemTopCircleContainer: {
-        width: 58 * scale, height: 58 * scale, backgroundColor: Colors.leaveCircleRed,
-        justifyContent: 'center', alignItems: 'center', borderRadius: 58 * scale
-        , marginTop: 10 * scale, marginBottom: 10 * scale
+        width: 53 * scale, height: 53 * scale, backgroundColor: Colors.leaveCircleRed,
+        justifyContent: 'center', alignItems: 'center', borderRadius: 53 * scale
+        , marginTop: 7 * scale, marginBottom: 7 * scale
     },
     leaveQuotaDetailItemTopCircleText: {
         textAlign: 'center', fontSize: 18 * scale, color: 'white',
@@ -735,8 +788,8 @@ export const styles = StyleSheet.create({
         height: 40
     },
     pinDelete: {
-        width: 65,
-        height: 65,
+        width: 60 * scale,
+        height: 60 * scale,
         tintColor:'white'
     },
     pinImageDotContainer: {
@@ -959,10 +1012,10 @@ export const styles = StyleSheet.create({
         height: scale * 60
     },
     handbookItem: {
-        height: 200,
+        height: 250,
         width: Layout.window.width / 2,
         flexDirection: 'column',
-        backgroundColor: Colors.backgroundcolor,
+        // backgroundColor: Colors.backgroundcolor,
         marginTop: 5,
         borderColor: Colors.lightGrayTextColor,
     },
@@ -1295,41 +1348,41 @@ export const styles = StyleSheet.create({
         textAlign: 'right',
         fontFamily: font_medium
 
-    },
-    registPinEnterContainer: {
+    },registPinEnterContainer: {
         //marginTop: 10,
         color: 'white',
         fontSize: 15 * scale,
-        marginBottom:5,
-        marginTop:5,
+        marginBottom: 5,
+        marginTop: 5,
         textAlign: 'right',
         fontFamily: font_medium
 
     }, payslipTitleTextLeft: {
-        fontSize: 14* scale,
-        marginLeft: 10* scale,
+        fontSize: 14 * scale,
+        marginLeft: 10 * scale,
         textAlign: 'left',
-        color: Colors.grayTextColor,
-        fontFamily: font_medium
+        color: Colors.thingrayTextColor,
+        fontFamily: font_bold,
+
 
     }, payslipDetailTextLeft: {
         fontSize: 13 * scale,
         marginLeft: 10 * scale,
        // textAlign: 'left',
-        color: Colors.lightGrayTextColor,
+        color: Colors.TextColor,
         fontFamily: font_medium
 
     }, payslipDetailTextRight: {
         fontSize: 14* scale,
         marginRight: 10* scale,
-        color: Colors.lightGrayTextColor,
+        color: Colors.thingrayTextColor,
         textAlign: 'right',
         fontFamily: font_medium
 
     }, payslipDetailTextCenter: {
         
         marginRight: 10* scale,
-        color: Colors.lightGrayTextColor,
+        color: Colors.thingrayTextColor,
         textAlign: 'center',
         fontFamily: font_medium,
         fontSize: 13* scale,

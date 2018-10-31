@@ -53,7 +53,9 @@ console.log("HOST ======================= " + HOST);
 // const VERSION = 'v1.0.76'//22-10-61 IOS: Android:
 // const VERSION = 'v1.0.77'//24-10-61 IOS: Android:
 // const VERSION = 'v1.0.78'//04-10-61 IOS: Android:
-const VERSION = 'v1.0.79'//04-10-61 IOS: Android:
+// const VERSION = 'v1.0.79'//29-10-61 IOS: Android:
+const VERSION = 'v1.0.80'//04-10-61 IOS: Android:
+
 export default {
     HOST: HOST,
     SERVER: SERVER,
@@ -95,7 +97,7 @@ export default {
     CLOCK_IN_OUT_MANAGER_API: HOST + '/api/' + VERSION + '/clockinout?empcode=',
     EMP_INFO_CAREERPATH_API: HOST + '/api/' + VERSION + '/employee/',
     EMP_INFO_MANAGER_API: HOST + '/api/' + VERSION + '/employee/',
-    ORGANIZ_STRUCTURE_API: HOST + '/api/' + VERSION + '/organization?type=CE&org_code=',
+    // ORGANIZ_STRUCTURE_API: HOST + '/api/' + VERSION + '/organization?type=CE&org_code=',
 
 
     OTSUMMARY_LINE_CHART: HOST + '/api/' + VERSION + '/ot/history?org_code=',

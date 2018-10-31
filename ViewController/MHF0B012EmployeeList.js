@@ -400,10 +400,10 @@ export default class OrganizationStruct extends Component {
                                             >
                                                 <View style={{ height: 49, flexDirection: 'row' }}>
                                                     <View style={{ flex: 1, justifyContent: 'center' }} >
-                                                        <Text style={{ marginLeft: 50, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular', fontSize: 12 }}
+                                                        <Text style={{ marginLeft: 50, color: Colors.blueTextColor, fontFamily: 'Prompt-Regular', fontSize: 12 }}
                                                         >{item.employee_name}
                                                         </Text>
-                                                        <Text style={{ marginLeft: 50, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
+                                                        <Text style={{ marginLeft: 50, color: Colors.thingrayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
                                                         >{item.employee_position}
                                                         </Text>
                                                     </View>

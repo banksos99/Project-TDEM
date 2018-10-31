@@ -344,13 +344,35 @@ console.log('register componentDidMount')
         data = data[1]
 
         // console.log("LoginChangePinAPI code ==> ", data.code)
-        console.log("LoginChangePinAPI data ==> ", data)
+        console.log("register LoginChangePinAPI data ==> ", data)
 
         if (code.DUPLICATE_DATA == data.code) {//409
-            this.onOpenPinActivity()
-            this.setState({
-                isLoading: false
-            })
+            console.log("register DUPLICATE_DATA data ==> ", data.code)
+            // if (data.data.code == "MHF00301ACRI") {
+            //     Alert.alert(
+            //         StringText.SERVER_ERROR_TITLE,
+            //         StringText.SERVER_ERROR_DESC,
+            //         [
+            //             {
+            //                 text: 'OK', onPress: () => {
+
+            //                     this.setState({
+            //                         isLoading: false
+            //                     })
+            //                 }
+
+
+            //             }
+            //         ],
+            //         { cancelable: false }
+            //     )
+            // } else {
+                this.onOpenPinActivity()
+                this.setState({
+                    isLoading: false
+                })
+            // }
+
         } else if (code.INVALID_DATA == data.code) {//401
             if (data.data.code == "MHF00301ACRI") {
                 this.setState({
@@ -804,6 +826,8 @@ console.log('register componentDidMount')
                                     source={require('../resource/images/pin_delete.png')}
                                     resizeMode="contain" />
                             </TouchableOpacity>
+                        </View>
+                        <View style={{ height: 50, width: '100%' }}>
                         </View>
                     </View>
                     {/* {this.renderProgressView()} */}

@@ -304,15 +304,15 @@ export default class PayslipDetail extends Component {
 
     onClickDownload() {
 
-        if (Platform.OS === 'android') {
+        // if (Platform.OS === 'android') {
 
-            this.requestPDFPermission()
+        //     this.requestPDFPermission()
 
-        } else {
+        // } else {
 
             this.onDownloadPDFFile()
 
-        }
+        // }
 
     }
 
@@ -907,23 +907,22 @@ export default class PayslipDetail extends Component {
 
                 return (
                     <View style={{ flex: 5, }}>
-                        <View style={{ flex: 1, marginTop: 15, marginBottom: 15, borderRadius: 5, borderWidth: 1, borderColor: this.state.bordercolor, flexDirection: 'column', }}>
+                        <View style={{ flex: 1, marginBottom: 15,  borderWidth: 1, borderColor: this.state.bordercolor, flexDirection: 'column', }}>
 
-                            <View style={{ height: 50, justifyContent: 'center' }}>
-                                <Text style={styles.payslipTitleTextLeft}>INCOME</Text>
+                            <View style={{ height: 10, justifyContent: 'center' }}>
+                                {/* <Text style={styles.payslipTitleTextLeft}>INCOME</Text> */}
                             </View>
                             {this.renderdeatilincome()}
                         </View>
                     </View>
                 )
-
             }
             return (
                 <View style={{ flex: 5, }}>
-                    <View style={{ flex: 1, marginTop: 15, marginBottom: 15, borderRadius: 5, borderWidth: 1, borderColor: this.state.bordercolor, flexDirection: 'column', }}>
+                    <View style={{ flex: 1,  marginBottom: 15,  borderWidth: 1, borderColor: this.state.bordercolor, flexDirection: 'column', }}>
 
-                        {<View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={styles.payslipTitleTextLeft}>DEDUCT</Text>
+                        {<View style={{ height: 10, width: '100%', justifyContent: 'center', }}>
+                            {/* <Text style={styles.payslipTitleTextLeft}>DEDUCT</Text> */}
                         </View>}
                         {this.renderdetaildeduct()}
                     </View>
@@ -1270,7 +1269,7 @@ export default class PayslipDetail extends Component {
 
                                     <Text style={this.state.showincome ? styles.payslipTextCente_income_ena : styles.payslipTextCente_income_dis}>INCOME</Text>
                                 </View>
-                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',  }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.incomeBG  }}>
                                     <Text style={this.state.showincome ? styles.payslipTextCente_income_ena : styles.payslipTextCente_income_dis}>
                                         {sum_income_str}
                                     </Text>
@@ -1282,7 +1281,7 @@ export default class PayslipDetail extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',  }}>
                                     <Text style={this.state.showincome ? styles.payslipTextCente_deduct_dis : styles.payslipTextCente_deduct_ena}>DEDUCT</Text>
                                 </View>
-                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',  }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:this.state.deductBG  }}>
                                     <Text style={this.state.showincome ? styles.payslipTextCente_deduct_dis : styles.payslipTextCente_deduct_ena}>
                                         {sum_deduct_str}
                                     </Text>

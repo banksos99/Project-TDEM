@@ -714,9 +714,9 @@ console.log('componentDidUpdate')
                                     <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : '#adf0c9' }]} />
                                     {/* <Text style={styles.calendarCurrentDayText}> */}
                                     <Text style=
-                                        {checkSpecialHoliday == 'Y' ? { fontSize: 10 * scale, textAlign: 'center', color: Colors.calendarBlueText } :
-                                            checkSpecialHoliday == 'N' ? { fontSize: 10 * scale, textAlign: 'center', color:  Colors.calendarRedText } :
-                                                { fontSize: 10 * scale, textAlign: 'center', color:'black' }
+                                        {checkSpecialHoliday == 'Y' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText } :
+                                            checkSpecialHoliday == 'N' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText } :
+                                                { fontSize: 10 * scale, textAlign: 'center',color: state === 'disabled' ? 'white' : 'black' }
                                         }
                                     >
                                         {date.day}
@@ -846,7 +846,7 @@ console.log('componentDidUpdate')
     LocaleConfig() {
         LocaleConfig.locales['en'] = {
             monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            monthNamesShort: ['JAN.', 'FEB.', 'MAR', 'APR', 'MAY', 'JUN', 'JULY.', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+            monthNamesShort: ['JAN.', 'FEB.', 'MAR', 'APR', 'MAY', 'JUN', 'JUL.', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
             dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
         };
@@ -894,15 +894,15 @@ console.log('componentDidUpdate')
             isLoadingPDF: true
         }, function () {
 
-            if (Platform.OS === 'android') {
+            // if (Platform.OS === 'android') {
 
-                this.requestPDFPermission()
+            //     this.requestPDFPermission()
 
-            } else {
+            // } else {
 
                 this.onloadPDFFile();
 
-            }
+            // }
         })
     }
     
@@ -1675,7 +1675,7 @@ console.log('componentDidUpdate')
         if (SharedPreference.isConnected) {
 
             // await RNCalendarEvents.authorizeEventStore();
-            await RNCalendarEvents.authorizeEventStore()
+            // await RNCalendarEvents.authorizeEventStore()
 
             await RNCalendarEvents.authorizationStatus().then(status => {
                 console.log('dsadasdadsadasd', status)
@@ -1713,7 +1713,6 @@ console.log('componentDidUpdate')
 
         if (SharedPreference.isConnected) {
 
-            // await RNCalendarEvents.authorizeEventStore();
             await RNCalendarEvents.authorizeEventStore()
 
             await RNCalendarEvents.authorizationStatus().then(status => {
@@ -2102,55 +2101,63 @@ console.log('componentDidUpdate')
                     </View>
                     <View style={styles.detailContainer} >
                         <View style={styles.calendarTitleBox} >
-                            <TouchableOpacity style={styles.calendarMonthTextLeftContainer} onPress={() => {
-                                if (SharedPreference.isConnected) {
+                            <TouchableOpacity
+                                style={styles.calendarMonthTextLeftContainer}
+                                onPress={() => {
+                                    if (SharedPreference.isConnected) {
 
-                                    this.setState({
-                                        yearviewPicker: true
-                                    })
-                                } else {
-                                    Alert.alert(
-                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
-                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                                        [{
-                                            text: 'OK', onPress: () => {
-                                                this.setState({
-                                                    isscreenloading: false,
-                                                });
-                                            }
-                                        },
-                                        ], { cancelable: false }
-                                    )
-                                }
+                                        this.setState({
+                                            yearviewPicker: true
+                                        })
+                                    } else {
+                                        Alert.alert(
+                                            StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                                            StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                                            [{
+                                                text: 'OK', onPress: () => {
+                                                    this.setState({
+                                                        isscreenloading: false,
+                                                    });
+                                                }
+                                            },
+                                            ], { cancelable: false }
+                                        )
+                                    }
 
-                            }}>
+                                }}>
                                 <Text style={styles.calendarYearText}>{this.state.showYear}</Text>
                             </TouchableOpacity>
+                            <View style={{ width: 1, height: '100%', justifyContent: 'center', flexDirection: 'column' }}>
+                                <View style={{ flex: 1, }}></View>
+                                <View style={{ flex: 6, backgroundColor: Colors.calendarLocationBorderBoxColor, }}></View>
+                                <View style={{ flex: 1, }}></View>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.calendarMonthTextRightContainer}
+                                onPress={() => {
+                                    if (SharedPreference.isConnected) {
 
-                            <TouchableOpacity style={styles.calendarMonthTextRightContainer} onPress={() => {
-                                if (SharedPreference.isConnected) {
-
-                                    this.setState({
-                                        locationPickerView: true
-                                    })
-                                } else {
-                                    Alert.alert(
-                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
-                                        StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
-                                        [{
-                                            text: 'OK', onPress: () => {
-                                                this.setState({
-                                                    isscreenloading: false,
-                                                });
-                                            }
-                                        },
-                                        ], { cancelable: false }
-                                    )
-                                }
-                            }}>
-                                <View style={styles.calendarCoverTitleBox}>
-                                    <Text style={styles.calendarLocationText}>'{this.state.showLocation}'</Text>
-                                </View>
+                                        this.setState({
+                                            locationPickerView: true
+                                        })
+                                    } else {
+                                        Alert.alert(
+                                            StringText.ALERT_CANNOT_CONNECT_NETWORK_TITLE,
+                                            StringText.ALERT_CANNOT_CONNECT_NETWORK_DESC,
+                                            [{
+                                                text: 'OK', onPress: () => {
+                                                    this.setState({
+                                                        isscreenloading: false,
+                                                    });
+                                                }
+                                            },
+                                            ], { cancelable: false }
+                                        )
+                                    }
+                                }}>
+                                {/* <View style={styles.calendarCoverTitleBox}> */}
+                                <Text style={styles.calendarLocationText}>{this.state.showLocation}</Text>
+                                {/* </View> */}
                             </TouchableOpacity>
                         </View>
                         {this.showAllMonthView()}

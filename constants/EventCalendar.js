@@ -48,7 +48,7 @@ export default class EventCalendar {
         }
 
         await this._deleteEventFromCalendar(selectYear)//oune
-        // await this._deleteAllEvent(selectYear)
+
 
     }
 
@@ -65,7 +65,7 @@ export default class EventCalendar {
 
         RNCalendarEvents.fetchAllEvents(startTime, endTime)
             .then(events => {
-
+                console.log("_recursiveDeleteEvent ==> events : ", events);
                 // for (let i = 0 ; i < events.length;i++) {
                 //     console.log("_recursiveDeleteAllEvent notes : ", events[i]);
 
@@ -93,15 +93,16 @@ export default class EventCalendar {
                 RNCalendarEvents.removeFutureEvents(eventID).then(event => {
 
                     let temp = events.splice(0, 1)
-                    setTimeout(() => {
-                        this._recursiveDeleteEvent(events);
-                    }, 100);
+                    this._recursiveDeleteEvent(events);
+                    // setTimeout(() => {
+                    //     this._recursiveDeleteEvent(events);
+                    // }, 100);
 
                 })
                     .catch(error => {
 
                     });
-
+                
             } else {
 
                 let temp = events.splice(0, 1)
@@ -114,16 +115,17 @@ export default class EventCalendar {
     }
 
     _deleteAllEvent = async (selectYear) => {
+        console.log("_deleteAllEvent ==> ", selectYear)
         let startTime = (selectYear - 1) + '-12-30T01:01:00.000Z'
         let endTime = (selectYear + 1) + '-01-01T01:01:00.000Z'
 
-        // console.log("deleteEventFromCalendar ==> startTime ==> ", startTime)
-        // console.log("deleteEventFromCalendar ==> endTime ==> ", endTime)
+        console.log("deleteEventFromCalendar ==> startTime ==> ", startTime)
+        console.log("deleteEventFromCalendar ==> endTime ==> ", endTime)
 
         RNCalendarEvents.fetchAllEvents(startTime, endTime)
             .then(events => {
                 // handle events
-                // console.log("deleteEventFromCalendar ==> evnets ==> ", events.length)
+                console.log("deleteEventFromCalendar ==> evnets ==> ", events)
 
                 // for (let index = 0; index < events.length; index++) {
                 //     const element = events[index];
@@ -166,8 +168,8 @@ export default class EventCalendar {
             for (let index = 0; index < array.length; index++) {
                 const eventID = array[index];
                 console.log("1 deleteEventCalendar ==> Success : ", array[index]);
-                await RNCalendarEvents.removeFutureEvents(eventID).then(event => {
-                // await RNCalendarEvents.removeEvent(eventID).then(event => {
+                // await RNCalendarEvents.removeFutureEvents(eventID).then(event => {
+                await RNCalendarEvents.removeEvent(eventID).then(event => {
                     // console.log("2 deleteEventCalendar ==> Success : ", eventID,index);
                 })
                     .catch(error => {
@@ -271,7 +273,8 @@ export default class EventCalendar {
             location: location,
             allDay: alldayBool,
             description: 'TDEM : ' + eventObject.description,
-            notes:'TDEMAutoSync'
+            notes:'TDEMAutoSync',
+            // calendar:{'title':'TDEM'}
         }
         // console.log("Timezone ==> ", DeviceInfo.getTimezone());   //   'America/New_York'
         // console.log("eventObject add caledar event : ", event)
@@ -387,7 +390,7 @@ export default class EventCalendar {
     _onSyncCalendarEvent = async(holidayArray,location)=>{
 
         let array = await this.getEventIDFromDevice()
-
+     
         await this._recursiveDeleteAllEvent(array)
 
         // if (array) {
