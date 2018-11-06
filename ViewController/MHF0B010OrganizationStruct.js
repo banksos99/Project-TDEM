@@ -786,7 +786,7 @@ export default class OrganizationStruct extends Component {
 
 
     APIDetailCallback(data, path) {
-        console.log('APIDetailCallback data  :', data[1].data.code)
+        // console.log('APIDetailCallback data  :', data[1].data.code)
         code = data[0]
         data = data[1]
         console.log('---------')

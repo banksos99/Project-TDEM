@@ -927,7 +927,7 @@ export default class HandbookViewer extends Component {
                     flow={this.state.flow}
                     location={this.state.location}
         
-
+                    onRelocated={console.log("onRelocated : ")}
                     onLocationChange={(visibleLocation) => {
                         console.log("locationChanged : ", visibleLocation.start.displayed)
                         this.setState({
@@ -1003,25 +1003,25 @@ export default class HandbookViewer extends Component {
                     }}
 
                     onPress={(cfi, position, rendition) => {
-                        
+                         console.log("onPress");
                     }}
 
                     onLongPress={(cfi, rendition, cfiRange) => {
-                        //console.log("longpress", cfiRange);
+                        console.log("onLongPress");
                         
                     }}
 
                     onViewAdded={(index) => {
-                        //console.log("added", index)
+                        console.log("added")
                     }}
 
                     beforeViewRemoved={(index) => {
-                        //console.log("removed", index)
+                        console.log("removed")
                     }}
 
-                    onSelected={(cfiRange, rendition, selected) => {
+                    onSelected={(cfiRange, rendition) => {
 
-                        //console.log("onSelected", rendition)
+                        console.log("onSelected", cfiRange)
 
                         let datatext = ''
                         HandbookHighlightList.push(

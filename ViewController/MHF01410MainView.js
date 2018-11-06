@@ -400,7 +400,93 @@ export default class HMF01011MainView extends Component {
 
 
     }
+    onupdatebadgeAnnouncement = async () => {
+     
+        
+        let urlPullnoti = SharedPreference.PULL_NOTIFICATION_NODATE_API
+        if (SharedPreference.lastdatetimeinterval) {
 
+            urlPullnoti = SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval
+        }
+
+        this.setState({
+            sendlastupdate: SharedPreference.lastdatetimeinterval
+        })
+        FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, 1, SharedPreference.profileObject.client_token)
+
+        return fetch(urlPullnoti, {
+
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: FUNCTION_TOKEN,
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+
+                try {
+       
+                    if (responseJson.status == 403) {
+
+                        this.onAutenticateErrorAlertDialog()
+
+                    } else if (parseInt(responseJson.status) == 401) {
+
+                        this.onRegisterErrorAlertDialog()
+
+                    } else if (responseJson.status == 200) {
+                        
+                        //update time request
+                        SharedPreference.lastdatetimeinterval = responseJson.meta.request_date;
+
+                        let dataArray = responseJson.data
+
+                        this.setState({
+
+                            // notiAnnounceMentBadge: parseInt(dataReceive.badge_count) + parseInt(this.state.notiAnnounceMentBadge)
+                            notiAnnounceMentBadge: parseInt(0),
+                            // nonPayslipBadge: parseInt(0),
+                            // notiPayslipBadge: parseInt(0),
+                        })
+
+                        this.notificationListener(0);
+                        
+                        for (let index = 0; index < dataArray.length; index++) {
+                            const dataReceive = dataArray[index];
+                
+
+                           if (dataReceive.function_id == "PHF02010") {
+                            
+                                this.setState({
+
+                                    notiAnnounceMentBadge: parseInt(dataReceive.badge_count)
+
+                                }, function () {
+
+                                    SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge
+                                })
+
+                            } 
+
+                        }
+
+                        this.notificationListener(parseInt(SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
+
+                    } 
+
+                } catch (error) {
+                    //console.log('erreo1 :', error);
+                }
+            })
+            .catch((error) => {
+
+                //console.log('error :', error)
+
+            });
+
+    }
 
     onLoadInAppNoti = async () => {
 
@@ -510,8 +596,6 @@ export default class HMF01011MainView extends Component {
                         }
 
                         this.notificationListener(parseInt(SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
-
-
 
                     } else {
 
@@ -968,17 +1052,25 @@ export default class HMF01011MainView extends Component {
         code = data[0]
         data = data[1]
 
-        this.setState({
-
-            isscreenloading: false,
-
-        })
-
         if (code.SUCCESS == data.code) {
-            //console.log('APIAnnouncementDetailCallback ==> code ==> ', code.SUCCESS)
+            console.log('tempannouncementData.length ==> ', tempannouncementData.length)
             if (tempannouncementData.length) {
-                tempannouncementData[index].attributes.read = true
+                // this.setState({
+
+                //     isscreenloading: false,
+                //     // notiAnnounceMentBadge:this.state.notiAnnounceMentBadge - 1
+
+                // },function(){
+
+                //     SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge
+                // })
+                if (tempannouncementData[index].attributes.read == false) {
+                    tempannouncementData[index].attributes.read = true
+                    this.onupdatebadgeAnnouncement()
+                }
+                
             }
+
             //console.log('APIAnnouncementDetailCallback ==> data ==> ', data.data)
             clearTimeout(this.timersession)
             this.props.navigation.navigate(rount, {
@@ -999,7 +1091,11 @@ export default class HMF01011MainView extends Component {
 
             this.onLoadErrorAlertDialog(data, rount)
         }
+        this.setState({
 
+            isscreenloading: false,
+
+        })
     }
 
     loadEmployeeInfoformAPI = async () => {
@@ -1666,7 +1762,7 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: true,
                 loadingtype: 3
             }, function () {
-                this.setState(this.renderloadingscreen())
+                // this.setState(this.renderloadingscreen())
                 this.loadOrgStructerOTHistoryfromAPI()
             });
 
@@ -1686,7 +1782,7 @@ export default class HMF01011MainView extends Component {
             isscreenloading: true,
             loadingtype: 3
         }, function () {
-            this.setState(this.renderloadingscreen())
+            // this.setState(this.renderloadingscreen())
             this.loadAnnouncementfromAPI()
             // this.temploadAnnouncementfromAPI()
         });
@@ -1701,7 +1797,7 @@ export default class HMF01011MainView extends Component {
             loadingtype: 3
         }, function () {
             ////console.log('index :', index);
-            this.setState(this.renderloadingscreen())
+            // this.setState(this.renderloadingscreen())
             this.loadAnnouncementDetailfromAPI(item, index)
         });
     }
@@ -2423,7 +2519,11 @@ export default class HMF01011MainView extends Component {
                             <View style={{ flex: 1 }} />
                             {/* Device Info */}
                             <View style={{ flex: 2, flexDirection: 'column' }} >
-                                <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text>
+                                <View style={{ flex: 2, flexDirection: 'row' }} >
+                                    {/* <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text> */}
+                                    <Text style={{  }}>{"Version : " + SharedPreference.deviceInfo.appVersion} </Text>
+                                    <Text style={{ color:SharedPreference.SERVER === 'DEV'? 'black':'transparent'}}>( {SharedPreference.SERVER} : {SharedPreference.VERSION} )</Text>
+                                </View>
                                 {/* <Text style={{ flex: 1,fontSize:10}}>{this.state.sendlastupdate}</Text> */}
                                 {this.rendertimeInterval()}
                             </View>
@@ -2650,7 +2750,7 @@ export default class HMF01011MainView extends Component {
         return (
             <View style={{ flexDirection: 'column', }}>
 
-                <View style={styles.mainmenutabbarstyle} />
+                <View style={{}} />
                 <View style={{ height: 50, flexDirection: 'row', backgroundColor: Colors.calendarRedText, }}>
                     <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                         onPress={this.select_announce_sort.bind(this)}>

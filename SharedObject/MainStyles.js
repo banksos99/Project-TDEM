@@ -1563,9 +1563,15 @@ export const styles = StyleSheet.create({
         color: Colors.thingrayTextColor,
         fontFamily: font_medium
     },
+    
     empinfoTitleText: {
         color: Colors.grayTextColor,
         marginLeft: 20,
+        fontFamily: font_medium
+    },
+    empinfoTitleTextred: {
+        color: Colors.grayTextColor,
+        color: 'red',
         fontFamily: font_medium
     },
     empinfoDetailText: {

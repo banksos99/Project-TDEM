@@ -444,8 +444,8 @@ export default class EmpInfoDetail extends Component {
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
-                    <View style={this.state.manager ? { height: 0, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' } :
-                        { height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
+                    {/* <View style={this.state.manager ? { height: 0, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' } :
+                        { height: 0, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
 
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
                             <Text style={styles.empinfoDetailRedText} >ID</Text>
@@ -453,8 +453,8 @@ export default class EmpInfoDetail extends Component {
                         <View style={{ flex: 3, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailText}>{cardid}</Text>
                         </View>
-                    </View>
-                    <View style={this.state.manager ?{ height: 0, justifyContent: 'center', backgroundColor:'transparent'  }:{ height: 1, justifyContent: 'center', backgroundColor:Colors.calendarLocationBoxColor }} />
+                    </View> */}
+                    {/* <View style={this.state.manager ?{ height: 0, justifyContent: 'center', backgroundColor:'transparent'  }:{ height: 1, justifyContent: 'center', backgroundColor:Colors.calendarLocationBoxColor }} /> */}
                     <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
                             <Text style={styles.empinfoDetailRedText} >Maritial Status</Text>
@@ -662,10 +662,9 @@ export default class EmpInfoDetail extends Component {
                     <TouchableOpacity style={{ flex: 1, marginLeft: 10, marginRight: 10, marginTop: 5, marginBottom: 5, backgroundColor: Colors.DisableGray, flexDirection: 'row' }}
                         onPress={() => { this.onExpandEducation() }}
                     >
-                        <View style={{ justifyContent: 'center', flex: 20 }}>
-
-                            <Text style={styles.empinfoTitleText} >EDUCATION</Text>
-
+                        <View style={{ flex: 20 ,justifyContent: 'center'}}>
+                            <Text style={styles.empinfoTitleText} >EDUCATION (Latest)</Text>
+                          
                         </View>
                         <View style={{ width: 30, alignItems: 'flex-end' }}>
                             <Image
@@ -739,7 +738,7 @@ export default class EmpInfoDetail extends Component {
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Place</Text>
+                            <Text style={styles.empinfoDetailRedText} >Institution</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
                             <Text style={styles.empinfoDetailText}>{school_university}</Text>

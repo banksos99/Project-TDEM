@@ -98,7 +98,7 @@ export default class OTSummaryLineChart extends Component {
             }
             if (DataResponse) {
             this.state.tdataSource = DataResponse;
-            console.log('tosummary data : ', this.state.tdataSource)
+            // console.log('tosummary data : ', this.state.tdataSource)
 
         }
     }
@@ -304,7 +304,7 @@ export default class OTSummaryLineChart extends Component {
         let rowhight = max / 6;
         let datalist = [];
 
-        console.log('this.state.tdataSource :', this.state.tdataSource)
+        // console.log('this.state.tdataSource :', this.state.tdataSource)
 
         if(this.state.tdataSource.org_code){
 

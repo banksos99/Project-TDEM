@@ -42,7 +42,7 @@ export default class PinActivity extends Component {
     }
     
     render() {
-        console.log('ิbarchart this.props.datalist', this.props.datalist);
+        // console.log('ิbarchart this.props.datalist', this.props.datalist);
         let current1 = this.props.datalist.request_month.avgX15;
         let current2 = this.props.datalist.request_month.avgX20;
         let current3 = this.props.datalist.request_month.avgX30;

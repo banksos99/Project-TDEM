@@ -619,7 +619,7 @@ Alert.alert(
         let curmonth = 0;
         let manpower1 = 0;
         let manpower2 = 0;
-        console.log('this.state.tdataSource =>',this.state.tdataSource)
+        // console.log('this.state.tdataSource =>',this.state.tdataSource)
         // if (this.state.tdataSource.length) {
             premonth = monthstr[parseInt(this.state.tdataSource.previous_month.month - 1)] + ' - ' + this.state.tdataSource.previous_month.year.substring(2, 4);
             curmonth = monthstr[parseInt(this.state.tdataSource.request_month.month - 1)] + ' - ' + this.state.tdataSource.request_month.year.substring(2, 4);

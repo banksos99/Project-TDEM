@@ -37,7 +37,7 @@ export default class LineChart extends Component {
             failPin: 0
         }
 
-        console.log('datalist :', this.props.datalist)
+        // console.log('datalist :', this.props.datalist)
     }
 
     conv(date) {
@@ -60,7 +60,7 @@ export default class LineChart extends Component {
     }
 
     render() {
-        console.log('data list :', this.props.datalist)
+        // console.log('data list :', this.props.datalist)
         let tmax = 0
         if (this.props.datalist != 'undefined') {
 
