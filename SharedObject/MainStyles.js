@@ -967,6 +967,13 @@ export const styles = StyleSheet.create({
         height: Layout.window.height,
         backgroundColor: 'black',
         opacity: 0.8
+    }, alertDialogBackgroudAlphacal: {
+        left: 0,
+        top: 0,
+        width: Layout.window.width,
+        height: Layout.window.height,
+        backgroundColor: 'black',
+        opacity: 0.95
     },
     alertDialogBoxContainer: {
         width: '80%',

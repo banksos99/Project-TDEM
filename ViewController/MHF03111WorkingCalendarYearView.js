@@ -1407,7 +1407,7 @@ console.log('componentDidUpdate')
                                     <View style={{ flex: 1 }}></View>
                                     <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                         onPress={() => {
-                                            //console.log('selectYear =>: ',this.state.selectYear);
+                                            
                                             // this.state.showLocation = this.state.selectLocation
                                             this.setState({
 
@@ -1415,11 +1415,16 @@ console.log('componentDidUpdate')
                                                 isLoading:true
 
                                             }, function () {
-                                                this.onresetcalendar();
-                                                // this.getLocation();
+
+                                                this.timersession = setTimeout(() => this.setState({
+                                          
+                                                }, function () {
+                                                    
+                                                    this.onresetcalendar();
+
+                                                }), 100)
+
                                             })
-
-
 
                                         }}>
                                         <Text style={styles.buttonpickerdownloadright}>{StringText.CALENDER_YEARVIEW_ALERT_LOCATION_BUTTON}</Text>
@@ -2003,7 +2008,7 @@ console.log('componentDidUpdate')
         if (this.state.isLoading) {
             return (
                 <View style={styles.alertDialogContainer}>
-                    <View style={styles.alertDialogBackgroudAlpha} />
+                    <View style={styles.alertDialogBackgroudAlphacal} />
                     {/* bg */}
                     <View style={styles.alertDialogContainer}>
                         <ActivityIndicator />

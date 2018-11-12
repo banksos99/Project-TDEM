@@ -42,6 +42,7 @@ let fontname = ['Times', 'Courier', 'Arial', 'Serif', 'Cursive', 'Fantasy', 'Mon
 let fonttext = ['Times', 'Courier', 'Arial', 'Serif', 'Cursive', 'Fantasy', 'Monospace'];
 let HandbookHighlightList = [];
 let HandbookMarkList = [];
+let tempcfiRange
 
 const Uri = require("epubjs/lib/utils/url");
 
@@ -482,6 +483,7 @@ export default class HandbookViewer extends Component {
     onOpenTOC() {
         this.setState({
             showTOC: 1,
+            location:'epubcfi()'
         })
     }
 
@@ -490,16 +492,51 @@ export default class HandbookViewer extends Component {
         this.setState({
             showTOC: 0,
             location: item.href,
+
             // position: 'epubcfi(/6/12[xepigraph_001]!/4/2/4)'
+        },function(){
+
+
         })
     }
+    selecthighlight() {
 
+        HandbookHighlightList.push(
+            tempcfiRange
+        )
+
+        console.log('HandbookHighlightList', HandbookHighlightList)
+        // Add marker
+        this.epub.rendition.highlight(tempcfiRange, {});
+
+    }
     _onhilight(item) {
-        //console.log('item :', item)
+        console.log('item :', item)
         this.setState({
             showTOC: 0,
             location: item.link,
+            
             // position: 'epubcfi(/6/12[xepigraph_001]!/4/2/4)'
+
+        })
+
+    }
+
+    removehilight(item) {
+
+
+        var index = HandbookMarkList.indexOf(item)
+
+        HandbookMarkList.splice(index, 1);
+        console.log('HandbookMarkList', HandbookMarkList, item.link)
+
+        this.epub.rendition.unhighlight(item.link);
+        var index = HandbookHighlightList.indexOf(item.link)
+        HandbookHighlightList.splice(index, 1);
+
+
+        this.setState({
+
 
         })
 
@@ -852,9 +889,18 @@ export default class HandbookViewer extends Component {
                             onPress={() => this._onhilight(item)}
                             key={index + 100}>
                             <View style={{ justifyContent: 'center', height: 40, marginLeft: 20, marginRight: 20 }}>
-                                <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'column' }}>
-                                    <Text style={styles.epubHighlightdateText} numberOfLines={1}> {item.date}</Text>
-                                    <Text style={styles.epubHighlighttitleText} numberOfLines={1}> {item.title}</Text>
+                                <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    <View style={{ flex: 4, justifyContent: 'center', flexDirection: 'column' }}>
+                                        <Text style={styles.epubHighlightdateText} numberOfLines={1}> {item.date}</Text>
+                                        <Text style={styles.epubHighlighttitleText} numberOfLines={1}> {item.title}</Text>
+                                    </View>
+                                    {/* <View style={{ flex: 1, backgroundColor: 'green' }}> */}
+                                    <TouchableOpacity
+                                        onPress={() => this.removehilight(item)}
+                                        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ color: 'blue' }} numberOfLines={1}>Remove</Text>
+                                    </TouchableOpacity>
+                                    {/* </View> */}
                                 </View>
                             </View>
                             <View style={{ height: 1, backgroundColor: Colors.calendarLocationBoxColor }}>
@@ -864,9 +910,8 @@ export default class HandbookViewer extends Component {
                     ))}
             </ScrollView>
         );
-
-
     }
+
     render() {
         
         return (
@@ -885,10 +930,10 @@ export default class HandbookViewer extends Component {
                 backgroundColor: 'white'
             }}>
 
-                <View style={[styles.navContainer, { flexDirection: 'column' ,backgroundColor: Colors.redTextColor}]}>
+                <View style={[styles.navContainer, { flexDirection: 'column', backgroundColor: Colors.redTextColor }]}>
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
-                        <View style={{ flex: 1, justifyContent: 'center', }}>
+                        <View style={{ flex: 2, justifyContent: 'center', }}>
                             <TouchableOpacity onPress={(this.onOpenTOC.bind(this))}>
                                 <Image
                                     style={{ width: 50, height: 50 }}
@@ -897,19 +942,33 @@ export default class HandbookViewer extends Component {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={[styles.navTitleTextTop, { fontFamily: "Prompt-Regular" }]}numberOfLines={1}>{this.state.handbook_title}</Text>
+                        <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={[styles.navTitleTextTop, { fontFamily: "Prompt-Regular" }]} numberOfLines={1}>{this.state.handbook_title}</Text>
                         </View>
-                        <View style={{ flex: 1, justifyContent: 'center' }}>
-                            <TouchableOpacity
-                                onPress={this.expand_collapse_Function}
-                            >
-                                <Image
-                                    style={{ width: 50, height: 50 }}
-                                    source={this.state.filterImageButton}
-                                    resizeMode='contain'
-                                />
-                            </TouchableOpacity>
+                        <View style={{ flex: 2,flexDirection: 'row' }}>
+                            <View style={{ flex: 1, justifyContent: 'center' }}>
+                                <TouchableOpacity
+                                    onPress={this.expand_collapse_Function}
+                                >
+                                    <Image
+                                        style={{ width: 50, height: 50 }}
+                                        source={this.state.filterImageButton}
+                                        resizeMode='contain'
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1, justifyContent: 'center' }}>
+                                <TouchableOpacity
+                                onPress={() => this.selecthighlight()}
+                                    // onPress={this.expand_collapse_Function}
+                                >
+                                    <Image
+                                        style={{ width: 40, height: 40 }}
+                                        source={require('../resource/images/write.png')}
+                                        resizeMode='contain'
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -1023,22 +1082,42 @@ export default class HandbookViewer extends Component {
 
                         console.log("onSelected", cfiRange)
 
+                        tempcfiRange = cfiRange;
+
                         let datatext = ''
-                        HandbookHighlightList.push(
-                            cfiRange
-                        )
-                        // Add marker
-                        rendition.highlight(cfiRange, {});
+                        // HandbookHighlightList.push(
+                        //     cfiRange
+                        // )
+
+                        // console.log('HandbookHighlightList', HandbookHighlightList)
+                        // // Add marker
+                        // rendition.highlight(cfiRange, {});
+
+
                     }}
                     
                     onMarkClicked={(cfiRange) => {
-                       
+
+                        // if (Platform.OS === 'android') {
+
+
+
+
+                        // }else{
+
+
+
+
+
+                        // }
+
                         Alert.alert(
                             'SAVE',
                             'Do you want to save Highlight?',
                             [
+
                                 {
-                                    text: 'OK', onPress: () => {
+                                    text: 'Save', onPress: () => {
 
                                         let datatext = ''
                                         this.state.book.getRange(cfiRange).then((range) => {
@@ -1053,18 +1132,30 @@ export default class HandbookViewer extends Component {
                                                     title: datatext,
                                                     date: timearr[2] + ' ' + timearr[1] + ' ' + timearr[3] + ' at ' + timearr[4]
                                                 })
-                                                
+
                                             }
 
                                         })
-                                    }
-                                },{ text: 'Cancel', onPress: () => { } }
 
+                                    }
+                                }
+                                // , {
+                                //     text: 'Remove', onPress: () => {
+
+                                //         this.epub.rendition.unhighlight(cfiRange);
+
+                                //         var index = HandbookHighlightList.indexOf(cfiRange)
+                                //         HandbookHighlightList.splice(index, 1);
+                                //     }
+                                // }
+                                , { text: 'Cancel', onPress: () => { } }
                             ],
                             { cancelable: false }
                         )
 
                     }}
+
+
                     // regenerateLocations={true}
                     // generateLocations={true}
                 />

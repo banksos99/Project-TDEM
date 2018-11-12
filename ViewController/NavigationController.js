@@ -50,6 +50,8 @@ import EmployeeList from "./MHF0B012EmployeeList"
 import ChangePINScreen from "./ChangePINScreen"
 import SharedPreference from "../SharedObject/SharedPreference"
 
+import screenA from "./screenA"
+
 const AppNavigatorPin = createStackNavigator({
     RegisterScreen: { screen: registerScreen },
     PinScreen: { screen: pinScreen },
@@ -76,7 +78,7 @@ const AppNavigatorPin = createStackNavigator({
     AnnouncementDetail: { screen: announcementdetail },
     ChangePINScreen: { screen: ChangePINScreen },
     EmployeeList: { screen: EmployeeList },
-
+    screenA: { screen: screenA },
 }, {
         initialRouteName: 'PinScreen',
         headerMode: 'none',
@@ -120,6 +122,8 @@ const AppNavigatorRegister = createStackNavigator({
     AnnouncementDetail: { screen: announcementdetail },
     ChangePINScreen: { screen: ChangePINScreen },
     EmployeeList: { screen: EmployeeList },
+    screenA: { screen: screenA },
+
 }, {
         initialRouteName: 'RegisterScreen',
         headerMode: 'none',
