@@ -915,7 +915,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 0 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net1}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 0 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay1}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge1 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge1 ? { color: 'white' } : { color: 'transparent' }}>{badge1}</Text></View>
+                            <View style={badge1 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge1 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge1}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={1 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -929,7 +929,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 1 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net2}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 1 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay2}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge2 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge2 ? { color: 'white' } : { color: 'transparent' }}>{badge2}</Text></View>
+                            <View style={badge2 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge2 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge2}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={2 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -943,7 +943,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 2 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net3}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 2 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay3}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge3 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge3 ? { color: 'white' } : { color: 'transparent' }}>{badge3}</Text></View>
+                            <View style={badge3 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge3 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>100</Text></View>
                         </View>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -960,7 +960,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={3 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 3 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay4}</Text></View>
 
                             </TouchableOpacity>
-                            <View style={badge4 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge4 ? { color: 'white' } : { color: 'transparent' }}>{badge4}</Text></View>
+                            <View style={badge4 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge4 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge4}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={4 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -974,7 +974,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 4 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net5}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 4 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay5}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge5 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge5 ? { color: 'white' } : { color: 'transparent' }}>{badge5}</Text></View>
+                            <View style={badge5 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge5 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge5}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={5 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -989,7 +989,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={5 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 5 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay6}</Text></View>
 
                             </TouchableOpacity>
-                            <View style={badge6 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge6 ? { color: 'white' } : { color: 'transparent' }}>{badge6}</Text></View>
+                            <View style={badge6 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge6 ? { color: 'white' ,marginLeft:5,marginRight:5} : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge6}</Text></View>
                         </View>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -1005,7 +1005,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 6 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net7}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 6 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay7}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge7 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge7 ? { color: 'white' } : { color: 'transparent' }}>{badge7}</Text></View>
+                            <View style={badge7 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge7 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge7}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={7 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -1019,7 +1019,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 7 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net8}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 7 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay8}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge8 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge8 ? { color: 'white' } : { color: 'transparent' }}>{badge8}</Text></View>
+                            <View style={badge8 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge8 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge8}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={8 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -1034,7 +1034,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={8 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 8 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay9}</Text></View>
 
                             </TouchableOpacity>
-                            <View style={badge9 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge9 ? { color: 'white' } : { color: 'transparent' }}>{badge9}</Text></View>
+                            <View style={badge9 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge9 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge9}</Text></View>
                         </View>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -1050,7 +1050,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 9 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net10}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 9 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay10}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge10 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge10 ? { color: 'white' } : { color: 'transparent' }}>{badge10}</Text></View>
+                            <View style={badge10 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge10 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge10}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={10 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -1064,7 +1064,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 10 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net11}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 10 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay11}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge11 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge11 ? { color: 'white' } : { color: 'transparent' }}>{badge11}</Text></View>
+                            <View style={badge11 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge11 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge11}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={11 === this.state.currentmonth && this.state.indexselectyear === 2 ?
@@ -1078,7 +1078,7 @@ export default class PaySlipActivity extends Component {
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdNet : 11 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net12}</Text></View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemcurrentdetail : 11 > this.state.currentmonth && this.state.indexselectyear === 2 ? styles.payslipitemdetailHide : styles.payslipitemdate}>{pay12}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge12 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge12 ? { color: 'white' } : { color: 'transparent' }}>{badge12}</Text></View>
+                            <View style={badge12 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge12 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge12}</Text></View>
                         </View>
                     </View>
                 </View>

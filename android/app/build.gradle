@@ -104,12 +104,12 @@ android {
     }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.tdem.tdemconnect"
+        applicationId "com.tdem.tdemconnectdev"
         minSdkVersion 16
         targetSdkVersion 26
         // targetSdkVersion 22
-        versionCode 24
-        versionName "2.24"
+        versionCode 108
+        versionName "1.108"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

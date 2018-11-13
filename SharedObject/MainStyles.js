@@ -100,18 +100,19 @@ export const styles = StyleSheet.create({
     badgeIconpayslip: {
         top: scale ,
         right: scale,
-        width: 18* scale,
+        // width: 18* scale,
         height: 18* scale,
         borderRadius: 9* scale,
         backgroundColor: 'red',
         position: 'absolute',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+
     },
     badgeIconpayslipDisable: {
         top: scale ,
         right: scale,
-        width: 18* scale,
+        // width: 18* scale,
         height: 18* scale,
         borderRadius: 9* scale,
         backgroundColor: 'transparent',

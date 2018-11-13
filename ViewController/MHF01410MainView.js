@@ -122,7 +122,7 @@ export default class HMF01011MainView extends Component {
         rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
         rolemanagementManager = [0, 0, 0, 0];
         managerstatus = 'N';
-        announcestatus = 'Y';
+        announcestatus = 'N';
         settingstatus = 'Y';
         for (let i = 0; i < SharedPreference.profileObject.role_authoried.length; i++) {
 
@@ -159,7 +159,7 @@ export default class HMF01011MainView extends Component {
                 rolemanagementEmpoyee[7] = 1
 
             } else if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0201') {
-
+console.log('announcestatus')
                 announcestatus = 'Y'
 
             } else if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0C11') {
@@ -2577,7 +2577,7 @@ export default class HMF01011MainView extends Component {
                                 <View style={styles.mainmenuTextButton}>
                                     <Text style={styles.mainmenuTextname}>Non Payroll</Text>
                                 </View>
-                                <View style={this.state.nonPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={this.state.nonPayslipBadge ? { color: 'white' } : { color: 'transparent' }}>{this.state.nonPayslipBadge}</Text></View>
+                                <View style={this.state.nonPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={this.state.nonPayslipBadge ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{this.state.nonPayslipBadge}</Text></View>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -2600,7 +2600,7 @@ export default class HMF01011MainView extends Component {
                                     <Text style={styles.mainmenuTextname}>Pay Slip</Text>
                                 </View>
                                 {/* notiPayslipBadge */}
-                                <View style={ this.state.notiPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={ this.state.notiPayslipBadge ? { color: 'white' } : { color: 'transparent' }}>{ this.state.notiPayslipBadge}</Text></View>
+                                <View style={ this.state.notiPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={ this.state.notiPayslipBadge ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{ this.state.notiPayslipBadge}</Text></View>
 
                             </View>
                         </TouchableOpacity>
@@ -3477,7 +3477,7 @@ export default class HMF01011MainView extends Component {
                                 {
                                     this.state.announcestatuslist.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
-
+                                            
                                             onPress={() => { this.on_select_Announcement_status(item, index) }}
                                         >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
@@ -3739,7 +3739,10 @@ export default class HMF01011MainView extends Component {
     render() {
         let badgeBG = 'transparent'
         let badgeText = 'transparent'
-
+        let annstatus = false
+        if (announcestatus == 'N') {
+            annstatus = true
+        }
         if (this.state.notiAnnounceMentBadge) {
             badgeBG = 'red'
             badgeText = 'white'
@@ -3770,7 +3773,7 @@ export default class HMF01011MainView extends Component {
                             />
                         </TouchableOpacity>
                         <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                            disabled={!announcestatus}
+                            disabled={annstatus}
                             onPress={() => { this.settabscreen(1) }}>
                             <Image
                                 style={page === 1 ?

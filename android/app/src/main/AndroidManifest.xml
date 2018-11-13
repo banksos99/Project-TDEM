@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.tdem.tdemconnect"
+package="com.tdem.tdemconnectdev"
 
-android:versionCode="24"
-android:versionName="2.24">
+android:versionCode="108"
+android:versionName="1.108">
 
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +23,7 @@ android:versionName="2.24">
 
     <provider
         android:name="android.support.v4.content.FileProvider"
-        android:authorities="com.tdem.tdemconnect.provider"
+        android:authorities="com.tdem.tdemconnectdev.provider"
         android:exported="false"
         android:grantUriPermissions="true">
         <meta-data
