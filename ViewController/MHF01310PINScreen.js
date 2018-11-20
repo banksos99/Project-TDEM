@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Image, Text, TouchableOpacity, Alert, ActivityIndicator,Platform ,PanResponder} from "react-native";
+import { View, Image, Text, TouchableOpacity, Alert, ActivityIndicator,Platform ,PanResponder,Linking} from "react-native";
 import { styles } from "./../SharedObject/MainStyles";
 import Colors from "./../SharedObject/Colors"
 import StringText from './../SharedObject/StringText'
@@ -272,47 +272,66 @@ export default class PinActivity extends Component {
         let data = await RestAPI(SharedPreference.APPLICATION_INFO_API, "1")
         code = data[0]
         data = data[1]
-        
+
         if (code.SUCCESS == data.code) {
             let appversion = '1.0.0'
             if (Platform.OS === 'android') {
+                if (data.data.android.force_update === 'N') {
+                    if (data.data.android.app_version != SharedPreference.deviceInfo.appVersion) {
 
-                if (data.data.android.force_update === 'Y') {
-                    Alert.alert(
-                        'New Version Available',
-                        'This is a newer version available for download! Please update the app by visiting the Play Store',
-                        [
-                            {
-                                text: 'Update', onPress: () => {
-                                    //console.log('OK Pressed') },
+                        Alert.alert(
+                            'New Version Available',
+                            'This is a newer version available for download! Please update the app by visiting the Play Store',
+                            [
+                                {
+                                    text: 'Update', onPress: () => {
+                                        //console.log('OK Pressed') },
+                                        Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
+                                       
+                                    }
                                 }
-                            }
-                        ],
-                        { cancelable: false }
-                    )
+                            ],
+                            { cancelable: false }
+                        )
+                    }else{
+                        this.props.navigation.navigate('HomeScreen')
+                    }
+
+                }else{
+                    this.props.navigation.navigate('HomeScreen')
 
                 }
             } else {
-                console.log('onLoadAppInfo', data.data.ios.force_update)
-                if (data.data.ios.force_update === 'Y') {
-                    Alert.alert(
-                        'New Version Available',
-                        'This is a newer version available for download! Please update the app by visiting the Apple Store',
-                        [
-                            {
-                                text: 'Update', onPress: () => {
-                                    //console.log('OK Pressed') },
-                                }
-                            }
-                        ],
-                        { cancelable: false }
-                    )
 
+                if (data.data.ios.force_update === 'N') {
+                    if(data.data.ios.app_version != SharedPreference.deviceInfo.appVersion){
+                        Alert.alert(
+                            'New Version Available',
+                            'This is a newer version available for download! Please update the app by visiting the Apple Store',
+                            [
+                                {
+                                    text: 'Update', onPress: () => {
+                                        // Linking.openURL("https://itunes.apple.com/us/app/pixel-starships-space-mmorpg/id1082948576?mt=12");
+                                        Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
+
+                                        
+                                    }
+                                }
+                            ],
+                            { cancelable: false }
+                        )
+
+                    }else{
+                        this.props.navigation.navigate('HomeScreen')
+                    }
+                    // console.log('onLoadAppInfo', ver)
+                }else{
+                    this.props.navigation.navigate('HomeScreen')
                 }
             }
         }
 
-        this.props.navigation.navigate('HomeScreen')
+        
     }
 
     componentWillMount() {

@@ -4,7 +4,7 @@ import {
     Image, Switch, ActivityIndicator, ScrollView,
     RefreshControl, Alert, NetInfo,
     Platform, Dimensions, BackHandler, StatusBar,PanResponder,
-    SafeAreaView
+    SafeAreaView,Linking
 } from "react-native";
 import { styles } from "../SharedObject/MainStyles";
 import Colors from "../SharedObject/Colors"
@@ -22,6 +22,7 @@ import EventCalendar from "../constants/EventCalendar"
 var BadgeAndroid = require('react-native-android-badge')
 
 const ROLL_ANNOUNCE = 50;
+let focealert = false;
 
 let annountype = { 'All': 'All', 'Company Announcement': 'Company Announcement', 'Emergency Announcement': 'Emergency Announcement', 'Event Announcement': 'Event Announcement', 'General Announcement': 'General Announcement' };
 let announstatus = { 'All': 'All', 'true': 'Read', 'false': 'Unread' };
@@ -42,8 +43,8 @@ let page = 0;
 let orgcode = '';//60162305;
 
 let managerstatus = 'N';
-let announcestatus = 'Y';
-let settingstatus = 'Y';
+let announcestatus = 'N';
+let settingstatus = 'N';
 
 let rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
 let rolemanagementManager = [0, 0, 0, 0];
@@ -121,9 +122,9 @@ export default class HMF01011MainView extends Component {
 
         rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
         rolemanagementManager = [0, 0, 0, 0];
-        managerstatus = 'N';
-        announcestatus = 'N';
-        settingstatus = 'Y';
+        // managerstatus = 'N';
+        // announcestatus = 'N';
+        // settingstatus = 'N';
         for (let i = 0; i < SharedPreference.profileObject.role_authoried.length; i++) {
 
             if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0401') {
@@ -159,7 +160,7 @@ export default class HMF01011MainView extends Component {
                 rolemanagementEmpoyee[7] = 1
 
             } else if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0201') {
-console.log('announcestatus')
+
                 announcestatus = 'Y'
 
             } else if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0C11') {
@@ -529,6 +530,7 @@ console.log('announcestatus')
 
                         this.timer = setTimeout(() => {
                             this.onLoadInAppNoti()
+                            this.onLoadAppInfo()
                         }, SharedPreference.timeinterval);
 
                         //update time request
@@ -602,7 +604,7 @@ console.log('announcestatus')
                         this.timer = setTimeout(() => {
 
                             this.onLoadInAppNoti()
-
+                            this.onLoadAppInfo()
                         }, SharedPreference.timeinterval);
 
                     }
@@ -620,6 +622,70 @@ console.log('announcestatus')
 
     }
 
+    onLoadAppInfo = async () => {
+        
+        let data = await RestAPI(SharedPreference.APPLICATION_INFO_API, "1")
+        code = data[0]
+        data = data[1]
+
+        if (code.SUCCESS == data.code) {
+            let appversion = '1.0.0'
+            if (Platform.OS === 'android') {
+                if (data.data.android.force_update === 'Y') {
+                    if (data.data.android.app_version != SharedPreference.deviceInfo.appVersion) {
+                        this.props.navigation.navigate('PinScreen')
+                            clearTimeout(this.timer);
+                            // focealert = true
+                            Alert.alert(
+                                'New Version Available',
+                                'This is a newer version available for download! Please update the app by visiting the Play Store',
+                                [
+                                    {
+                                        text: 'Update', onPress: () => {
+                                          
+                                            Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
+                                        }
+                                    }
+                                ],
+                                { cancelable: false }
+                            )
+
+                        }
+                        
+                    // }
+
+                }
+            } else {
+
+                if (data.data.ios.force_update === 'N') {
+                    if (data.data.ios.app_version != SharedPreference.deviceInfo.appVersion) {
+                        this.props.navigation.navigate('PinScreen')
+                        // if (!focealert) {
+                        //     focealert = true
+                            clearTimeout(this.timer);
+                            Alert.alert(
+                                'New Version Available',
+                                'This is a newer version available for download! Please update the app by visiting the Apple Store',
+                                [
+                                    {
+                                        text: 'Update', onPress: () => {
+                                            
+                                           // Linking.openURL("https://itunes.apple.com/us/app/pixel-starships-space-mmorpg/id1082948576?mt=12");
+                                           Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
+                                        }
+                                    }
+                                ],
+                                { cancelable: false }
+                            )
+                        // }
+
+                    }
+                    // console.log('onLoadAppInfo', ver)
+                }
+            }
+        }
+
+    }
 
 
     _loadResourcesAsync = async () => {
@@ -2803,7 +2869,7 @@ console.log('announcestatus')
                     </TouchableOpacity>
                 </View> */}
 
-                <View style={{ height: expandheight, }}>
+                <View style={{ height: expandheight,backgroundColor:'white' }}>
                     <View style={{ height: 50, marginLeft: 10, marginRight: 10, flexDirection: 'row', }}>
                         <View style={{ flex: 2, justifyContent: 'center' }} >
                             <Text style={{ textAlign: 'center', fontSize: 12 }}>Type</Text>
@@ -3740,9 +3806,14 @@ console.log('announcestatus')
         let badgeBG = 'transparent'
         let badgeText = 'transparent'
         let annstatus = false
+        let setstatus = false
         if (announcestatus == 'N') {
             annstatus = true
         }
+        if (settingstatus == 'N') {
+            setstatus = true
+        }
+        
         if (this.state.notiAnnounceMentBadge) {
             badgeBG = 'red'
             badgeText = 'white'
@@ -3792,7 +3863,7 @@ console.log('announcestatus')
                         </TouchableOpacity>
                         {this.rendermanagertab()}
                         <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                            disabled={!settingstatus}
+                            disabled={setstatus}
                             onPress={() => { this.settabscreen(3) }}>
                             <Image
                                 style={page === 3 ?

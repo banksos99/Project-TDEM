@@ -527,33 +527,56 @@ console.log('register componentDidMount')
     }
 
     onLoadAppInfo = async () => {
-
-        let data = await RestAPI(SharedPreference.APPLICATION_INFO_API)
+        
+        let data = await RestAPI(SharedPreference.APPLICATION_INFO_API, "1")
         code = data[0]
         data = data[1]
+
         if (code.SUCCESS == data.code) {
-            //////console.log('app info data2 :', data)
-            // let appversion = '1.0.0'
-            if (data.data.force_update === 'Y') {
-                Alert.alert(
-                    'New Version Available',
-                    'This is a newer version available for download! Please update the app by visiting the Apple Store',
-                    [
+            let appversion = '1.0.0'
+            if (Platform.OS === 'android') {
+                if (data.data.android.force_update === 'Y') {
+                    if (data.data.android.app_version != SharedPreference.deviceInfo.appVersion) {
 
-                        {
-                            text: 'Update', onPress: () => {
-                                //console.log('OK Pressed') },
-                            }
-                        }
-                    ],
-                    { cancelable: false }
-                )
+                        Alert.alert(
+                            'New Version Available',
+                            'This is a newer version available for download! Please update the app by visiting the Play Store',
+                            [
+                                {
+                                    text: 'Update', onPress: () => {
+                                        //console.log('OK Pressed') },
+                                    }
+                                }
+                            ],
+                            { cancelable: false }
+                        )
+                    }
 
+                }
+            } else {
+
+                if (data.data.ios.force_update === 'Y') {
+                    if(data.data.ios.app_version != SharedPreference.deviceInfo.appVersion){
+                        Alert.alert(
+                            'New Version Available',
+                            'This is a newer version available for download! Please update the app by visiting the Apple Store',
+                            [
+                                {
+                                    text: 'Update', onPress: () => {
+                                        //console.log('OK Pressed') },
+                                    }
+                                }
+                            ],
+                            { cancelable: false }
+                        )
+
+                    }
+                  
+                }
             }
-
         }
-        this.props.navigation.navigate('HomeScreen')
 
+        this.props.navigation.navigate('HomeScreen')
     }
 
     onClosePIN = () => {
