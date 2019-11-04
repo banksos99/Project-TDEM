@@ -83,7 +83,8 @@ include ':react-native-firebase'
 project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
 include ':react-native-file-provider'
 project(':react-native-file-provider').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-file-provider/android')
-
+include ':RNWebView', ':app'
+project(':RNWebView').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview-android/android')
 
 
 include ':app'

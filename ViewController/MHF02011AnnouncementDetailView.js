@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import RNFetchBlob from 'react-native-fetch-blob'
+import Authorization from '../SharedObject/Authorization'
 
 import {
     Text,
@@ -8,23 +10,32 @@ import {
     BackHandler,
     Platform,
     Alert,
-    PanResponder
+    PanResponder,
+    ScrollView
 } from 'react-native';
 
-import { styles } from "./../SharedObject/MainStyles"
-import SharedPreference from "./../SharedObject/SharedPreference"
-import firebase from 'react-native-firebase';
-import RestAPI from "../constants/RestAPI"
-import StringText from '../SharedObject/StringText'
-import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
-import Colors from "../SharedObject/Colors"
 import moment from 'moment'
+import firebase from 'react-native-firebase';
+
+import SharedPreference from "./../SharedObject/SharedPreference"
+import StringText from '../SharedObject/StringText'
+import Colors from "../SharedObject/Colors"
 import Months from "./../constants/Month"
+import { styles } from "./../SharedObject/MainStyles"
+
+import RestAPI from "../constants/RestAPI"
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+import { DocumentDirectoryPath } from 'react-native-fs';
+
 let content;
 let title;
 let category;
 let modifly;
 let createby;
+
+let filelist;
+let isPDF;
+let notifacationID;
 
 export default class PaySlipActivity extends Component {
     panResponder = {};
@@ -55,6 +66,9 @@ export default class PaySlipActivity extends Component {
             category=DataResponse.category
             modifly=DataResponse.attributes.create_date
             createby=DataResponse.attributes.create_by
+            isPDF = true;
+            filelist = DataResponse.fileInfo
+            notifacationID = DataResponse.notifacationID
         }
        
     }
@@ -211,9 +225,198 @@ export default class PaySlipActivity extends Component {
         SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
     }
 
+    renderPDF(){
+        if(filelist == null || filelist.length == 0){
+            isPDF = false;
+        }
+
+        if(isPDF){
+            var bodyArray = [];
+            for (let i = 0; i < filelist.length; i++) {
+                bodyArray.push(
+                    <View style={styles.mainmenuImageButton} key={i}>
+                    <TouchableOpacity onPress={() => { this.onClickDownload(filelist[i].fileNo , filelist[i].fileName) }}>
+                        <Image
+                            style={{ width: 50, height: 50 }}
+                            source={require('./../resource/images/pdf-icon.png')}
+                            resizeMode='contain'
+                        />
+                    </TouchableOpacity>
+                    <Text style={{ marginLeft: 20, fontSize: 15,fontFamily: 'Prompt-Regular' }}
+                            allowFontScaling={SharedPreference.allowfontscale}>{filelist[i].fileName}</Text>
+                    </View>
+                );
+            }
+
+            return(
+                <View style={{ height: 80 }}>
+                    <ScrollView horizontal={true}>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                {bodyArray}
+                            </View>
+                    </ScrollView>
+                    <View style={{ height: 1, marginLeft: 10, marginRight: 10, backgroundColor: Colors.grayColor }}></View>
+                </View>
+            );
+        }
+    }
+
+
+    onClickDownload(fileno, filename){
+        this.onDownloadPDFFile(fileno, filename);
+    }
+
+    onDownloadPDFFile = async (fileno, filename) => {
+
+        ANNOUNCEMENT_DOWNLOAD_API = SharedPreference.ANNOUNCEMENT_DOWNLOAD_API + "?notiID=" +notifacationID +"&fileID=" + fileno
+        FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_ANNOUCEMENT, SharedPreference.profileObject.client_token)
+        let savePath = DocumentDirectoryPath + '/pdf/' + filename;
+
+        if (Platform.OS === 'android') {
+            RNFetchBlob
+                .config({
+                    path: savePath,
+                    title: filename,
+
+                })
+                .fetch('GET', ANNOUNCEMENT_DOWNLOAD_API, {
+                    'Content-Type': 'application/pdf;base64',
+                    Authorization: FUNCTION_TOKEN
+                })
+                .then((resp) => {
+                    console.log('esp.status :', resp.respInfo.status)
+
+                    if (resp.respInfo.status == 200) {
+                        this.setState({
+
+                            isscreenloading: false,
+
+                        }, function () {
+                            // this.setState(this.renderloadingscreen())
+                        });
+                        RNFetchBlob.android.actionViewIntent(resp.path(), 'application/pdf');
+
+                    } else {
+
+                        Alert.alert(
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                            [
+                                {
+                                    text: 'OK', onPress: () => {
+                                        this.setState({
+
+                                            isscreenloading: false,
+
+                                        });
+                                    }
+                                },
+                            ],
+                            { cancelable: false }
+                        )
+                    }
+
+                })
+                .catch((errorCode, errorMessage) => {
+
+                    Alert.alert(
+                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                        [
+
+                            {
+                                text: 'OK', onPress: () => {
+                                    this.setState({
+                                        isscreenloading: false
+                                    })
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                })
+        } else {//iOS
+
+            RNFetchBlob
+                .config({
+                    fileCache: true,
+                    appendExt: 'pdf',
+                    filename: filename
+                })
+                .fetch('GET', ANNOUNCEMENT_DOWNLOAD_API, {
+                    'Content-Type': 'application/pdf;base64',
+                    Authorization: FUNCTION_TOKEN
+                })
+                .then((resp) => {
+
+                    RNFetchBlob.fs.exists(resp.path())
+                        .then((exist) => {
+                            // console.log(`WorkingCalendarYear ==> file ${exist ? '' : 'not'} exists`)
+                        })
+                        .catch(() => {
+                            // console.log('WorkingCalendarYear ==> err while checking')
+                        });
+
+                    if (resp.respInfo.status == 200) {
+                        this.setState({
+                            isscreenloading: false,
+                        }, function () {
+                            // this.setState(this.renderloadingscreen())
+                            RNFetchBlob.ios.openDocument(resp.path());
+                        });
+                    } else {
+                        Alert.alert(
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                            StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                            [
+                                {
+                                    text: 'OK', onPress: () => {
+                                        this.setState({
+
+                                            isscreenloading: false,
+
+                                        });
+                                    }
+                                },
+                            ],
+                            { cancelable: false }
+                        )
+
+                    }
+
+                    this.setState({
+
+                        isscreenloading: false,
+
+                    }, function () {
+                        // this.setState(this.renderloadingscreen())
+                    });
+
+                })
+                .catch((errorMessage, statusCode) => {
+                    Alert.alert(
+                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_TITLE,
+                        StringText.ALERT_PAYSLIP_CANNOT_DOWNLOAD_DESC,
+                        [
+                            {
+                                text: 'OK', onPress: () => {
+                                    this.setState({
+
+                                        isscreenloading: false,
+
+                                    });
+                                }
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                });
+        }
+    }
+
     render() {
         // content = `<span class="price bold some-class-name">$459.00</span>`;
-        console.log('modifly =>',content)
+        // console.log('modifly =>',content)
         let pp = modifly.split(' ');
         let tpp = pp[0].split('-');
         let spp = pp[1].split(':');
@@ -238,7 +441,7 @@ export default class PaySlipActivity extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={styles.navTitleTextTop} numberOfLines={1}>{title}</Text>
+                            <Text style={styles.navTitleTextTop} numberOfLines={1}allowFontScaling={SharedPreference.allowfontscale}>{title}</Text>
                         </View>
                         <View style={{ flex: 1, }}>
                         </View>
@@ -249,9 +452,9 @@ export default class PaySlipActivity extends Component {
             </View> */}
                 <View style={{ flexDirection: 'column' }}>
                 <View style={{ height: 4 }}></View>
-                    <Text style={{ marginLeft: 20, fontSize: 15,fontFamily: 'Prompt-Regular', color: Colors.calendarRedText }}>{category}</Text>
+                    <Text style={{ marginLeft: 20, fontSize: 15,fontFamily: 'Prompt-Regular', color: Colors.calendarRedText }}allowFontScaling={SharedPreference.allowfontscale}>{category}</Text>
                     <View style={{ height: 4 }}></View>
-                    <Text style={{ marginLeft: 20, fontSize: 15,fontFamily: 'Prompt-Regular' }}>{title}</Text>
+                    <Text style={{ marginLeft: 20, fontSize: 15,fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{title}</Text>
                     <View style={{ height: 20, flexDirection: 'row', alignContent: 'center' }}>
                         <View style={{ width: 15, height: 10, }} />
                         <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
@@ -261,7 +464,7 @@ export default class PaySlipActivity extends Component {
                                 resizeMode='contain'
                             />
                         </View>
-                        <Text style={{ height: 20, fontSize: 10,marginTop: 3, color: Colors.grayColor, fontFamily: 'Prompt-Regular' }}>{modidtstr}</Text>
+                        <Text style={{ height: 20, fontSize: 10,marginTop: 3, color: Colors.grayColor, fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{modidtstr}</Text>
                     </View>
                     <View style={{ height: 20, flexDirection: 'row', alignContent: 'center' }}>
                         <View style={{ width: 15, height: 10, }} />
@@ -272,11 +475,13 @@ export default class PaySlipActivity extends Component {
                                 resizeMode='contain'
                             />
                         </View>
-                        <Text style={{ height: 20,fontSize: 10, marginTop: 5,color: Colors.grayColor, fontFamily: 'Prompt-Regular' }}>Create by : {createby}</Text>
+                        <Text style={{ height: 20,fontSize: 10, marginTop: 5,color: Colors.grayColor, fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>Create by : {createby}</Text>
                     </View>
                     <View style={{ height: 10 }}></View>
                     <View style={{ height: 1, marginLeft: 10, marginRight: 10, backgroundColor: Colors.grayColor }}></View>
                 </View>
+
+                {this.renderPDF()}
                 <View style={{ flex: 1, marginTop: 0, marginRight: 10, marginLeft: 10 }}>
                     <WebView
                         source={{ html: '<!DOCTYPE html><html><body><style>{font-family:Prompt-Regular;}</style>' + content + '</body></html>' }}
@@ -302,6 +507,8 @@ export default class PaySlipActivity extends Component {
                     scalesPageToFit={false}
                   /> */}
                 </View >
+               
+                
             </View >
 
         );

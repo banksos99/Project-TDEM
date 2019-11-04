@@ -102,14 +102,14 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
-    compileSdkVersion 27
+    compileSdkVersion 29
     defaultConfig {
-        applicationId "com.tdem.tdemconnectdev"
+        applicationId "com.tdem.stmconnect" // com.tdem.tdemconnect
         minSdkVersion 16
         targetSdkVersion 26
         // targetSdkVersion 22
-        versionCode 108
-        versionName "1.108"
+        versionCode 132
+        versionName "1.0.4"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -153,11 +153,11 @@ android {
     productFlavors {
         dev {
             dimension "api"
-            applicationId "com.tdem.tdemconnectdev"
+            applicationId "com.tdem.stmconnectdev" //com.tdem.tdemconnectdev
         }
         prod {
             dimension "api"
-            applicationId "com.tdem.tdemconnect"
+            applicationId "com.tdem.stmmconnect" //com.tdem.tdemconnect
         }
     }
 
@@ -174,9 +174,9 @@ android {
             }
         }
     }
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.0'
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -194,6 +194,8 @@ dependencies {
     compile project(':react-native-device-info')
     compile project(':react-native-calendar-events')
     compile project(':react-native-android-badge')
+    compile project(':RNWebView')
+    
     implementation project(':react-native-svg')
     implementation project(':react-native-zip-archive')
     implementation project(':react-native-static-server')

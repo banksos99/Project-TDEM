@@ -374,7 +374,7 @@ export default class OrganizationStruct extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={styles.navTitleTextTop}>Employee List</Text>
+                            <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Employee List</Text>
                         </View>
                         <View style={{ flex: 1, }}>
                         </View>
@@ -384,7 +384,7 @@ export default class OrganizationStruct extends Component {
                     <View style={{ flex: 1, flexDirection: 'column', }}>
                         <View style={{ height: 50, justifyContent: 'center' }}>
                             <Text style={{ marginLeft: 50, color: Colors.redTextColor, fontFamily: 'Prompt-Regular', fontSize: 15 }}
-                            >{dataSource.org_name}
+                            allowFontScaling={SharedPreference.allowfontscale}>{dataSource.org_name}
                             </Text>
                         </View>
                         <View style={{ height: 1, backgroundColor: 'lightgray', justifyContent: 'flex-end' }} />
@@ -401,10 +401,10 @@ export default class OrganizationStruct extends Component {
                                                 <View style={{ height: 49, flexDirection: 'row' }}>
                                                     <View style={{ flex: 1, justifyContent: 'center' }} >
                                                         <Text style={{ marginLeft: 50, color: Colors.blueTextColor, fontFamily: 'Prompt-Regular', fontSize: 12 }}
-                                                        >{item.employee_name}
+                                                        allowFontScaling={SharedPreference.allowfontscale}>{item.employee_name}
                                                         </Text>
                                                         <Text style={{ marginLeft: 50, color: Colors.thingrayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
-                                                        >{item.employee_position}
+                                                        allowFontScaling={SharedPreference.allowfontscale}>{item.employee_position}
                                                         </Text>
                                                     </View>
 

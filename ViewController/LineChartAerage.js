@@ -149,34 +149,34 @@ export default class LineChart extends Component {
         let month13 = Months.monthNameStr[(currentmonth + 12) % 12] + '-' +(currentyear + parseInt((currentmonth  + 12) / 12)) ;
 
         let mm1 = (today.getFullYear() + parseInt((currentmonth  + 0) / 12)-1).toString()+(((currentmonth + 0) % 12)+1).toString()
-        if(((currentmonth + 0) % 12)+2 <= 10){mm1 = (today.getFullYear() + parseInt((currentmonth  + 0) / 12)-1).toString()+'0'+(((currentmonth + 0) % 12)+1).toString()}
+        if(((currentmonth + 0) % 12)+1 < 10){mm1 = (today.getFullYear() + parseInt((currentmonth  + 0) / 12)-1).toString()+'0'+(((currentmonth + 0) % 12)+1).toString()}
         let mm2 = (today.getFullYear() + parseInt((currentmonth  + 1) / 12)-1).toString()+(((currentmonth + 1) % 12)+1).toString()
-        if(((currentmonth + 1) % 12)+2 <= 10){mm2 = (today.getFullYear() + parseInt((currentmonth  + 1) / 12)-1).toString()+'0'+(((currentmonth + 1) % 12)+1).toString()}
+        if(((currentmonth + 1) % 12)+1 < 10){mm2 = (today.getFullYear() + parseInt((currentmonth  + 1) / 12)-1).toString()+'0'+(((currentmonth + 1) % 12)+1).toString()}
         let mm3 = (today.getFullYear() + parseInt((currentmonth  + 2) / 12)-1).toString()+(((currentmonth + 2) % 12)+1).toString()
-        if(((currentmonth + 2) % 12)+2 <= 10){mm3 = (today.getFullYear() + parseInt((currentmonth  + 2) / 12)-1).toString()+'0'+(((currentmonth + 2) % 12)+1).toString()}
+        if(((currentmonth + 2) % 12)+1 < 10){mm3 = (today.getFullYear() + parseInt((currentmonth  + 2) / 12)-1).toString()+'0'+(((currentmonth + 2) % 12)+1).toString()}
         let mm4 = (today.getFullYear() + parseInt((currentmonth  + 3) / 12)-1).toString()+(((currentmonth + 3) % 12)+1).toString()
-        if(((currentmonth + 3) % 12)+1 <= 10){mm4 = (today.getFullYear() + parseInt((currentmonth  + 3) / 12)-1).toString()+'0'+(((currentmonth + 3) % 12)+1).toString()}
+        if(((currentmonth + 3) % 12)+1 < 10){mm4 = (today.getFullYear() + parseInt((currentmonth  + 3) / 12)-1).toString()+'0'+(((currentmonth + 3) % 12)+1).toString()}
         let mm5 = (today.getFullYear() + parseInt((currentmonth  + 4) / 12)-1).toString()+(((currentmonth + 4) % 12)+1).toString()
-        if(((currentmonth + 4) % 12)+1 <= 10){mm5 = (today.getFullYear() + parseInt((currentmonth  + 4) / 12)-1).toString()+'0'+(((currentmonth + 4) % 12)+1).toString()}
+        if(((currentmonth + 4) % 12)+1 < 10){mm5 = (today.getFullYear() + parseInt((currentmonth  + 4) / 12)-1).toString()+'0'+(((currentmonth + 4) % 12)+1).toString()}
         let mm6 = (today.getFullYear() + parseInt((currentmonth  + 5) / 12)-1).toString()+(((currentmonth + 5) % 12)+1).toString()
-        if(((currentmonth + 5) % 12) +1<= 10){mm6 = (today.getFullYear() + parseInt((currentmonth  + 5) / 12)-1).toString()+'0'+(((currentmonth + 5) % 12)+1).toString()}
+        if(((currentmonth + 5) % 12) +1< 10){mm6 = (today.getFullYear() + parseInt((currentmonth  + 5) / 12)-1).toString()+'0'+(((currentmonth + 5) % 12)+1).toString()}
         let mm7 = (today.getFullYear() + parseInt((currentmonth  + 6) / 12)-1).toString()+(((currentmonth + 6) % 12)+1).toString()
-        if(((currentmonth + 6) % 12)+1 <= 10){mm7 = (today.getFullYear() + parseInt((currentmonth  + 6) / 12)-1).toString()+'0'+(((currentmonth + 6) % 12)+1).toString()}
+        if(((currentmonth + 6) % 12)+1 < 10){mm7 = (today.getFullYear() + parseInt((currentmonth  + 6) / 12)-1).toString()+'0'+(((currentmonth + 6) % 12)+1).toString()}
         let mm8 = (today.getFullYear() + parseInt((currentmonth  + 7) / 12)-1).toString()+(((currentmonth + 7) % 12)+1).toString()
-        if(((currentmonth + 7) % 12)+1 <= 10){mm8 = (today.getFullYear() + parseInt((currentmonth  + 7) / 12)-1).toString()+'0'+(((currentmonth + 7) % 12)+1).toString()}
+        if(((currentmonth + 7) % 12)+1 < 10){mm8 = (today.getFullYear() + parseInt((currentmonth  + 7) / 12)-1).toString()+'0'+(((currentmonth + 7) % 12)+1).toString()}
         let mm9 = (today.getFullYear() + parseInt((currentmonth  + 8) / 12)-1).toString()+(((currentmonth + 8) % 12)+1).toString()
-        if(((currentmonth + 8) % 12)+1 <= 10){mm9 = (today.getFullYear() + parseInt((currentmonth  + 8) / 12)-1).toString()+'0'+(((currentmonth + 8) % 12)+1).toString()}
+        if(((currentmonth + 8) % 12)+1 < 10){mm9 = (today.getFullYear() + parseInt((currentmonth  + 8) / 12)-1).toString()+'0'+(((currentmonth + 8) % 12)+1).toString()}
         let mm10 = (today.getFullYear() + parseInt((currentmonth  + 9) / 12)-1).toString()+(((currentmonth + 9) % 12)+1).toString()
-        if(((currentmonth + 9) % 12)+1 <= 10){mm10 = (today.getFullYear() + parseInt((currentmonth  + 9) / 12)-1).toString()+'0'+(((currentmonth + 9) % 12)+1).toString()}
+        if(((currentmonth + 9) % 12)+1 < 10){mm10 = (today.getFullYear() + parseInt((currentmonth  + 9) / 12)-1).toString()+'0'+(((currentmonth + 9) % 12)+1).toString()}
         let mm11 = (today.getFullYear() + parseInt((currentmonth  + 10) / 12)-1).toString()+(((currentmonth + 10) % 12)+1).toString()
-        if(((currentmonth + 10) % 12)+1 <= 10){mm11 = (today.getFullYear() + parseInt((currentmonth  + 10) / 12)-1).toString()+'0'+(((currentmonth + 10) % 12)+1).toString()}
+        if(((currentmonth + 10) % 12)+1 < 10){mm11 = (today.getFullYear() + parseInt((currentmonth  + 10) / 12)-1).toString()+'0'+(((currentmonth + 10) % 12)+1).toString()}
         let mm12 = (today.getFullYear() + parseInt((currentmonth  + 11) / 12)-1).toString()+(((currentmonth + 11) % 12)+1).toString()
-        if(((currentmonth + 11) % 12)+1 <= 10){mm12 = (today.getFullYear() + parseInt((currentmonth  + 11) / 12)-1).toString()+'0'+(((currentmonth + 11) % 12)+1).toString()}
+        if(((currentmonth + 11) % 12)+1 < 10){mm12 = (today.getFullYear() + parseInt((currentmonth  + 11) / 12)-1).toString()+'0'+(((currentmonth + 11) % 12)+1).toString()}
         let mm13 = (today.getFullYear() + parseInt((currentmonth  + 12) / 12)-1).toString()+(((currentmonth + 12) % 12)+1).toString()
-        if(((currentmonth + 12) % 12)+1 <= 10){mm13 = (today.getFullYear() + parseInt((currentmonth  + 12) / 12)-1).toString()+'0'+(((currentmonth + 12) % 12)+1).toString()}
+        if(((currentmonth + 12) % 12)+1 < 10){mm13 = (today.getFullYear() + parseInt((currentmonth  + 12) / 12)-1).toString()+'0'+(((currentmonth + 12) % 12)+1).toString()}
 
         console.log('dsdasdasd 13', mm1, mm2, mm3, mm4, mm5, mm6, mm7, mm8, mm9, mm10, mm11, mm12, mm13)
-
+        
         for (let i = 0; i < this.props.datalist.length; i++) {
 
             if (this.props.datalist[i].year_month == mm1) {
@@ -316,6 +316,9 @@ export default class LineChart extends Component {
        }
     }
 */
+console.log('dsdasdasd 13', p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13)
+console.log('dsdasdasd 13', ot1, ot1, ot1, ot1, ot1, ot1, ot7, ot8, ot9, ot10, ot11, ot12, ot13)
+console.log('dsdasdasd 13',this.props.datalist[10].total_ot,this.props.datalist[11].total_ot)
         let screenwidth = 350 * scale
         return (
             <Svg height="300" width={screenwidth}>

@@ -18,17 +18,25 @@ export default async function getRestAPI(username, password) {
         CUT_JSON: "700",
         NETWORK_ERROR: "800"
     }
-
-    // //console.log("getRestAPI ===> username : ", username, " ,  password :", password)
-    console.log("getRestAPI ===> SharedPreference.REGISTER_API : ", SharedPreference.REGISTER_API)
-    // //console.log("getRestAPI ===> SharedPreference.company : ", SharedPreference.company)
-    console.log("getRestAPI ===> SharedPreference.deviceInfo: ", SharedPreference.deviceInfo)
+    console.log("REGISTER_API : => ",SharedPreference.REGISTER_API)
+    console.log("username : => ",username)
+    console.log("password : => ",password)
+    console.log("device_model : => ",SharedPreference.deviceInfo.deviceModel)
+    console.log("deviceBrand : => ",SharedPreference.deviceInfo.deviceBrand)
+    console.log("deviceOS : => ",SharedPreference.deviceInfo.deviceOS)
+    console.log("deviceOSVersion : => ",SharedPreference.deviceInfo.deviceOSVersion)
+    console.log("firebaseToken : => ",SharedPreference.deviceInfo.firebaseToken)
+    console.log("appVersion : => ",SharedPreference.deviceInfo.appVersion)
+    console.log("company : => ",SharedPreference.company)
 
     return fetch(SharedPreference.REGISTER_API, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': 0,
         },
         body: JSON.stringify({
             grant_type: "register",
@@ -40,14 +48,13 @@ export default async function getRestAPI(username, password) {
             device_os: SharedPreference.deviceInfo.deviceOS,
             device_os_version: SharedPreference.deviceInfo.deviceOSVersion,
             firebase_token: SharedPreference.deviceInfo.firebaseToken,
-            app_version: SharedPreference.deviceInfo.appVersion
+            app_version: SharedPreference.deviceInfo.appVersion,
+            application_device: SharedPreference.APPLICATION_DEVICE
         }),
     })
         .then((response) => response.json())
         .then((responseJson) => {
-            console.log("REGISTER_API ==>  body : ", SharedPreference.REGISTER_API)
-            console.log("RegisterAPI ==>  body : ", username,password)
-            console.log("RegisterAPI ==> callback  success : ", responseJson)
+
             let object
             if (responseJson.status == code.SUCCESS) {
                 SharedPreference.profileObject = responseJson.data
@@ -72,7 +79,7 @@ export default async function getRestAPI(username, password) {
 
         })
         .catch((error) => {
-            console.log("callback error : ", error)
+      
             object = [code, {
                 code: code.NETWORK_ERROR,
                 data: "Cannot connect Network"

@@ -914,7 +914,7 @@ export default class OrganizationStruct extends Component {
 
                         <View style={{ flex: 1, justifyContent: 'center', }}>
                             <View style={{ width: '100%', justifyContent: 'center', position: 'absolute', }}>
-                                <Text style={styles.navTitleTextTop}>Organization</Text>
+                                <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Organization</Text>
                             </View>
                             <TouchableOpacity
                                 onPress={(this.onBack.bind(this))}>
@@ -947,14 +947,14 @@ export default class OrganizationStruct extends Component {
                                                             <Text style={item.expand === 0 ?
                                                                 item.org_code === 0 ? { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.blueTextColor, fontFamily: 'Prompt-Regular' } :
                                                                     { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.grayTextColor, fontFamily: 'Prompt-Regular' } :
-                                                                { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}>
+                                                                { marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.redTextColor, fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>
                                                                 {/* {item.org_name + ' ('+item.org_level+')'} */}
                                                                 {item.org_name}
                                                             </Text>
                                                         </View>
                                                         <View style={item.org_code === 0 ? { height: 20, justifyContent: 'center' } : { height: 0, justifyContent: 'center' }} >
                                                             <Text style={{ marginLeft: (parseInt(item.org_level - beginlebel)) * 2, color: Colors.thingrayTextColor, fontFamily: 'Prompt-Regular', fontSize: 10 }}
-                                                            >{item.position}</Text>
+                                                            allowFontScaling={SharedPreference.allowfontscale}>{item.position}</Text>
                                                         </View>
                                                     </View>
                                                     <Image

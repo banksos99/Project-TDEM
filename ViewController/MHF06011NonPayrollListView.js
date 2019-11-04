@@ -65,7 +65,7 @@ export default class NonPayRollActivity extends Component {
         })
 
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-
+        currentYear = new Date().getFullYear()
         this.state = {
             isscreenloading: false,
             loadingtype: 0,
@@ -81,7 +81,7 @@ export default class NonPayRollActivity extends Component {
             inappTimeIntervalStatus: true
         };
 
-        firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_PAYSLIP_LIST)
+        firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_NON_PAYROLL_LIST)
 
     }
 
@@ -1040,7 +1040,8 @@ export default class NonPayRollActivity extends Component {
         )
     }
     PayslipBody() {
-
+        
+        this.state.currentmonth= new Date().getMonth();
         let net1 = '0.00'; let pay1 = '-';
         let net2 = '0.00'; let pay2 = '-';
         let net3 = '0.00'; let pay3 = '-';
@@ -1097,7 +1098,7 @@ export default class NonPayRollActivity extends Component {
             let tnet12 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 11].netsalary; let tpay12 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 11].paydate;
             if (tpay12) { let apay12 = tpay12.split('-'); pay12 = apay12[2] + ' ' + Month.monthNamesShort[apay12[1] - 1] + ' ' + apay12[0]; net12 = Dcryptfun.decrypt(tnet12); }
 
-            badge1 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 0].badge;
+            badge1 =this.state.yearlistdata[(this.state.indexselectyear * 12) + 0].badge;
             badge2 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 1].badge;
             badge3 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 2].badge;
             badge4 = this.state.yearlistdata[(this.state.indexselectyear * 12) + 3].badge;
@@ -1123,11 +1124,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net1 == 0}
                                 onPress={() => { this.onPayslipDetail(0, net1) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : styles.payslipiteMonth}>{Month.monthNamesShort[0]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 0 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 0 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net1}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[0]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 0 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={0 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 0 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net1}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge1 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge1 ? { color: 'white' ,marginLeft:5,marginRight:5} : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge1}</Text></View>
+                            <View style={badge1 ? badge1 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge1 ? { color: 'white' ,marginLeft:5,marginRight:5} : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge1}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={1 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1137,11 +1138,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net2 == 0}
                                 onPress={() => { this.onPayslipDetail(1, net2) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 1 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[1]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 1 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 1 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net2}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 1 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[1]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 1 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={1 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 1 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net2}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge2 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge2 ? { color: 'white' ,marginLeft:5,marginRight:5} : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge2}</Text></View>
+                            <View style={badge2 ? badge2 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge2 ? { color: 'white' ,marginLeft:5,marginRight:5} : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge2}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={2 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1151,11 +1152,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net3 == 0}
                                 onPress={() => { this.onPayslipDetail(2, net3) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 2 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[2]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 2 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 2 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net3}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 2 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[2]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 2 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={2 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 2 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net3}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge3 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge3 ? { color: 'white' ,marginLeft:5,marginRight:5} : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge3}</Text></View>
+                            <View style={badge3 ? badge3 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge3 ? { color: 'white' ,marginLeft:5,marginRight:5} : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge3}</Text></View>
                         </View>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -1167,12 +1168,12 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net4 == 0}
                                 onPress={() => { this.onPayslipDetail(3, net4) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={3 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 3 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[3]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={3 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 3 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={3 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 3 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net4}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={3 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 3 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[3]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={3 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 3 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={3 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 3 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net4}</Text></View>
 
                             </TouchableOpacity>
-                            <View style={badge4 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge4 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge4}</Text></View>
+                            <View style={badge4 ? badge4 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge4 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge4}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={4 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1182,11 +1183,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net5 == 0}
                                 onPress={() => { this.onPayslipDetail(4, net5) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 4 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[4]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 4 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 4 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net5}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 4 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[4]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 4 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={4 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 4 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net5}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge5 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge5 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge5}</Text></View>
+                            <View style={badge5 ? badge5 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge5 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge5}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={5 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1196,12 +1197,12 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net6 == 0}
                                 onPress={() => { this.onPayslipDetail(5, net6) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={5 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 5 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[5]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={5 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 5 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={5 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 5 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net6}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={5 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 5 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[5]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={5 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 5 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={5 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 5 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net6}</Text></View>
 
                             </TouchableOpacity>
-                            <View style={badge6 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge6 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge6}</Text></View>
+                            <View style={badge6 ? badge6 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge6 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge6}</Text></View>
                         </View>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -1213,11 +1214,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net7 == 0}
                                 onPress={() => { this.onPayslipDetail(6, net7) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 6 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[6]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 6 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 6 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net7}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 6 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[6]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 6 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={6 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 6 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net7}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge7 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge7 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge7}</Text></View>
+                            <View style={badge7 ? badge7 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge7 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge7}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={7 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1227,11 +1228,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net8 == 0}
                                 onPress={() => { this.onPayslipDetail(7, net8) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 7 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[7]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 7 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 7 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net8}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 7 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[7]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 7 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={7 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 7 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net8}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge8 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge8 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge8}</Text></View>
+                            <View style={badge8 ? badge8 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge8 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge8}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={8 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1241,12 +1242,12 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net9 == 0}
                                 onPress={() => { this.onPayslipDetail(8, net9) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={8 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 8 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[8]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={8 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 8 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={8 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 8 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net9}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={8 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 8 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[8]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={8 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 8 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={8 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 8 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net9}</Text></View>
 
                             </TouchableOpacity>
-                            <View style={badge9 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge9 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge9}</Text></View>
+                            <View style={badge9 ? badge9 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge9 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{badge9}</Text></View>
                         </View>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -1258,11 +1259,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net10 == 0}
                                 onPress={() => { this.onPayslipDetail(9, net10) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 9 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[9]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 9 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 9 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net10}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 9 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[9]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 9 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={9 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 9 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net10}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge10 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge10 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge10}</Text></View>
+                            <View style={badge10 ? badge10 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge10 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge10}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={10 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1272,11 +1273,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net11 == 0}
                                 onPress={() => { this.onPayslipDetail(10, net11) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 10 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[10]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 10 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 10 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net11}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 10 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[10]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 10 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={10 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 10 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net11}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge11 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge11 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge11}</Text></View>
+                            <View style={badge11 ? badge11 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge11 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge11}</Text></View>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={11 === this.state.currentmonth && this.state.indexselectyear === 1 ?
@@ -1286,11 +1287,11 @@ export default class NonPayRollActivity extends Component {
                                         styles.payslipitem}
                                 disabled={net12 == 0}
                                 onPress={() => { this.onPayslipDetail(11, net12) }} >
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 11 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}>{Month.monthNamesShort[11]}</Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 11 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}></Text></View>
-                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 11 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}>{net12}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdMonth : 11 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipiteMonthHide : styles.payslipiteMonth}allowFontScaling={SharedPreference.allowfontscale}>{Month.monthNamesShort[11]}</Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 11 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}></Text></View>
+                                <View style={{ flex: 1, justifyContent: 'center' }}><Text style={11 === this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemcurrentdNet : 11 > this.state.currentmonth && this.state.indexselectyear === 1 ? styles.payslipitemdetailHide : styles.payslipitemmoney}allowFontScaling={SharedPreference.allowfontscale}>{net12}</Text></View>
                             </TouchableOpacity>
-                            <View style={badge12 ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge12 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge12}</Text></View>
+                            <View style={badge12 ? badge12 ==1?styles.badgeIconpayslip1:styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={badge12 ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent' ,marginLeft:5,marginRight:5}}>{badge12}</Text></View>
                         </View>
                     </View>
                 </View>
@@ -1460,7 +1461,7 @@ export default class NonPayRollActivity extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={styles.navTitleTextTop}>Non Payroll</Text>
+                            <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Non Payroll</Text>
                         </View>
                         <View style={{ flex: 1, }}>
                         </View>
@@ -1476,7 +1477,7 @@ export default class NonPayRollActivity extends Component {
 
                                 )}>
                                 <View style={this.state.indexselectyear === 0 ? styles.nonpayrolltabBG_ena : styles.nonpayrolltabBG_dis}>
-                                    <Text style={this.state.indexselectyear === 0 ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}>{this.state.selectYearArray[0]}</Text>
+                                    <Text style={this.state.indexselectyear === 0 ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}allowFontScaling={SharedPreference.allowfontscale}>{this.state.selectYearArray[0]}</Text>
                                 </View>
                             </TouchableOpacity>
 
@@ -1485,7 +1486,7 @@ export default class NonPayRollActivity extends Component {
                                 onPress={(this.onLastYear.bind(this))}
                             >
                                 <View style={this.state.indexselectyear === 1 ? styles.nonpayrolltabBG_ena : styles.nonpayrolltabBG_dis}>
-                                    <Text style={this.state.indexselectyear === 1 ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}>{this.state.selectYearArray[1]}</Text>
+                                    <Text style={this.state.indexselectyear === 1 ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}allowFontScaling={SharedPreference.allowfontscale}>{this.state.selectYearArray[1]}</Text>
                                 </View>
                             </TouchableOpacity>
 

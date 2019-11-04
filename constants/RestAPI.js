@@ -36,12 +36,15 @@ export default async function getRestAPI(url, functionID) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': 0,
             Authorization: FUNCTION_TOKEN,
         },
     })
         .then((response) => response.json())
         .then((responseJson) => {
-            console.log("RestAPI success : ", responseJson)
+            // console.log("RestAPI success : ", responseJson)
             let object
             if (responseJson.status == code.SUCCESS) {
                 object = [code, {

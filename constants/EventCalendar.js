@@ -163,8 +163,7 @@ export default class EventCalendar {
         let array = await this.getEventIDFromDevice()
 
         if (array) {
-
-
+            
             for (let index = 0; index < array.length; index++) {
                 const eventID = array[index];
                 console.log("1 deleteEventCalendar ==> Success : ", array[index]);
@@ -391,7 +390,19 @@ export default class EventCalendar {
 
         let array = await this.getEventIDFromDevice()
      
-        await this._recursiveDeleteAllEvent(array)
+        // await this._recursiveDeleteAllEvent(array)
+
+        if (Platform.OS === 'android') {
+
+            await this._deleteEventFromCalendar(array)
+            // await this.eventCalendar._deleteAllEvent(currentyear)
+            // await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
+        } else {
+
+            await this._recursiveDeleteAllEvent(array)
+        }
+
+
 
         // if (array) {
 

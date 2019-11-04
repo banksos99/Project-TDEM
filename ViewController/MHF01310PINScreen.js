@@ -56,8 +56,33 @@ export default class PinActivity extends Component {
 
             code = data[0]
             data = data[1]
+
+            // data.data.code = 'MSC29122AERR'
+
             console.log('onLoadLoginWithPin =>', data)
-            if (code.SUCCESS == data.code) {
+
+            if (data.data.code === 'MSC29134AERR') {//423
+                Alert.alert(
+                    StringText.ALERT_USER_LOCK_TITLE,
+                    StringText.ALERT_USER_LOCK_DETAIL,
+                    [
+                        {
+                            text: 'OK', onPress: () => {
+                                this.setState({
+                                    pin: '',
+                                    isLoading: false
+                                }, function () {
+                                    this.saveProfile.setProfile(null)
+                                    this.props.navigation.navigate('RegisterScreen')
+                                    SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                                })
+
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            } else if (code.SUCCESS == data.code) {
                 this.setState({
                     pintitle: 'Enter your PIN',
                     pin: '',
@@ -108,6 +133,7 @@ export default class PinActivity extends Component {
                             this.saveProfile.setProfile(null)
                             this.props.navigation.navigate('RegisterScreen')
                             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                            SharedPreference.company='tmap-em'
                         }
                     }
                     ],
@@ -190,6 +216,11 @@ export default class PinActivity extends Component {
                         [{
                             text: 'OK', onPress: () => {
                                 // SharedPreference.profileObject = null
+                                this.setState({
+                                    failPin: 0,
+                                    pin:''
+                                })
+                          
                                 this.saveProfile.setProfile(null)
                                 this.props.navigation.navigate('RegisterScreen')
                                 SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
@@ -220,6 +251,10 @@ export default class PinActivity extends Component {
                         { cancelable: false }
                     )
                 }
+            }else if (data.data.code === 'MHF00301ACRI') {
+            //  }else if (data.data.code === 'MSC29122AERR') {
+                
+                
             } else {
 
                 this.setState({
@@ -272,11 +307,11 @@ export default class PinActivity extends Component {
         let data = await RestAPI(SharedPreference.APPLICATION_INFO_API, "1")
         code = data[0]
         data = data[1]
-
+console.log('data.detail',data.data.detail)
         if (code.SUCCESS == data.code) {
             let appversion = '1.0.0'
             if (Platform.OS === 'android') {
-                if (data.data.android.force_update === 'N') {
+                if (data.data.android.force_update === 'Y') {
                     if (data.data.android.app_version != SharedPreference.deviceInfo.appVersion) {
 
                         Alert.alert(
@@ -285,8 +320,8 @@ export default class PinActivity extends Component {
                             [
                                 {
                                     text: 'Update', onPress: () => {
-                                        //console.log('OK Pressed') },
-                                        Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
+                                        Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.stmconnectdev&hl=en");
+                                        //   Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
                                        
                                     }
                                 }
@@ -303,17 +338,19 @@ export default class PinActivity extends Component {
                 }
             } else {
 
-                if (data.data.ios.force_update === 'N') {
+                if (data.data.ios.force_update === 'Y') {
                     if(data.data.ios.app_version != SharedPreference.deviceInfo.appVersion){
                         Alert.alert(
                             'New Version Available',
-                            'This is a newer version available for download! Please update the app by visiting the Apple Store',
+                            'This is a newer version available for download! Please click Update',
                             [
                                 {
                                     text: 'Update', onPress: () => {
-                                        // Linking.openURL("https://itunes.apple.com/us/app/pixel-starships-space-mmorpg/id1082948576?mt=12");
-                                        Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
+                                        // Linking.openURL("https://www.technobrave.asia/tdemios/");
+                                        // Linking.openURL("https://www.technobrave.asia/tdemiosdev/");
+                                         Linking.openURL("https://smart.ap.toyota-asia.com/tdemconnect/");
 
+                                       
                                         
                                     }
                                 }
@@ -329,6 +366,24 @@ export default class PinActivity extends Component {
                     this.props.navigation.navigate('HomeScreen')
                 }
             }
+        }else{
+
+            Alert.alert(
+                'Error',
+                data.data.detail,
+                [
+                    {
+                        text: 'OK', onPress: () => {
+                            // Linking.openURL("https://itunes.apple.com/us/app/pixel-starships-space-mmorpg/id1082948576?mt=12");
+                            // Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
+
+                            
+                        }
+                    }
+                ],
+                { cancelable: false }
+            )
+
         }
 
         
@@ -347,12 +402,12 @@ export default class PinActivity extends Component {
     }
 
     onLoadInitialMaster = async () => {
-        console.log('onLoadInitialMaster')
+        // console.log('onLoadInitialMaster')
         let data = await RestAPI(SharedPreference.INITIAL_MASTER_API, SharedPreference.FUNCTIONID_GENERAL_INFORMATION_SHARING)
         code = data[0]
         data = data[1]
 
-        console.log("onLoadInitialMaster : ", data)
+        // console.log("onLoadInitialMaster : ", data)
         console.log("profileObject : ", SharedPreference.profileObject.location)
         if (code.SUCCESS == data.code) {
             this.setState({
@@ -373,7 +428,7 @@ export default class PinActivity extends Component {
                     SharedPreference.TB_M_LEAVETYPE = element.TB_M_LEAVETYPE
                 }
             }
-            console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION)
+            console.log("SharedPreference.NOTIFICATION_CATEGORY : ", SharedPreference.NOTIFICATION_CATEGORY)
 
             await this.onLoadAppInfo()
 
@@ -455,7 +510,7 @@ export default class PinActivity extends Component {
     renderFailPin() {
         if (this.state.failPin > 0) {
             return (<View style={styles.pinFailBoxContainer}>
-                <Text style={styles.pinFailBoxText}>
+                <Text style={styles.pinFailBoxText}allowFontScaling={SharedPreference.allowfontscale}>
                     {this.state.failPin} failed PIN Attempts
                 </Text>
             </View>)
@@ -616,10 +671,10 @@ export default class PinActivity extends Component {
                             source={require('../resource/regist/regist_lock_white.png')}
                         //resizeMode="cover" 
                         />
-                        <Text style={styles.registPinEnterContainer}>{this.state.pintitle}</Text>
+                        <Text style={styles.registPinEnterContainer}allowFontScaling={SharedPreference.allowfontscale}>{this.state.pintitle}</Text>
                         {this.renderImagePin()}
                         <TouchableOpacity onPress={() => { this.onResetPIN() }}>
-                            <Text style={styles.registPinForgotContainer}>Forgot your PIN?</Text>
+                            <Text style={styles.registPinForgotContainer}allowFontScaling={SharedPreference.allowfontscale}>Forgot your PIN?</Text>
                         </TouchableOpacity>
                         {this.renderFailPin()}
                     </View>
@@ -632,20 +687,20 @@ export default class PinActivity extends Component {
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(1) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>1</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>1</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(2) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>2</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>2</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(3) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>3</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>3</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -654,19 +709,19 @@ export default class PinActivity extends Component {
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(4) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>4</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>4</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(5) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>5</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>5</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(6) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>6</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>6</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -675,21 +730,21 @@ export default class PinActivity extends Component {
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(7) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>7</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>7</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(8) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>8</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>8</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(9) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>9</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>9</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -698,13 +753,13 @@ export default class PinActivity extends Component {
                        
                         <View style={styles.emptyContainer}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={[styles.pinnumber,{color:Colors.redColor}]}>0</Text>
+                                <Text style={[styles.pinnumber,{color:Colors.redColor}]}allowFontScaling={SharedPreference.allowfontscale}>0</Text>
                             </View>
                         </View>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(0) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>0</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>0</Text>
                             </View>
                         </TouchableOpacity>
 

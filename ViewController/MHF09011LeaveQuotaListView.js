@@ -175,7 +175,7 @@ export default class LeaveQuotaActivity extends Component {
     renderEmpty() {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={styles.payslipDetailTextCenter}>No Result</Text>
+                <Text style={styles.payslipDetailTextCenter}allowFontScaling={SharedPreference.allowfontscale}>No Result</Text>
             </View>
         )
     }
@@ -185,7 +185,7 @@ export default class LeaveQuotaActivity extends Component {
         if (this.state.dataSource.code != '200') {
             return (
                 <View style={{ flex: 1,justifyContent:'center',alignItems:'center' }}>
-                <Text style={styles.payslipDetailTextCenter}>No Result</Text>
+                <Text style={styles.payslipDetailTextCenter}allowFontScaling={SharedPreference.allowfontscale}>No Result</Text>
             </View>
             )
         }
@@ -216,7 +216,7 @@ export default class LeaveQuotaActivity extends Component {
                 height: 50, justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <Text style={{ fontFamily: font_medium }}>No Result</Text>
+                <Text style={{ fontFamily: font_medium }}allowFontScaling={SharedPreference.allowfontscale}>No Result</Text>
             </View>)
 
         }
@@ -242,28 +242,28 @@ export default class LeaveQuotaActivity extends Component {
                                 <View style={styles.leavequotaContainer}>
 
                                     <View style={styles.leavequotaLeftContainer}>
-                                        <Text numberOfLines={1} style={[styles.leavequotalisttextbold, { color: Colors.grayTextColor }]}>
+                                        <Text numberOfLines={1} style={[styles.leavequotalisttextbold, { color: Colors.grayTextColor }]}allowFontScaling={SharedPreference.allowfontscale}>
                                             {item.leave_desc_en}
                                         </Text>
-                                        <Text numberOfLines={1} style={[styles.leavequotalisttextbold, { color: Colors.lightgrayText }]}>
+                                        <Text numberOfLines={1} style={[styles.leavequotalisttextbold, { color: Colors.lightgrayText }]}allowFontScaling={SharedPreference.allowfontscale}>
                                             {item.leave_desc_th}
                                         </Text>
                                     </View>
 
                                     <View style={styles.leavequotaListContainer} >
-                                        <Text style={styles.leavequotalisttextred}>
+                                        <Text style={styles.leavequotalisttextred}allowFontScaling={SharedPreference.allowfontscale}>
                                             {item.used}
                                         </Text>
                                     </View>
 
                                     <View style={styles.leavequotaListContainer} >
-                                        <Text style={styles.leavequotalisttextgreen}>
+                                        <Text style={styles.leavequotalisttextgreen}allowFontScaling={SharedPreference.allowfontscale}>
                                             {item.quota}
                                         </Text>
                                     </View>
 
                                     <View style={styles.leavequotaLastListContainer} >
-                                        <Text style={styles.leavequotalisttextboldUnit}>
+                                        <Text style={styles.leavequotalisttextboldUnit}allowFontScaling={SharedPreference.allowfontscale}>
                                             {item.unit}
                                         </Text>
                                     </View>
@@ -313,24 +313,24 @@ export default class LeaveQuotaActivity extends Component {
                         style={{ flex: 1 }}
                         onPress={(this.onLastYear.bind(this))} >
                         <View style={this.state.selectYear === lastYear ? styles.nonpayrolltabBG_ena : styles.nonpayrolltabBG_dis}>
-                            <Text style={this.state.selectYear === lastYear ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}>{lastYear}</Text>
+                            <Text style={this.state.selectYear === lastYear ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}allowFontScaling={SharedPreference.allowfontscale}>{lastYear}</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         onPress={(this.onCurrentYear.bind(this))} >
                         <View style={this.state.selectYear === (lastYear + 1) ? styles.nonpayrolltabBG_ena : styles.nonpayrolltabBG_dis}>
-                            <Text style={this.state.selectYear === (lastYear + 1) ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}>{lastYear + 1}</Text>
+                            <Text style={this.state.selectYear === (lastYear + 1) ? styles.leaveYearButton_ena : styles.leaveYearButton_dis}allowFontScaling={SharedPreference.allowfontscale}>{lastYear + 1}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.leavequotaListContainer} >
-                    <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.leavequotalisttextred}>Used</Text>
+                    <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.leavequotalisttextred}allowFontScaling={SharedPreference.allowfontscale}>Used</Text>
                 </View>
 
                 <View style={styles.leavequotaListContainer} >
-                    <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.leavequotalisttextgreen}>Quota</Text>
+                    <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.leavequotalisttextgreen}allowFontScaling={SharedPreference.allowfontscale}>Quota</Text>
                 </View>
                 <View style={{ flex: 2 }} />
             </View>)
@@ -362,7 +362,7 @@ export default class LeaveQuotaActivity extends Component {
                             source={require('./../resource/images/Back.png')}
                         />
                     </TouchableOpacity>
-                    <Text numberOfLines={1} style={styles.navTitleText}>Leave Quota</Text>
+                    <Text numberOfLines={1} style={styles.navTitleText}allowFontScaling={SharedPreference.allowfontscale}>Leave Quota</Text>
                     <View style={styles.navRightContainer}>
                     </View>
                 </View>

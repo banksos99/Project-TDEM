@@ -21,13 +21,14 @@ import {
     BackHandler,
     Dimensions,
     AsyncStorage,
-    PanResponder
+    PanResponder,
+    PixelRatio
 } from 'react-native';
 
 import { Epub, Streamer } from 'epubjs-rn';
 
-import BottomBar from '../component/BottomBar'
-import TopBar from '../component/TopBar'
+// import BottomBar from '../component/BottomBar'
+// import TopBar from '../component/TopBar'
 import Nav from '../component/Nav'
 import { styles } from "./../SharedObject/MainStyles"
 import Colors from '../SharedObject/Colors';
@@ -37,7 +38,7 @@ import StringText from '../SharedObject/StringText';
 import RestAPI from "../constants/RestAPI"
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 
-let fontsizearr = ['50%', '80%', '100%', '120%', '150%', '180%'];
+let fontsizearr = [50, 80, 100, 120, 150, 180];
 let fontname = ['Times', 'Courier', 'Arial', 'Serif', 'Cursive', 'Fantasy', 'Monospace'];
 let fonttext = ['Times', 'Courier', 'Arial', 'Serif', 'Cursive', 'Fantasy', 'Monospace'];
 let HandbookHighlightList = [];
@@ -499,19 +500,24 @@ export default class HandbookViewer extends Component {
 
         })
     }
+
     selecthighlight() {
 
-        HandbookHighlightList.push(
-            tempcfiRange
-        )
+        if (tempcfiRange) {
+            HandbookHighlightList.push(
+                tempcfiRange
+            )
 
-        console.log('HandbookHighlightList', HandbookHighlightList)
-        // Add marker
-        this.epub.rendition.highlight(tempcfiRange, {});
+            // Add marker
+            this.epub.rendition.highlight(tempcfiRange, {});
 
+        } else {
+
+        }
     }
+
     _onhilight(item) {
-        console.log('item :', item)
+    
         this.setState({
             showTOC: 0,
             location: item.link,
@@ -675,19 +681,19 @@ export default class HandbookViewer extends Component {
             return (
                 <View style={{ height: 50, backgroundColor: 'white', flexDirection: 'row' }} >
                     <View style={{ flex: 3, justifyContent: 'center' }} >
-                        <Text style={{ textAlign: 'center' }}>Text Size</Text>
+                        <Text style={{ textAlign: 'center' , fontFamily: "Prompt-Regular"}}allowFontScaling={SharedPreference.allowfontscale}>Text Size</Text>
                     </View>
                     {this.renderlowerbutton()}
                     {this.renderupperbutton()}
                     <View style={{ flex: 3, justifyContent: 'center' }} >
-                        <Text style={{ textAlign: 'center' }}>Font Style</Text>
+                        <Text style={{ textAlign: 'center' , fontFamily: "Prompt-Regular"}}allowFontScaling={SharedPreference.allowfontscale}>Font Style</Text>
                     </View>
                     <View style={{ flex: 4, justifyContent: 'center', borderWidth: 1, borderRadius: 5, margin: 8, backgroundColor: 'lightgray' }} >
                         <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                          onPress={this.onchangefont.bind(this)}
                     
                          >
-                            <Text style={{ textAlign: 'left', color: 'red', marginLeft: 5 }}>{this.state.selectfontnametext}</Text>
+                            <Text style={{ textAlign: 'left', color: 'red', marginLeft: 5, fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{this.state.selectfontnametext}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -706,7 +712,7 @@ export default class HandbookViewer extends Component {
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={styles.alertDialogBoxText}>Select Font</Text>
+                                <Text style={styles.alertDialogBoxText}allowFontScaling={SharedPreference.allowfontscale}>Select Font</Text>
                             </View>
                             <ScrollView style={{ height: '40%' }}>
                                 {
@@ -715,7 +721,7 @@ export default class HandbookViewer extends Component {
                                             onPress={() => { this.selected_Font(item) }}
                                             >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
-                                                <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> {item}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
@@ -725,7 +731,7 @@ export default class HandbookViewer extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={styles.buttonpicker}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -740,7 +746,7 @@ export default class HandbookViewer extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={styles.titlepicker}>Select Font</Text>
+                            <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>Select Font</Text>
                         </View>
                         <Picker
                             selectedValue={this.state.tempselectfontname}
@@ -763,13 +769,13 @@ export default class HandbookViewer extends Component {
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_change_font.bind(this))}
                             >
-                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 3, justifyContent: 'center' }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.onSelecteFont.bind(this))}
                             >
-                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>OK</Text>
                             </TouchableOpacity>
                         </View>
                         
@@ -827,7 +833,7 @@ export default class HandbookViewer extends Component {
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={[styles.navTitleTextTop]}numberOfLines={1}>{this.state.titleTOC}</Text>
+                                <Text style={[styles.navTitleTextTop]}numberOfLines={1}allowFontScaling={SharedPreference.allowfontscale}>{this.state.titleTOC}</Text>
                             </View>
                             <View style={{ flex: 1, }}>
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
@@ -862,7 +868,7 @@ export default class HandbookViewer extends Component {
                                 key={index + 100}>
                                 <View style={{ justifyContent: 'center', height: 40, marginLeft: 10, marginRight: 10 }}>
                                     {/* <View style={{ flex: 1, ustifyContent: 'center', flexDirection: 'column' }}> */}
-                                    <Text style={styles.epubTocText} numberOfLines={1}> {item.label.replace('\n', '')}</Text>
+                                    <Text style={styles.epubTocText} numberOfLines={1}allowFontScaling={SharedPreference.allowfontscale}> {item.label.replace('\n', '')}</Text>
                                     {/* <Text style={styles.epubHighlighttitleText} numberOfLines={1}> {item.title}</Text> */}
                                     {/* </View> */}
                                     
@@ -891,14 +897,14 @@ export default class HandbookViewer extends Component {
                             <View style={{ justifyContent: 'center', height: 40, marginLeft: 20, marginRight: 20 }}>
                                 <View style={{ flex: 1, flexDirection: 'row' }}>
                                     <View style={{ flex: 4, justifyContent: 'center', flexDirection: 'column' }}>
-                                        <Text style={styles.epubHighlightdateText} numberOfLines={1}> {item.date}</Text>
-                                        <Text style={styles.epubHighlighttitleText} numberOfLines={1}> {item.title}</Text>
+                                        <Text style={styles.epubHighlightdateText} numberOfLines={1}allowFontScaling={SharedPreference.allowfontscale}> {item.date}</Text>
+                                        <Text style={styles.epubHighlighttitleText} numberOfLines={1}allowFontScaling={SharedPreference.allowfontscale}> {item.title}</Text>
                                     </View>
                                     {/* <View style={{ flex: 1, backgroundColor: 'green' }}> */}
                                     <TouchableOpacity
                                         onPress={() => this.removehilight(item)}
                                         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: 'blue' }} numberOfLines={1}>Remove</Text>
+                                        <Text style={{ color: 'blue' }} numberOfLines={1}allowFontScaling={SharedPreference.allowfontscale}>Remove</Text>
                                     </TouchableOpacity>
                                     {/* </View> */}
                                 </View>
@@ -913,7 +919,16 @@ export default class HandbookViewer extends Component {
     }
 
     render() {
+        let scalepixel
         
+        if (Platform.OS === 'android') {
+
+            scalepixel = 1;
+
+        } else {
+
+            scalepixel = PixelRatio.getFontScale()
+        }
         return (
             <View
             
@@ -943,7 +958,7 @@ export default class HandbookViewer extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={[styles.navTitleTextTop, { fontFamily: "Prompt-Regular" }]} numberOfLines={1}>{this.state.handbook_title}</Text>
+                            <Text style={[styles.navTitleTextTop, { fontFamily: "Prompt-Regular" }]} numberOfLines={1}allowFontScaling={SharedPreference.allowfontscale}>{this.state.handbook_title}</Text>
                         </View>
                         <View style={{ flex: 2,flexDirection: 'row' }}>
                             <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -982,7 +997,9 @@ export default class HandbookViewer extends Component {
                     flow={"paginated"}
                     font={this.state.selectfontnametext.toLowerCase()}
                     height='100%'
-                    fontSize={fontsizearr[this.state.fontsizelivel]}
+                
+                    fontSize={(fontsizearr[this.state.fontsizelivel]/scalepixel)+"%"}
+                    allowFontScaling={false}
                     flow={this.state.flow}
                     location={this.state.location}
         
@@ -1098,19 +1115,6 @@ export default class HandbookViewer extends Component {
                     
                     onMarkClicked={(cfiRange) => {
 
-                        // if (Platform.OS === 'android') {
-
-
-
-
-                        // }else{
-
-
-
-
-
-                        // }
-
                         Alert.alert(
                             'SAVE',
                             'Do you want to save Highlight?',
@@ -1139,15 +1143,7 @@ export default class HandbookViewer extends Component {
 
                                     }
                                 }
-                                // , {
-                                //     text: 'Remove', onPress: () => {
-
-                                //         this.epub.rendition.unhighlight(cfiRange);
-
-                                //         var index = HandbookHighlightList.indexOf(cfiRange)
-                                //         HandbookHighlightList.splice(index, 1);
-                                //     }
-                                // }
+                            
                                 , { text: 'Cancel', onPress: () => { } }
                             ],
                             { cancelable: false }
@@ -1161,19 +1157,13 @@ export default class HandbookViewer extends Component {
                 />
 
                 <View style={{ height: 30, justifyContent: 'center' }}>
-                    <Text style={{ textAlign: 'center', }}>{this.state.currentpage + ' / ' + this.state.totalpage}</Text>
+                    <Text style={{ textAlign: 'center', fontFamily: "Prompt-Regular" }} allowFontScaling={SharedPreference.allowfontscale}>{this.state.currentpage + ' / ' + this.state.totalpage}</Text>
                 </View>
                 {this.renderTableOfContent()}
                 {this.renderloadingscreen()}
 
             </View>
-
-            
-
-
         );
-
-
     }
 }
 

@@ -349,7 +349,7 @@ export default class EmpInfoDetail extends Component {
                     >
                         <View style={{ justifyContent: 'center', flex: 20 }}>
 
-                            <Text style={styles.empinfoTitleText} >PERSONAL</Text>
+                            <Text style={styles.empinfoTitleText}allowFontScaling={SharedPreference.allowfontscale}>PERSONAL</Text>
 
                         </View>
                         <View style={{ width: 30, alignItems: 'flex-end' }}>
@@ -404,28 +404,28 @@ export default class EmpInfoDetail extends Component {
                 <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10 }}>
                     <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Emp Code</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Emp Code</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{employee_code}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{employee_code}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText}>Name (Thai)</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale}>Name (Thai)</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{full_name_th}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{full_name_th}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={[styles.empinfoDetailRedText,{alignItems:'flex-start'}]}>Address</Text>
+                            <Text style={[styles.empinfoDetailRedText,{alignItems:'flex-start'}]}allowFontScaling={SharedPreference.allowfontscale}>Address</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{address}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{address}</Text>
                         </View>
                     </View>
                     {/* <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
@@ -437,10 +437,10 @@ export default class EmpInfoDetail extends Component {
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Birth Date</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Birth Date</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{birthdate}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{birthdate}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
@@ -457,19 +457,19 @@ export default class EmpInfoDetail extends Component {
                     {/* <View style={this.state.manager ?{ height: 0, justifyContent: 'center', backgroundColor:'transparent'  }:{ height: 1, justifyContent: 'center', backgroundColor:Colors.calendarLocationBoxColor }} /> */}
                     <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Maritial Status</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Maritial Status</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{marital_status}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{marital_status}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ height: 30, justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Mobile No.</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Mobile No.</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{mobileno}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{mobileno}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
@@ -496,7 +496,7 @@ export default class EmpInfoDetail extends Component {
                     >
                         <View style={{ justifyContent: 'center', flex: 20 }}>
 
-                            <Text style={styles.empinfoTitleText} >CURRENT JOB</Text>
+                            <Text style={styles.empinfoTitleText} allowFontScaling={SharedPreference.allowfontscale}>CURRENT JOB</Text>
 
                         </View>
                         <View style={{ width: 30, alignItems: 'flex-end' }}>
@@ -557,94 +557,94 @@ export default class EmpInfoDetail extends Component {
                 <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10 }}>
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Hiring</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Hiring</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText1line}>{hiring_date_emp}</Text>
-                            <Text style={styles.empinfoDetailText2line}>{'(' + service_years + ')'}</Text>
+                            <Text style={styles.empinfoDetailText1line}allowFontScaling={SharedPreference.allowfontscale}>{hiring_date_emp}</Text>
+                            <Text style={styles.empinfoDetailText2line}allowFontScaling={SharedPreference.allowfontscale}>{'(' + service_years + ')'}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Position</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Position</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{position}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{position}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Group</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Group</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{org_group}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{org_group}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Division</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Division</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{org_division}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{org_division}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Department</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Department</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{org_department}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{org_department}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Section</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Section</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{org_section}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{org_section}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Cost Center</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Cost Center</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{org_cost_center}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{org_cost_center}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Location</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Location</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{company_location}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{company_location}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Latest Section</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Latest Section</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText1line}>{date_in_dept}</Text>
-                            <Text style={styles.empinfoDetailText2line}>{'(' + period_in_dept + ')'}</Text>
+                            <Text style={styles.empinfoDetailText1line}allowFontScaling={SharedPreference.allowfontscale}>{date_in_dept}</Text>
+                            <Text style={styles.empinfoDetailText2line}allowFontScaling={SharedPreference.allowfontscale}>{'(' + period_in_dept + ')'}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{ justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Latest Position</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Latest Position</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText1line}>{date_in_position}</Text>
-                            <Text style={styles.empinfoDetailText2line}>{'(' + period_in_position + ')'}</Text>
+                            <Text style={styles.empinfoDetailText1line}allowFontScaling={SharedPreference.allowfontscale}>{date_in_position}</Text>
+                            <Text style={styles.empinfoDetailText2line}allowFontScaling={SharedPreference.allowfontscale}>{'(' + period_in_position + ')'}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
@@ -663,7 +663,7 @@ export default class EmpInfoDetail extends Component {
                         onPress={() => { this.onExpandEducation() }}
                     >
                         <View style={{ flex: 20 ,justifyContent: 'center'}}>
-                            <Text style={styles.empinfoTitleText} >EDUCATION (Latest)</Text>
+                            <Text style={styles.empinfoTitleText} allowFontScaling={SharedPreference.allowfontscale}>EDUCATION (Latest)</Text>
                           
                         </View>
                         <View style={{ width: 30, alignItems: 'flex-end' }}>
@@ -720,64 +720,64 @@ export default class EmpInfoDetail extends Component {
                 <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10 }}>
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Graduate Year</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>Graduate Year</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{graduate}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{graduate}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Degree</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Degree</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{degree}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{degree}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Institution</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Institution</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{school_university}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{school_university}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >Major</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale} >Major</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{major}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{major}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >GPA</Text>
+                            <Text style={styles.empinfoDetailRedText} allowFontScaling={SharedPreference.allowfontscale}>GPA</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{gpa}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{gpa}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText} >TOEIC</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale}>TOEIC</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{toeic}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{toeic}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
                     <View style={{  justifyContent: 'center', backgroundColor: Colors.calendarGrayBackgroundColor, flexDirection: 'row' }}>
                         <View style={{ flex: 2, justifyContent: 'flex-start' }}>
-                            <Text style={styles.empinfoDetailRedText}>JLPT</Text>
+                            <Text style={styles.empinfoDetailRedText}allowFontScaling={SharedPreference.allowfontscale}>JLPT</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }}>
-                            <Text style={styles.empinfoDetailText}>{jlpt}</Text>
+                            <Text style={styles.empinfoDetailText}allowFontScaling={SharedPreference.allowfontscale}>{jlpt}</Text>
                         </View>
                     </View>
                     <View style={{ height: 1, justifyContent: 'center', backgroundColor: Colors.calendarLocationBoxColor }} />
@@ -798,7 +798,7 @@ export default class EmpInfoDetail extends Component {
                         <View style={{ height: 10 }} />
                         <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
                             <View style={{ height: 40 * scale, width: 120 * scale, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.DisableGray }}>
-                                <Text style={{ color: Colors.redTextColor, fontFamily: 'Prompt-Medium' }}> PRESENT</Text>
+                                <Text style={{ color: Colors.redTextColor, fontFamily: 'Prompt-Medium' }}allowFontScaling={SharedPreference.allowfontscale}> PRESENT</Text>
                             </View>
                         </View>
 
@@ -813,30 +813,30 @@ export default class EmpInfoDetail extends Component {
                                     <View>
                                         <View style={{ flex: 1, flexDirection: 'row', backgroundColor: Colors.DisableGray }} key={index}>
                                             <View style={{ flex: 1.3, justifyContent: 'center', }}>
-                                                <Text adjustsFontSizeToFit={true} allowFontScaling={true} style={styles.empinfocareerLeftText}> {empinfodetail.career_paths[index].position}</Text>
+                                                <Text adjustsFontSizeToFit={true} allowFontScaling={true} style={styles.empinfocareerLeftText}allowFontScaling={SharedPreference.allowfontscale}> {empinfodetail.career_paths[index].position}</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center', }}>
-                                                <Text style={styles.empinfocareerRightText}>{empinfodetail.career_paths[index].action_type}</Text>
+                                                <Text style={styles.empinfocareerRightText}allowFontScaling={SharedPreference.allowfontscale}>{empinfodetail.career_paths[index].action_type}</Text>
                                             </View>
                                         </View>
                                     </View>
                                     <View>
                                         <View style={{ flex: 1, flexDirection: 'row', backgroundColor: Colors.DisableGray }} key={index}>
                                             <View style={{ flex: 1, justifyContent: 'center', }}>
-                                                <Text style={styles.empinfocareerLeftText}> {empinfodetail.career_paths[index].org_department}</Text>
+                                                <Text style={styles.empinfocareerLeftText}allowFontScaling={SharedPreference.allowfontscale}> {empinfodetail.career_paths[index].org_department}</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center', }}>
-                                                <Text style={styles.empinfocareerRightText}>{}</Text>
+                                                <Text style={styles.empinfocareerRightText}allowFontScaling={SharedPreference.allowfontscale}>{}</Text>
                                             </View>
                                         </View>
                                     </View>
                                     <View>
                                         <View style={{ flex: 1, flexDirection: 'row', backgroundColor: Colors.DisableGray }} key={index}>
                                             <View style={{ flex: 1.5, justifyContent: 'center', }}>
-                                                <Text style={styles.empinfocareerLeftText}> {empinfodetail.career_paths[index].org_section}</Text>
+                                                <Text style={styles.empinfocareerLeftText}allowFontScaling={SharedPreference.allowfontscale}> {empinfodetail.career_paths[index].org_section}</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center', }}>
-                                                <Text style={styles.empinfocareerRightRedText}>{this.convertdate(empinfodetail.career_paths[index].hiring_date)}</Text>
+                                                <Text style={styles.empinfocareerRightRedText}allowFontScaling={SharedPreference.allowfontscale}>{this.convertdate(empinfodetail.career_paths[index].hiring_date)}</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -850,7 +850,7 @@ export default class EmpInfoDetail extends Component {
                             ))}
                         <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
                             <View style={{ height: 40 * scale, width: 120 * scale, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.DisableGray }}>
-                                <Text style={{ color: Colors.redTextColor, fontFamily: 'Prompt-Medium' }}> HIRING</Text>
+                                <Text style={{ color: Colors.redTextColor, fontFamily: 'Prompt-Medium' }}allowFontScaling={SharedPreference.allowfontscale}> HIRING</Text>
                             </View>
                         </View>
                     </ScrollView>
@@ -897,7 +897,7 @@ export default class EmpInfoDetail extends Component {
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
                         <View style={{ width: '100%', height: '100%', justifyContent: 'center', position: 'absolute' }}>
-                            <Text style={styles.navTitleTextTop}>{title}</Text>
+                            <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>{title}</Text>
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center', }}>
                             <TouchableOpacity onPress={(this.onBack.bind(this))}>
@@ -931,10 +931,10 @@ export default class EmpInfoDetail extends Component {
                         <View style={{ flex: 11, backgroundColor: Colors.navColor, flexDirection: 'column', }}>
                             <View style={{ flex: 0.5 }} />
                             <View style={{ flex: 1, justifyContent: 'center', marginLeft: 10 }}>
-                                <Text style={styles.empInfoLeftText}>{empinfodetail.full_name_en}</Text>
+                                <Text style={styles.empInfoLeftText}allowFontScaling={SharedPreference.allowfontscale}>{empinfodetail.full_name_en}</Text>
                             </View>
                             <View style={{ flex: 1, justifyContent: 'center', marginLeft: 10 }}>
-                                <Text style={styles.empInfopositionLeftText}>
+                                <Text style={styles.empInfopositionLeftText}allowFontScaling={SharedPreference.allowfontscale}>
                                     {position}
                                 </Text>
                             </View>
@@ -947,7 +947,7 @@ export default class EmpInfoDetail extends Component {
                             <TouchableOpacity style={{ flex: 1 }} onPress={(this.onShowCareerPathView.bind(this))}>
                                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.careerTextColor }}>
 
-                                    <Text style={{ color: this.state.profileTextColor, fontFamily: 'Prompt-Medium' }}>PROFILE</Text>
+                                    <Text style={{ color: this.state.profileTextColor, fontFamily: 'Prompt-Medium' }}allowFontScaling={SharedPreference.allowfontscale}>PROFILE</Text>
                                 </View>
 
                             </TouchableOpacity>
@@ -955,7 +955,7 @@ export default class EmpInfoDetail extends Component {
                         <View style={{ flex: 1, flexDirection: 'column' }}>
                             <TouchableOpacity style={{ flex: 1 }} onPress={(this.onShowProfileView.bind(this))}>
                                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.profileTextColor }}>
-                                    <Text style={{ color: this.state.careerTextColor, fontFamily: 'Prompt-Medium' }}>CAREER INFO</Text>
+                                    <Text style={{ color: this.state.careerTextColor, fontFamily: 'Prompt-Medium' }}allowFontScaling={SharedPreference.allowfontscale}>CAREER INFO</Text>
                                 </View>
 
                             </TouchableOpacity>

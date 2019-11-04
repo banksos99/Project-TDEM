@@ -34,7 +34,8 @@ export default async function getRestAPI(pin, functionID) {
         body: JSON.stringify({
             "type": "set",
             "client_pin": pin,
-            "systemdn": "TMAP-EM"
+            "systemdn": SharedPreference.company,
+            application_device: SharedPreference.APPLICATION_DEVICE // Watchara N, at 16August2019
         }),
     })
         .then((response) => response.json())

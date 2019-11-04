@@ -1,25 +1,262 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="062dc8e7-eba0-4112-9cc7-4d4672dfb697" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/App.js" afterPath="$PROJECT_DIR$/App.js" />
-      <change beforePath="$PROJECT_DIR$/SharedObject/MainStyles.js" afterPath="$PROJECT_DIR$/SharedObject/MainStyles.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF01210RegisterScreen.js" afterPath="$PROJECT_DIR$/ViewController/MHF01210RegisterScreen.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF01310PINScreen.js" afterPath="$PROJECT_DIR$/ViewController/MHF01310PINScreen.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF01410MainView.js" afterPath="$PROJECT_DIR$/ViewController/MHF01410MainView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF03111WorkingCalendarYearView.js" afterPath="$PROJECT_DIR$/ViewController/MHF03111WorkingCalendarYearView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF03111WorkingCalendarYearView2.js" afterPath="$PROJECT_DIR$/ViewController/MHF03111WorkingCalendarYearView2.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF05011PaySlipListView.js" afterPath="$PROJECT_DIR$/ViewController/MHF05011PaySlipListView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF05012PaySlipDetailView.js" afterPath="$PROJECT_DIR$/ViewController/MHF05012PaySlipDetailView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF06011NonPayrollListView.js" afterPath="$PROJECT_DIR$/ViewController/MHF06011NonPayrollListView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF07011ClockInOutSelfViewView.js" afterPath="$PROJECT_DIR$/ViewController/MHF07011ClockInOutSelfViewView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF08011OTSummarySelfViewView.js" afterPath="$PROJECT_DIR$/ViewController/MHF08011OTSummarySelfViewView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/MHF08014OTSummaryBarGraphView.js" afterPath="$PROJECT_DIR$/ViewController/MHF08014OTSummaryBarGraphView.js" />
-      <change beforePath="$PROJECT_DIR$/ViewController/NavigationController.js" afterPath="$PROJECT_DIR$/ViewController/NavigationController.js" />
-      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Info.plist" afterPath="$PROJECT_DIR$/ios/tdemconnect/Info.plist" />
+      <change beforePath="$PROJECT_DIR$/.babelrc" beforeDir="false" afterPath="$PROJECT_DIR$/.babelrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.buckconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.buckconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flowconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.flowconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/toyotatdemconnect.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/toyotatdemconnect.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.watchmanconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.watchmanconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Appstore_1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/Appstore_1024.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/Announcementdata.js" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/Announcementdata.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/HandbookListData.js" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/HandbookListData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/Leavequotalistdata.js" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/Leavequotalistdata.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/NonPayRoll.json" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/NonPayRoll.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/OTSummarySelfData.js" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/OTSummarySelfData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/OrgstructerData.json" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/OrgstructerData.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/Payslipdatadetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/Payslipdatadetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/Payslipdatadetail2.js" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/Payslipdatadetail2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/Payslipdatalist.js" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/Payslipdatalist.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/PullNotification.json" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/PullNotification.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/calendar-event-data-2018.json" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/calendar-event-data-2018.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InAppData/non-payroll-detail-data.json" beforeDir="false" afterPath="$PROJECT_DIR$/InAppData/non-payroll-detail-data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/Authorization.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/Authorization.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/Colors.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/Colors.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/DecryptID.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/DecryptID.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/Decryptfun.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/Decryptfun.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/Layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/MainStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/MainStyles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/SharedPreference.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/SharedPreference.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SharedObject/StringText.js" beforeDir="false" afterPath="$PROJECT_DIR$/SharedObject/StringText.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/BarChartCompare.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/BarChartCompare.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/BarChartIndividual.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/BarChartIndividual.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/BookCover.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/BookCover.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/ChangePINScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/ChangePINScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/LineChartAerage.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/LineChartAerage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF01110SplashScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF01110SplashScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF01210RegisterScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF01210RegisterScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF01310PINScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF01310PINScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF01410MainView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF01410MainView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF02011AnnouncementDetailView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF02011AnnouncementDetailView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF03111WorkingCalendarYearView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF03111WorkingCalendarYearView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF03111WorkingCalendarYearView2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF03112WorkingCalendarMonthView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF03112WorkingCalendarMonthView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF03211CalendarEventDetailView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF03211CalendarEventDetailView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF04011EmpInfoSelfViewView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF04011EmpInfoSelfViewView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF05011PaySlipListView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF05011PaySlipListView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF05012PaySlipDetailView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF05012PaySlipDetailView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF06011NonPayrollListView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF06011NonPayrollListView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF06012NonPayrollDetailView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF06012NonPayrollDetailView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF07011ClockInOutSelfViewView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF07011ClockInOutSelfViewView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF08011OTSummarySelfViewView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF08011OTSummarySelfViewView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF08013OTSummaryLineGraphView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF08013OTSummaryLineGraphView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF08014OTSummaryBarGraphView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF08014OTSummaryBarGraphView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF09011LeaveQuotaListView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF09011LeaveQuotaListView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF09012LeaveQuotaDetailView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF09012LeaveQuotaDetailView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF0A011HandbookListView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF0A011HandbookListView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF0A012HandbookDetailView.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF0A012HandbookDetailView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF0B010OrganizationStruct.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF0B010OrganizationStruct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF0B011OrganizationStruct.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF0B011OrganizationStruct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/MHF0B012EmployeeList.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/MHF0B012EmployeeList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/NavigationController.js" beforeDir="false" afterPath="$PROJECT_DIR$/ViewController/NavigationController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/screenA.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewController/screenB.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.project" beforeDir="false" afterPath="$PROJECT_DIR$/android/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.settings/org.eclipse.buildship.core.prefs" beforeDir="false" afterPath="$PROJECT_DIR$/android/.settings/org.eclipse.buildship.core.prefs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/.project" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/.settings/org.eclipse.buildship.core.prefs" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/.settings/org.eclipse.buildship.core.prefs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/BUCK" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/BUCK" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/proguard-rules.pro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/release/output.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/release/tdem_v2_20180712_1244AM.apk" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/release/tdem_v2_20180712_1244AM.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/debug/google-services.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/debug/google-services.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/google-services.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/google-services.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-ldpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-ldpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/dev/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/dev/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/google-services.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/google-services.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnect/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnect/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnect/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnect/MainApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnectdev/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnectdev/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnectdev/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/tdem/tdemconnectdev/MainApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/xml/provider_paths.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/res/xml/provider_paths.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/prod/google-services.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/prod/google-services.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/release/google-services.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/release/google-services.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/tdemconnect.jks" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/tdemconnect.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/keystores/BUCK" beforeDir="false" afterPath="$PROJECT_DIR$/android/keystores/BUCK" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/keystores/debug.keystore.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/keystores/debug.keystore.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/tdemconnect.iml" beforeDir="false" afterPath="$PROJECT_DIR$/android/tdemconnect.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-prod-release-01.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app-prod-release-01.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/RNFirebase.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/RNFirebase.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/rename.js" beforeDir="false" afterPath="$PROJECT_DIR$/bin/rename.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/calendarArra" beforeDir="false" afterPath="$PROJECT_DIR$/calendarArra" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/BottomBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/component/BottomBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/Nav.js" beforeDir="false" afterPath="$PROJECT_DIR$/component/Nav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TopBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/component/TopBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/BgMessaging.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/BgMessaging.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/CalendarPDFAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/CalendarPDFAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/EventCalendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/EventCalendar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/LoadPDFFile.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/LoadPDFFile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/LoginChangePinAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/LoginChangePinAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/LoginResetPinAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/LoginResetPinAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/LoginWithPinAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/LoginWithPinAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/Month.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/Month.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/PayslipPDFApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/PayslipPDFApi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/RegisterAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/RegisterAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/RestAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/RestAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/SaveAutoSyncCalendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/SaveAutoSyncCalendar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/SavePIN.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/SavePIN.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/SaveProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/SaveProfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/SaveTimeNonPayroll.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/SaveTimeNonPayroll.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/SaveToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/SaveToken.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/SetPinAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/SetPinAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/SignOutAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/constants/SignOutAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/initial.txt" beforeDir="false" afterPath="$PROJECT_DIR$/initial.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/GoogleService-Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/GoogleService-Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/googleservice/dev/GoogleService-Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/googleservice/dev/GoogleService-Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/googleservice/prod/GoogleService-Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/googleservice/prod/GoogleService-Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/Appstore_1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/Appstore_1024.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone20@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone20@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone20@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone20@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone29@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone29@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone29@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone29@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone40@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone40@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone40@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone40@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone60@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone60@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/icon/iPhone60@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/icon/iPhone60@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/Appstore_1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/Appstore_1024.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone20@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone20@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone20@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone20@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone29@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone29@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone29@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone29@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone40@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone40@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone40@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone40@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone60@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone60@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/iconPro/iPhone60@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/iconPro/iPhone60@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect-tvOS/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect-tvOS/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect-tvOSTests/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect-tvOSTests/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/project.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/xcshareddata/xcschemes/tdemconnect-tvOS.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/xcshareddata/xcschemes/tdemconnect-tvOS.xcscheme" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/xcshareddata/xcschemes/tdemconnect.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect.xcodeproj/xcshareddata/xcschemes/tdemconnect.xcscheme" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/AppDelegate.h" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/AppDelegate.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/AppDelegate.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/AppDelegate.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Base.lproj/LaunchScreen.xib" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Base.lproj/LaunchScreen.xib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/Appstore_1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/Appstore_1024.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone20@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone20@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone20@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone20@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone29@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone29@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone29@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone29@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone40@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone40@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone40@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone40@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone60@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone60@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone60@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Images.xcassets/AppIcon.appiconset/iPhone60@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/main.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/main.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnect/tdemconnect.entitlements" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnect/tdemconnect.entitlements" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnectTests/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnectTests/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/tdemconnectTests/tdemconnectTests.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/tdemconnectTests/tdemconnectTests.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/Employee Handbook_Original Source (TH)_Final.epub" beforeDir="false" afterPath="$PROJECT_DIR$/resource/Employee Handbook_Original Source (TH)_Final.epub" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/Back.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/Back.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/Collapse.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/Collapse.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/Company.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/Company.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/DeletePIN.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/DeletePIN.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/Emergency.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/Emergency.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/Event.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/Event.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/Expand.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/Expand.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/General.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/General.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/announcement_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/announcement_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/ascending.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/ascending.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/bankIcon/blank.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/bankIcon/blank.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/bankIcon/scb.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/bankIcon/scb.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/clock.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/clock.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/close.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/close.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/descending.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/descending.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/dropdown.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/dropdown.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/home_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/home_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-1024.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-1024.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-20.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-20.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-20@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-20@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-20@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-20@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-29.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-29.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-29@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-29@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-29@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-29@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-40.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-40@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-40@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-40@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-40@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-60@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-60@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-60@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-60@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-76.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-76.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-76@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-76@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/icon/Icon-83.5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/icon/Icon-83.5@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/ksbank.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/ksbank.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/manager_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/manager_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/next.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/next.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/next_dis.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/next_dis.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/pen.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/pen.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/pinBG.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/pinBG.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/pin_delete.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/pin_delete.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/pin_delete_red.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/pin_delete_red.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/pinimg.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/pinimg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/previous.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/previous.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/previous_dis.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/previous_dis.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/setting.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/setting.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/setting_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/setting_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/images/write.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/images/write.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/pinimg.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/pinimg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/regist/regist_lock_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/regist/regist_lock_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/regist/regist_logo copy.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/regist/regist_logo copy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource/regist/regist_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/resource/regist/regist_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,9 +270,8 @@
       <file leaf-file-name="App.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-344">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="195">
+              <caret line="31" column="18" lean-forward="true" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -44,8 +280,7 @@
         <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="5" column="14" lean-forward="false" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-              <folding />
+              <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -53,30 +288,21 @@
       <file leaf-file-name="toyotatdemconnect.iml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
+            <state />
           </provider>
         </entry>
       </file>
       <file leaf-file-name="vcs.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
+            <state />
           </provider>
         </entry>
       </file>
       <file leaf-file-name="workspace.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
+            <state />
           </provider>
         </entry>
       </file>
@@ -85,68 +311,41 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GradleLocalSettings">
-    <option name="externalProjectsViewState">
-      <projects_view />
-    </option>
-  </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1790" />
-    <option name="y" value="-123" />
-    <option name="width" value="1714" />
-    <option name="height" value="895" />
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="824" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
-      <showMembers />
-      <showModules />
-      <showLibraryContents />
-      <hideEmptyPackages />
-      <abbreviatePackageNames />
-      <autoscrollToSource />
-      <autoscrollFromSource />
-      <sortByType />
-      <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="toyotatdemconnect" type="b2602c69:ProjectViewProjectNode" />
-              <item name="toyotatdemconnect" type="462c0819:PsiDirectoryNode" />
+              <item name="toyotatdemconnect(20190129)" type="b2602c69:ProjectViewProjectNode" />
+              <item name="toyotatdemconnect(20190129)" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="toyotatdemconnect" type="b2602c69:ProjectViewProjectNode" />
-              <item name="toyotatdemconnect" type="462c0819:PsiDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="toyotatdemconnect" type="b2602c69:ProjectViewProjectNode" />
-              <item name="toyotatdemconnect" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="toyotatdemconnect" type="b2602c69:ProjectViewProjectNode" />
-              <item name="toyotatdemconnect" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
+              <item name="toyotatdemconnect(20190129)" type="b2602c69:ProjectViewProjectNode" />
+              <item name="toyotatdemconnect(20190129)" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="android.sdk.path" value="$USER_HOME$/Documents/AndroidSDK" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -162,8 +361,6 @@
   </component>
   <component name="RunManager">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" />
@@ -173,38 +370,16 @@
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="singleModule" />
       </option>
-      <envs />
       <patterns />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
-    </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="SUITE_NAME" />
@@ -217,15 +392,12 @@
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="singleModule" />
       </option>
       <option name="USE_DEFAULT_REPORTERS" value="false" />
       <option name="PROPERTIES_FILE" />
-      <envs />
       <properties />
       <listeners />
     </configuration>
@@ -247,9 +419,6 @@
     <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
     </configuration>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -274,118 +443,235 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1790" y="-123" width="1714" height="895" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="824" extended-state="0" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24985233" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info id="Image Layers" order="2" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.3287483" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="2" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info id="Captures" order="2" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager />
-    <watches-manager />
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/App.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="50" selection-start-line="19" selection-start-column="50" selection-end-line="19" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="50" selection-start-line="19" selection-start-column="50" selection-end-line="19" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="5" column="14" lean-forward="false" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-          <folding />
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="5" column="14" lean-forward="false" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/toyotatdemconnect.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-344">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="195">
+          <caret line="31" column="18" lean-forward="true" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
         </state>
       </provider>
     </entry>

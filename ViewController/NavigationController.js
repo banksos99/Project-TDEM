@@ -1,60 +1,49 @@
 import React, { Component } from 'react';
 import {
-    Animated,Easing
+    Animated,Easing,
+    AsyncStorage
 } from "react-native";
 
 import {
     createStackNavigator,
 } from 'react-navigation';
-import DeviceInfo from 'react-native-device-info';
 
 import homeScreen from "./MHF01410MainView";
 import empInfoDetail from "./MHF04011EmpInfoSelfViewView";
 import nonPayrollList from "./MHF06011NonPayrollListView";
 import nonPayrollDetail from "./MHF06012NonPayrollDetailView";
-
 import payslipList from "./MHF05011PaySlipListView";
 import payslipDetail from "./MHF05012PaySlipDetailView";
-
 import leavequotaList from "./MHF09011LeaveQuotaListView";
 import leavequotaDetail from "./MHF09012LeaveQuotaDetailView";
-
 import OTSummarySelfView from "./MHF08011OTSummarySelfViewView";
-
 import handbookList from "./MHF0A011HandbookListView";
 import handbookDetail from "./MHF0A012HandbookDetailView";
-
 import OrganizationStruct from "./MHF0B011OrganizationStruct";
-
-
 import calendarYearView from "./MHF03111WorkingCalendarYearView";
-import calendarYearView2 from "./MHF03111WorkingCalendarYearView2";
-
 import calendarMonthView from "./MHF03112WorkingCalendarMonthView";
 import calendarEventDetailView from "./MHF03211CalendarEventDetailView";
-
 import clockInOutSelfView from "./MHF07011ClockInOutSelfViewView";
-
 import registerScreen from "./MHF01210RegisterScreen";
 import pinScreen from "./MHF01310PINScreen";
-
 import SaveProfile from "../constants/SaveProfile"
-
 import OTLineChartView from "./MHF08013OTSummaryLineGraphView";
 import OTBarChartView from "./MHF08014OTSummaryBarGraphView";
 import OrganizationOTStruct from "./MHF0B010OrganizationStruct";
 import announcementdetail from "./MHF02011AnnouncementDetailView"
+import InsuranceListScreen from "./MHF0B011InsuranceListView"
+import meclaimdetail from "./MHF0B012MeclaimDetailView"
 
 import EmployeeList from "./MHF0B012EmployeeList"
-
 import ChangePINScreen from "./ChangePINScreen"
+import WelcomeScreen from "./WelcomeView"
 import SharedPreference from "../SharedObject/SharedPreference"
-
-import screenA from "./screenA"
+// import SaveCompany from "./constants/SaveCompanylocation";
 
 const AppNavigatorPin = createStackNavigator({
-    RegisterScreen: { screen: registerScreen },
+    
     PinScreen: { screen: pinScreen },
+    RegisterScreen: { screen: registerScreen },
     HomeScreen: { screen: homeScreen },
     EmployeeInfoDetail: { screen: empInfoDetail },
     NonPayrollList: { screen: nonPayrollList },
@@ -68,7 +57,7 @@ const AppNavigatorPin = createStackNavigator({
     HandbookDetail: { screen: handbookDetail },
     OrgStructure: { screen: OrganizationStruct },
     calendarYearView: { screen: calendarYearView },
-    calendarYearView2: { screen: calendarYearView2 },
+   
     calendarMonthView: { screen: calendarMonthView },
     calendarEventDetailView: { screen: calendarEventDetailView },
     ClockInOutSelfView: { screen: clockInOutSelfView },
@@ -78,7 +67,9 @@ const AppNavigatorPin = createStackNavigator({
     AnnouncementDetail: { screen: announcementdetail },
     ChangePINScreen: { screen: ChangePINScreen },
     EmployeeList: { screen: EmployeeList },
-    screenA: { screen: screenA },
+    WelcomeScreen: { screen: WelcomeScreen },
+    InsuranceListScreen:{screen:InsuranceListScreen},
+    meclaimdetail:{screen:meclaimdetail}
 }, {
         initialRouteName: 'PinScreen',
         headerMode: 'none',
@@ -112,7 +103,7 @@ const AppNavigatorRegister = createStackNavigator({
     HandbookDetail: { screen: handbookDetail },
     OrgStructure: { screen: OrganizationStruct },
     calendarYearView: { screen: calendarYearView },
-    calendarYearView2: { screen: calendarYearView2 },
+
     calendarMonthView: { screen: calendarMonthView },
     calendarEventDetailView: { screen: calendarEventDetailView },
     ClockInOutSelfView: { screen: clockInOutSelfView },
@@ -122,8 +113,10 @@ const AppNavigatorRegister = createStackNavigator({
     AnnouncementDetail: { screen: announcementdetail },
     ChangePINScreen: { screen: ChangePINScreen },
     EmployeeList: { screen: EmployeeList },
-    screenA: { screen: screenA },
-
+    WelcomeScreen: { screen: WelcomeScreen },
+    InsuranceListScreen:{screen:InsuranceListScreen},
+    meclaimdetail:{screen:meclaimdetail}
+    
 }, {
         initialRouteName: 'RegisterScreen',
         headerMode: 'none',
@@ -215,23 +208,30 @@ export default class rootNavigation extends Component {
     render() {
         console.log('app.je render',this.state.hasPin)
         if (this.state.hasPin == false) {
+            if(SharedPreference.APPLICATION_DEVICE === 'STM'){
+                //SharedPreference.company = 'stm'
+                //SharedPreference.company = 'tmap-em'
+            }else{
+                SharedPreference.company = 'tmap-em'
+            }
+            
             return (
-                <AppNavigatorRegister
-                    // onNavigationStateChange
-                    // ={(prevState, currentState) => {
-                    //     console.log("AppNavigatorRegister ==> prevState = ", prevState)
-                    //     console.log("AppNavigatorRegister ==> currentState = ", currentState)
-                    // }} 
-                    />
+                <AppNavigatorRegister/>
             );
         } else {
+
+            AsyncStorage.getItem("mycompany").then((value) => {
+
+                if (value) {
+                    
+                    SharedPreference.company = value
+                    
+                }
+
+            }).done();
+
             return (
-                <AppNavigatorPin
-                    // onNavigationStateChange={(prevState, currentState) => {
-                        // console.log("AppNavigatorRegister ==> prevState = ", prevState)
-                        // console.log("AppNavigatorRegister ==> currentState = ", currentState)
-                    // }} 
-                    />
+                <AppNavigatorPin/>
             );
         }
 

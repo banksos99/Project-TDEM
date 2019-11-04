@@ -34,8 +34,9 @@ export default async function changePin(oldPin, newPin, functionID) {
         body: JSON.stringify({
             type: "change",
             client_pin: newPin,
-            systemdn: "TMAP-EM",
-            client_oldpin: oldPin
+            systemdn: SharedPreference.company,
+            client_oldpin: oldPin,
+            application_device: SharedPreference.APPLICATION_DEVICE // Watchara N, at 16August2019
         }),
     })
         .then((response) => response.json())

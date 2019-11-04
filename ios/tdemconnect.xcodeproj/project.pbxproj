@@ -23,6 +23,16 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1748761E2240FF5F0037F5B0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1748761D2240FF5F0037F5B0 /* GoogleService-Info.plist */; };
+		17EB627822436958005C9ACB /* iPhone20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB626F22436958005C9ACB /* iPhone20@2x.png */; };
+		17EB627922436958005C9ACB /* iPhone20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627022436958005C9ACB /* iPhone20@3x.png */; };
+		17EB627A22436958005C9ACB /* Appstore_1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627122436958005C9ACB /* Appstore_1024.png */; };
+		17EB627B22436958005C9ACB /* iPhone40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627222436958005C9ACB /* iPhone40@3x.png */; };
+		17EB627C22436958005C9ACB /* iPhone40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627322436958005C9ACB /* iPhone40@2x.png */; };
+		17EB627D22436958005C9ACB /* iPhone29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627422436958005C9ACB /* iPhone29@3x.png */; };
+		17EB627E22436958005C9ACB /* iPhone60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627522436958005C9ACB /* iPhone60@2x.png */; };
+		17EB627F22436958005C9ACB /* iPhone60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627622436958005C9ACB /* iPhone60@3x.png */; };
+		17EB628022436958005C9ACB /* iPhone29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 17EB627722436958005C9ACB /* iPhone29@2x.png */; };
 		2C1775017702450792E6E251 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65A5ED9CD51A43DF906753DD /* libRNFS.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -43,17 +53,7 @@
 		8D23B666C5C34102B2B7A96E /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE1DD2BE76EE4533ACED6CAF /* Roboto-Bold.ttf */; };
 		8D244B14598E46EF9804BEE1 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AA49043124E4FD9AC71857A /* SpaceMono-Regular.ttf */; };
 		8E5223DD70154EDBB00C0852 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5D8D44AC2441D8A40E44CB /* Roboto-Regular.ttf */; };
-		8E7D4B171F8AFD9C00699FE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8E7D4B161F8AFD9B00699FE4 /* GoogleService-Info.plist */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		BA207C29219A809900EC16C1 /* Appstore_1024.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C20219A809900EC16C1 /* Appstore_1024.png */; };
-		BA207C2A219A809900EC16C1 /* iPhone20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C21219A809900EC16C1 /* iPhone20@2x.png */; };
-		BA207C2B219A809900EC16C1 /* iPhone20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C22219A809900EC16C1 /* iPhone20@3x.png */; };
-		BA207C2C219A809900EC16C1 /* iPhone29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C23219A809900EC16C1 /* iPhone29@2x.png */; };
-		BA207C2D219A809900EC16C1 /* iPhone29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C24219A809900EC16C1 /* iPhone29@3x.png */; };
-		BA207C2E219A809900EC16C1 /* iPhone40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C25219A809900EC16C1 /* iPhone40@2x.png */; };
-		BA207C2F219A809900EC16C1 /* iPhone40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C26219A809900EC16C1 /* iPhone40@3x.png */; };
-		BA207C30219A809900EC16C1 /* iPhone60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C27219A809900EC16C1 /* iPhone60@2x.png */; };
-		BA207C31219A809900EC16C1 /* iPhone60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA207C28219A809900EC16C1 /* iPhone60@3x.png */; };
 		BA4C9B5E20F73E3800C47899 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD0D66C20F5F0AA00593D44 /* libReact.a */; };
 		BA4C9B8020F73FF900C47899 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA4C9B7F20F73FEB00C47899 /* libRNFetchBlob.a */; };
 		BA6B581C2109FC0E004C44C4 /* libRCTWKWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDFDE90520F4E7D90094E5AB /* libRCTWKWebView.a */; };
@@ -69,6 +69,7 @@
 		BDD6B9C420FB768600ACF810 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD6B9BD20FB767100ACF810 /* libRNDeviceInfo.a */; };
 		C81E53BA144248D689D84CD9 /* Prompt-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 803FF4FD684B41F4A960ACA7 /* Prompt-Light.ttf */; };
 		DF46D30A24884FD7B38C7236 /* libFPStaticServer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 356039C755064952A630DFB7 /* libFPStaticServer.a */; };
+		F46A47F421CF323300179640 /* libfishhook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 836AA8DA1FACD2AC0010E64B /* libfishhook.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -451,13 +452,23 @@
 		0C05B15A915F4D059F3460DB /* Prompt-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Prompt-Medium.ttf"; path = "../resource/fonts/Prompt-Medium.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* tdemconnect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tdemconnect.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* STM Connect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "STM Connect.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = tdemconnect/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = tdemconnect/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = tdemconnect/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = tdemconnect/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = tdemconnect/main.m; sourceTree = "<group>"; };
+		1748761D2240FF5F0037F5B0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "googleservice/enterprise/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		17EB626F22436958005C9ACB /* iPhone20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone20@2x.png"; sourceTree = "<group>"; };
+		17EB627022436958005C9ACB /* iPhone20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone20@3x.png"; sourceTree = "<group>"; };
+		17EB627122436958005C9ACB /* Appstore_1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Appstore_1024.png; sourceTree = "<group>"; };
+		17EB627222436958005C9ACB /* iPhone40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone40@3x.png"; sourceTree = "<group>"; };
+		17EB627322436958005C9ACB /* iPhone40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone40@2x.png"; sourceTree = "<group>"; };
+		17EB627422436958005C9ACB /* iPhone29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone29@3x.png"; sourceTree = "<group>"; };
+		17EB627522436958005C9ACB /* iPhone60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone60@2x.png"; sourceTree = "<group>"; };
+		17EB627622436958005C9ACB /* iPhone60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone60@3x.png"; sourceTree = "<group>"; };
+		17EB627722436958005C9ACB /* iPhone29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone29@2x.png"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* tdemconnect-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tdemconnect-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* tdemconnect-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tdemconnect-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		356039C755064952A630DFB7 /* libFPStaticServer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFPStaticServer.a; sourceTree = "<group>"; };
@@ -477,20 +488,10 @@
 		804CA12CE1D24F8F96666375 /* libRNZipArchive.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNZipArchive.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8D2E6669A3E94D03B10639AE /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		8E7D4B161F8AFD9B00699FE4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		95EC3AC1BC5B157DDFA7B2A7 /* Pods-tdemconnect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tdemconnect.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tdemconnect/Pods-tdemconnect.debug.xcconfig"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		ADF4CB3C3BF44D3EBA8B78C4 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		B93DE3132C74458C9CF748F7 /* Prompt-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Prompt-Regular.ttf"; path = "../resource/fonts/Prompt-Regular.ttf"; sourceTree = "<group>"; };
-		BA207C20219A809900EC16C1 /* Appstore_1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Appstore_1024.png; sourceTree = "<group>"; };
-		BA207C21219A809900EC16C1 /* iPhone20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone20@2x.png"; sourceTree = "<group>"; };
-		BA207C22219A809900EC16C1 /* iPhone20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone20@3x.png"; sourceTree = "<group>"; };
-		BA207C23219A809900EC16C1 /* iPhone29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone29@2x.png"; sourceTree = "<group>"; };
-		BA207C24219A809900EC16C1 /* iPhone29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone29@3x.png"; sourceTree = "<group>"; };
-		BA207C25219A809900EC16C1 /* iPhone40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone40@2x.png"; sourceTree = "<group>"; };
-		BA207C26219A809900EC16C1 /* iPhone40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone40@3x.png"; sourceTree = "<group>"; };
-		BA207C27219A809900EC16C1 /* iPhone60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone60@2x.png"; sourceTree = "<group>"; };
-		BA207C28219A809900EC16C1 /* iPhone60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone60@3x.png"; sourceTree = "<group>"; };
 		BA4C9B7A20F73FEA00C47899 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		BA8CB6E120F72AFE00FC1F92 /* tdemconnect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tdemconnect.entitlements; path = tdemconnect/tdemconnect.entitlements; sourceTree = "<group>"; };
 		BAF9753A20FD89CA0044C4ED /* SplashBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SplashBg.png; sourceTree = "<group>"; };
@@ -537,6 +538,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				BD6BCF8320F4AB1E00E7AB24 /* libRNSVG.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				F46A47F421CF323300179640 /* libfishhook.a in Frameworks */,
 				BA8CB70520F72FB600FC1F92 /* libRNFirebase.a in Frameworks */,
 				BAF9561BB4526904D3EC6946 /* libPods-tdemconnect.a in Frameworks */,
 				DF46D30A24884FD7B38C7236 /* libFPStaticServer.a in Frameworks */,
@@ -655,6 +657,7 @@
 		13B07FAE1A68108700A75B9A /* tdemconnect */ = {
 			isa = PBXGroup;
 			children = (
+				1748761D2240FF5F0037F5B0 /* GoogleService-Info.plist */,
 				BAF9753A20FD89CA0044C4ED /* SplashBg.png */,
 				BA8CB6E120F72AFE00FC1F92 /* tdemconnect.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -666,6 +669,22 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = tdemconnect;
+			sourceTree = "<group>";
+		};
+		17EB626E22436958005C9ACB /* iconPro */ = {
+			isa = PBXGroup;
+			children = (
+				17EB626F22436958005C9ACB /* iPhone20@2x.png */,
+				17EB627022436958005C9ACB /* iPhone20@3x.png */,
+				17EB627122436958005C9ACB /* Appstore_1024.png */,
+				17EB627222436958005C9ACB /* iPhone40@3x.png */,
+				17EB627322436958005C9ACB /* iPhone40@2x.png */,
+				17EB627422436958005C9ACB /* iPhone29@3x.png */,
+				17EB627522436958005C9ACB /* iPhone60@2x.png */,
+				17EB627622436958005C9ACB /* iPhone60@3x.png */,
+				17EB627722436958005C9ACB /* iPhone29@2x.png */,
+			);
+			path = iconPro;
 			sourceTree = "<group>";
 		};
 		47A54DCAFD7093DCE5496C93 /* Pods */ = {
@@ -736,8 +755,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				BA207C1F219A809900EC16C1 /* icon */,
-				8E7D4B161F8AFD9B00699FE4 /* GoogleService-Info.plist */,
+				17EB626E22436958005C9ACB /* iconPro */,
 				13B07FAE1A68108700A75B9A /* tdemconnect */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* tdemconnectTests */,
@@ -755,7 +773,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* tdemconnect.app */,
+				13B07F961A680F5B00A75B9A /* STM Connect.app */,
 				00E356EE1AD99517003FC87E /* tdemconnectTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* tdemconnect-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* tdemconnect-tvOSTests.xctest */,
@@ -826,22 +844,6 @@
 				BA0A8B6A21098D2F001BCCF4 /* libRNZipArchive.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		BA207C1F219A809900EC16C1 /* icon */ = {
-			isa = PBXGroup;
-			children = (
-				BA207C20219A809900EC16C1 /* Appstore_1024.png */,
-				BA207C21219A809900EC16C1 /* iPhone20@2x.png */,
-				BA207C22219A809900EC16C1 /* iPhone20@3x.png */,
-				BA207C23219A809900EC16C1 /* iPhone29@2x.png */,
-				BA207C24219A809900EC16C1 /* iPhone29@3x.png */,
-				BA207C25219A809900EC16C1 /* iPhone40@2x.png */,
-				BA207C26219A809900EC16C1 /* iPhone40@3x.png */,
-				BA207C27219A809900EC16C1 /* iPhone60@2x.png */,
-				BA207C28219A809900EC16C1 /* iPhone60@3x.png */,
-			);
-			path = icon;
 			sourceTree = "<group>";
 		};
 		BA4C9B7B20F73FEA00C47899 /* Products */ = {
@@ -972,7 +974,7 @@
 			);
 			name = tdemconnect;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* tdemconnect.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* STM Connect.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* tdemconnect-tvOS */ = {
@@ -1023,10 +1025,12 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = NRQFGRP965;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = NRQFGRP965;
+						DevelopmentTeam = 4586HRYFBG;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1054,6 +1058,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1525,28 +1530,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA207C2F219A809900EC16C1 /* iPhone40@3x.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				17EB627E22436958005C9ACB /* iPhone60@2x.png in Resources */,
+				17EB627922436958005C9ACB /* iPhone20@3x.png in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				BA207C2C219A809900EC16C1 /* iPhone29@2x.png in Resources */,
-				BA207C2B219A809900EC16C1 /* iPhone20@3x.png in Resources */,
-				BA207C29219A809900EC16C1 /* Appstore_1024.png in Resources */,
-				8E7D4B171F8AFD9C00699FE4 /* GoogleService-Info.plist in Resources */,
 				4889EEAF70734C2ABCF02CA2 /* Prompt-Bold.ttf in Resources */,
 				C81E53BA144248D689D84CD9 /* Prompt-Light.ttf in Resources */,
 				04D7CBE8327843E6AB07C8CA /* Prompt-Medium.ttf in Resources */,
 				606619CF086D4B5CA9330CE8 /* Prompt-Regular.ttf in Resources */,
 				30347D275CBF413DB203F68C /* Prompt-Thin.ttf in Resources */,
-				BA207C31219A809900EC16C1 /* iPhone60@3x.png in Resources */,
-				BA207C30219A809900EC16C1 /* iPhone60@2x.png in Resources */,
+				17EB627A22436958005C9ACB /* Appstore_1024.png in Resources */,
+				17EB627B22436958005C9ACB /* iPhone40@3x.png in Resources */,
+				17EB627822436958005C9ACB /* iPhone20@2x.png in Resources */,
 				BAF9756920FD89CB0044C4ED /* SplashBg.png in Resources */,
 				8D23B666C5C34102B2B7A96E /* Roboto-Bold.ttf in Resources */,
-				BA207C2D219A809900EC16C1 /* iPhone29@3x.png in Resources */,
 				0B582ED7764B45179D566188 /* Roboto-Medium.ttf in Resources */,
+				17EB627D22436958005C9ACB /* iPhone29@3x.png in Resources */,
 				8E5223DD70154EDBB00C0852 /* Roboto-Regular.ttf in Resources */,
-				BA207C2A219A809900EC16C1 /* iPhone20@2x.png in Resources */,
-				BA207C2E219A809900EC16C1 /* iPhone40@2x.png in Resources */,
 				8D244B14598E46EF9804BEE1 /* SpaceMono-Regular.ttf in Resources */,
+				17EB627F22436958005C9ACB /* iPhone60@3x.png in Resources */,
+				1748761E2240FF5F0037F5B0 /* GoogleService-Info.plist in Resources */,
+				17EB628022436958005C9ACB /* iPhone29@2x.png in Resources */,
+				17EB627C22436958005C9ACB /* iPhone40@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1580,7 +1585,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1626,7 +1631,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\"";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
 		};
 		CF435D7C3667CC9EE5367D42 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1715,6 +1720,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NRQFGRP965;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1744,7 +1751,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tdemconnect.app/tdemconnect";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/STM Connect.app/STM Connect";
 			};
 			name = Debug;
 		};
@@ -1752,6 +1760,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = NRQFGRP965;
 				HEADER_SEARCH_PATHS = (
@@ -1778,7 +1788,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tdemconnect.app/tdemconnect";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/STM Connect.app/STM Connect";
 			};
 			name = Release;
 		};
@@ -1788,9 +1799,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = tdemconnect/tdemconnect.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = NRQFGRP965;
+				DEVELOPMENT_TEAM = 4586HRYFBG;
 				DISPLAY_NAME = tdemconnect;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
@@ -1808,8 +1822,11 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tdem.tdemconnectdev;
-				PRODUCT_NAME = tdemconnect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tdem.stmconnectent;
+				PRODUCT_NAME = "STM Connect";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "STM Connect";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1820,8 +1837,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = tdemconnect/tdemconnect.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = NRQFGRP965;
+				DEVELOPMENT_TEAM = 4586HRYFBG;
 				DISPLAY_NAME = tdemconnect;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
@@ -1839,8 +1859,11 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tdem.tdemconnectdev;
-				PRODUCT_NAME = tdemconnect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tdem.stmconnectent;
+				PRODUCT_NAME = "STM Connect";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "STM Connect";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1880,7 +1903,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tdem.tdemconnectdev-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tdem.tdemconnect-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1923,7 +1946,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tdem.tdemconnectdev-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tdem.tdemconnect-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;

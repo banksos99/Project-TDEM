@@ -74,12 +74,15 @@ export default class PinActivity extends Component {
                 max = listdata[i]
             }
         }
-        //console.log('max :', max)
-        let ratio = 50 / max
+        console.log('max :', Math.ceil(max ))
+        console.log('previousmax :', previousmax)
+        
+
+        let ratio = Math.ceil(max / 10)
         if(max == 0){
            ratio = 1
         }
-
+        console.log('previousmax rate :', (10 / ratio) * (previousmax / 100))
         console.log('ratio :', ratio)
         let intratio = Math.ceil(ratio)
         let fonrsize = 12 * scale
@@ -109,39 +112,39 @@ export default class PinActivity extends Component {
                 <Text x="20" y={bartop + (barhight * 1) + gap1} fill='#555555' fontSize="14" textAnchor="start" fontFamily='Prompt-Regular'>Max</Text>
                 <Text x="20" y={bartop + (barhight * 3) + (gap1 * 2) + gap2} fill='#555555' fontSize="14" textAnchor="start" fontFamily='Prompt-Regular'>Min</Text>
 
-                <Rect x={shiftRight} y={bartop} width={previousmax * 4.7 * scale * ratio} height={barhight} fill="#d77c7c" />
-                <Text x={shiftRight + (previousmax * 4.8 * scale * ratio) + 10} y={bartop + (barhight * 1)} fill='#d77c7c' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{previousmax}</Text>
+                <Rect x={shiftRight} y={bartop} width={(rowhight * 10 * (10 / ratio) * (previousmax / 100)) } height={barhight} fill="#d77c7c" />
+                <Text x={shiftRight + (rowhight * 10 * (10 / ratio) * (previousmax / 100)) + 10} y={bartop + (barhight * 1)} fill='#d77c7c' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{previousmax}</Text>
 
-                <Rect x={shiftRight} y={bartop + barhight + gap1} width={currencemax * 4.7 * scale * ratio} height={barhight} fill="#f20909" />
-                <Text x={shiftRight + (currencemax * 4.8 * scale * ratio) + 10} y={bartop + (barhight * 2) + gap1} fill='#f20909' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{currencemax}</Text>
+                <Rect x={shiftRight} y={bartop + barhight + gap1} width={(rowhight * 10 * (10 / ratio) * (currencemax / 100))} height={barhight} fill="#f20909" />
+                <Text x={shiftRight + (rowhight * 10 * (10 / ratio) * (currencemax / 100)) + 10} y={bartop + (barhight * 2) + gap1} fill='#f20909' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{currencemax}</Text>
 
-                <Rect x={shiftRight} y={bartop + (barhight * 2) + gap1 + gap2} width={previouemin * 4.7 * scale * ratio} height={barhight} fill="#d77c7c" />
-                <Text x={shiftRight + (previouemin * 4.8 * scale * ratio) + 10} y={bartop + (barhight * 3) + gap1 + gap2} fill='#d77c7c' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{previouemin}</Text>
+                <Rect x={shiftRight} y={bartop + (barhight * 2) + gap1 + gap2} width={(rowhight * 10 * (10 / ratio) * (previouemin / 100))} height={barhight} fill="#d77c7c" />
+                <Text x={shiftRight + (rowhight * 10 * (10 / ratio) * (previouemin / 100)) + 10} y={bartop + (barhight * 3) + gap1 + gap2} fill='#d77c7c' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{previouemin}</Text>
 
-                <Rect x={shiftRight} y={bartop + (barhight * 3) + (gap1 * 2) + gap2} width={currencemin * 4.7 * scale * ratio} height={barhight} fill="#f20909" />
-                <Text x={shiftRight + (currencemin * 4.8 * scale * ratio) + 10} y={bartop + (barhight * 4) + (gap1 * 2) + gap2} fill='#f20909' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{currencemin}</Text>
+                <Rect x={shiftRight} y={bartop + (barhight * 3) + (gap1 * 2) + gap2} width={(rowhight * 10 * (10 / ratio) * (currencemin / 100))} height={barhight} fill="#f20909" />
+                <Text x={shiftRight + (rowhight * 10 * (10 / ratio) * (currencemin / 100)) + 10} y={bartop + (barhight * 4) + (gap1 * 2) + gap2} fill='#f20909' fontSize="12" textAnchor="start" fontFamily='Prompt-Regular'>{currencemin}</Text>
 
-                <Text x={(rowhight * 0) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 0 * ratio)}</Text>
+                <Text x={(rowhight * 0) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>0</Text>
 
-                <Text x={(rowhight * 1) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 5 / ratio)}</Text>
+                <Text x={(rowhight * 1) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 1)}</Text>
 
-                <Text x={(rowhight * 2) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 10 / ratio)}</Text>
+                <Text x={(rowhight * 2) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 2)}</Text>
 
-                <Text x={(rowhight * 3) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 15 / ratio)}</Text>
+                <Text x={(rowhight * 3) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 3)}</Text>
 
-                <Text x={(rowhight * 4) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 20 / ratio)}</Text>
+                <Text x={(rowhight * 4) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 4)}</Text>
 
-                <Text x={(rowhight * 5) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 25 / ratio)}</Text>
+                <Text x={(rowhight * 5) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 5)}</Text>
 
-                <Text x={(rowhight * 6) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 30 / ratio)}</Text>
+                <Text x={(rowhight * 6) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 6)}</Text>
 
-                <Text x={(rowhight * 7) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 35 / ratio)}</Text>
+                <Text x={(rowhight * 7) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 7)}</Text>
 
-                <Text x={(rowhight * 8) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 40 / ratio)}</Text>
+                <Text x={(rowhight * 8) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 8)}</Text>
 
-                <Text x={(rowhight * 9) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 45 / ratio)}</Text>
+                <Text x={(rowhight * 9) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 9)}</Text>
 
-                <Text x={(rowhight * 10) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{Math.ceil( 50 / ratio)}</Text>
+                <Text x={(rowhight * 10) + shiftRight} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>{(ratio * 10)}</Text>
 
                 <Text x={(rowhight * 11) + shiftRight + 15} y={shiftTop + height + bottomlabel} fill='#555555' fontSize={fonrsize} textAnchor="middle" fontFamily='Prompt-Regular'>Hour(s)</Text>
 

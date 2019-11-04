@@ -20,7 +20,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
  // [Fabric with:@[[Crashlytics class]]];
-
+//  if (![[NSUserDefaults standardUserDefaults] objectForKey:@"is_first_time"])
+//  {
+//    [application cancelAllLocalNotifications];
+//    // Restart the Local Notifications list
+//    application.applicationIconBadgeNumber = 0;
+//    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"is_first_time"];
+//
+//  }
   [FIRApp configure];
   NSURL *jsCodeLocation;
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
@@ -94,6 +101,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+//  application.applicationIconBadgeNumber = 0;
   [self onAppActiveStateChanged:YES];
 }
 

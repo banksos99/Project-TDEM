@@ -1,28 +1,32 @@
 import React, { Component } from 'react';
 import { View, Image, Alert, Platform, Text, TouchableOpacity, ActivityIndicator, StatusBar, NetInfo, AppState, ViewPropTypes,BackHandler } from 'react-native';
 
+import firebase from 'react-native-firebase';
+
 import SharedPreference from './SharedObject/SharedPreference';
 
-import RootViewController from './ViewController/NavigationController';
+
 import SavePIN from "./constants/SavePIN";
 import SaveProfile from "./constants/SaveProfile"
 import SaveTOKEN from "./constants/SaveToken"
 import LoginResetPinAPI from "./constants/LoginResetPinAPI";
+import { styles } from "./SharedObject/MainStyles"
 
-import DeviceInfo from 'react-native-device-info';
-
-import firebase from 'react-native-firebase';
 import Layout from "./SharedObject/Layout";
 import Colors from "./SharedObject/Colors";
 import StringText from "./SharedObject/StringText";
+import LoginWithPinAPI from "./constants/LoginWithPinAPI"
 
+import DeviceInfo from 'react-native-device-info';
 import UserInactivity from 'react-native-user-inactivity';
 import moment from 'moment'
-import { styles } from "./SharedObject/MainStyles"
-import LoginWithPinAPI from "./constants/LoginWithPinAPI"
+
 import PropTypes from 'prop-types';
 // import registerScreen from "./ViewController/MHF01210RegisterScreen";
 var BadgeAndroid = require('react-native-android-badge')
+
+import RootViewController from './ViewController/NavigationController';
+
 let sessionTimeoutSec = 10000;
 let countsession = 0;
 let begin = false;
@@ -392,7 +396,7 @@ export default class mainview extends Component {
                     style={{ height: 20, width: 20, }}
                     source={require('./resource/SplashBg.png')}
                   /></View>
-                <View style={{ flex: 7, justifyContent: 'center' }}><Text>TDEM Connect</Text></View>
+                <View style={{ flex: 7, justifyContent: 'center' }}><Text>STM Connect</Text></View>
               </View>
               <View style={{ flex: 1, marginLeft: 10 }}>
                 <Text style={{ fontSize: 14 }}>{this.state.notiTitle}</Text>
@@ -786,6 +790,7 @@ export default class mainview extends Component {
             // SharedPreference.profileObject = null
             this.saveProfile.setProfile(null)
             SharedPreference.gotoRegister = true
+            SharedPreference.company='tmap-em'
             // console.log("SharedPreference.gotoRegister : ", SharedPreference.gotoRegister)
             this.setState({
               showpin: false,

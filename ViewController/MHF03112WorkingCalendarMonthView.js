@@ -64,7 +64,7 @@ export default class calendarEventDetailView extends Component {
         // console.log("calendarEventDetailView ==> monthObject ==> ", this.state.monthObject)
         // console.log("calendarEventDetailView ==> monthText ==> ", this.state.monthText)
         codelocation = this.props.navigation.getParam("codelocation", "")
-        firebase.analytics().setCurrentScreen(SharedPreference.FUNCTIONID_CALENDAR_EVENT)
+        firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_CALENDAR_EVENT)
 
     }
 
@@ -280,11 +280,8 @@ export default class calendarEventDetailView extends Component {
 
                     const datemonth = this.state.dayObject[index].date;
 
-                    console.log("selectedMonth ==> datemonth ", datemonth)
-                    console.log("selectedMonth ==> datemonth ", this.state.dayObject[index].special_holiday)
-
                     if (this.state.dayObject[index].special_holiday == "Y") {
-                        console.log("selectedMonth ==> Y")
+                     
                         let count = this.state.dayObject[index].events.length;
 
                         if (count > 1) {
@@ -324,7 +321,7 @@ export default class calendarEventDetailView extends Component {
                         }
 
                     } else if (this.state.dayObject[index].special_holiday == "N") {
-                        console.log("selectedMonth ==> N")
+                     
                         let count = this.state.dayObject[index].events.length;
 
                         if (count > 1) {
@@ -363,7 +360,7 @@ export default class calendarEventDetailView extends Component {
                         }
 
                     } else {//W
-                        console.log("selectedMonth ==> W")
+                      
                         let count = this.state.dayObject[index].events.length;
 
                         if (count > 1) {
@@ -482,7 +479,7 @@ export default class calendarEventDetailView extends Component {
     }
 
     onPressToday() {//TODO
-        ////console.log("onPressToday")
+
         this.setState({ isLoading: true })
         this.onLoadCalendarAPI(new Date().getFullYear(), codelocation)
     }
@@ -509,7 +506,7 @@ export default class calendarEventDetailView extends Component {
         code = data[0]
         data = data[1]
 
-        console.log("calendarCallback : ", data.code)
+        // console.log("calendarCallback : ", data)
 
         if (code.SUCCESS == data.code) {
             let monthArray = data.data.holidays
@@ -518,9 +515,10 @@ export default class calendarEventDetailView extends Component {
             let today = new Date()
             let _format = 'M'
             const selectedMonth = moment(today).format(_format);
-
+            console.log("calendarCallback selectedMonth : ", selectedMonth);
             for (let index = 0; index < monthArray.length; index++) {
                 const element = monthArray[index];
+                console.log("calendarCallback element : ", element.month);
                 if (element.month == selectedMonth) {
                     let formatdate = 'YYYY-MM-DD'
                     const monthText = moment(today).format(formatdate);
@@ -607,7 +605,7 @@ export default class calendarEventDetailView extends Component {
         if (this.state.viewSection) {
             return (
                 <View style={{ height: 200, flexDirection: 'column' }}>
-                    <Text style={styles.calendarEventTitleText}>Event</Text>
+                    <Text style={styles.calendarEventTitleText} allowFontScaling={SharedPreference.allowfontscale}>Event</Text>
                     {this.getEventView(object)}
                 </View>
             )
@@ -621,7 +619,7 @@ export default class calendarEventDetailView extends Component {
                 flex: 1, justifyContent: 'center',
                 alignItems: 'center',
             }}>
-                <Text style={styles.calendarNoEventItemText}>{StringText.CALENDAR_MONTHVIEW_NO_EVENT_TEXT}
+                <Text style={styles.calendarNoEventItemText} allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDAR_MONTHVIEW_NO_EVENT_TEXT}
                 </Text>
             </View>
             )
@@ -657,11 +655,11 @@ export default class calendarEventDetailView extends Component {
                 return (<View>
                     <TouchableOpacity style={styles.calendarEventItemView} onPress={() => this.onOpenEventDetail(type, date, object)} >
                         <View style={styles.calendarEventItemLeftView}>
-                            <Text style={styles.calendarEventTimeStartText}>All Day</Text>
+                            <Text style={styles.calendarEventTimeStartText}allowFontScaling={SharedPreference.allowfontscale}>All Day</Text>
                         </View>
                         <View style={[styles.calendarEventCircleView, { backgroundColor: Colors.calendarYellowDotColor }]}></View>
                         <View style={styles.calendarEventItemRightView}>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.title}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.title}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>)
@@ -669,13 +667,13 @@ export default class calendarEventDetailView extends Component {
                 return (<View>
                     <TouchableOpacity style={styles.calendarEventItemView} onPress={() => this.onOpenEventDetail(type, date, object)} >
                         <View style={styles.calendarEventItemLeftView}>
-                            <Text style={styles.calendarEventTimeStartText}>{moment(object.time_start).format(_formatTime)}</Text>
-                            <Text style={styles.calendarEventTimeEndText}>{moment(object.time_end).format(_formatTime)}</Text>
+                            <Text style={styles.calendarEventTimeStartText}allowFontScaling={SharedPreference.allowfontscale}>{moment(object.time_start).format(_formatTime)}</Text>
+                            <Text style={styles.calendarEventTimeEndText}allowFontScaling={SharedPreference.allowfontscale}>{moment(object.time_end).format(_formatTime)}</Text>
                         </View>
                         <View style={[styles.calendarEventCircleView, { backgroundColor: Colors.calendarYellowDotColor }]}></View>
                         <View style={styles.calendarEventItemRightView}>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.title}</Text>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.description}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.title}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.description}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>)
@@ -685,11 +683,11 @@ export default class calendarEventDetailView extends Component {
                 return (<View>
                     <TouchableOpacity style={styles.calendarEventItemView} onPress={() => this.onOpenEventDetail(type, date, object)} >
                         <View style={styles.calendarEventItemLeftView}>
-                            <Text style={styles.calendarEventTimeStartText}>All Day</Text>
+                            <Text style={styles.calendarEventTimeStartText}allowFontScaling={SharedPreference.allowfontscale}>All Day</Text>
                         </View>
                         <View style={[styles.calendarEventCircleView, { backgroundColor: Colors.calendarBlueDotColor }]}></View>
                         <View style={styles.calendarEventItemRightView}>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.title}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.title}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>)
@@ -697,13 +695,13 @@ export default class calendarEventDetailView extends Component {
                 return (<View>
                     <TouchableOpacity style={styles.calendarEventItemView} onPress={() => this.onOpenEventDetail(type, date, object)} >
                         <View style={styles.calendarEventItemLeftView}>
-                            <Text style={styles.calendarEventTimeStartText}>{moment(object.time_start).format(_formatTime)}</Text>
-                            <Text style={styles.calendarEventTimeEndText}>{moment(object.time_end).format(_formatTime)}</Text>
+                            <Text style={styles.calendarEventTimeStartText}allowFontScaling={SharedPreference.allowfontscale}>{moment(object.time_start).format(_formatTime)}</Text>
+                            <Text style={styles.calendarEventTimeEndText}allowFontScaling={SharedPreference.allowfontscale}>{moment(object.time_end).format(_formatTime)}</Text>
                         </View>
                         <View style={[styles.calendarEventCircleView, { backgroundColor: Colors.calendarBlueDotColor }]}></View>
                         <View style={styles.calendarEventItemRightView}>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.title}</Text>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.description}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.title}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.description}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>)
@@ -713,11 +711,11 @@ export default class calendarEventDetailView extends Component {
                 return (<View>
                     <TouchableOpacity style={styles.calendarEventItemView} onPress={() => this.onOpenEventDetail(type, date, object)} >
                         <View style={styles.calendarEventItemLeftView}>
-                            <Text style={styles.calendarEventTimeStartText}>All Day</Text>
+                            <Text style={styles.calendarEventTimeStartText}allowFontScaling={SharedPreference.allowfontscale}>All Day</Text>
                         </View>
                         <View style={[styles.calendarEventCircleView, { backgroundColor: Colors.calendarRedDotColor }]}></View>
                         <View style={styles.calendarEventItemRightView}>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.title}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.title}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>)
@@ -725,13 +723,13 @@ export default class calendarEventDetailView extends Component {
                 return (<View>
                     <TouchableOpacity style={styles.calendarEventItemView} onPress={() => this.onOpenEventDetail(type, date, object)} >
                         <View style={styles.calendarEventItemLeftView}>
-                            <Text style={styles.calendarEventTimeStartText}>{moment(object.time_start).format(_formatTime)}</Text>
-                            <Text style={styles.calendarEventTimeEndText}>{moment(object.time_end).format(_formatTime)}</Text>
+                            <Text style={styles.calendarEventTimeStartText}allowFontScaling={SharedPreference.allowfontscale}>{moment(object.time_start).format(_formatTime)}</Text>
+                            <Text style={styles.calendarEventTimeEndText}allowFontScaling={SharedPreference.allowfontscale}>{moment(object.time_end).format(_formatTime)}</Text>
                         </View>
                         <View style={[styles.calendarEventCircleView, { backgroundColor: Colors.calendarRedDotColor }]}></View>
                         <View style={styles.calendarEventItemRightView}>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.title}</Text>
-                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10 }}>{object.description}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.title}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ marginRight: 10,fontFamily: "Prompt-Regular" }}allowFontScaling={SharedPreference.allowfontscale}>{object.description}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>)
@@ -758,6 +756,7 @@ export default class calendarEventDetailView extends Component {
     renderCalendarTable() {
         //console.log("renderCalendarTable ==> markedDates : ",this.state._markedDates)
         return (<Calendar
+          
             current={this.state.monthText}
             monthFormat={''}
             hideArrows={true}
@@ -768,11 +767,22 @@ export default class calendarEventDetailView extends Component {
             onDayPress={this.onDaySelect}
             markedDates={this.state._markedDates}
             markingType={'multi-dot'}
+            
             theme={{
-                // todayTextColor: Colors.redTextColor,
                 todayTextColor: '#adf0c9',
-                dayTextColor: 'black'
+                dayTextColor: 'black',
+                textDayFontFamily:"Prompt-Regular",
             }}
+            // dayComponent={({ date, state }) => {
+            //     return <View >
+            //         <TouchableOpacity  style={[styles.container]}
+            //             onPress={() => this.onDaySelect(date)} >
+            //             <Text style={{ fontSize: 17, fontFamily: "Prompt-Regular", textAlign: 'center', color: state === 'disabled' ? 'white' : 'Black' }} allowFontScaling={SharedPreference.allowfontscale}>
+            //                 {date.day}</Text>
+            //         </TouchableOpacity>
+            //     </View>
+
+            // }}
         />)
     }
 
@@ -780,7 +790,7 @@ export default class calendarEventDetailView extends Component {
     renderDayName() {
         return (<View style={styles.calendarWeekTitleView}>
             {month.dayNamesShortMonthView.map((day, idx) => (
-                <Text allowFontScaling={false} key={idx} accessible={false} style={styles.calendarDayHeader} numberOfLines={1} importantForAccessibility='no'>{day}</Text>
+                <Text allowFontScaling={SharedPreference.allowfontscale} key={idx} accessible={false} style={styles.calendarDayHeader} numberOfLines={1} importantForAccessibility='no'>{day}</Text>
             ))}
         </View>)
     }
@@ -802,15 +812,15 @@ export default class calendarEventDetailView extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.navRightContainer} onPress={(this.onPressToday.bind(this))}>
                             <View style={{ margin: 10 }}>
-                                <Text style={styles.calendarTitleRightText} >{StringText.CALENDER_YEARVIEW_YEAR_TODAY_BUTTON}</Text>
+                                <Text style={styles.calendarTitleRightText} allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDER_YEARVIEW_YEAR_TODAY_BUTTON}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
                     <View style={{ flex: 1 }}>
                         <View style={{ flex: 1, flexDirection: 'column', backgroundColor: Colors.navColor }}>
                             <View style={{ paddingLeft: 10, flex: 3 }}>
-                                <Text style={styles.calendarMonthTitleText}>{month.monthNames[moment(this.state.monthText).format(_formatMonth) - 1]}</Text>
-                                <Text style={styles.calendarYearTitleText}>{moment(this.state.monthText).format(_formatYear)}</Text>
+                                <Text style={styles.calendarMonthTitleText}allowFontScaling={SharedPreference.allowfontscale}>{month.monthNames[moment(this.state.monthText).format(_formatMonth) - 1]}</Text>
+                                <Text style={styles.calendarYearTitleText}allowFontScaling={SharedPreference.allowfontscale}>{moment(this.state.monthText).format(_formatYear)}</Text>
                             </View>
                             {this.renderDayName()}
                         </View>

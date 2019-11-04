@@ -7,7 +7,7 @@ export default class SaveProfile {
         return JSON.parse(value)
     }
     setProfile = async (profileObject) => {
-        //console.log("setProfile  ========> ", profileObject)
+        console.log("setProfile  ========> ", profileObject)
         return await AsyncStorage.setItem('profile', JSON.stringify(profileObject));
     }
 }

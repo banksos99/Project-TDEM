@@ -1,24 +1,38 @@
 import React, { Component } from "react";
-import { View, Image, Text, TextInput, Keyboard, TouchableOpacity, Alert, ActivityIndicator, Platform } from "react-native";
+import {
+    View,
+    Image,
+    Text,
+    TextInput,
+    Keyboard,
+    TouchableOpacity,
+    Alert,
+    ActivityIndicator,
+    Platform,
+    Picker, ScrollView,
+    AsyncStorage,
+    PixelRatio
+} from "react-native";
+
+import firebase from 'react-native-firebase';
+
 import { styles } from "./../SharedObject/MainStyles";
 import Colors from './../SharedObject/Colors';
-import RegisterAPI from './../constants/RegisterAPI';
-import SetPinAPI from './../constants/SetPinAPI';
+import SharedPreference from "../SharedObject/SharedPreference";
+import Layout from "../SharedObject/Layout";
 import StringText from "../SharedObject/StringText";
+
+import RegisterAPI from './../constants/RegisterAPI';
+import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
+import SetPinAPI from './../constants/SetPinAPI';
+import RestAPI from "./../constants/RestAPI"
+
+import SaveTOKEN from "./../constants/SaveToken"
+import SaveProfile from "./../constants/SaveProfile"
 import SavePIN from "./../constants/SavePIN"
 
-import SaveProfile from "./../constants/SaveProfile"
-import SharedPreference from "../SharedObject/SharedPreference";
-import SaveTOKEN from "./../constants/SaveToken"
-
-import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
-
-import RestAPI from "./../constants/RestAPI"
-import firebase from 'react-native-firebase';
-import Layout from "../SharedObject/Layout";
-
-// import SaveAutoSyncCalendar from "./../constants/SaveAutoSyncCalendar";
 var BadgeAndroid = require('react-native-android-badge')
+const dismissKeyboard = require('dismissKeyboard');
 
 let scale = Layout.window.width / 320;
 let countgettokenFB = 0;
@@ -43,12 +57,19 @@ export default class RegisterActivity extends Component {
             password: '',
             versionCode: "Version : " + SharedPreference.deviceInfo.appVersion,
             datastatus: 0,
-            isLoading: false
+            isLoading: false,
+            showlocation:false,
+            temptextlocation:'',
+            textlocation: SharedPreference.APPLICATION_DEVICE , //'TDEM',
+            temptextlocationvalue:'',
+            textlocationvalue:'',
+            tempcompany:'',
+            locationlist:["TDEM","TMAP-MS","TMT" ,"STM" ,"TAW" ,"OTHER"]
         }
         firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_REGISTER)
-
+        // SharedPreference.company = 'tmap-em'
         // SharedPreference.sessionOpenFirstTime = true
-
+        console.log('constructor')
     }
 
     async getfirebasetoken() {
@@ -98,11 +119,11 @@ export default class RegisterActivity extends Component {
                 isLoading: true
             })
             Keyboard.dismiss()
-            console.log('onRegister')
+       
             let data = await RegisterAPI(this.state.username, this.state.password)
             code = data[0]
             data = data[1]
-            console.log('onRegister', data.data)
+           
             this.setState({
                 datastatus: data.code
             })
@@ -120,13 +141,17 @@ export default class RegisterActivity extends Component {
                 SharedPreference.userRegisted = true;
                 SharedPreference.lastdatetimeinterval = data.data.last_request
 
-                loginsuccess = true;
+               // loginsuccess = true;
+
+                AsyncStorage.setItem("mycompany", SharedPreference.company);
 
                 await this.onCheckPINWithChangePIN('1111', '2222')
                 this.setState({
                     isLoading: false,
                     password: '',
-                    username: ''
+                    username: '',
+                    textlocation : SharedPreference.APPLICATION_DEVICE , //'TDEM',
+                    textlocationvalue: SharedPreference.APPLICATION_DEVICE ,//'TDEM',
                 })
 
             } else if (code.DOES_NOT_EXISTS == data.code) {
@@ -318,7 +343,8 @@ console.log('register componentDidMount')
             password: '',
             versionCode: "Version : " + SharedPreference.deviceInfo.appVersion,
             datastatus: 0,
-            isLoading: false
+            isLoading: false,
+            textlocation : SharedPreference.APPLICATION_DEVICE //'TDEM'
         })
 
         // SharedPreference.profileObject = null
@@ -337,7 +363,7 @@ console.log('register componentDidMount')
 
     onCheckPINWithChangePIN = async (PIN1, PIN2) => {
 
-        console.log("Tdem ==> onCheckPINWithChangePIN  ==> show")
+       
 
         let data = await LoginChangePinAPI(PIN1, PIN2, SharedPreference.FUNCTIONID_PIN)
         code = data[0]
@@ -396,6 +422,71 @@ console.log('register componentDidMount')
         }
     }
 
+    openlocation = async () => {
+        this.state.temptextlocation = this.state.textlocation
+        this.state.temptextlocationvalue = this.state.textlocationvalue
+        this.state.tempcompany = SharedPreference.company
+        console.log('openlocation')
+        this.setState({
+            showlocation: true,
+            keyboardHeight: 0
+        })
+        dismissKeyboard();
+       
+    }
+
+    selectLocation = async (i) => {
+
+        console.log('openlocation')
+        if(i === 0){
+            this.setState({
+                showlocation: false,
+            })
+        }else if(i === 1){
+            this.setState({
+                showlocation: false,
+                textlocation:'TDEM'
+            },function(){
+                SharedPreference.company='tmap-em'
+            })
+        }else if(i === 2){
+            this.setState({
+                showlocation: false,
+                textlocation:'TMAP-MS'
+            },function(){
+                SharedPreference.company='tmap-ms'
+            })
+        }else if(i === 3){
+            this.setState({
+                showlocation: false,
+                textlocation:'TMT'
+            },function(){
+                SharedPreference.company='tmt'
+            })
+        }else if(i === 4){
+            this.setState({
+                showlocation: false,
+                textlocation:'STM'
+            },function(){
+                SharedPreference.company='stm'
+            })
+        }else if(i === 5){
+            this.setState({
+                showlocation: false,
+                textlocation:'TAW'
+            },function(){
+                SharedPreference.company='taw'
+            })
+        }else if(i === 6){
+            this.setState({
+                showlocation: false,
+                textlocation:'OTHER'
+            },function(){
+                SharedPreference.company='other'
+            })
+        }
+        
+    }
 
     onSetPin = async () => {
         
@@ -419,7 +510,7 @@ console.log('register componentDidMount')
         })
 
         if (code.SUCCESS == data.code) {
-            console.log("Tdem ==> onCheckPINWithChangePIN  ==> show")
+            
            
             this.setState({
                 showCreatePinSuccess: true,
@@ -544,7 +635,8 @@ console.log('register componentDidMount')
                             [
                                 {
                                     text: 'Update', onPress: () => {
-                                        //console.log('OK Pressed') },
+                                        Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.stmconnectdev&hl=en");
+                                    //    Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
                                     }
                                 }
                             ],
@@ -559,11 +651,14 @@ console.log('register componentDidMount')
                     if(data.data.ios.app_version != SharedPreference.deviceInfo.appVersion){
                         Alert.alert(
                             'New Version Available',
-                            'This is a newer version available for download! Please update the app by visiting the Apple Store',
+                            'This is a newer version available for download! Please click Update',
                             [
                                 {
                                     text: 'Update', onPress: () => {
-                                        //console.log('OK Pressed') },
+                                        // Linking.openURL("https://www.technobrave.asia/tdemiosdev/");
+                                        //   Linking.openURL("https://www.technobrave.asia/tdemios/");
+                                         Linking.openURL("https://smart.ap.toyota-asia.com/tdemconnect/");
+                                      
                                     }
                                 }
                             ],
@@ -728,6 +823,33 @@ console.log('register componentDidMount')
         //////console.log("Reset Pin")
     }
 
+
+    onselectlocation = () => {
+
+        this.setState({
+
+            showlocation: false,
+
+        }, function () {
+
+
+        });
+
+    }
+
+    cancelselectlocation = () => {
+
+        this.setState({
+
+            showlocation: false,
+            textlocation: this.state.temptextlocation,
+            textlocationvalue: this.state.temptextlocationvalue
+        }, function () {
+            SharedPreference.company = this.state.tempcompany
+        });
+
+    }
+
     renderCreatePin() {
         if (this.state.showCreatePin == true) {
             console.log("Register ==> this.state.showCreatePin : ", this.state.showCreatePin)
@@ -752,11 +874,11 @@ console.log('register componentDidMount')
                                 source={require('../resource/regist/regist_lock_gray.png')}
                                 resizeMode="cover" />
 
-                            <Text style={styles.pinText}>{this.state.pintitle}</Text>
+                            <Text style={styles.pinText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.pintitle}</Text>
                             {this.renderImagePin()}
 
                             <TouchableOpacity onPress={() => { this.onResetPin.bind(this) }}>
-                                <Text style={styles.registPinForgotContainer}>Reset PIN?</Text>
+                                <Text style={styles.registPinForgotContainer}allowFontScaling={SharedPreference.allowfontscale}>Reset PIN?</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -766,21 +888,21 @@ console.log('register componentDidMount')
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(1) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>1</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>1</Text>
                                 </View>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(2) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>2</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>2</Text>
                                 </View>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(3) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>3</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>3</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -789,19 +911,19 @@ console.log('register componentDidMount')
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(4) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>4</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>4</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(5) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>5</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>5</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(6) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>6</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>6</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -810,21 +932,21 @@ console.log('register componentDidMount')
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(7) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>7</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>7</Text>
                                 </View>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(8) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>8</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>8</Text>
                                 </View>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(9) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>9</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>9</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -832,14 +954,14 @@ console.log('register componentDidMount')
                         <View style={styles.registPinNumRowContainer}>
                             <View style={styles.emptyContainer}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={[styles.pinnumber, { color: Colors.redColor }]}>0</Text>
+                                    <Text style={[styles.pinnumber, { color: Colors.redColor }]}allowFontScaling={SharedPreference.allowfontscale}>0</Text>
                                 </View>
                             </View>
 
                             <TouchableOpacity style={styles.emptyContainer}
                                 onPress={() => { this.setPIN(0) }}>
                                 <View style={styles.registPinNumContainer}>
-                                    <Text style={styles.pinnumber}>0</Text>
+                                    <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>0</Text>
                                 </View>
                             </TouchableOpacity>
 
@@ -864,6 +986,175 @@ console.log('register componentDidMount')
         }
     }
 
+    renderDropDownLocation() {
+        
+
+        
+        console.log('renderDropDownLocation',this.state.temptextlocation)
+        if (this.state.showlocation) {
+
+            if (Platform.OS === 'android') {
+
+                return (
+                    <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
+                    <View style={{ height: '100%', width: '100%', position: 'absolute', backgroundColor: 'black', opacity: 0.5 }}></View>
+                        <View style={{ width: '80%', backgroundColor: 'white' }}>
+                            <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
+                                <Text style={styles.alertDialogBoxText}allowFontScaling={SharedPreference.allowfontscale}>Select Company</Text>
+                            </View>
+                            <ScrollView style={{ height: '40%' }}>
+                                <TouchableOpacity style={styles.button}
+                                    onPress={() => { this.selectLocation(1) }}
+                                    >
+                                    <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}>TDEM</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.button}
+                                    onPress={() => { this.selectLocation(2) }}
+                                    >
+                                    <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}>TMAP-MS</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.button}
+                                    onPress={() => { this.selectLocation(3) }}
+                                    >
+                                    <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}>TMT</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.button}
+                                    onPress={() => { this.selectLocation(4) }}
+                                    >
+                                    <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}>STM</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.button}
+                                    onPress={() => { this.selectLocation(5) }}
+                                    >
+                                    <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}>TAW</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.button}
+                                    onPress={() => { this.selectLocation(6) }}
+                                    >
+                                    <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}>OTHER</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                {/* <TouchableOpacity style={styles.button}
+                                    onPress={() => { this.selectLocation(6) }}
+                                    >
+                                    <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}>FTH</Text>
+                                    </View>
+                                </TouchableOpacity> */}
+
+                            </ScrollView>
+                            <View style={{ flexDirection: 'row', height: 40, }}>
+                                <View style={{ flex: 2 }} />
+                                <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                                    onPress={() => { this.cancelselectlocation() }}>
+                                    <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}> Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )
+
+            }
+            return (
+                <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
+                    <View style={{ height: '100%', width: '100%', position: 'absolute', backgroundColor: 'black', opacity: 0.5 }}></View>
+                    <View style={{ width: '80%', backgroundColor: 'white' }}>
+                        <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
+                            <Text style={styles.titlepicker} allowFontScaling={SharedPreference.allowfontscale}>Select Company</Text>
+                        </View>
+                        <Picker
+                            selectedValue={this.state.textlocationvalue}
+                            onValueChange={(itemValue, itemindex) => this.setState({
+                                textlocation: this.state.locationlist[itemindex],
+                                textlocationvalue:itemValue
+                            }, function () {
+                                SharedPreference.company = itemValue
+                                console.log('SharedPreference.company : ',SharedPreference.company)
+                            })}
+                            >
+                            <Picker.Item label="TDEM" value="tmap-em" />
+                            <Picker.Item label="TMAP-MS" value="tmap-ms" />
+                            <Picker.Item label="TMT" value="tmt" />
+                            <Picker.Item label="STM" value="stm" />
+                            <Picker.Item label="TAW" value="taw" />
+                            <Picker.Item label="OTHER" value="other" />
+                            {/* <Picker.Item label="FTH" value="fth" /> */}
+                        </Picker>
+                        <View style={{ flexDirection: 'row', height: 50 }}>
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
+                                onPress={(this.cancelselectlocation)}>
+                                >
+                                <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
+                            </TouchableOpacity>
+                            <View style={{ flex: 1 }} />
+                            <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
+                                onPress={(this.onselectlocation)}>
+                                <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>OK</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                    </View>
+                </View>
+            )
+
+            // return (
+            //     <View style={{ height: '100%', width: '100%', position: 'absolute' }}>
+            //         <TouchableOpacity style={{ height: '100%', width: '100%', position: 'absolute', backgroundColor: 'black', opacity: 0.5 }}
+            //             onPress={() => this.selectLocation(0)}>
+            //         </TouchableOpacity>
+            //         <View style={{ marginTop: 415, marginLeft: 90, height: 200, width: 200, position: 'absolute', flexDirection: 'column' }}>
+            //             <TouchableOpacity
+            //                 onPress={() => this.selectLocation(1)}
+            //                 style={[{ backgroundColor: 'white', height: 30, justifyContent: 'center' }]}>
+            //                 <Text style={[styles.registText, { marginLeft: 15, color: 'black', justifyContent: 'center' }]} allowFontScaling={SharedPreference.allowfontscale}>TDEM</Text>
+            //             </TouchableOpacity>
+            //             <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+            //             <TouchableOpacity
+            //                 onPress={() => this.selectLocation(2)}
+            //                 style={[{ backgroundColor: 'white', height: 30, }]}>
+            //                 <Text style={[styles.registText, { marginLeft: 15, color: 'black' }]} allowFontScaling={SharedPreference.allowfontscale}>TMAP-MS</Text>
+            //             </TouchableOpacity>
+            //             <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+            //             <TouchableOpacity
+            //                 onPress={() => this.selectLocation(3)}
+            //                 style={[{ backgroundColor: 'white', height: 30, }]}>
+            //                 <Text style={[styles.registText, { marginLeft: 15, color: 'black' }]} allowFontScaling={SharedPreference.allowfontscale}>TMT</Text>
+            //             </TouchableOpacity>
+            //             <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+            //             <TouchableOpacity
+            //                 onPress={() => this.selectLocation(4)}
+            //                 style={[{ backgroundColor: 'white', height: 30, }]}>
+            //                 <Text style={[styles.registText, { marginLeft: 15, color: 'black' }]} allowFontScaling={SharedPreference.allowfontscale}>STM</Text>
+            //             </TouchableOpacity>
+            //             <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+            //             <TouchableOpacity
+            //                 onPress={() => this.selectLocation(5)}
+            //                 style={[{ backgroundColor: 'white', height: 30, }]}>
+            //                 <Text style={[styles.registText, { marginLeft: 15, color: 'black' }]} allowFontScaling={SharedPreference.allowfontscale}>TAW</Text>
+            //             </TouchableOpacity>
+            //             <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+            //             <TouchableOpacity
+            //                 onPress={() => this.selectLocation(6)}
+            //                 style={[{ backgroundColor: 'white', height: 30, }]}>
+            //                 <Text style={[styles.registText, { marginLeft: 15, color: 'black' }]} allowFontScaling={SharedPreference.allowfontscale}>FTH</Text>
+            //             </TouchableOpacity>
+            //             <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+            //         </View>
+            //     </View>
+            // )
+        }
+    }
     // renderProgressView() {
     //     if (this.state.isLoading) {
     //         return (
@@ -896,16 +1187,16 @@ console.log('register componentDidMount')
                                 <Image style={{ width: 120, height: 120, marginBottom: 20 }}
                                     source={require('../resource/regist/regist_lock_green.png')}
                                     resizeMode="cover" />
-                                <Text style={styles.pinCreateSuccessTitleText}>Create PIN Successfully</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You can use this PIN to log in next time.</Text>
+                                <Text style={styles.pinCreateSuccessTitleText}allowFontScaling={SharedPreference.allowfontscale}>Create PIN Successfully</Text>
+                                <Text style={styles.pinCreateSuccessDescText}allowFontScaling={SharedPreference.allowfontscale}>You've successfully created/changed your PIN.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}allowFontScaling={SharedPreference.allowfontscale}>You can use this PIN to log in next time.</Text>
                             </View>
                         </View>
 
                         <TouchableOpacity
                             onPress={() => { this.onOpenPinActivity() }}>
                             <View style={styles.pinButtonContainer}>
-                                <Text style={styles.pinCreateSuccessButtonText}>DONE</Text>
+                                <Text style={styles.pinCreateSuccessButtonText}allowFontScaling={SharedPreference.allowfontscale}>DONE</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -971,11 +1262,17 @@ console.log('register componentDidMount')
                     <Image source={require('../resource/regist/regist_logo.png')} />
 
                     <View style={[styles.registerContainerWidth, { marginBottom: this.state.keyboardHeight }]}>
-                        <View style={styles.registTextContainer}>
+                    
+                        <TouchableOpacity
+                            onPress={() => this.openlocation()}
+                            style={styles.selectLocationContainer}>
                             <Image style={[styles.registetImageContainer, { height: 20, width: 20, }]}
                                 source={require('../resource/regist/regist_location.png')} />
-                            <Text style={[styles.registText, { color: Colors.grayTextColor, marginTop: 15 }]}>TDEM</Text>
-                        </View>
+                            <Text style={[styles.registText, { color: Colors.grayTextColor, marginTop: 25 }]}allowFontScaling={SharedPreference.allowfontscale}>{this.state.textlocation}</Text>
+                            <Image style={[styles.registetImageContainer, { height: 40, width: 40, }]}
+                                source={require('../resource/images/Expand.png')} />
+                        </TouchableOpacity>
+                        
                         <View style={styles.registLine} />
 
                         <View style={styles.registTextContainer}>
@@ -987,7 +1284,7 @@ console.log('register componentDidMount')
                                 autoCapitalize='none'
                                 underlineColorAndroid="transparent"
                                 selectionColor='black'
-                                style={styles.registText}
+                                style={[styles.registText1,{fontSize:(20 / PixelRatio.getFontScale())}]}
                                 placeholder="User ID"
                                 value={this.state.username}
                                 placeholderTextColor={Colors.lightGrayTextColor}
@@ -1000,13 +1297,12 @@ console.log('register componentDidMount')
                             <Image style={[styles.registetImageContainer, { height: 20, width: 20, }]}
                                 source={require('../resource/regist/regist_locked.png')} />
                             <TextInput
-
                                 onSubmitEditing={Keyboard.dismiss}
                                 autoCapitalize='none'
                                 underlineColorAndroid="transparent"
                                 secureTextEntry={true}
                                 selectionColor='black'
-                                style={styles.registText}
+                                style={[styles.registText1,{fontSize:(20 / PixelRatio.getFontScale())}]}
                                 placeholder="Password"
                                 placeholderTextColor={Colors.lightGrayTextColor}
                                 value={this.state.password}
@@ -1018,7 +1314,7 @@ console.log('register componentDidMount')
                             onPress={() => this.onRegister()}
                         >
                             <View style={styles.registButton}>
-                                <Text style={styles.registTextButton}>
+                                <Text style={styles.registTextButton}allowFontScaling={SharedPreference.allowfontscale}>
                                     Log In
                                 </Text>
                             </View>
@@ -1026,7 +1322,7 @@ console.log('register componentDidMount')
                     </View>
                     {/* Device Info */}
                     <Text></Text>
-                    <Text>{this.state.versionCode}</Text>
+                    <Text style={styles.showvwesiontext} allowFontScaling={SharedPreference.allowfontscale}>{this.state.versionCode}</Text>
                     {/* <Text style={{ color: 'lightgray' }}>{this.state.datastatus}</Text>
                         <Text style={{ fontSize: 10, color: 'lightgray' }}>{SharedPreference.deviceInfo.deviceBrand},{SharedPreference.deviceInfo.deviceOS},{SharedPreference.deviceInfo.deviceModel},{SharedPreference.deviceInfo.deviceOSVersion},{SharedPreference.deviceInfo.appVersion}</Text>
                         <Text style={{ fontSize: 10, color: 'lightgray' }}>{SharedPreference.deviceInfo.firebaseToken}</Text> */}
@@ -1036,7 +1332,7 @@ console.log('register componentDidMount')
                 {this.renderCreatePinSuccess()}
 
                 {this.renderProgressView()}
-
+                {this.renderDropDownLocation()}
             </View >
         );
     }

@@ -289,7 +289,7 @@ export default class NonpayrollDetailView extends Component {
                     const detail = item.tran_detail;
                     const money = item.nonpay_amt
                     var decodedString = Decrypt.decrypt(money)
-                    subDetail.push(this.renderSection(detail, decodedString,keyindex))
+                    subDetail.push(this.renderSection(detail, decodedString,index2))
                 }
                 detail.push(subDetail);
                 detail.push(<View style={{ height: 1, backgroundColor: 'gray', marginLeft: 20, marginRight: 20 }} key={keyindex}></View>
@@ -310,18 +310,18 @@ export default class NonpayrollDetailView extends Component {
 
     renderDate(date) {
         return (
-            <Text style={styles.nonPayRollTitleText} key={date}>{date}</Text>
+            <Text style={styles.nonPayRollTitleText} key={date}allowFontScaling={SharedPreference.allowfontscale}>{date}</Text>
         );
     }
 
     renderSection(detail, money,index) {
         return (
-            <View style={{marginLeft:20,marginRight:20}} key={100+index}>
+            <View style={{marginLeft:20,marginRight:20}} key={200+index}>
                 <View style={styles.nonPayRollLeftContainer}>
-                    <Text style={styles.nonPayRolldateDetailText}>{detail}</Text>
+                    <Text style={styles.nonPayRolldateDetailText}allowFontScaling={SharedPreference.allowfontscale}>{detail}</Text>
                 </View>
                 <View style={styles.nonPayRollRightContainer}>
-                    <Text style={styles.nonPayRolldateMoneyText}>{money}</Text>
+                    <Text style={styles.nonPayRolldateMoneyText}allowFontScaling={SharedPreference.allowfontscale}>{money}</Text>
                 </View>
             </View >
         );
@@ -378,9 +378,9 @@ export default class NonpayrollDetailView extends Component {
                                 source={require('../resource/images/Back.png')}
                             />
                         </TouchableOpacity>
-                        <Text style={styles.navTitleText}>Non-Payroll Detail</Text>
+                        <Text style={styles.navTitleText}allowFontScaling={SharedPreference.allowfontscale}>Non Payroll Detail</Text>
                     </View>
-                    <Text style={styles.nonPayRolldateYearText}>{this.state.monthYear}</Text>
+                    <Text style={styles.nonPayRolldateYearText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.monthYear}</Text>
                     <View style={{ height: 1, backgroundColor: 'gray',marginLeft: 20, marginRight: 20 }}></View>
                     <ScrollView style={{ flex:1 }}>
 

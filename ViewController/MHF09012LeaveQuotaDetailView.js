@@ -234,7 +234,7 @@ export default class LeaveQuotaActivity extends Component {
                             source={require('./../resource/images/Back.png')}
                         />
                     </TouchableOpacity>
-                    <Text numberOfLines={1} style={styles.navTitleText}>{this.state.item.leave_desc_en}</Text>
+                    <Text numberOfLines={1} style={styles.navTitleText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.leave_desc_en}</Text>
                     <View style={styles.navRightContainer}>
                     </View>
                 </View>
@@ -245,30 +245,30 @@ export default class LeaveQuotaActivity extends Component {
                         <View style={styles.leaveQuotaContainer}>
 
                             <View style={styles.leaveQuotaDetailItemTopContainer}>
-                                <Text style={styles.leaveQuotaDetailItemTopTitleText}>Used</Text>
+                                <Text style={styles.leaveQuotaDetailItemTopTitleText}allowFontScaling={SharedPreference.allowfontscale}>Used</Text>
                                 <View style={styles.leaveQuotaDetailItemTopCircleContainer} >
-                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.used}</Text>
+                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.used}</Text>
                                 </View>
-                                <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
+                                <Text style={styles.leaveQuotaDetailItemTopDescText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.unit}</Text>
                             </View>
 
                             <View style={styles.leaveQuotaDetailItemTopContainer}>
-                                <Text style={styles.leaveQuotaDetailItemTopTitleText}>Remain</Text>
+                                <Text style={styles.leaveQuotaDetailItemTopTitleText}allowFontScaling={SharedPreference.allowfontscale}>Remain</Text>
                                 <View style={[styles.leaveQuotaDetailItemTopCircleContainer, { backgroundColor: Colors.leaveCircleBlue }]} >
-                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.remain_quota}</Text>
+                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.remain_quota}</Text>
                                 </View>
-                                <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
+                                <Text style={styles.leaveQuotaDetailItemTopDescText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.unit}</Text>
                             </View>
 
                             <View style={styles.leaveQuotaDetailItemTopContainer}>
-                                <Text style={styles.leaveQuotaDetailItemTopTitleText}>Quota</Text>
+                                <Text style={styles.leaveQuotaDetailItemTopTitleText}allowFontScaling={SharedPreference.allowfontscale}>Quota</Text>
                                 <View style={[styles.leaveQuotaDetailItemTopCircleContainer, {
                                     backgroundColor:
                                         Colors.leaveCircleGreen
                                 }]} >
-                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}>{this.state.item.quota}</Text>
+                                    <Text style={styles.leaveQuotaDetailItemTopCircleText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.quota}</Text>
                                 </View>
-                                <Text style={styles.leaveQuotaDetailItemTopDescText}>{this.state.item.unit}</Text>
+                                <Text style={styles.leaveQuotaDetailItemTopDescText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.unit}</Text>
                             </View>
                         </View >
 
@@ -276,33 +276,33 @@ export default class LeaveQuotaActivity extends Component {
                         <View style={[styles.leaveQuotaDetailContentContainer]}>
                             <View style={styles.leaveQuotaDetailContentTextContainer}>
                                 <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
-                                    <Text style={styles.leaveQuotaContentTitleText}>Time/Year</Text>
-                                    <Text style={styles.leaveQuotaContentDescText}>{this.state.item.time_year}</Text>
+                                    <Text style={styles.leaveQuotaContentTitleText}allowFontScaling={SharedPreference.allowfontscale}>Time/Year</Text>
+                                    <Text style={styles.leaveQuotaContentDescText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.time_year}</Text>
                                 </View>
                             </View>
                             <View style={styles.leaveQuotaDetailContentTextContainer}>
                                 <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
-                                    <Text style={styles.leaveQuotaContentTitleText}>Time/Service</Text>
-                                    <Text style={styles.leaveQuotaContentDescText}>{this.state.item.time_serviceyear}</Text>
+                                    <Text style={styles.leaveQuotaContentTitleText}allowFontScaling={SharedPreference.allowfontscale}>Time/Service</Text>
+                                    <Text style={styles.leaveQuotaContentDescText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.time_serviceyear}</Text>
                                 </View>
                             </View>
                             <View style={styles.leaveQuotaDetailContentTextContainer}>
                                 <View style={styles.leaveQuotaDetailContentTextInsideContainer}>
-                                    <Text style={styles.leaveQuotaContentTitleText}>Effective</Text>
+                                    <Text style={styles.leaveQuotaContentTitleText}allowFontScaling={SharedPreference.allowfontscale}>Effective</Text>
                                 </View>
                             </View>
 
                             <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }} >
-                                <Text style={styles.leaveQuotaContentGrayText}>From   </Text>
-                                <Text style={styles.leaveQuotaContentRedText}>{this.state.item.eff_from_date}</Text>
-                                <Text style={styles.leaveQuotaContentGrayText}>  To  </Text>
-                                <Text style={styles.leaveQuotaContentRedText}>{this.state.item.eff_to_date}</Text>
+                                <Text style={styles.leaveQuotaContentGrayText}allowFontScaling={SharedPreference.allowfontscale}>From   </Text>
+                                <Text style={styles.leaveQuotaContentRedText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.eff_from_date}</Text>
+                                <Text style={styles.leaveQuotaContentGrayText}allowFontScaling={SharedPreference.allowfontscale}>  To  </Text>
+                                <Text style={styles.leaveQuotaContentRedText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.eff_to_date}</Text>
                             </View>
 
                         </View >
                         <View style={[styles.leaveQuotaDetailContentContainer, { flex: 1, paddingLeft: 10, paddingRight: 10, paddingTop: 15 }]}>
-                            <Text style={styles.leaveQuotaContentGrayText}>Regulation   </Text>
-                            <Text style={styles.leaveQuotaDescText}>{this.state.item.leave_regulation}</Text>
+                            <Text style={styles.leaveQuotaContentGrayText}allowFontScaling={SharedPreference.allowfontscale}>Regulation   </Text>
+                            <Text style={styles.leaveQuotaDescText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.item.leave_regulation}</Text>
                         </View >
                         {/* </View> */}
                     </View>

@@ -87,18 +87,18 @@ export default class calendarMonthView extends Component {
             return (<View style={styles.calendarEventContainer}>
                 <View style={styles.calendarEventViewContainer}>
                     <View style={{ width: '40%', paddingLeft: 10 }}>
-                        <Text style={styles.calendarEventTimeText}>Start</Text>
+                        <Text style={styles.calendarEventTimeText}allowFontScaling={SharedPreference.allowfontscale}>Start</Text>
                     </View>
                     <View style={{ width: '60%' , }}>
-                        <Text style={styles.calendarEventTimeDetialText}>{moment(eventObject[0].time_start).format(_format)}</Text>
+                        <Text style={styles.calendarEventTimeDetialText}allowFontScaling={SharedPreference.allowfontscale}>{moment(eventObject[0].time_start).format(_format)}</Text>
                     </View>
                 </View>
                 <View style={styles.calendarEventViewContainer}>
                     <View style={{ width: '40%', paddingLeft: 10 }}>
-                        <Text style={styles.calendarEventTimeText}>End</Text>
+                        <Text style={styles.calendarEventTimeText}allowFontScaling={SharedPreference.allowfontscale}>End</Text>
                     </View>
                     <View style={{ width: '60%',  }}>
-                        <Text style={styles.calendarEventTimeDetialText}>{moment(eventObject[0].time_end).format(_format)}
+                        <Text style={styles.calendarEventTimeDetialText}allowFontScaling={SharedPreference.allowfontscale}>{moment(eventObject[0].time_end).format(_format)}
                         </Text>
                     </View>
                 </View>
@@ -107,10 +107,10 @@ export default class calendarMonthView extends Component {
             return (<View style={styles.calendarEventContainer}>
                 <View style={styles.calendarEventViewContainer}>
                     <View style={{ width: '40%' }}>
-                        <Text style={styles.calendarEventTimeText}>All Day</Text>
+                        <Text style={styles.calendarEventTimeText}allowFontScaling={SharedPreference.allowfontscale}>All Day</Text>
                     </View>
                     <View style={{ width: '60%', }}>
-                        <Text style={styles.calendarEventTimeAlldayDetialText}>{moment(this.state.date).format(_formatAllday)}</Text>
+                        <Text style={styles.calendarEventTimeAlldayDetialText}allowFontScaling={SharedPreference.allowfontscale}>{moment(this.state.date).format(_formatAllday)}</Text>
                     </View>
                 </View>
             </View>)
@@ -124,7 +124,7 @@ export default class calendarMonthView extends Component {
                 collapsable={true}
                 {...this.panResponder.panHandlers}
             >
-                <Text >No Data</Text>
+                <Text allowFontScaling={SharedPreference.allowfontscale}>No Data</Text>
             </View>)
         } else {
             return (
@@ -139,7 +139,7 @@ export default class calendarMonthView extends Component {
                                 source={require('../resource/images/Back.png')}
                             />
                         </TouchableOpacity>
-                        <Text style={styles.navTitleText}>Event Detail</Text>
+                        <Text style={styles.navTitleText}allowFontScaling={SharedPreference.allowfontscale}>Event Detail</Text>
                     </View>
                     <View style={styles.detailContainer}>
                         <View style={styles.calendarEventDetailView}>
@@ -147,14 +147,14 @@ export default class calendarMonthView extends Component {
                                 style={styles.calendarEventDetailIcon}
                                 source={require('../resource/images/calendar/calendar_event.png')}
                             />
-                            <Text style={styles.calendarEventHeaderText}>{eventObject[0].title}</Text>
+                            <Text style={styles.calendarEventHeaderText}allowFontScaling={SharedPreference.allowfontscale}>{eventObject[0].title}</Text>
                         </View>
                         <View style={styles.calendarEventDetailView}>
                             <Image
                                 style={styles.calendarEventDetailIcon}
                                 source={require('../resource/images/calendar/calendar_sticky-note.png')}
                             />
-                            <Text style={[styles.calendarEventText, { color: Colors.lightGrayTextColor }]}>
+                            <Text style={[styles.calendarEventText, { color: Colors.lightGrayTextColor }]}allowFontScaling={SharedPreference.allowfontscale}>
                                 {eventObject[0].description}
                             </Text>
                         </View>
@@ -171,7 +171,7 @@ export default class calendarMonthView extends Component {
                                 style={styles.calendarEventDetailIcon}
                                 source={require('../resource/images/calendar/calendar_location.png')}
                             />
-                            <Text style={[styles.calendarEventHeaderText, { color: 'black' }]}>{this.state.showLocation}</Text>
+                            <Text style={[styles.calendarEventHeaderText, { color: 'black' }]}allowFontScaling={SharedPreference.allowfontscale}>{this.state.showLocation}</Text>
 
                         </View>
                     </View>

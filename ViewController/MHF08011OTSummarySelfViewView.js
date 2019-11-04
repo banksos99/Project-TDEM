@@ -650,7 +650,7 @@ export default class OTSummaryDetail extends Component {
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={styles.alertDialogBoxText}>Select Month and Year</Text>
+                                <Text style={styles.alertDialogBoxText}allowFontScaling={SharedPreference.allowfontscale}>Select Month and Year</Text>
                             </View>
                             <ScrollView style={{ height: '40%' }}>
                                 {
@@ -661,7 +661,7 @@ export default class OTSummaryDetail extends Component {
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }}>
                                                 <Text style={index === selectmonth ?
                                                     { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
-                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> {item}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
@@ -671,7 +671,7 @@ export default class OTSummaryDetail extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={styles.buttonpicker}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -686,7 +686,7 @@ export default class OTSummaryDetail extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={styles.titlepicker}>Select Month and Year</Text>
+                            <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>Select Month and Year</Text>
                         </View>
                         <Picker
 
@@ -709,12 +709,12 @@ export default class OTSummaryDetail extends Component {
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_change_month)}>
                                 >
-                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 1 }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_change_month)}>
-                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>OK</Text>
                             </TouchableOpacity>
 
                         </View>
@@ -758,16 +758,16 @@ export default class OTSummaryDetail extends Component {
 
                                 <View key={item.id} style={{ height: 50 }} key={index + 500}>
                                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', }}>
-                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>
+                                        <Text style={[styles.otsummarybody, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>
                                             {parseInt(item.ot_date.split('-')[2])}
                                         </Text>
-                                        <Text style={[styles.otsummarybody, { flex: 2, }]}>{item.time}</Text>
-                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.x15}</Text>
-                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.x20}</Text>
-                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.x30}</Text>
-                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.total_ot}</Text>
-                                        <Text style={[styles.otsummarybody, { flex: 1 }]}>{item.meal_no}</Text>
-                                        <Text style={[styles.otsummarybody, { flex: 1.5 }]}>{item.shift_allw}</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 2, }]}allowFontScaling={SharedPreference.allowfontscale}>{item.time}</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>{item.x15}</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>{item.x20}</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>{item.x30}</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>{item.total_ot}</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>{item.meal_no}</Text>
+                                        <Text style={[styles.otsummarybody, { flex: 1.5 }]}allowFontScaling={SharedPreference.allowfontscale}>{item.shift_allw}</Text>
                                     </View>
                                     <View style={{ height: 1, backgroundColor: Colors.lightGrayTextColor, }} />
                                 </View>
@@ -781,7 +781,7 @@ export default class OTSummaryDetail extends Component {
         return (
 
             <View style={{ flex: 16, backgroundColor: 'white', alignItems: 'center',justifyContent:'center' }} key={1000}>
-                <Text style={styles.payslipDetailTextCenter}> No Result</Text>
+                <Text style={styles.payslipDetailTextCenter}allowFontScaling={SharedPreference.allowfontscale}> No Result</Text>
             </View>
 
         )
@@ -841,7 +841,7 @@ export default class OTSummaryDetail extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={styles.navTitleTextTop}>Overtime Summary</Text>
+                            <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Overtime Summary</Text>
                         </View>
                         <View style={{ flex: 1, }}>
                         </View>
@@ -866,7 +866,7 @@ export default class OTSummaryDetail extends Component {
                             onPress={(this.select_month.bind(this))}
                         >
 
-                            <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
+                            <Text style={styles.otsummarydatetext}allowFontScaling={SharedPreference.allowfontscale}>{this.state.announcementTypetext}</Text>
 
                         </TouchableOpacity>
 
@@ -875,13 +875,13 @@ export default class OTSummaryDetail extends Component {
                         <View style={{ flex: 1, backgroundColor: Colors.lightblue, marginLeft: 15, marginRight: 15, marginTop: 2, marginBottom: 2, borderRadius: 5, flexDirection: 'row', }}>
 
                             <View style={{ flex: 2, justifyContent: 'center', marginLeft: 18 }}>
-                                <Text style={styles.otsummaryheadertext}>Total OT Hour</Text>
+                                <Text style={styles.otsummaryheadertext}allowFontScaling={SharedPreference.allowfontscale}>Total OT Hour</Text>
                             </View>
                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                <Text style={styles.otsummaryheaderredtext}>{total_ot}</Text>
+                                <Text style={styles.otsummaryheaderredtext}allowFontScaling={SharedPreference.allowfontscale}>{total_ot}</Text>
                             </View>
                             <View style={{ flex: 1, justifyContent: 'center', marginRight: 18 }}>
-                                <Text style={styles.otsummaryheadertext}>Hour(s)</Text>
+                                <Text style={styles.otsummaryheadertext}allowFontScaling={SharedPreference.allowfontscale}>Hour(s)</Text>
                             </View>
 
                         </View>
@@ -900,30 +900,16 @@ export default class OTSummaryDetail extends Component {
                                     <View style={{ flex: 1, flexDirection: 'row' }}>
                                         <View style={{ flex: 1, justifyContent: 'center', marginLeft: 15, flexDirection: 'column' }}>
                                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailboldtext}>OT Hour</Text>
+                                                <Text style={styles.otsummarydetailboldtext}allowFontScaling={SharedPreference.allowfontscale}>OT Hour</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailtext}>X 1.5</Text>
+                                                <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>X 1.5</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailredtext}>{ot_15}</Text>
+                                                <Text style={styles.otsummarydetailredtext}allowFontScaling={SharedPreference.allowfontscale}>{ot_15}</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailtext}>Hour(s)</Text>
-                                            </View>
-                                        </View>
-                                        <View style={{ flex: 1, justifyContent: 'center', marginLeft: 15, flexDirection: 'column' }}>
-                                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                {/* <Text style={{ color: Colors.grayTextColor, fontSize: 18, fontWeight: 'bold' }}>OT Hour</Text> */}
-                                            </View>
-                                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailtext}>X 2.0</Text>
-                                            </View>
-                                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailredtext}>{ot_20}</Text>
-                                            </View>
-                                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailtext}>Hour(s)</Text>
+                                                <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>Hour(s)</Text>
                                             </View>
                                         </View>
                                         <View style={{ flex: 1, justifyContent: 'center', marginLeft: 15, flexDirection: 'column' }}>
@@ -931,13 +917,27 @@ export default class OTSummaryDetail extends Component {
                                                 {/* <Text style={{ color: Colors.grayTextColor, fontSize: 18, fontWeight: 'bold' }}>OT Hour</Text> */}
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailtext}>X 3.0</Text>
+                                                <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>X 2.0</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailredtext}>{ot_30}</Text>
+                                                <Text style={styles.otsummarydetailredtext}allowFontScaling={SharedPreference.allowfontscale}>{ot_20}</Text>
                                             </View>
                                             <View style={{ flex: 1, justifyContent: 'center' }}>
-                                                <Text style={styles.otsummarydetailtext}>Hour(s)</Text>
+                                                <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>Hour(s)</Text>
+                                            </View>
+                                        </View>
+                                        <View style={{ flex: 1, justifyContent: 'center', marginLeft: 15, flexDirection: 'column' }}>
+                                            <View style={{ flex: 1, justifyContent: 'center' }}>
+                                                {/* <Text style={{ color: Colors.grayTextColor, fontSize: 18, fontWeight: 'bold' }}>OT Hour</Text> */}
+                                            </View>
+                                            <View style={{ flex: 1, justifyContent: 'center' }}>
+                                                <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>X 3.0</Text>
+                                            </View>
+                                            <View style={{ flex: 1, justifyContent: 'center' }}>
+                                                <Text style={styles.otsummarydetailredtext}allowFontScaling={SharedPreference.allowfontscale}>{ot_30}</Text>
+                                            </View>
+                                            <View style={{ flex: 1, justifyContent: 'center' }}>
+                                                <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>Hour(s)</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -945,16 +945,16 @@ export default class OTSummaryDetail extends Component {
                             </View>
                             <View style={{ flex: 1, backgroundColor: Colors.pink, marginLeft: 3, marginTop: 5, marginBottom: 5, borderRadius: 5, flexDirection: 'column' }}>
                                 <View style={{ flex: 1, justifyContent: 'center', marginLeft: 5 }}>
-                                    <Text style={styles.otsummarydetailboldtext}>OT Meal</Text>
+                                    <Text style={styles.otsummarydetailboldtext}allowFontScaling={SharedPreference.allowfontscale}>OT Meal</Text>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'center', marginLeft: 5 }}>
-                                    <Text style={styles.otsummarydetailtext}>No.</Text>
+                                    <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>No.</Text>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'center', marginLeft: 5 }}>
-                                    <Text style={styles.otsummarydetailredtext}>{ot_meals}</Text>
+                                    <Text style={styles.otsummarydetailredtext}allowFontScaling={SharedPreference.allowfontscale}>{ot_meals}</Text>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'center', marginLeft: 5 }}>
-                                    <Text style={styles.otsummarydetailtext}>Meal(s)</Text>
+                                    <Text style={styles.otsummarydetailtext}allowFontScaling={SharedPreference.allowfontscale}>Meal(s)</Text>
                                 </View>
 
                             </View>
@@ -965,21 +965,21 @@ export default class OTSummaryDetail extends Component {
 
                         <View style={{ flex: 1, backgroundColor: Colors.lightred, borderRadius: 5 }}>
                             <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={[styles.otsummarybodytitle, { flex: 1 }]}>Date</Text>
-                                <Text style={[styles.otsummarybodytitle, { flex: 2 }]}>Time</Text>
+                                <Text style={[styles.otsummarybodytitle, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>Date</Text>
+                                <Text style={[styles.otsummarybodytitle, { flex: 2 }]}allowFontScaling={SharedPreference.allowfontscale}>Time</Text>
                                 <View style={{ flex: 4, flexDirection: 'column', }}>
                                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
-                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}>OT Hour</Text>
+                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>OT Hour</Text>
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
-                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}>X1.5</Text>
-                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}>X2</Text>
-                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}>X3</Text>
-                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}>Total</Text>
+                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>X1.5</Text>
+                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>X2</Text>
+                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>X3</Text>
+                                        <Text style={[styles.otsummarybodytitle, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>Total</Text>
                                     </View>
                                 </View>
-                                <Text style={[styles.otsummarybodytitle, { flex: 1 }]}>OT Meal No.</Text>
-                                <Text style={[styles.otsummarybodytitle, { flex: 1.5 }]}>Shift Allowance</Text>
+                                <Text style={[styles.otsummarybodytitle, { flex: 1 }]}allowFontScaling={SharedPreference.allowfontscale}>OT Meal No.</Text>
+                                <Text style={[styles.otsummarybodytitle, { flex: 1.5 }]}allowFontScaling={SharedPreference.allowfontscale}>Shift Allowance</Text>
                             </View>
                             {this.renderdetail()}
 

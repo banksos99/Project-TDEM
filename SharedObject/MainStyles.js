@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, } from "react-native";
+import { StyleSheet, Platform, PixelRatio} from "react-native";
 
 import Colors from "./Colors";
 import Layout from "./Layout";
@@ -98,16 +98,60 @@ export const styles = StyleSheet.create({
         backgroundColor: '#2b78e4',
     },
     badgeIconpayslip: {
-        top: scale ,
+        top: scale,
         right: scale,
         // width: 18* scale,
-        height: 18* scale,
-        borderRadius: 9* scale,
+        paddingLeft: 1 * scale,
+        paddingRight: 1 * scale,
+        height: 18 * scale,
+        borderRadius: 9 * scale,
         backgroundColor: 'red',
         position: 'absolute',
         justifyContent: 'center',
         alignItems: 'center',
-
+    },
+    badgeIconannouncement: {
+        paddingLeft: 1 * scale,
+        paddingRight: 1 * scale,
+        height: 18 * scale,
+        borderRadius: 9 * scale,
+        backgroundColor: 'red',
+        marginLeft: 20,
+        justifyContent: 'center',
+        marginTop: 5 * scale,
+    },
+    badgeIconannouncement1: {
+        paddingLeft: 2 * scale,
+        paddingRight: 2 * scale,
+        height: 18 * scale,
+        borderRadius: 9 * scale,
+        backgroundColor: 'red',
+        marginLeft: 20,
+        justifyContent: 'center',
+        marginTop: 5 * scale,
+    },
+    badgeIconannouncementdisable: {
+        paddingLeft: 2 * scale,
+        paddingRight: 2 * scale,
+        height: 18 * scale,
+        borderRadius: 9 * scale,
+        backgroundColor: 'transparent',
+        marginLeft: 20,
+        justifyContent: 'center',
+        marginTop: 5 * scale,
+    },
+    badgeIconpayslip1: {
+        top: scale,
+        right: scale,
+        // width: 18* scale,
+        paddingLeft: 2 * scale,
+        paddingRight: 2 * scale,
+        height: 18 * scale,
+        borderRadius: 9 * scale,
+        backgroundColor: 'red',
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     badgeIconpayslipDisable: {
         top: scale ,
@@ -263,7 +307,7 @@ export const styles = StyleSheet.create({
         flex:1,
         alignItems: 'center',
         justifyContent:'center',
-        marginTop:-2
+  
         // flexDirection: 'row',
         // position: 'absolute',
         // alignSelf: 'flex-start',
@@ -285,16 +329,20 @@ export const styles = StyleSheet.create({
         color: Colors.calendarRedText
     },
     calendarYearText: {
-        fontSize: 35,
-        textAlign: 'center',
-        justifyContent:'center',
+        fontSize: 25 * scale,
+        // textAlign: 'center',
+        // justifyContent:'center',
+        margin:-10* scale,
         color: Colors.redTextColor,
+        fontFamily: font_medium
     },
     calendarLocationText: {
         fontSize: 14 * scale,
         textAlign: 'center',
         justifyContent:'center',
         color: Colors.redTextColor,
+        fontFamily: font_medium
+
     },
 
     calendarTitleBox: {
@@ -334,9 +382,10 @@ export const styles = StyleSheet.create({
         flex: 1, backgroundColor: 'white', flexDirection: 'row'
     },
     calendarDayContainer: {
-        flex: 1, height: 14, 
+        flex: 1,
+         height: 14* scale, 
         // marginBottom: -13,
-         marginTop: -8,
+         marginTop: -8* scale,
         // backgroundColor:'green',
         justifyContent:'center',
         alignItems: 'center',
@@ -357,9 +406,9 @@ export const styles = StyleSheet.create({
     },
     calendarCurrentDayCicleContainer: {
         flex: 1,
-        height: 14,
+        height: 14* scale,
         // marginBottom: -13,
-        marginTop: -8,
+        marginTop: -8 * scale,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -395,18 +444,21 @@ export const styles = StyleSheet.create({
     },
     calendarTitleRightText: {
         fontSize: 15,
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         color: 'white',
-        paddingRight: 10
+        paddingRight: 10,
+        fontFamily: font_medium
     },
     calendarMonthTitleText: {
         fontSize: 35,
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         color: 'white',
+        fontFamily: font_medium
     },
     calendarYearTitleText: {
         fontSize: 20,
         color: 'white',
+        fontFamily: font_medium
     },
     calendarWeekTitleView: {
         flexDirection: 'row',
@@ -421,36 +473,42 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         textAlign: 'center',
-        paddingBottom: 2
+        paddingBottom: 2,
+        fontFamily: font_medium
     },
     calendarEventTitleText: {
         fontSize: 15,
         textAlign: 'left',
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         color: Colors.redTextColor,
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
+        fontFamily: font_medium
     },
     calendarEventItemView: {
         height: 50,
         margin: 3,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        // fontFamily: font_medium
     },
     calendarNoEventItemView: {
         flex: 1, justifyContent: 'center',
         alignItems: 'center',
     },
     calendarNoEventItemText: {
-        color: Colors.grayTextColor, alignSelf: 'center'
+        color: Colors.grayTextColor,
+         alignSelf: 'center',
+         fontFamily: font_medium
     },
     calendarEventCircleView: {
         width: 5,
         height: 5,
         borderRadius: 3,
         marginRight: 5,
-        marginBottom: 5
+        marginBottom: 5,
+        
     },
     calendarEventItemLeftView: {
         width: 100,
@@ -463,11 +521,13 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'left',
         color: Colors.grayTextColor,
+        fontFamily: font_medium
     },
     calendarEventTimeEndText: {
         fontSize: 12,
         textAlign: 'left',
         color: Colors.lightGrayTextColor,
+        fontFamily: font_medium
     },
     calendarEventDetailIcon: {
         width: 30,
@@ -487,7 +547,7 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         // textAlign: 'left',
         color: Colors.redTextColor,
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         fontFamily: font_medium
     },
     calendarEventText: {
@@ -501,8 +561,8 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         // textAlign: 'left',
         color: Colors.grayTextColor,
-        fontWeight: 'bold',
-        fontFamily: font_medium
+       // fontWeight: 'bold',
+        fontFamily: font_medium,
     },
     calendarEventTimeDetialText: {
         fontSize: 13,
@@ -580,12 +640,12 @@ export const styles = StyleSheet.create({
     },
     userTitleText: {
         fontSize: scale * 15,
-        color: 'white',
+        color: 'black',
         fontFamily: font_medium
     },
     usernameText: {
         fontSize: scale * 13,
-        color: 'white',//Colors.grayTextColor,
+        color: 'black',//Colors.grayTextColor,
         fontFamily: font_medium
 
     },
@@ -618,6 +678,7 @@ export const styles = StyleSheet.create({
         color: Colors.calendarLocationBoxColor,
         fontSize: scale * 22,
         textAlign: 'center',
+        fontFamily: font_medium
         // backgroundColor: Colors.backgroundcolor
     },
     leaveYearButton_ena: {
@@ -625,7 +686,21 @@ export const styles = StyleSheet.create({
         color: Colors.redTextColor,
         fontSize: scale * 22,
         textAlign: 'center',
+        fontFamily: font_medium
         // backgroundColor: Colors.calendarLocationBoxColor
+    },
+    payslipannounal: {
+        flex: 5,
+        fontSize: 15,
+        marginLeft: 10,
+       // fontWeight: 'bold',
+        fontFamily: font_bold
+    },
+    payslipmonth:{
+        fontSize: 21,
+        color: Colors.redTextColor,
+         textAlign: 'center',
+         fontFamily: font_medium
     },
     leavequotaBackground: {
         flex: 1,
@@ -768,12 +843,13 @@ export const styles = StyleSheet.create({
     pinnumber: {
         flex: 1,
         fontSize: scale * 20,
-        fontWeight: 'bold',
+      //  fontWeight: 'bold',
         //color: Colors.grayColor,//'white',
         color: 'white',
         textAlign: 'center',
         justifyContent: 'center',
         position: 'absolute',
+        fontFamily: font_medium
     },
     pinnumber1: {
         flex: 1,
@@ -926,7 +1002,8 @@ export const styles = StyleSheet.create({
         textAlign: 'right',
         color: Colors.lightredTextColor,
         fontSize: 15 * scale,
-        marginLeft: 10* scale
+        marginLeft: 10 * scale,
+        fontFamily: font_medium
     },
     alertDialogContainer: {
         flex: 1,
@@ -987,7 +1064,8 @@ export const styles = StyleSheet.create({
         textAlign: 'left',
         color: 'black',
         fontSize: 18,
-        fontWeight: 'bold',
+       // fontWeight: 'bold',
+       fontFamily: font_bold
     },
     alertDialogBoxSelectText: {
         textAlign: 'center', fontSize: 18, width: '100%', height: 50, alignItems: 'center'
@@ -1019,6 +1097,51 @@ export const styles = StyleSheet.create({
         backgroundColor: '#F2DEDE',
         height: scale * 60
     },
+    announcementtext1: {
+       // height: 20,
+        fontSize: 12 * scale,
+        textAlign: 'left',
+        //    fontWeight: 'bold',
+       //marginTop: -10* scale,
+        fontFamily: font_medium,
+        
+        
+    },
+    announcementtext2: {
+       // height: 20,
+        fontSize: 11 * scale,
+        textAlign: 'left',
+        color: 'gray',
+        fontFamily: font_medium,
+    },
+    announcementtext3: {
+        //height: 40,
+        fontSize: 8 * scale,
+        textAlign: 'right',
+        color: Colors.redTextColor,
+        fontFamily: font_medium,
+        
+    },
+    announcementtext4: {
+       // height: 40,
+        fontSize: 8 * scale,
+        textAlign: 'right',
+        color: 'gray',
+        fontFamily: font_medium,
+        
+    },
+    announcementtexthidenodata: {
+        fontSize: 23 * scale, 
+        textAlign: 'center', 
+        color: 'transparent',
+        fontFamily: font_medium,
+    },
+    announcementtextshownodata: {
+        fontSize: 23 * scale,
+         textAlign: 'center',
+          color: 'black',
+        fontFamily: font_medium,
+    },
     handbookItem: {
         height: 250,
         width: Layout.window.width / 2,
@@ -1046,19 +1169,26 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
          marginLeft: 20,
-    }, nonPayRolldateYearText: {
+         fontFamily: font_medium,
+    }, 
+    nonPayRolldateYearText: {
         color: Colors.redTextColor,
         fontSize: 20,
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 20, 
-        marginRight: 20
-    }, nonPayRolldateDetailText: {
+        marginRight: 20,
+        fontFamily: font_medium,
+    },
+     nonPayRolldateDetailText: {
         color: Colors.grayTextColor,
         fontSize: 14,
-    }, nonPayRolldateMoneyText: {
+        fontFamily: font_medium,
+    }, 
+    nonPayRolldateMoneyText: {
         color: Colors.redTextColor,
         fontSize: 14,
+        fontFamily: font_medium,
     },
     nonpayrolltabBG_ena: {
         flex: 1,
@@ -1274,10 +1404,21 @@ export const styles = StyleSheet.create({
         height: 22,
         alignItems: 'center'
     },
+    selectLocationContainer: {
+        flexDirection: 'row',
+        height: 30,
+        // backgroundColor:'blue',
+        alignItems: 'center',
+    },
+    dropdownLocationContainer: {
+       // flexDirection: 'row',
+        height: 30,
+        // backgroundColor:'blue',
+        alignItems: 'center',
+    },
     registTextContainer: {
         flexDirection: 'row',
         height: 30,
-        
         alignItems: 'center',
     },
     registLine: {
@@ -1285,12 +1426,26 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.lightGrayTextColor,
         marginBottom: 10
     },
-    registText: {
-        fontSize: 17 * scale,
+    registText1: {
+        // fontSize: (20 )/ PixelRatio.getFontScale() ,
         //color: Colors.lightGrayTextColor,
         flex: 1,
         height: 45* scale,
         fontFamily:font_medium
+    },
+    registText: {
+        fontSize: (17 * scale) ,
+        //color: Colors.lightGrayTextColor,
+        flex: 1,
+        height: 45* scale,
+        fontFamily:font_medium
+    },
+    registTextpass: {
+        fontSize: 17 * scale,
+        //color: Colors.lightGrayTextColor,
+        flex: 1,
+        height: 45* scale,
+        
     },
     registTitleText: {
         fontSize: 12,
@@ -1312,6 +1467,10 @@ export const styles = StyleSheet.create({
     registTextButton: {
         fontSize: 16 * scale,
         color: 'white',
+        fontFamily: font_medium
+    },
+    showvwesiontext: {
+        fontSize: 16 * scale,
         fontFamily: font_medium
     },
     epubreader: {
@@ -1389,17 +1548,17 @@ export const styles = StyleSheet.create({
 
     }, payslipDetailTextCenter: {
         
-        marginRight: 10* scale,
+        marginRight: 10 * scale,
         color: Colors.thingrayTextColor,
         textAlign: 'center',
-        fontFamily: font_medium,
-        fontSize: 13* scale,
-        fontWeight: 'bold'
+        fontFamily: font_bold,
+        fontSize: 13 * scale,
+        // fontWeight: 'bold'
     },
     pinText: {
         fontSize: 13,
         color: Colors.grayText,
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         paddingTop: 10,
         paddingBottom: 10,
         fontFamily: font_medium,
@@ -1571,7 +1730,13 @@ export const styles = StyleSheet.create({
         color: Colors.thingrayTextColor,
         fontFamily: font_medium
     },
-    
+    insurancename: {
+        textAlign: 'center',
+        fontSize: 12 * scale,
+        color: Colors.grayTextColor,
+        fontFamily: font_medium,
+        // backgroundColor:'blue'
+    },
     empinfoTitleText: {
         color: Colors.grayTextColor,
         marginLeft: 20,
@@ -1678,7 +1843,7 @@ export const styles = StyleSheet.create({
         color: 'black',
         fontSize: 15 * scale,
       //  fontWeight: 'bold',
-        fontFamily: font_medium
+        fontFamily: font_bold
     },
     buttonpicker: {
         textAlign: 'center',
@@ -1705,6 +1870,14 @@ export const styles = StyleSheet.create({
         marginRight: 15,
         fontFamily: font_medium,
         // borderWidth:1
+    },
+    claimItem: {
+        height: 300,
+        width: Layout.window.width,
+        flexDirection: 'row',
+        // backgroundColor: Colors.backgroundcolor,
+        marginTop: 5,
+        borderColor: Colors.lightGrayTextColor,
     },
     datapicker: {
 

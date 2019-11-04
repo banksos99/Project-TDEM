@@ -34,7 +34,7 @@ export default {
   CALENDAR_ALERT_PDF_TITLE_SUCCESS: 'Success.',
 
   CALENDAR_ALERT_PDF_DESC_SUCCESS_1: 'Calendar ',
-  CALENDAR_ALERT_PDF_DESC_SUCCESS_2: ' has been downloaded.',
+  CALENDAR_ALERT_PDF_DESC_SUCCESS_2: 'has been downloaded.',
 
   CALENDAR_ALERT_PDF_TITLE_FAIL: 'Calendar ',
   CALENDAR_ALERT_PDF_DESC_FAIL: 'No data',
@@ -118,6 +118,6 @@ export default {
   ALERT_USER_NOT_AUTHORIZED_DETAIL: 'User is not authorized to access the system.',
 
   ALERT_USER_LOCK_TITLE: 'User account locked',
-  ALERT_USER_LOCK_DETAIL: 'Incorrect password was entered more then 5 times.To unlock your account please contact Helpdesk.',
+  ALERT_USER_LOCK_DETAIL: 'Incorrect password was entered more than 5 times.To unlock your account please contact Helpdesk.',
 
 };

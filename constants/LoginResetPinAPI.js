@@ -33,7 +33,8 @@ export default async function resetPIN(functionID) {
         },
         body: JSON.stringify({
             type: "reset",
-            systemdn: "TMAP-EM"
+            systemdn: SharedPreference.company,
+            application_device: SharedPreference.APPLICATION_DEVICE // Watchara N, at 16August2019
         }),
     })
         .then((response) => response.json())

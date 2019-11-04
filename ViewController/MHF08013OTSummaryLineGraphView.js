@@ -336,7 +336,7 @@ export default class OTSummaryLineChart extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={styles.navTitleTextTop}>Overtime History</Text>
+                            <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Overtime History</Text>
                         </View>
                         <View style={{ flex: 1, }}>
                         </View>
@@ -346,8 +346,8 @@ export default class OTSummaryLineChart extends Component {
 
                 </View>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>Total Average Overtime History</Text>
-                    <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>{this.state.org_name}</Text>
+                    <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>Total Average Overtime History</Text>
+                    <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{this.state.org_name}</Text>
                 </View>
                 <View style={{ flex: 8, }}>
                     <View style={{ flex: 1, flexDirection: 'row' }}>

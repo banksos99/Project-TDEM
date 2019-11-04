@@ -510,7 +510,7 @@ Alert.alert(
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={styles.alertDialogBoxText}>Select Month and Year</Text>
+                                <Text style={styles.alertDialogBoxText}allowFontScaling={SharedPreference.allowfontscale}>Select Month and Year</Text>
                             </View>
                             <ScrollView style={{ height: '40%' }}>
                                 {
@@ -521,7 +521,7 @@ Alert.alert(
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
                                             <Text style={index === selectmonth ?
                                                     { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
-                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> {item}</Text>
                                                 {/* <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text> */}
                                             </View>
                                         </TouchableOpacity>
@@ -533,7 +533,7 @@ Alert.alert(
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={{ fontSize: 16, color: Colors.redTextColor, textAlign: 'center' }}> Cancel</Text>
+                                    <Text style={{ fontSize: 16, color: Colors.redTextColor, textAlign: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                             
@@ -546,7 +546,7 @@ Alert.alert(
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={styles.titlepicker}>Select Month and Year</Text>
+                            <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>Select Month and Year</Text>
                         </View>
                         <Picker
                             selectedValue={this.state.announcementType}
@@ -571,13 +571,13 @@ Alert.alert(
                                 onPress={(this.selected_cancle_month)}
 
                             >
-                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 1 }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_month_ios)}
                             >
-                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>OK</Text>
                             </TouchableOpacity>
 
                         </View>
@@ -635,20 +635,20 @@ Alert.alert(
                     <View style={{ flex: 1 }} />
 
                     <View style={{ flex: 3, justifyContent: 'center' }}>
-                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>Month</Text>
+                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>Month</Text>
                     </View>
                     <View style={{ flex: 1 }}>
                         <View style={{ flex: 1, backgroundColor: '#d77c7c', margin: 10 }} />
 
                     </View>
                     <View style={{ flex: 2, justifyContent: 'center' }}>
-                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>{premonth}</Text>
+                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{premonth}</Text>
                     </View>
                     <View style={{ flex: 1 }}>
                         <View style={{ flex: 1, backgroundColor: '#f20909', margin: 10 }} />
                     </View>
                     <View style={{ flex: 2, justifyContent: 'center' }}>
-                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>{curmonth}</Text>
+                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{curmonth}</Text>
                     </View>
                     <View style={{ flex: 1 }}>
                     </View>
@@ -657,15 +657,15 @@ Alert.alert(
                     <View style={{ flex: 1 }} />
 
                     <View style={{ flex: 3, justifyContent: 'center' }}>
-                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}>Manpower</Text>
+                        <Text style={{ color: '#555555', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>Manpower</Text>
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <Text style={{ textAlign: 'center', color: '#d77c7c', fontFamily: 'Prompt-Regular' }}>{manpower1}</Text>
+                        <Text style={{ textAlign: 'center', color: '#d77c7c', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{manpower1}</Text>
                     </View>
                     <View style={{ flex: 2 }}>
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <Text style={{ textAlign: 'center', color: '#f20909', fontFamily: 'Prompt-Regular' }}>{manpower2}</Text>
+                        <Text style={{ textAlign: 'center', color: '#f20909', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{manpower2}</Text>
                     </View>
                     <View style={{ flex: 2 }}>
                     </View>
@@ -699,7 +699,7 @@ Alert.alert(
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={styles.navTitleTextTop}>Overtime Average</Text>
+                            <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Overtime Average</Text>
                         </View>
                         <View style={{ flex: 1, }}>
                         </View>
@@ -733,7 +733,7 @@ Alert.alert(
                             onPress={(this.select_month.bind(this))}
                         >
 
-                            <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
+                            <Text style={styles.otsummarydatetext}allowFontScaling={SharedPreference.allowfontscale}>{this.state.announcementTypetext}</Text>
 
                         </TouchableOpacity>
 

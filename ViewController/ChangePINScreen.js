@@ -167,13 +167,84 @@ export default class NonpayrollActivity extends Component {
         let data = await LoginChangePinAPI(this.state.oldpin, this.state.newpin2)
         code = data[0]
         data = data[1]
-
+        console.log("onChangePINAPI : ", data.code)
         // TODO 
         if (code.SUCCESS == data.code) {
             this.setState({
                 showCreatePinSuccess: true,
                 isLoading: false
             })
+
+        } else if (data.data.code == 'MSC29136AERR') {
+            this.setState({
+                pin: [],
+                pin1: [],
+                pin2: [],
+            })
+            // this.props.navigation.navigate('HomeScreen');
+            
+            Alert.alert(
+                StringText.ALERT_USER_NOT_AUTHORIZED_TITLE,
+                    StringText.ALERT_USER_NOT_AUTHORIZED_DETAIL,
+                [{
+                    text: 'OK', onPress: () => {
+
+                        this.setState({
+                            pin: [],
+                            pin1: [],
+                            pin2: [],
+                        }, function () {
+                            SharedPreference.currentNavigator = SharedPreference.SCREEN_MAIN;
+                            this.props.navigation.navigate('Register');
+                        })
+                    }
+                },
+                ],
+                { cancelable: false }
+            )
+        } else if (code.DOES_NOT_EXISTS == data.code) {
+
+            Alert.alert(
+                StringText.ALERT_SESSION_AUTHORIZED_TITILE,
+                StringText.ALERT_SESSION_AUTHORIZED_DESC,
+                [{
+                    text: 'OK', onPress: () => {
+                        this.setState({
+                            pin: [],
+                            pin1: [],
+                            pin2: [],
+                        }, function () {
+                            SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                            this.props.navigation.navigate('RegisterScreen')
+                        })
+                    }
+                }],
+                { cancelable: false }
+            )
+
+        } else if (code.INVALID_AUTH_TOKEN == data.code) {
+
+            if (!SharedPreference.sessionTimeoutBool) {
+
+                Alert.alert(
+                    StringText.ALERT_AUTHORLIZE_ERROR_TITLE,
+                    StringText.ALERT_AUTHORLIZE_ERROR_MESSAGE,
+                    [{
+                        text: 'OK', onPress: () => {
+                            this.setState({
+                                pin: [],
+                                pin1: [],
+                                pin2: [],
+                            }, function () {
+                                SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+                                this.props.navigation.navigate('RegisterScreen')
+                            })
+                        }
+                    }
+                    ],
+                    { cancelable: false }
+                )
+            }    
         } else {
             Alert.alert(
                 StringText.CHANGE_PIN_FAIL_TITLE,
@@ -215,16 +286,16 @@ export default class NonpayrollActivity extends Component {
                                 <Image style={{ width: 120, height: 120, marginBottom: 20 }}
                                     source={require('../resource/regist/regist_lock_green.png')}
                                     resizeMode="cover" />
-                                <Text style={styles.pinCreateSuccessTitleText}>Create PIN Successfully</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You've successfully created/changed your PIN.</Text>
-                                <Text style={styles.pinCreateSuccessDescText}>You can use this PIN to log in next time.</Text>
+                                <Text style={styles.pinCreateSuccessTitleText}allowFontScaling={SharedPreference.allowfontscale}>Create PIN Successfully</Text>
+                                <Text style={styles.pinCreateSuccessDescText}allowFontScaling={SharedPreference.allowfontscale}>You've successfully created/changed your PIN.</Text>
+                                <Text style={styles.pinCreateSuccessDescText}allowFontScaling={SharedPreference.allowfontscale}>You can use this PIN to log in next time.</Text>
                             </View>
                         </View>
 
                         <TouchableOpacity
                             onPress={() => { this.onClosePIN() }}>
                             <View style={styles.pinButtonContainer}>
-                                <Text style={styles.pinCreateSuccessButtonText}>DONE</Text>
+                                <Text style={styles.pinCreateSuccessButtonText}allowFontScaling={SharedPreference.allowfontscale}>DONE</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -295,7 +366,7 @@ export default class NonpayrollActivity extends Component {
                             source={require('../resource/regist/regist_lock_gray.png')}
                             resizeMode="cover" />
 
-                        <Text style={styles.pinText}>{this.state.pintitle}</Text>
+                        <Text style={styles.pinText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.pintitle}</Text>
                         {this.renderImagePin()}
 
                     </View>
@@ -306,21 +377,21 @@ export default class NonpayrollActivity extends Component {
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(1) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>1</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>1</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(2) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>2</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>2</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(3) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>3</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>3</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -329,19 +400,19 @@ export default class NonpayrollActivity extends Component {
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(4) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>4</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>4</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(5) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>5</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>5</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(6) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>6</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>6</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -350,21 +421,21 @@ export default class NonpayrollActivity extends Component {
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(7) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>7</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>7</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(8) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>8</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>8</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(9) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>9</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>9</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -375,7 +446,7 @@ export default class NonpayrollActivity extends Component {
                         <TouchableOpacity style={styles.emptyContainer}
                             onPress={() => { this.setPIN(0) }}>
                             <View style={styles.registPinNumContainer}>
-                                <Text style={styles.pinnumber}>0</Text>
+                                <Text style={styles.pinnumber}allowFontScaling={SharedPreference.allowfontscale}>0</Text>
                             </View>
                         </TouchableOpacity>
 

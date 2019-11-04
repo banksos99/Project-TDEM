@@ -79,6 +79,7 @@ export default class calendarYearView extends Component {
             locationPickerArray: [],
             //
             selectYear: this.props.navigation.getParam("selectYear", ""),
+            tempselectYear:this.props.navigation.getParam("selectYear", ""),
             selectDownloadYear: '',
             selectLocation: this.props.navigation.getParam("selectLocation", ""),
 
@@ -197,12 +198,14 @@ console.log('componentDidUpdate')
         ////console.log("WorkingCalendar ==> componentDidMount ==> finish getYearView")
 
         let autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
+
         SharedPreference.autoSyncCalendarBool = false
         
-
         ////console.log("WorkingCalendar 2==> ",SharedPreference.calendarAutoSync)
 
         if (autoSyncCalendarBool != false && autoSyncCalendarBool != true) {
+
+            //check firsttime
 
             SharedPreference.autoSyncCalendarBool = true
 
@@ -210,7 +213,7 @@ console.log('componentDidUpdate')
             this.onAutoSynWithCalendar()
 
         } else if (autoSyncCalendarBool == true) {
-
+            
             this.onAutoSynWithCalendarNoAlert()
 
         }
@@ -303,6 +306,8 @@ console.log('componentDidUpdate')
     componentWillUnmount() {
 
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+        
 
         if (Platform.OS === 'android') {
 
@@ -551,6 +556,7 @@ console.log('componentDidUpdate')
 
         if (code.SUCCESS == data.code) {
             //////////console.log("onLoadCalendarAPI ====> SUCCESS")
+            this.state.tempselectYear = this.state.selectYear
             this.getYearView(this.state.selectYear, data)
 
         } else {
@@ -672,30 +678,37 @@ console.log('componentDidUpdate')
                         disableMonthChange={true}
                         monthFormat={'MMMM'}
                         hideDayNames={false}
-                        
+
                         theme={{
-                            
+
                             dayTextColor: 'white',
                             todayTextColor: 'white',
                             monthTextColor: 'white',
                             selectedDayBackgroundColor: '#333248',
+                            textMonthFontFamily: "Prompt-Regular",
                             'stylesheet.calendar.header': {
                                 week: {
-                                    marginTop: 0,
-                                
+                                    marginTop: -2 * scale,
                                     flexDirection: 'row',
+
                                 },
                                 header: {
                                     justifyContent: 'space-between',
+
+                                },
+                                weekText: {
+                                    fontFamily: "Prompt-Regular"
                                 },
                                 monthText: {
+                                    //marginTop: -7 * scale,
                                     fontSize: 10 * scale,
                                     textAlign: 'left',
+
                                     color: Colors.calendarRedText,
-                                
+                                    fontFamily: "Prompt-Regular"
                                 }
                             },
-                        
+
                         }}
 
                         dayComponent={({ date, state }) => {
@@ -714,28 +727,28 @@ console.log('componentDidUpdate')
                                     <View style={[styles.calendarCurrentDayCircle, { backgroundColor: state === 'disabled' ? 'white' : '#adf0c9' }]} />
                                     {/* <Text style={styles.calendarCurrentDayText}> */}
                                     <Text style=
-                                        {checkSpecialHoliday == 'Y' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText } :
-                                            checkSpecialHoliday == 'N' ? { fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText } :
-                                                { fontSize: 10 * scale, textAlign: 'center',color: state === 'disabled' ? 'white' : 'black' }
+                                        {checkSpecialHoliday == 'Y' ? { fontSize: 10 * scale, fontFamily: "Prompt-Regular", textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText } :
+                                            checkSpecialHoliday == 'N' ? { fontSize: 10 * scale, fontFamily: "Prompt-Regular", textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText } :
+                                                { fontSize: 10 * scale, fontFamily: "Prompt-Regular", textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }
                                         }
-                                    >
+                                        allowFontScaling={SharedPreference.allowfontscale}>
                                         {date.day}
 
                                     </Text>
                                 </View>
                             } else if (checkSpecialHoliday == 'Y') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText }}>
+                                    <Text style={{ fontSize: 10 * scale,fontFamily: "Prompt-Regular", textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarBlueText }}allowFontScaling={SharedPreference.allowfontscale}>
                                         {date.day}</Text>
                                 </View>
                             } else if (checkSpecialHoliday == 'N') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText }}>
+                                    <Text style={{ fontSize: 10 * scale,fontFamily: "Prompt-Regular", textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarRedText }}allowFontScaling={SharedPreference.allowfontscale}>
                                         {date.day}</Text>
                                 </View>
                             } else if (checkSpecialHoliday == 'W') {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }}>
+                                    <Text style={{ fontSize: 10 * scale,fontFamily: "Prompt-Regular", textAlign: 'center', color: state === 'disabled' ? 'white' : Colors.calendarGrayText }}allowFontScaling={SharedPreference.allowfontscale}>
                                         {date.day}</Text>
                                 </View>
                                 //} else if ((this.state.countDay.length % 7) == 0 || (this.state.countDay.length % 7) == 1) {//Holiday
@@ -746,7 +759,7 @@ console.log('componentDidUpdate')
 
                             } else {
                                 return <View style={styles.calendarDayContainer}>
-                                    <Text style={{ fontSize: 10 * scale, textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }}>
+                                    <Text style={{ fontSize: 10 * scale, fontFamily: "Prompt-Regular",textAlign: 'center', color: state === 'disabled' ? 'white' : 'black' }}allowFontScaling={SharedPreference.allowfontscale}>
                                         {date.day}</Text>
                                 </View>
                             }
@@ -1130,7 +1143,7 @@ console.log('componentDidUpdate')
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.titlepicker}>
+                                <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>
                                     {StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}
                                 </Text>
                                 <View style={{height:20}}/>
@@ -1142,8 +1155,8 @@ console.log('componentDidUpdate')
                                                 key={index + 100}>
                                                 <View style={styles.pickerViewAndroidContrianer} key={index + 200}>
                                                 <Text style={i.label === this.state.selectYear ?
-                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
-                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {i.label}</Text>
+                                                    { color: 'red', textAlign: 'center', fontSize: 18,fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18,fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> {i.label}</Text>
                                                     {/* <Text style={styles.pickerViewAndroidText}> {i.label}</Text> */}
                                                 </View>
                                             </TouchableOpacity>))}
@@ -1160,7 +1173,7 @@ console.log('componentDidUpdate')
 
                                             })
                                         }}>
-                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                        <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                                     </TouchableOpacity>
                                     
                                 </View>
@@ -1170,6 +1183,8 @@ console.log('componentDidUpdate')
                     </View >
                 )
             } else {
+
+                console.log("selectYear =>",this.state.selectYear)
                 return (
                     <View style={{ height: '100%', width: '100%', position: 'absolute', }}>
                     <View style={{ backgroundColor: 'black', height: '100%', width: '100%', position: 'absolute', opacity: 0.7 }}>
@@ -1178,10 +1193,10 @@ console.log('componentDidUpdate')
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
+                                <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_TITLE}</Text>
                             </View>
                             <Picker
-                                selectedValue={this.state.selectYear}
+                                selectedValue={this.state.selectYear.toString()}
                                 onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
                                 {this.state.yearsPickerArray.map((i, index) => (
                                     <Picker.Item key={index} label={i.label} value={i.value} />
@@ -1191,13 +1206,13 @@ console.log('componentDidUpdate')
                                 <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                     onPress={() => {
                                         this.setState({
-
+                                            selectYear: this.state.tempselectYear,
                                             yearviewPicker: false
                                         }, function () {
 
                                         })
                                     }}>
-                                    <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                    <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                                 </TouchableOpacity>
                                 <View style={{ flex: 1 }}></View>
 
@@ -1206,7 +1221,7 @@ console.log('componentDidUpdate')
                                         this.setState({ yearviewPicker: false }),
                                             this.resetCalendar()
                                     }}>
-                                    <Text style={styles.buttonpickerdownloadright}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
+                                    <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDER_YEARVIEW_SELECT_YEAR_BUTTON}</Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -1226,7 +1241,7 @@ console.log('componentDidUpdate')
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
+                                <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
                                 <View style={{height:20}}/>
                                 <ScrollView style={{ height: '40%' }}>
                                     {
@@ -1236,7 +1251,7 @@ console.log('componentDidUpdate')
                                                 onPress={() => { this.onPressSelectYearWhenSelectPDF(i.label,i) }}
                                                 >
                                                 <View style={styles.pickerViewAndroidContrianer}>
-                                                    <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {i.label}</Text>
+                                                    <Text style={{ textAlign: 'center', fontSize: 18,fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> {i.label}</Text>
                                                 </View>
                                             </TouchableOpacity>))}
                                 </ScrollView>
@@ -1252,7 +1267,7 @@ console.log('componentDidUpdate')
 
                                             })
                                         }}>
-                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                        <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                                     </TouchableOpacity>
                                     
                                 </View>
@@ -1268,9 +1283,9 @@ console.log('componentDidUpdate')
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.titlepicker}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
+                                <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_TITLE}</Text>
                                 <Picker
-                                    selectedValue={this.state.selectYear}
+                                    selectedValue={this.state.selectYear.toString()}
                                     onValueChange={(itemValue, itemIndex) => this.setState({ selectYear: itemValue })}>
                                     {this.state.yearsPickerArray.map((i, index) => (
                                         <Picker.Item key={index} label={i.label} value={i.value} />
@@ -1280,29 +1295,31 @@ console.log('componentDidUpdate')
                                     <TouchableOpacity style={{ flex: 2 , justifyContent:'center'}}
                                         onPress={() => {
                                             this.setState({
-                                               
+                                                selectYear: this.state.tempselectYear,
                                                 yearPickerForDownloadPDFFileView: false
                                             }, function () {
                                                
 
                                             })
                                         }}>
-                                        <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                        <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                                     </TouchableOpacity>
                                     <View style={{ flex:1}}></View>
                                     <TouchableOpacity style={{ flex:2,justifyContent:'center'}}
                                         onPress={() => {
                                             //////console.log('selectYear =>: ',this.state.selectYear);
                                             this.setState({
+                                                // selectYear: this.state.tempselectYear,
                                                 yearPickerForDownloadPDFFileView: false,
-                                                isLoadingPDF: true
+                                                isLoadingPDF: true,
+
                                             }, function () {
                                                 this.onloadPDFFile();
 
                                             })
 
                                         }}>
-                                        <Text style={styles.buttonpickerdownloadright}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_BUTTON}</Text>
+                                        <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDER_YEARVIEW_DOWNLOAD_PDF_BUTTON}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -1321,7 +1338,7 @@ console.log('componentDidUpdate')
                         {/* bg */}
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
-                                <Text style={styles.titlepicker}>
+                                <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>
                                     {StringText.CALENDER_YEARVIEW_LOCATION_TITLE}
                                 </Text>
                                 <ScrollView style={{ height: '40%' }}>
@@ -1342,8 +1359,8 @@ console.log('componentDidUpdate')
                                                 key={index + 300}>
                                                 <View style={styles.pickerViewAndroidContrianer} key={index + 200}>
                                                     <Text style={i.value === this.state.showLocation ?
-                                                        { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
-                                                        { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {i.value}</Text>
+                                                        { color: 'red', textAlign: 'center', fontSize: 18,fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' } :
+                                                        { textAlign: 'center', fontSize: 18,fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> {i.value}</Text>
                                                     {/* <Text style={styles.pickerViewAndroidText}> {i.label}</Text> */}
                                                 </View>
                                             </TouchableOpacity>))}
@@ -1359,7 +1376,7 @@ console.log('componentDidUpdate')
 
                                             })
                                         }}>
-                                        <Text style={styles.buttonpicker}>Cancel</Text>
+                                        <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                                     </TouchableOpacity>
 
                                 </View>
@@ -1376,7 +1393,7 @@ console.log('componentDidUpdate')
                         <View style={styles.alertDialogContainer}>
                             <View style={styles.alertDialogBoxContainer}>
                             <View style={{height:50, justifyContent:'center'}}>
-                                <Text style={styles.titlepicker}>
+                                <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>
                                     {StringText.CALENDER_YEARVIEW_LOCATION_TITLE}
                                 </Text>
                                 </View>
@@ -1402,7 +1419,7 @@ console.log('componentDidUpdate')
 
                                             })
                                         }}>
-                                        <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                        <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                                     </TouchableOpacity>
                                     <View style={{ flex: 1 }}></View>
                                     <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
@@ -1427,7 +1444,7 @@ console.log('componentDidUpdate')
                                             })
 
                                         }}>
-                                        <Text style={styles.buttonpickerdownloadright}>{StringText.CALENDER_YEARVIEW_ALERT_LOCATION_BUTTON}</Text>
+                                        <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>{StringText.CALENDER_YEARVIEW_ALERT_LOCATION_BUTTON}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 {/* <View style={styles.alertDialogBox}>
@@ -1453,7 +1470,7 @@ console.log('componentDidUpdate')
                         <View style={[styles.alertDialogContainer,{borderRadius:10}]}>
                             <View style={[styles.alertDialogBoxContainer,{borderRadius:10}]}>
                             <View style={{height:100, justifyContent:'center',alignItems:'center'}}>
-                                <Text  style={{fontSize:15}}>Sync Success</Text>
+                                <Text  style={{fontSize:15}}allowFontScaling={SharedPreference.allowfontscale}>Sync Success</Text>
                                 </View>
                             </View>
                         </View>
@@ -1502,7 +1519,8 @@ console.log('componentDidUpdate')
                     text: 'OK', onPress: () => {
                         //////////console.log("cancel downlosad")
                         this.setState({
-                            isLoadingPDF: false
+                            isLoadingPDF: false,
+                            selectYear: this.state.tempselectYear
                         })
                     }
                 }],
@@ -1564,6 +1582,8 @@ console.log('componentDidUpdate')
         //////console.log("Android ==> LoadPDFFile ==> path  : ", RNFetchBlob.fs.dirs.DownloadDir + '/' + filename);
         //let pathToFile = RNFetchBlob.fs.dirs.DownloadDir + '/' + filename;
         let pathToFile = DocumentDirectoryPath + '/pdf/' + filename;
+        
+
         if (Platform.OS === 'android') {
             this.downloadTask = RNFetchBlob
                 .config({
@@ -1626,6 +1646,8 @@ console.log('componentDidUpdate')
         } else {//iOS
             //////////console.log("loadPdf pdfPath : ", pdfPath)
             //////////console.log("loadPdf filename : ", filename)
+            this.state.selectYear =  this.state.tempselectYear;
+            
             this.downloadTask = RNFetchBlob
                 .config({
                     fileCache: true,
@@ -1681,15 +1703,16 @@ console.log('componentDidUpdate')
 
             // await RNCalendarEvents.authorizeEventStore();
             // await RNCalendarEvents.authorizeEventStore()
-
+            
             await RNCalendarEvents.authorizationStatus().then(status => {
-                console.log('dsadasdadsadasd', status)
+                
                 if (status == 'authorized') {
 
                     this.setState({
                         isLoading: true
                     })
 
+                               
                     this.addEventOnCalendar()
                     this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
                     SharedPreference.autoSyncCalendarBool = true;
@@ -1841,8 +1864,22 @@ console.log('componentDidUpdate')
     }
 
     deleteEventOnCalendar = async () => {
+        let currentyear = new Date().getFullYear();
+        
+        if (Platform.OS === 'android') {
+
+            await this.eventCalendar._deleteEventFromCalendar(currentyear)
+
+        } else {
+
+            await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
+        }
+
+        this.setState({
+            isscreenloading: false
+        })
         //////console.log("YearView ==> deleteEventCalendar")
-        await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
+        // await this.eventCalendar._deleteEventCalendar(this.state.selectYear)
     }
 
     checkDuplicateEventCalendar = async (duplicateEventArray, newEventID) => {
@@ -1875,10 +1912,13 @@ console.log('componentDidUpdate')
     addEventOnCalendar = async () => {
 
         let duplicateEventArray = []
-
+        
         // //////console.log("addEventOnCalendar ==> this.state.calendarEventData ", this.state.calendarEventData.length)
 
         if (this.state.calendarEventData.code == 200) {
+
+            await this.deleteEventOnCalendar()
+
             let holidayArray = this.state.calendarEventData.data.holidays;
             console.log("addEventOnCalendar ==> holidayArray ", holidayArray.length)
 
@@ -1986,20 +2026,27 @@ console.log('componentDidUpdate')
 
         } else {
 
-            Alert.alert(
-                StringText.CALENDAR_ALERT_SYNC_CALENDAR_TITLE_SUCCESS,
-                StringText.CALENDAR_ALERT_SYNC_CALENDAR_DESC_SUCCESS,
-                [
-                    {
-                        text: StringText.CALENDAR_ALERT_SYNC_CALENDAR_BUTTON_SUCCESS, onPress: () => {
-                            this.setState({
-                                isLoading: false
-                            })
-                        }
-                    },
-                ],
-                { cancelable: false }
-            )
+            this.setState({
+                isLoading: false,
+                syncSuccess:true
+            },function(){
+                this.onsyncAlert()
+            })
+
+            // Alert.alert(
+            //     StringText.CALENDAR_ALERT_SYNC_CALENDAR_TITLE_SUCCESS,
+            //     StringText.CALENDAR_ALERT_SYNC_CALENDAR_DESC_SUCCESS,
+            //     [
+            //         {
+            //             text: StringText.CALENDAR_ALERT_SYNC_CALENDAR_BUTTON_SUCCESS, onPress: () => {
+            //                 this.setState({
+            //                     isLoading: false
+            //                 })
+            //             }
+            //         },
+            //     ],
+            //     { cancelable: false }
+            // )
 
         }
     }
@@ -2059,7 +2106,7 @@ console.log('componentDidUpdate')
                                 source={require('../resource/images/Back.png')}
                             />
                         </TouchableOpacity>
-                        <Text style={styles.navTitleText}>Calendar</Text>
+                        <Text style={styles.navTitleText}allowFontScaling={SharedPreference.allowfontscale}>Calendar</Text>
                         <View style={styles.navRightContainer}>
                             <TouchableOpacity 
                             // onPress={this.onSynWithCalendar.bind(this)}
@@ -2130,7 +2177,9 @@ console.log('componentDidUpdate')
                                     }
 
                                 }}>
-                                <Text style={styles.calendarYearText}>{this.state.showYear}</Text>
+                                <View style={{justifyContent:'center'}}>
+                                    <Text style={styles.calendarYearText} allowFontScaling={SharedPreference.allowfontscale}>{this.state.showYear}</Text>
+                                </View>
                             </TouchableOpacity>
                             <View style={{ width: 1, height: '100%', justifyContent: 'center', flexDirection: 'column' }}>
                                 <View style={{ flex: 1, }}></View>
@@ -2160,9 +2209,9 @@ console.log('componentDidUpdate')
                                         )
                                     }
                                 }}>
-                                {/* <View style={styles.calendarCoverTitleBox}> */}
-                                <Text style={styles.calendarLocationText}>{this.state.showLocation}</Text>
-                                {/* </View> */}
+                                <View style={{justifyContent:'center'}}>
+                                <Text style={styles.calendarLocationText}allowFontScaling={SharedPreference.allowfontscale}>{this.state.showLocation}</Text>
+                                </View>
                             </TouchableOpacity>
                         </View>
                         {this.showAllMonthView()}

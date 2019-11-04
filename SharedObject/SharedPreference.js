@@ -1,18 +1,36 @@
 import DeviceInfo from 'react-native-device-info';
 const bundleId = DeviceInfo.getBundleId();
+
 console.log("BUNDLE ID ======================= " + bundleId);
-let HOST = 'https://tdemconnect.tdem.toyota-asia.com';
-let SERVER = 'DEV'
-// let HOST = bundleId == "com.tdem.tdemconnect" ? 'https://tdemconnect.tdem.toyota-asia.com' : 'https://tdemconnect-dev.tdem.toyota-asia.com';
-// SERVER = 'PROD'
-if (bundleId == "com.tdem.tdemconnect") {
+
+// let HOST = 'https://tdemconnect.tdem.toyota-asia.com';
+// let SERVER = 'PROD'
+// let SessiontimeoutSec = 1800;
+
+ let HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com';
+ let SERVER = 'DEV'
+ let SessiontimeoutSec = 300;
+
+//HOST = 'https://tdemconnect.tdem.toyota-asia.com'
+//    SERVER = 'PROD'
+//   SessiontimeoutSec = 1800;
+    
+
+if (bundleId == "com.tdem.stmconnect") {
    HOST = 'https://tdemconnect.tdem.toyota-asia.com'
     SERVER = 'PROD'
-}else if (bundleId == "com.tdem.tdemconnectdev") {
+    SessiontimeoutSec = 1800;
+}
+//else if (bundleId == "com.tdem.tdemconnectdev") {
+else{
     HOST = 'https://tdemconnect-dev.tdem.toyota-asia.com'
     SERVER = 'DEV'
+    SessiontimeoutSec = 300;
 }
+
+
 console.log("HOST ======================= " + HOST);
+
 // android - (Build type)
 // 1. Debug - (มี log warning + error)
 // 2. Release - (ไม่มี log พร้อมขึ้น store)
@@ -55,21 +73,45 @@ console.log("HOST ======================= " + HOST);
 // const VERSION = 'v1.0.78'//04-10-61 IOS: Android:
 // const VERSION = 'v1.0.79'//29-10-61 IOS: Android:
 // const VERSION = 'v1.0.80'//01-11-61 IOS: Android:
-const VERSION = 'v1.0.81'//04-10-61 IOS: Android:
+// const VERSION = 'v1.0.81'//04-10-61 IOS: Android:
+// const VERSION = 'v1.0.82'//04-10-61 IOS: Android:
+
+//const VERSION = 'v1.0.83'//04-10-61 IOS: Android:
+// const VERSION = 'v1.0.84'//04-10-61 IOS: Android:
+
+ const VERSION = 'v1.0.86'//04-10-61 IOS: Android: ** New funtion download file pdf on announment 24/10/2019
+
+// const VERSION = 'v1.0.0'//23-11-61 IOS: Android:
+// const VERSION = 'v1.0.1'//23-11-61 IOS: Android:
+// const VERSION = 'v1.0.2'//23-11-61 IOS: Android:
+
+
+ const APPLICATION_DEVICE = 'STM' // STM , TDEM
+
+ let COMPANY_DEVICE = 'tmap-em'
+ if(APPLICATION_DEVICE === 'STM'){
+     COMPANY_DEVICE = 'stm'
+ }
 
 export default {
+    APPLICATION_DEVICE: APPLICATION_DEVICE,
     HOST: HOST,
     SERVER: SERVER,
     VERSION: VERSION,
     TOKEN: '',
-
+    SessiontimeoutSec:SessiontimeoutSec,
+    
     INITIAL_MASTER_API: HOST + '/api/' + VERSION + '/initmaster/',
     APPLICATION_INFO_API: HOST + '/api/' + VERSION + '/appinfo',
-    PULL_NOTIFICATION_API: HOST + '/api/' + VERSION + '/pullnotification?latest_date=',
-    PULL_NOTIFICATION_NODATE_API: HOST + '/api/' + VERSION + '/pullnotification',
-    ANNOUNCEMENT_ASC_API: HOST + '/api/' + VERSION + '/announcement?sort=-create_date',
-    ANNOUNCEMENT_DSC_API: HOST + '/api/' + VERSION + '/announcement?sort=%2Bcreate_date',
+    
+
+    PULL_NOTIFICATION_API: HOST + '/api/' + VERSION + '/pullnotificationRollout' + '?applicationDevice=' + APPLICATION_DEVICE + '&latest_date=',
+    PULL_NOTIFICATION_NODATE_API: HOST + '/api/' + VERSION + '/pullnotificationRollout' + '?applicationDevice=' + APPLICATION_DEVICE,
+    ANNOUNCEMENT_ASC_API: HOST + '/api/' + VERSION + '/announcementRollout?sort=-create_date' + '&applicationDevice=' + APPLICATION_DEVICE,
+    ANNOUNCEMENT_DSC_API: HOST + '/api/' + VERSION + '/announcementRollout?sort=%2Bcreate_date' + '&applicationDevice=' + APPLICATION_DEVICE,
+
     ANNOUNCEMENT_DETAIL_API: HOST + '/api/' + VERSION + '/announcement/',
+    ANNOUNCEMENT_DOWNLOAD_API: HOST + '/api/' + VERSION + '/announcement/file',
 
     PAYSLIP_LIST_API: HOST + '/api/' + VERSION + '/payslip/summary',
     PAYSLIP_DETAIL_API: HOST + '/api/' + VERSION + '/payslip/',
@@ -115,7 +157,8 @@ export default {
     COMPANY_LOCATION: [],
    
     TB_M_LEAVETYPE: [],
-    company: 'TMAP-EM',
+    company: COMPANY_DEVICE,
+
     deviceInfo: {},
     calendarAutoSync: true,
     autoSyncCalendarBool:true,
@@ -214,6 +257,7 @@ export default {
     selectLocationCalendar:'default',
     Sessiontimeout:0,
     del_event:0,
-    add_event:0
+    add_event:0,
+    allowfontscale:false
 }
 

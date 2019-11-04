@@ -1,220 +1,96 @@
 {
   "project_info": {
-    "project_number": "166754553752",
-    "firebase_url": "https://tdem-connect.firebaseio.com",
-    "project_id": "tdem-connect",
-    "storage_bucket": "tdem-connect.appspot.com"
+    "project_number": "1088837947928",
+    "firebase_url": "https://stm-connect-81b4d.firebaseio.com",
+    "project_id": "stm-connect-81b4d",
+    "storage_bucket": "stm-connect-81b4d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:166754553752:android:5208b5d033b9cfac",
+        "mobilesdk_app_id": "1:1088837947928:android:bad86b5b7b1cea62",
         "android_client_info": {
-          "package_name": "com.tdem.tdemconnect"
+          "package_name": "com.tdem.stmconnect"
         }
       },
       "oauth_client": [
         {
-          "client_id": "166754553752-gjvbcpv8vfgpd2je44gke3fegr2d9ret.apps.googleusercontent.com",
+          "client_id": "1088837947928-574b4f775abe5mnk147q0117qf3v2qce.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.tdem.tdemconnect",
-            "certificate_hash": "9edf9b5e68a92c07b884ce49cbfa352cc5b7c858"
+            "package_name": "com.tdem.stmconnect",
+            "certificate_hash": "fab806daa4ef9c396a166765933e49fb86b475ec"
           }
         },
         {
-          "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
+          "client_id": "1088837947928-scpunjr8l0urj2tr3mdhljk5b4bt4pes.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCjhfYoY2LxK2Y6xs-9nb26LvynUrzZwuk"
+          "current_key": "AIzaSyDH6QvimtMkZpmpH94661dlQZkwCcGWkVY"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
+              "client_id": "1088837947928-scpunjr8l0urj2tr3mdhljk5b4bt4pes.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "166754553752-858onaf7ceh1dbd9f58mv4ge4frsqm7p.apps.googleusercontent.com",
+              "client_id": "1088837947928-qpg1rdr0s4ba3eisk21jgr57bv3adm87.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.tdem.tdemconnectdev"
+                "bundle_id": "com.tdem.stmconnect"
               }
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:166754553752:android:84d7f338348b9cc2",
+        "mobilesdk_app_id": "1:1088837947928:android:477311ab90ce5bf1",
         "android_client_info": {
-          "package_name": "com.tdem.tdemconnectdev"
+          "package_name": "com.tdem.stmconnectdev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "166754553752-0mj6vof7p61s74e19cj9fpmkbvnvs7th.apps.googleusercontent.com",
+          "client_id": "1088837947928-g0i1cl04rj76upshm5la9g773gvg6jd5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.tdem.tdemconnectdev",
-            "certificate_hash": "9edf9b5e68a92c07b884ce49cbfa352cc5b7c858"
+            "package_name": "com.tdem.stmconnectdev",
+            "certificate_hash": "fab806daa4ef9c396a166765933e49fb86b475ec"
           }
         },
         {
-          "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
+          "client_id": "1088837947928-scpunjr8l0urj2tr3mdhljk5b4bt4pes.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCjhfYoY2LxK2Y6xs-9nb26LvynUrzZwuk"
+          "current_key": "AIzaSyDH6QvimtMkZpmpH94661dlQZkwCcGWkVY"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
+              "client_id": "1088837947928-scpunjr8l0urj2tr3mdhljk5b4bt4pes.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "166754553752-858onaf7ceh1dbd9f58mv4ge4frsqm7p.apps.googleusercontent.com",
+              "client_id": "1088837947928-qpg1rdr0s4ba3eisk21jgr57bv3adm87.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.tdem.tdemconnectdev"
+                "bundle_id": "com.tdem.stmconnect"
               }
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:166754553752:android:c4efca517c12a3e2",
-        "android_client_info": {
-          "package_name": "com.toyotaasia.tdemconnect"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "166754553752-vequg9tqsfr19ttl07baognsm6jueoe5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.toyotaasia.tdemconnect",
-            "certificate_hash": "ccbe62932a8b1ce0deb65d271fbb09ca9f076fae"
-          }
-        },
-        {
-          "client_id": "166754553752-ip11at037qrl5rghhel5bqldq4ifeiip.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.toyotaasia.tdemconnect",
-            "certificate_hash": "0001465e18330b4b5f3c5a80714a4979675fbabf"
-          }
-        },
-        {
-          "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCjhfYoY2LxK2Y6xs-9nb26LvynUrzZwuk"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "166754553752-858onaf7ceh1dbd9f58mv4ge4frsqm7p.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.tdem.tdemconnectdev"
-              }
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:166754553752:android:e0ba149e373d8841",
-        "android_client_info": {
-          "package_name": "com.toyotaasia.tdemconnect_dev"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "166754553752-37h07ufa1uoee9mnudi4tcnqn50r0121.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.toyotaasia.tdemconnect_dev",
-            "certificate_hash": "0001465e18330b4b5f3c5a80714a4979675fbabf"
-          }
-        },
-        {
-          "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCjhfYoY2LxK2Y6xs-9nb26LvynUrzZwuk"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "166754553752-grmpsrjdja2u3dhp27cltug6jki904k0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "166754553752-858onaf7ceh1dbd9f58mv4ge4frsqm7p.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.tdem.tdemconnectdev"
-              }
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

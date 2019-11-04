@@ -41,6 +41,8 @@ let currentmonth;
 let initannouncementType;
 let selectmonth = 0;
 let DataResponse=[];
+let changemonth=true;
+let yOffset = 0;
 
 export default class ClockInOutSelfView extends Component {
 
@@ -103,9 +105,12 @@ export default class ClockInOutSelfView extends Component {
             employee_ID: 0,
             employee_name: this.props.navigation.getParam("employee_name", ""),
             employee_position: this.props.navigation.getParam("employee_position", ""),
+            showpicker:false,
         }
+        temptdataSource=0;
         selectmonth = 0;
         tempannouncementType=0;
+        initmonthselect='';
         tempinitannouncementType = 0;
         tempinitannouncementTypetext = 0;
         this.checkDataFormat(this.props.navigation.getParam("DataResponse", ""));
@@ -113,12 +118,17 @@ export default class ClockInOutSelfView extends Component {
         firstday = birthday.getDay() + 1;
 
         if (this.state.manager) {
+
             title = 'Clock In - Out Manager View'
+            firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_CLOCK_IN_OUT_MANAGER)
+
         } else {
+
             title = 'Clock In - Out'
+            firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_CLOCK_IN_OUT_SELF)
 
         }
-        firebase.analytics().setCurrentScreen(SharedPreference.SCREEN_CLOCK_IN_OUT_SELF)
+        
     }
 
     componentDidMount() {
@@ -274,18 +284,18 @@ export default class ClockInOutSelfView extends Component {
         this.state.initialyear = today.getFullYear();
         this.state.initialmonth = parseInt(today.getMonth() - 1);
         this.state.announcementTypetext = Months.monthNames[this.state.initialmonth + 1] + ' ' + this.state.initialyear;
+        initmonthselect = this.state.announcementTypetext
         for (let i = this.state.initialmonth + 13; i > this.state.initialmonth + 1; i--) {
-
-            if (i === 11) {
-
+            this.state.months.push(Months.monthNames[i % 12] + ' ' + this.state.initialyear)
+            if (i === 12) {
                 this.state.initialyear--;
             }
-            this.state.months.push(Months.monthNames[i % 12] + ' ' + this.state.initialyear)
+            
         }
 
         var monthnow = new Date(this.state.initialyear, this.state.initialmonth + 1, 1);
         var monthnext = new Date(this.state.initialyear, this.state.initialmonth + 2, 1);
-        //console.log('monthnow :', this.state.initialmonth);
+    
         var date1_ms = monthnow.getTime();
         var date2_ms = monthnext.getTime();
 
@@ -426,7 +436,7 @@ export default class ClockInOutSelfView extends Component {
         firstday = birthday.getDay();
 
         let url = SharedPreference.CLOCK_IN_OUT_API + this.state.employee_ID + '&month=' + tmonth + '&year=' + oyear
-        //console.log('CLOCK_IN_OUT_API :', url)
+        console.log('CLOCK_IN_OUT_API :', url)
 
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_CLOCK_IN_OUT))
 
@@ -513,8 +523,8 @@ export default class ClockInOutSelfView extends Component {
                     early: early
 
                 })
-
-
+                changemonth = true;
+initmonthselect = this.state.announcementTypetext
             }
         } else {
 
@@ -599,12 +609,13 @@ export default class ClockInOutSelfView extends Component {
 
     //***** Evant Close Pickerview select date for IOS
     cancel_select_change_month = () => {
-
+console.log('tempannouncementType',tempannouncementType);
         this.setState({
+            // announcementType:tempinitannouncementType,
             announcementType: tempannouncementType,
             loadingtype: 1,
             isscreenloading: false,
-
+            announcementTypetext:initmonthselect
         })
 
     }
@@ -623,24 +634,27 @@ export default class ClockInOutSelfView extends Component {
 
      // ****** Function change data when select Month and Year for IOS
     select_month_clockinout() {
-
+        console.log('this.state.announcementTypetext',this.state.announcementTypetext)
         this.setState({
             loadingtype: 1,
             isscreenloading: true,
-            announcementTypetext: this.state.tempannouncementTypetext
+            // announcementTypetext: this.state.tempannouncementTypetext
+            
 
         }, function () {
-            initannouncementType = tempinitannouncementType;
+            // initannouncementType = tempinitannouncementType;
+            
+            initannouncementType = this.state.announcementTypetext
             // initannouncementTypetext = tempinitannouncementTypetext
             let tdate = initannouncementType.split(' ')
             let mdate = 0;
-
+            console.log('tdate',tdate)
             for (let i = 0; i < 12; i++) {
                 if (Months.monthNames[i] === tdate[0]) {
                     mdate = i;
                 }
             }
-
+            console.log('mdate',mdate)
             this.loadClockInOutfromAPI(mdate + 1, tdate[1])
         });
 
@@ -717,13 +731,16 @@ export default class ClockInOutSelfView extends Component {
 
         if (this.state.loadingtype == 0) {
 
+            console.log('tempinitannouncementType',tempinitannouncementType) ;
+            
+
             if (Platform.OS === 'android') {
        
                 return (
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={styles.alertDialogBoxText}>Select Month and Year</Text>
+                                <Text style={styles.alertDialogBoxText}allowFontScaling={SharedPreference.allowfontscale}>Select Month and Year</Text>
                             </View>
                             <ScrollView style={{ height: '40%' }}>
                                 {
@@ -744,7 +761,7 @@ export default class ClockInOutSelfView extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={styles.buttonpicker}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -756,12 +773,12 @@ export default class ClockInOutSelfView extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={styles.titlepicker}>Select Month and Year</Text>
+                            <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>Select Month and Year</Text>
                         </View>
                         <Picker
-                            selectedValue={this.state.announcementType}
+                            selectedValue={this.state.announcementTypetext}
                             onValueChange={(itemValue, itemIndex) => this.setState({
-                                announcementType: itemValue,
+                                announcementTypetext: itemValue,
                                 tempannouncementTypetext: this.state.months[itemIndex],
                             }, function () {
 
@@ -779,12 +796,12 @@ export default class ClockInOutSelfView extends Component {
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_change_month)}>
                                 >
-                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 1 }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_month_clockinout.bind(this))}>
-                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>OK</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -800,10 +817,23 @@ export default class ClockInOutSelfView extends Component {
 
     }
 
-    
+    handleScroll() {
+        console.log(event.nativeEvent.contentOffset.y);
+    }
+
     renderdetail() {
+        let equ = false;
 
         //Calaulate offset y of scrollview content when select currence Month and Year
+        console.log('this.state.tdataSource.map',this.state.tdataSource.length)
+        console.log('temptdataSource',temptdataSource)
+        console.log('yOffset',yOffset + 92)
+        console.log('maxoffset',(this.state.tdataSource.length * 92) - (Layout.window.height - 100))
+
+        if(this.state.tdataSource.length === temptdataSource){
+          equ = true
+        }
+        temptdataSource = this.state.tdataSource.length;
         let offsety = 0;
         if (this.state.initialmonth + 2 === this.state.monthselected) {
             let half = (Layout.window.height - 100) / 2
@@ -811,15 +841,38 @@ export default class ClockInOutSelfView extends Component {
             if (offsety > ((this.state.tdataSource.length * 92)) - (Layout.window.height - 100)) {
                 offsety = ((this.state.tdataSource.length * 92)) - (Layout.window.height - 100)
             } else if (((currentday + 1) * 90) < ((Layout.window.height - 100) / 2)) {
-                offsety = 0
+                offsety = 0;
             }
 
         }
 
         return (
             <View style={{ flex: 16, backgroundColor: Colors.calendarLocationBoxColor, }}>
-                <ScrollView ref="scrollView"
-                    onContentSizeChange={(width, height) => this.refs.scrollView.scrollTo({ y: offsety })}
+                <ScrollView 
+                    ref={ref => {
+
+                        this.scrollView = ref
+             
+                        if (this.scrollView !== null && this.state.isscreenloading === false && changemonth) {
+                            if (equ) {
+                                this.scrollView.scrollTo({ y: offsety });
+                         
+                                
+                            }
+                            changemonth = false;
+                        }
+                    }
+                    }
+
+                onContentSizeChange={(contentWidth, contentHeight)=>{      
+                    console.log('onContentSizeChange')
+                    this.scrollView.scrollTo({ y: offsety });
+                }}
+                onMomentumScrollEnd={event =>{        
+                    console.log('onMomentumScrollEnd',event.nativeEvent.contentOffset.y)
+                }}
+                // {/* ref="scrollView"
+                //     onContentSizeChange={(width, height) => this.refs.scrollView.scrollTo({ y: offsety })} */}
                 >
                     {
                         this.state.tdataSource.map((item, index) => (
@@ -829,32 +882,32 @@ export default class ClockInOutSelfView extends Component {
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', }}>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
                                         <Text style={item.datetype === 'Y' ? styles.clockinoutdaybluetext :
-                                            item.datetype === 'N' ? styles.clockinoutdayredtext : styles.clockinoutdaytext}>
+                                            item.datetype === 'N' ? styles.clockinoutdayredtext : styles.clockinoutdaytext}allowFontScaling={SharedPreference.allowfontscale}>
                                             {index + 1}
                                         </Text >
                                         <Text style={item.datetype === 'Y' ? styles.clockinoutweakdaybluetext :
-                                            item.datetype === 'N' ? styles.clockinoutweakdayredtext : styles.clockinoutweakdaytext}>
+                                            item.datetype === 'N' ? styles.clockinoutweakdayredtext : styles.clockinoutweakdaytext}allowFontScaling={SharedPreference.allowfontscale}>
                                             {Months.dayNamesShortMonthView[(firstday + index) % 7]}
                                         </Text>
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                                        <Text style={styles.clockinoutweakdayalphatext}>SHIFT</Text>
+                                        <Text style={styles.clockinoutweakdayalphatext}allowFontScaling={SharedPreference.allowfontscale}>SHIFT</Text>
                                         <Text style={styles.clockinoutweakdayalphatext} />
-                                        <Text style={styles.clockinoutweakdayalphatext}>ACTUAL</Text>
+                                        <Text style={styles.clockinoutweakdayalphatext}allowFontScaling={SharedPreference.allowfontscale}>ACTUAL</Text>
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}>
+                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}allowFontScaling={SharedPreference.allowfontscale}>
                                             {this.changeformatdata(item.workstart)}
                                         </Text>
                                         <Text style={styles.clockinoutweakdayalphatext} />
                                         <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : item.actualstart === '-' && item.workstart != '-' ?
                                             styles.clockinoutbodyredtext :
-                                            item.late === 1 && item.datetype === 'W' ? styles.clockinoutbodyredtext : styles.clockinoutbodytext}>
+                                            item.late === 1 && item.datetype === 'W' ? styles.clockinoutbodyredtext : styles.clockinoutbodytext}allowFontScaling={SharedPreference.allowfontscale}>
 
                                             {this.changeformatdata(item.actualstart)}</Text>
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}>
+                                        <Text style={index > currentday && (this.state.initialmonth + 2 === this.state.monthselected) ? styles.clockinoutbodyhidetext : styles.clockinoutbodytext}allowFontScaling={SharedPreference.allowfontscale}>
                                             {this.changeformatdata(item.workend)}
                                         </Text>
                                         <Text style={styles.clockinoutweakdayalphatext} />
@@ -863,7 +916,7 @@ export default class ClockInOutSelfView extends Component {
                                             item.actualend === '-' && item.workend != '-' ?
                                                 styles.clockinoutbodyredtext :
                                                 item.early === 1 && item.datetype === 'W'? styles.clockinoutbodyredtext :
-                                                    styles.clockinoutbodytext}>
+                                                    styles.clockinoutbodytext}allowFontScaling={SharedPreference.allowfontscale}>
 
                                             {this.changeformatdata(item.actualend)}</Text>
                                     </View>
@@ -902,7 +955,7 @@ export default class ClockInOutSelfView extends Component {
                     <View style={styles.statusbarcontainer} />
                     <View style={{ height: 50, flexDirection: 'row', }}>
                         <View style={{ width: '100%', height: '100%', justifyContent: 'center', position: 'absolute' }}>
-                            <Text style={styles.navTitleTextTop}>{title}</Text>
+                            <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>{title}</Text>
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center', }}>
                             <TouchableOpacity onPress={(this.onBack.bind(this))}>
@@ -920,8 +973,8 @@ export default class ClockInOutSelfView extends Component {
                 </View>
                 <View style={{ flex: 1, flexDirection: 'column', }}>
                     <View style={{ height: this.state.manager * 50, backgroundColor: Colors.redColor, justifyContent: 'center' }}>
-                        <Text style={{ flex: 1, marginLeft: 20, color: 'white', fontFamily: 'Prompt-Regular' }}>{this.state.employee_name}</Text>
-                        <Text style={{ flex: 1, marginLeft: 20, color: 'white', fontFamily: 'Prompt-Regular' }}>{this.state.employee_position}</Text>
+                        <Text style={{ flex: 1, marginLeft: 20, color: 'white', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{this.state.employee_name}</Text>
+                        <Text style={{ flex: 1, marginLeft: 20, color: 'white', fontFamily: 'Prompt-Regular' }}allowFontScaling={SharedPreference.allowfontscale}>{this.state.employee_position}</Text>
                     </View>
                     {/* <TouchableOpacity style={{ backgroundColor: Colors.calendarLocationBoxColor, margin: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}
                         onPress={(this.select_month.bind(this))}
@@ -948,7 +1001,7 @@ export default class ClockInOutSelfView extends Component {
                             onPress={(this.select_month.bind(this))}
                         >
 
-                            <Text style={styles.otsummarydatetext}>{this.state.announcementTypetext}</Text>
+                            <Text style={styles.otsummarydatetext}allowFontScaling={SharedPreference.allowfontscale}>{this.state.announcementTypetext}</Text>
 
                         </TouchableOpacity>
 

@@ -4,8 +4,9 @@ import {
     Image, Switch, ActivityIndicator, ScrollView,
     RefreshControl, Alert, NetInfo,
     Platform, Dimensions, BackHandler, StatusBar,PanResponder,
-    SafeAreaView,Linking
+    SafeAreaView,Linking, If
 } from "react-native";
+
 import { styles } from "../SharedObject/MainStyles";
 import Colors from "../SharedObject/Colors"
 import SharedPreference from "../SharedObject/SharedPreference"
@@ -19,13 +20,23 @@ import StringText from '../SharedObject/StringText';
 import firebase from 'react-native-firebase';
 import LoginChangePinAPI from "./../constants/LoginChangePinAPI"
 import EventCalendar from "../constants/EventCalendar"
-var BadgeAndroid = require('react-native-android-badge')
+import RNCalendarEvents from 'react-native-calendar-events';
 
+var BadgeAndroid = require('react-native-android-badge')
+let scale = Layout.window.width / 320;
 const ROLL_ANNOUNCE = 50;
 let focealert = false;
 
 let annountype = { 'All': 'All', 'Company Announcement': 'Company Announcement', 'Emergency Announcement': 'Emergency Announcement', 'Event Announcement': 'Event Announcement', 'General Announcement': 'General Announcement' };
 let announstatus = { 'All': 'All', 'true': 'Read', 'false': 'Unread' };
+
+let announcementpicker =  [ { value: 'All', key: 'All' },{ value: 'Company Announcement', key: 'Company Announcement' },
+{ value: 'Emergency Announcement', key: 'Emergency Announcement' },
+{ value: 'Event Announcement', key: 'Event Announcement' },
+{ value: 'General Announcement', key: 'General Announcement' } ];
+
+let announstatuspicker =  [ { value: 'All', key: 'All' },{ value: 'Unread', key: 'Unread' }, { value: 'Read', key: 'Read' } ];
+
 
 let ICON_SIZE = '60%';
 let expandheight = 0;
@@ -46,7 +57,7 @@ let managerstatus = 'N';
 let announcestatus = 'N';
 let settingstatus = 'N';
 
-let rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
+let rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 let rolemanagementManager = [0, 0, 0, 0];
 let timerstatus = false;
 let viewupdate = false;
@@ -105,7 +116,7 @@ export default class HMF01011MainView extends Component {
             tempannouncementStatus: 'All',
             initannouncementStatus: 'All',
             announcementStatus: 'All',
-
+            // SharedPreference.READ_TYPE
 
             notiAnnounceMentBadge: SharedPreference.notiAnnounceMentBadge,
             notiPayslipBadge: SharedPreference.notiPayslipBadge.length,
@@ -116,15 +127,17 @@ export default class HMF01011MainView extends Component {
             select_announcement_type: 0,
             select_announcement_status: 0,
             sendlastupdate: SharedPreference.lastdatetimeinterval,
-            Sessiontimeout:0
+            Sessiontimeout:0,
+            application_device: SharedPreference.APPLICATION_DEVICE
         }
 
 
-        rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0];
+        rolemanagementEmpoyee = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         rolemanagementManager = [0, 0, 0, 0];
-        // managerstatus = 'N';
-        // announcestatus = 'N';
-        // settingstatus = 'N';
+        managerstatus = 'N';
+        announcestatus = 'N';
+        settingstatus = 'N';
+        
         for (let i = 0; i < SharedPreference.profileObject.role_authoried.length; i++) {
 
             if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0401') {
@@ -159,6 +172,10 @@ export default class HMF01011MainView extends Component {
 
                 rolemanagementEmpoyee[7] = 1
 
+            } else if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0B01') {
+
+                rolemanagementEmpoyee[8] = 1
+
             } else if (SharedPreference.profileObject.role_authoried[i].module_function === 'HF0201') {
 
                 announcestatus = 'Y'
@@ -188,7 +205,6 @@ export default class HMF01011MainView extends Component {
                 settingstatus = 'Y'
             }
         }
-
 
     }
 
@@ -229,46 +245,14 @@ export default class HMF01011MainView extends Component {
         BackHandler.addEventListener('hardwareBackPress', () => {
 
             BackHandler.exitApp()
-            
-            // console.log('readyExit',readyExit)
-            // //   this.props.navigation.navigate('HomeScreen');
-            // if (readyExit == true) {
-            //     readyExit = false
-            //     BackHandler.exitApp()
-
-            // } else {
-            //     readyExit = true
-
-            //     this.setState({
-            //         isscreenloading:true,
-            // loadingtype:4
-            //         // nonPayslipBadge:SharedPreference.nonPayslipBadge,
-            //     })
-            //     // Alert.alert(
-            //     //     'Confirm Exit',
-            //     //     'Are you sure you eant to exit?',
-            //     //     [{
-            //     //         text: 'cancel', onPress: () => {
-
-            //     //             // BackHandler.exitApp()
-            //     //             readyExit = false
-            //     //         }
-            //     //     }],
-            //     //     { cancelable: false }
-            //     // )
-            // }
-
+         
             return true
         })
-        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-
-        
-
+  
         
     }
     resetTimer() {
-        // console.log('resetTimer',countsession)
-      
+ 
         this.timersession = setTimeout(() => this.setState({
             // glass: true
         }, function () {
@@ -280,20 +264,18 @@ export default class HMF01011MainView extends Component {
                     StringText.ALERT_SESSION_TIMEOUT_DESC,
                     [{
                         text: 'OK', onPress: () => {
-                            // this.setState({
-                         
+                        
                             this.props.navigation.navigate('PinScreen')
                             SharedPreference.userRegisted = false;
                             page = 0
                             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-                            //showpin: true,
-                            // });
+
                         }
                     }],
                     { cancelable: false }
                 )
             }
-            //   this.onInactivityTime();
+  
 
         }), sessionTimeoutSec)
     }
@@ -305,35 +287,29 @@ export default class HMF01011MainView extends Component {
 
     loadData = async () => {
 
-        SharedPreference.autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
-        if (SharedPreference.autoSyncCalendarBool == null) {
-            SharedPreference.autoSyncCalendarBool = true
-        }
         this.setState({
             syncCalendar: false,
-            // nonPayslipBadge:SharedPreference.nonPayslipBadge,
         })
-        // SharedPreference.calendarAutoSync = autoSyncCalendarBool
-        // this.notificationListener(0)
+        let autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
+
+        await RNCalendarEvents.authorizationStatus().then(status => {
+
+            if (status == 'authorized') {
+
+               SharedPreference.autoSyncCalendarBool = autoSyncCalendarBool;
+               SharedPreference.calendarSyncStatus = true;
+
+            } else {
+
+                SharedPreference.calendarSyncStatus = false;
+                SharedPreference.autoSyncCalendarBool = false;
+            }
+
+        })
+
         this.onLoadInAppNoti()
         this.onloadSessiontimeout();
     }
-
-    // componentWillUpdate() {
-    //     // console.log('mainview => componentWillUpdate')
-
-    // }
-
-    // componentDidUpdate() {
-    //     // console.log('mainview => componentDidUpdate')
-    //     // if(!viewupdate){
-
-    //     //     viewupdate = true;
-
-    //     // }
-
-
-    // }
 
     componentDidMount() {
 
@@ -347,15 +323,13 @@ export default class HMF01011MainView extends Component {
 
         }
 
-        // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-
         this.loadData()
 
         this.notificationListener(parseInt(SharedPreference.notiAnnounceMentBadge) + SharedPreference.notiPayslipBadge.length + SharedPreference.nonPayslipBadge.length);
     }
 
     componentWillUnmount() {
-        console.log('mainview => componentWillUnmount')
+   
         clearTimeout(this.timer);
         clearTimeout(this.timersession);
 
@@ -363,10 +337,10 @@ export default class HMF01011MainView extends Component {
 
     }
 
-    onloadSessiontimeout = async () => {
+    onloadSessiontimeout(){
         SharedPreference.Sessiontimeout = SharedPreference.Sessiontimeout + 1
 
-        if (SharedPreference.Sessiontimeout >= 1800) {
+        if (SharedPreference.Sessiontimeout >= SharedPreference.SessiontimeoutSec) {
 
             if (SharedPreference.userRegisted) {
                 Alert.alert(
@@ -388,16 +362,18 @@ export default class HMF01011MainView extends Component {
 
 
         } else {
+            console.log('SharedPreference.Sessiontimeout =>',SharedPreference.Sessiontimeout,SharedPreference.userRegisted)
             this.setState({
                 Sessiontimeout:SharedPreference.Sessiontimeout
             })
             this.timersession = setTimeout(() => {
+
                 clearTimeout(this.timersession)
                 this.onloadSessiontimeout()
             }, 1000);
 
         }
-        // console.log('onloadSessiontimeout', SharedPreference.Sessiontimeout)
+
 
 
     }
@@ -496,10 +472,12 @@ export default class HMF01011MainView extends Component {
         if (SharedPreference.lastdatetimeinterval) {
 
             urlPullnoti = SharedPreference.PULL_NOTIFICATION_API + SharedPreference.lastdatetimeinterval
+            // urlPullnoti = SharedPreference.PULL_NOTIFICATION_API + '2018-12-12 14:40:25'
         }
 
         this.setState({
             sendlastupdate: SharedPreference.lastdatetimeinterval
+            // sendlastupdate: '2018-12-12 14:40:25'
         })
      
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, 1, SharedPreference.profileObject.client_token)
@@ -529,8 +507,10 @@ export default class HMF01011MainView extends Component {
                     } else if (responseJson.status == 200) {
 
                         this.timer = setTimeout(() => {
+                       
                             this.onLoadInAppNoti()
                             this.onLoadAppInfo()
+
                         }, SharedPreference.timeinterval);
 
                         //update time request
@@ -602,20 +582,21 @@ export default class HMF01011MainView extends Component {
                     } else {
 
                         this.timer = setTimeout(() => {
-
+                          
                             this.onLoadInAppNoti()
                             this.onLoadAppInfo()
+
                         }, SharedPreference.timeinterval);
 
                     }
 
                 } catch (error) {
-                    //console.log('erreo1 :', error);
+              
                 }
             })
             .catch((error) => {
 
-                //console.log('error :', error)
+              
 
             });
 
@@ -634,53 +615,48 @@ export default class HMF01011MainView extends Component {
                 if (data.data.android.force_update === 'Y') {
                     if (data.data.android.app_version != SharedPreference.deviceInfo.appVersion) {
                         this.props.navigation.navigate('PinScreen')
-                            clearTimeout(this.timer);
-                            // focealert = true
-                            Alert.alert(
-                                'New Version Available',
-                                'This is a newer version available for download! Please update the app by visiting the Play Store',
-                                [
-                                    {
-                                        text: 'Update', onPress: () => {
-                                          
-                                            Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
-                                        }
+
+                        clearTimeout(this.timer);
+
+                        Alert.alert(
+                            'New Version Available',
+                            'This is a newer version available for download! Please update the app by visiting the Play Store',
+                            [
+                                {
+                                    text: 'Update', onPress: () => {
+                                        Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.stmconnectdev&hl=en");
+                                        // Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
                                     }
-                                ],
-                                { cancelable: false }
-                            )
-
-                        }
-                        
-                    // }
-
+                                }
+                            ],
+                            { cancelable: false }
+                        )
+                    }
                 }
             } else {
 
-                if (data.data.ios.force_update === 'N') {
+                if (data.data.ios.force_update === 'Y') {
                     if (data.data.ios.app_version != SharedPreference.deviceInfo.appVersion) {
                         this.props.navigation.navigate('PinScreen')
-                        // if (!focealert) {
-                        //     focealert = true
-                            clearTimeout(this.timer);
-                            Alert.alert(
-                                'New Version Available',
-                                'This is a newer version available for download! Please update the app by visiting the Apple Store',
-                                [
-                                    {
-                                        text: 'Update', onPress: () => {
-                                            
-                                           // Linking.openURL("https://itunes.apple.com/us/app/pixel-starships-space-mmorpg/id1082948576?mt=12");
-                                           Linking.openURL("https://play.google.com/store/apps/details?id=com.tdem.tdemconnectdev&hl=th&ah=HZ_1qJI8z-iAdQaRwublugkbqPE");
-                                        }
-                                    }
-                                ],
-                                { cancelable: false }
-                            )
-                        // }
 
+                        clearTimeout(this.timer);
+
+                        Alert.alert(
+                            'New Version Available',
+                            'This is a newer version available for download! Please click Update',
+                            [
+                                {
+                                    text: 'Update', onPress: () => {
+                                        // Linking.openURL("https://www.technobrave.asia/tdemios/");
+                                        // Linking.openURL("https://www.technobrave.asia/tdemiosdev/");
+                                       Linking.openURL("https://smart.ap.toyota-asia.com/tdemconnect/");
+
+                                    }
+                                }
+                            ],
+                            { cancelable: false }
+                        )
                     }
-                    // console.log('onLoadAppInfo', ver)
                 }
             }
         }
@@ -711,7 +687,7 @@ export default class HMF01011MainView extends Component {
         }, function () {
 
             let promise = this.loadAnnouncementfromAPI();
-            // let promise = this.temploadAnnouncementfromAPI();
+
             if (!promise) {
                 return;
             }
@@ -734,8 +710,7 @@ export default class HMF01011MainView extends Component {
             }, function () {
                 this.setState(this.renderloadingscreen())
                 this.loadAnnouncementMorefromAPI()
-                // this.temploadAnnouncementMorefromAPI()
-
+            
             });
         } else {
 
@@ -758,16 +733,13 @@ export default class HMF01011MainView extends Component {
             totalroll = ROLL_ANNOUNCE
         }
 
-        // //console.log("calendarPDFAPI ==>  functionID : ", functionID)
-
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_ANNOUCEMENT, SharedPreference.profileObject.client_token)
-        console.log("calendarPDFAPI ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
-        // console.log("client_id  : ", SharedPreference.profileObject.client_id)
+ 
         let hostApi = SharedPreference.ANNOUNCEMENT_ASC_API + '&offset=0&limit=' + totalroll
         if (ascendingSort) {
             hostApi = SharedPreference.ANNOUNCEMENT_DSC_API + '&offset=0&limit=' + totalroll
         }
-        console.log("loadAnnouncementfromAPI ", hostApi)
+      
         return fetch(hostApi, {
             method: 'GET',
             headers: {
@@ -865,10 +837,8 @@ export default class HMF01011MainView extends Component {
         if (ascendingSort) {
             hostApi = SharedPreference.ANNOUNCEMENT_DSC_API + '&offset=' + announcementData.length + '&limit=' + ROLL_ANNOUNCE
         }
-        ////console.log('hostApi :', hostApi)
 
         FUNCTION_TOKEN = await Authorization.convert(SharedPreference.profileObject.client_id, SharedPreference.FUNCTIONID_ANNOUCEMENT, SharedPreference.profileObject.client_token)
-        ////console.log("calendarPDFAPI ==> FUNCTION_TOKEN  : ", FUNCTION_TOKEN)
 
         return fetch(hostApi, {
             method: 'GET',
@@ -888,8 +858,6 @@ export default class HMF01011MainView extends Component {
                         loadmore: false
                     }, function () {
 
-                        ////console.log('this.state.dataSource.data :', this.state.dataSource.data)
-                        ////console.log('this.state.dataSource.status :', this.state.dataSource.status)
                         if (this.state.dataSource.status === 200) {
 
                             this.setState(this.renderloadingscreen());
@@ -1114,22 +1082,14 @@ export default class HMF01011MainView extends Component {
     }
 
     APIAnnouncementDetailCallback(data, rount, index) {
-        console.log('APIAnnouncementDetailCallback ==> data ==> ', data)
+
         code = data[0]
         data = data[1]
 
         if (code.SUCCESS == data.code) {
-            console.log('tempannouncementData.length ==> ', tempannouncementData.length)
+
             if (tempannouncementData.length) {
-                // this.setState({
 
-                //     isscreenloading: false,
-                //     // notiAnnounceMentBadge:this.state.notiAnnounceMentBadge - 1
-
-                // },function(){
-
-                //     SharedPreference.notiAnnounceMentBadge = this.state.notiAnnounceMentBadge
-                // })
                 if (tempannouncementData[index].attributes.read == false) {
                     tempannouncementData[index].attributes.read = true
                     this.onupdatebadgeAnnouncement()
@@ -1137,8 +1097,6 @@ export default class HMF01011MainView extends Component {
                 
             }
 
-            //console.log('APIAnnouncementDetailCallback ==> data ==> ', data.data)
-            clearTimeout(this.timersession)
             this.props.navigation.navigate(rount, {
                 DataResponse: data.data,
             });
@@ -1166,7 +1124,6 @@ export default class HMF01011MainView extends Component {
 
     loadEmployeeInfoformAPI = async () => {
 
-        ////console.log("loadEmployeeInfoformAPI :", SharedPreference.profileObject.employee_id)
         this.APICallback(await RestAPI(SharedPreference.EMP_INFO_CAREERPATH_API, SharedPreference.FUNCTIONID_EMPLOYEE_INFORMATION), 'EmployeeInfoDetail')
 
     }
@@ -1176,7 +1133,7 @@ export default class HMF01011MainView extends Component {
         let data = await RestAPI(SharedPreference.NONPAYROLL_SUMMARY_API, SharedPreference.FUNCTIONID_NON_PAYROLL)
         code = data[0]
         data = data[1]
-        //console.log("loadNonpayrollfromAPI  ==> data : ", data.data)
+   
         this.setState({
             isscreenloading: false,
         })
@@ -1251,7 +1208,7 @@ export default class HMF01011MainView extends Component {
                     // datadetail: PayslipDataDetail.detail[dataSource.years[year].detail[index].payroll_id]
 
                 }, function () {
-                    ////console.log('status : ', this.state.dataSource.status);
+  
                     if (this.state.dataSource.status === 200) {
                       
                         this.props.navigation.navigate('PayslipDetail', {
@@ -1391,14 +1348,13 @@ export default class HMF01011MainView extends Component {
     }
 
     loadHandbooklistfromAPI = async () => {
-        ////console.log("loadHandbooklistfromAPI", SharedPreference.HANDBOOK_LIST)
 
         this.APIHandbookCallback(await RestAPI(SharedPreference.HANDBOOK_LIST, SharedPreference.FUNCTIONID_HANDBOOK), 'Handbooklist')
-        // this.props.navigation.navigate('Handbooklist');
 
     }
 
     loadOTLineChartfromAPI = async () => {
+
         let today = new Date();
         let url = SharedPreference.OTSUMMARY_LINE_CHART + 'month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
         if (parseInt(today.getMonth() + 1) > 9) {
@@ -1409,12 +1365,14 @@ export default class HMF01011MainView extends Component {
     }
 
     loadOTBarChartfromAPI = async () => {
+
         let today = new Date();
         let url = SharedPreference.OTSUMMARY_BAR_CHART + 'month=0' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
         if (parseInt(today.getMonth() + 1) > 9) {
             url = SharedPreference.OTSUMMARY_BAR_CHART + 'month=' + parseInt(today.getMonth() + 1) + '&year=' + today.getFullYear()
         }
         this.APICallback(await RestAPI(url, SharedPreference.FUNCTIONID_OT_SUMMARY), 'OTBarChartView', 0)
+
     }
 
     loadOrgStructerfromAPI = async () => {
@@ -1483,7 +1441,9 @@ export default class HMF01011MainView extends Component {
         }
 
     }
+
     APIHandbookCallback(data, rount) {
+
         code = data[0]
         data = data[1]
         this.setState({
@@ -1510,7 +1470,6 @@ export default class HMF01011MainView extends Component {
 
             this.onAutenticateErrorAlertDialog()
 
-
         } else {
 
             this.onLoadErrorAlertDialog(data, rount)
@@ -1519,6 +1478,7 @@ export default class HMF01011MainView extends Component {
 
 
     APIClockInOutCallback(data, rount) {
+
         code = data[0]
         data = data[1]
         this.setState({
@@ -1544,7 +1504,6 @@ export default class HMF01011MainView extends Component {
         } else if (code.INVALID_AUTH_TOKEN == data.code) {
 
             this.onAutenticateErrorAlertDialog()
-
 
         } else {
 
@@ -1603,6 +1562,7 @@ export default class HMF01011MainView extends Component {
     }
 
     onNodataExistErrorAlertDialog() {
+
         this.setState({
             isscreenloading: false,
         })
@@ -1618,7 +1578,6 @@ export default class HMF01011MainView extends Component {
             { cancelable: false }
         )
 
-        // //console.log("error : ", error)
     }
 
     onLoadErrorAlertDialog(error, resource) {
@@ -1690,7 +1649,7 @@ export default class HMF01011MainView extends Component {
 
         code = data[0]
         data = data[1]
-        console.log("calendarCallback ==> data : ", data)
+  
         this.setState({
             isscreenloading: false,
         })
@@ -1701,7 +1660,7 @@ export default class HMF01011MainView extends Component {
             for (let i = 0; i < SharedPreference.COMPANY_LOCATION.length; i++) {
 
                 if (SharedPreference.COMPANY_LOCATION[i].key === SharedPreference.profileObject.location) {
-                    console.log("SharedPreference.COMPANY_LOCATION : ", SharedPreference.COMPANY_LOCATION[i].value)
+         
                     locationdef = SharedPreference.COMPANY_LOCATION[i].value;
                 }
 
@@ -1848,22 +1807,19 @@ export default class HMF01011MainView extends Component {
             isscreenloading: true,
             loadingtype: 3
         }, function () {
-            // this.setState(this.renderloadingscreen())
+
             this.loadAnnouncementfromAPI()
-            // this.temploadAnnouncementfromAPI()
+
         });
     }
 
     onOpenAnnouncementDetail(item, index) {
 
-        console.log('onOpenAnnouncementDetail')
-        console.log('onOpenAnnouncementItem = > ', item)
         this.setState({
             isscreenloading: true,
             loadingtype: 3
         }, function () {
-            ////console.log('index :', index);
-            // this.setState(this.renderloadingscreen())
+
             this.loadAnnouncementDetailfromAPI(item, index)
         });
     }
@@ -1929,7 +1885,7 @@ export default class HMF01011MainView extends Component {
                 isscreenloading: true,
                 loadingtype: 3
             }, function () {
-                // this.setState(this.renderloadingscreen())
+      
                 this.loadLeaveQuotafromAPI()
             });
         } else {
@@ -2020,6 +1976,15 @@ export default class HMF01011MainView extends Component {
         }
     }
 
+    onOpenInsurance() {
+        console.log('onOpenInsurance')
+        this.props.navigation.navigate('InsuranceListScreen', {
+
+        });
+
+    }
+
+    
     //*********** push notification */
 
 
@@ -2391,7 +2356,7 @@ export default class HMF01011MainView extends Component {
             });
 
         } else {
-            console.log('select_search_announce')
+
             tempannouncementData = []
 
             announcementData.map((item, i) => {
@@ -2445,20 +2410,24 @@ export default class HMF01011MainView extends Component {
             });
         }
 
-        console.log('tempannouncementData =>', tempannouncementData)
     }
 
     
 
     onChangeFunction = async (newState) => {
+
         SharedPreference.autoSyncCalendarBool = newState;
-        console.log("onChangeFunction ==> ", newState)
+
         this.setState({
             // syncCalendar: newState.syncCalendar,
             isscreenloading: true
         });
         // SharedPreference.calendarAutoSync = newState.syncCalendar
-        this.saveAutoSyncCalendar.setAutoSyncCalendar(newState)
+        let autoSyncCalendarBool = await this.saveAutoSyncCalendar.getAutoSyncCalendar()
+        
+        if (autoSyncCalendarBool != null) {
+            this.saveAutoSyncCalendar.setAutoSyncCalendar(newState)
+        }
 
         if (newState == false) {
 
@@ -2482,6 +2451,38 @@ export default class HMF01011MainView extends Component {
             
 
         }else{
+
+            if(SharedPreference.calendarSyncStatus){
+
+
+
+            }else{
+
+                this.setState({
+                    isscreenloading: false
+                }, function () {
+                    SharedPreference.autoSyncCalendarBool = false
+                })
+
+                // Alert.alert(
+                //     'Calendar Permission',
+                //     'Please enable permission calendar',
+                //     [
+                //         {
+                //             text: 'OK', onPress: () => {
+                //                 this.setState({
+                //                     isscreenloading: false
+                //                 }, function () {
+                //                     SharedPreference.autoSyncCalendarBool = false
+                //                 })
+                //             }
+                //         }
+                //     ],
+                //     { cancelable: false }
+                // )
+
+
+            }
             this.setState({
                 isscreenloading: false
             })
@@ -2515,14 +2516,13 @@ export default class HMF01011MainView extends Component {
     }
     
     deleteEventOnCalendar = async () => {
-        console.log("YearView ==> deleteEventCalendar")
+
         let currentyear = new Date().getFullYear();
         
         if (Platform.OS === 'android') {
 
             await this.eventCalendar._deleteEventFromCalendar(currentyear)
-            // await this.eventCalendar._deleteAllEvent(currentyear)
-            // await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
+
         } else {
 
             await this.eventCalendar._recursiveDeleteAllEvent(currentyear)
@@ -2553,48 +2553,39 @@ export default class HMF01011MainView extends Component {
 
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <View style={{height: 0,
-                backgroundColor: Colors.calendarRedText}} />
-                {/* <View style={styles.mainmenutabbarstyle} /> */}
+                <View style={{
+                    height: 0,
+                    backgroundColor: Colors.calendarRedText
+                }} />
                 <View style={styles.mainscreen}>
                     <Image
-                        style={{ width:'100%',height:'100%',backgroundColor:'white' }}
+                        style={{ width: '100%', height: '100%', backgroundColor: 'white' }}
                         source={require('./../resource/images/mainscreen.png')}
-                    // resizeMode="contain" 
                     />
                     <View style={{ position: 'absolute', height: 100, width: '80%', marginTop: '7%', marginLeft: '6%' }}>
-                        {/* <View style={{ flex: 1, flexDirection: 'row' }}> */}
-                        {/* <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
 
-                                <Image
-
-                                    style={{ width: '80%', height: '80%' }}
-                                    source={require('./../resource/images/people.png')}
-                                    resizeMode="contain"
-                                />
-
-                            </View> */}
                         <View style={{ flex: 3, justifyContent: 'center', flexDirection: 'column' }}>
                             <View style={{ flex: 1 }} />
                             <View style={{ flex: 1.5 }}>
-                                <Text style={[styles.userTitleText, { fontFamily: "Prompt-Bold" }]}>Welcome</Text>
+                                <Text style={[styles.userTitleText, { fontFamily: "Prompt-Bold" }]} allowFontScaling={SharedPreference.allowfontscale}>Welcome</Text>
                             </View>
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.usernameText}>{this.state.username}</Text>
+                                <Text style={styles.usernameText} allowFontScaling={SharedPreference.allowfontscale}>{this.state.username}</Text>
                             </View>
                             <View style={{ flex: 1 }} />
                             {/* Device Info */}
                             <View style={{ flex: 2, flexDirection: 'column' }} >
                                 <View style={{ flex: 2, flexDirection: 'row' }} >
-                                    {/* <Text style={{ flex: 1 }}>{"Version : " + SharedPreference.deviceInfo.appVersion + '( ' + '' + SharedPreference.SERVER + ' : ' + SharedPreference.VERSION + ')'}</Text> */}
-                                    <Text style={{  }}>{"Version : " + SharedPreference.deviceInfo.appVersion} </Text>
-                                    <Text style={{ color:SharedPreference.SERVER === 'DEV'? 'black':'transparent'}}>( {SharedPreference.SERVER} : {SharedPreference.VERSION} )</Text>
+                                    <Text style={{}} allowFontScaling={SharedPreference.allowfontscale}>
+                                        {"Version : " + SharedPreference.deviceInfo.appVersion}
+                                    </Text>
+                                    <Text style={{ color: SharedPreference.SERVER === 'DEV' ? 'black' : 'transparent' }} allowFontScaling={SharedPreference.allowfontscale}>
+                                        ( {SharedPreference.SERVER} : {SharedPreference.VERSION} )
+                                    </Text>
                                 </View>
-                                {/* <Text style={{ flex: 1,fontSize:10}}>{this.state.sendlastupdate}</Text> */}
                                 {this.rendertimeInterval()}
                             </View>
                         </View>
-                        {/* </View> */}
                     </View>
                 </View>
 
@@ -2617,8 +2608,8 @@ export default class HMF01011MainView extends Component {
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
 
-                                    <Text style={styles.mainmenuTextname}>Employee</Text>
-                                    <Text style={styles.mainmenuTextname}>Information</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Employee</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Information</Text>
 
                                 </View>
                             </View>
@@ -2641,9 +2632,12 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
-                                    <Text style={styles.mainmenuTextname}>Non Payroll</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Non Payroll</Text>
                                 </View>
-                                <View style={this.state.nonPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={this.state.nonPayslipBadge ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{this.state.nonPayslipBadge}</Text></View>
+                                <View style={this.state.nonPayslipBadge ? this.state.nonPayslipBadge == 1 ? styles.badgeIconpayslip1 : styles.badgeIconpayslip : styles.badgeIconpayslipDisable}>
+                                <Text style={this.state.nonPayslipBadge ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}allowFontScaling={SharedPreference.allowfontscale}>{this.state.nonPayslipBadge}
+                                </Text>
+                                </View>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -2663,10 +2657,13 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
-                                    <Text style={styles.mainmenuTextname}>Pay Slip</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Pay Slip</Text>
                                 </View>
                                 {/* notiPayslipBadge */}
-                                <View style={ this.state.notiPayslipBadge ? styles.badgeIconpayslip : styles.badgeIconpayslipDisable}><Text style={ this.state.notiPayslipBadge ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}>{ this.state.notiPayslipBadge}</Text></View>
+                                <View style={ this.state.notiPayslipBadge ? this.state.notiPayslipBadge == 1 ? styles.badgeIconpayslip1 : styles.badgeIconpayslip : styles.badgeIconpayslipDisable}>
+                                <Text style={ this.state.notiPayslipBadge ? { color: 'white',marginLeft:5,marginRight:5 } : { color: 'transparent',marginLeft:5,marginRight:5 }}allowFontScaling={SharedPreference.allowfontscale}>{ this.state.notiPayslipBadge}
+                                </Text>
+                                </View>
 
                             </View>
                         </TouchableOpacity>
@@ -2690,7 +2687,7 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
-                                    <Text style={styles.mainmenuTextname}>Leave Quota</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Leave Quota</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -2712,7 +2709,7 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
-                                    <Text style={styles.mainmenuTextname}>Clock In/Out</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Clock In/Out</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -2734,7 +2731,7 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
-                                    <Text style={styles.mainmenuTextname}>OT Summary</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>OT Summary</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -2759,7 +2756,7 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
-                                    <Text style={styles.mainmenuTextname}>Calendar</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Calendar</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -2781,23 +2778,48 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
-                                    <Text style={styles.mainmenuTextname}>Employee</Text>
-                                    <Text style={styles.mainmenuTextname}>Handbooks</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Employee</Text>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Handbooks</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
+                        
+                       
 
-
-                        <View style={{ flex: 1 }} >
+                        <TouchableOpacity
+                            ref='MHF01B11Insurance'
+                            disabled={!rolemanagementEmpoyee[8]}
+                            style={{ flex: 1 }}
+                            onPress={this.onOpenInsurance.bind(this)}
+                        >
+                            <View style={[styles.boxShadow, shadow]} >
+                                <View style={styles.mainmenuImageButton}>
+                                    <Image
+                                        style={rolemanagementEmpoyee[8] === 1 ?
+                                            { width: 50, height: 50, tintColor: Colors.redTextColor } :
+                                            { width: 50, height: 50, tintColor: Colors.lightGrayTextColor }}
+                                        source={require('./../resource/images/MainMenu/insurance.png')}
+                                    // resizeMode='contain'
+                                    />
+                                </View>
+                                <View style={styles.mainmenuTextButton}>
+                                    <Text style={styles.mainmenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Welfare</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                        {/* <View style={{ flex: 1 }} >
                             <View style={styles.mainmenuImageButton}>
 
                             </View>
                             <View style={styles.mainmenuTextButton}>
 
                             </View>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
+
+                
+
             </View>
         )
 
@@ -2827,7 +2849,7 @@ export default class HMF01011MainView extends Component {
                         />
                     </TouchableOpacity>
                     <View style={{ flex: 3, justifyContent: 'center' }}>
-                        <Text style={styles.navTitleTextTop}>Announcement</Text>
+                        <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Announcement</Text>
                     </View>
                     <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                         onPress={this.expand_collapse_Function}>
@@ -2840,39 +2862,10 @@ export default class HMF01011MainView extends Component {
 
                 </View>
 
-
-                {/* <View style={{ height: 70, flexDirection: 'row', backgroundColor: '#F20909', }}>
-
-
-                    <TouchableOpacity style={{ flex: 1, marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
-                        onPress={this.select_announce_sort.bind(this)}>
-                        <Image
-                            style={{ flex: 1, height: 30, width: 30, }}
-                            source={sortImageButton}
-                            resizeMode='contain'
-                        />
-                    </TouchableOpacity>
-
-                    <View style={{ flex: 5, justifyContent: 'center' }}>
-
-                        <Text style={styles.navTitleTextTop}>Announcement</Text>
-
-                    </View>
-
-                    <TouchableOpacity style={{ flex: 1, marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
-                        onPress={this.expand_collapse_Function}>
-                        <Image
-                            style={{ flex: 1, height: 30, width: 30, }}
-                            source={filterImageButton}
-                            resizeMode='contain'
-                        />
-                    </TouchableOpacity>
-                </View> */}
-
-                <View style={{ height: expandheight,backgroundColor:'white' }}>
+                <View style={{ height: expandheight, backgroundColor: 'white' }}>
                     <View style={{ height: 50, marginLeft: 10, marginRight: 10, flexDirection: 'row', }}>
                         <View style={{ flex: 2, justifyContent: 'center' }} >
-                            <Text style={{ textAlign: 'center', fontSize: 12 }}>Type</Text>
+                            <Text style={{ textAlign: 'center', fontSize: 12, fontFamily: "Prompt-Regular" }} allowFontScaling={SharedPreference.allowfontscale}>Type</Text>
                         </View>
                         <View style={{ flex: 7, justifyContent: 'center' }} >
                             <View style={{ height: 25, justifyContent: 'center', backgroundColor: 'lightgray', borderRadius: 3, }} >
@@ -2880,12 +2873,12 @@ export default class HMF01011MainView extends Component {
                                     style={styles.button}
                                     onPress={(this.select_init_announce_type.bind(this))}
                                 >
-                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10 }}>{this.state.announcementType}</Text>
+                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10, fontFamily: "Prompt-Regular" }} allowFontScaling={SharedPreference.allowfontscale}>{this.state.announcementType}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                         <View style={{ flex: 2, justifyContent: 'center' }} >
-                            <Text style={{ textAlign: 'center', fontSize: 12 }}>Status</Text>
+                            <Text style={{ textAlign: 'center', fontSize: 12, fontFamily: "Prompt-Regular" }} allowFontScaling={SharedPreference.allowfontscale}>Status</Text>
                         </View>
                         <View style={{ flex: 3, justifyContent: 'center' }} >
                             <View style={{ height: 25, justifyContent: 'center', backgroundColor: 'lightgray', borderRadius: 3, }} >
@@ -2893,7 +2886,7 @@ export default class HMF01011MainView extends Component {
                                     style={styles.button}
                                     onPress={(this.select_init_announce_status.bind(this))}
                                 >
-                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10 }}>{tempannouncementStatustext}</Text>
+                                    <Text style={{ textAlign: 'left', color: Colors.redTextColor, fontSize: 12, marginLeft: 10, fontFamily: "Prompt-Regular" }} allowFontScaling={SharedPreference.allowfontscale}>{tempannouncementStatustext}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -2920,14 +2913,13 @@ export default class HMF01011MainView extends Component {
                         />
                     }
                     onScroll={(event) => {
-                        // onScrollEndDrag={(event) => {
+                      
                         var windowHeight = Dimensions.get('window').height,
                             height = event.nativeEvent.contentSize.height,
                             offset = event.nativeEvent.contentOffset.y;
-                        ////console.log('windowHeight : ', windowHeight - 120 - expandheight)
-
+                      
                         if ((height - (windowHeight - 120 - expandheight) < offset) & (this.state.enddragannounce)) {
-                            ////console.log('load more')
+                        
                             if (this.state.loadmore === false) {
                                 this._onLoadMore()
                             }
@@ -2959,8 +2951,8 @@ export default class HMF01011MainView extends Component {
 
                                         onPress={() => { this.onOpenAnnouncementDetail(item, index) }}>
 
-                                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                                            <View style={{ flex: 2, justifyContent: 'center' }}>
+                                        <View style={{ flex: 1, flexDirection: 'row',justifyContent:'center' }}>
+                                            <View style={{ flex: 1.8, justifyContent: 'center' }}>
                                                 <Image
                                                     style={{ height: 40, width: 40 }}
                                                     source={item.category === 'Emergency Announcement' || item.category === 'Event Announcement' ?
@@ -2968,19 +2960,32 @@ export default class HMF01011MainView extends Component {
                                                         item.category === 'Company Announcement' ? require('./../resource/images/Company.png') : require('./../resource/images/General.png')}
                                                 />
                                             </View>
-                                            <View style={{ flex: 5, justifyContent: 'center' }}>
-                                                <Text style={{ height: 20, fontSize: 13, textAlign: 'left', fontWeight: 'bold', marginTop: 5 }}>
-                                                    {annountype[item.category]}
-                                                </Text>
-                                                <Text style={{ height: 20, fontSize: 11, textAlign: 'left', color: 'gray' }} numberOfLines={1} ellipsizeMode={'tail'}>
-                                                    {item.title}
-                                                </Text>
+                                            <View style={{ flex: 5.5, justifyContent: 'center' }}>
+                                                <View style={{ height: 30 * scale, justifyContent: 'flex-end' }}>
+                                                    <Text style={styles.announcementtext1} allowFontScaling={SharedPreference.allowfontscale}>
+                                                        {annountype[item.category]}
+                                                    </Text>
+                                                </View>
+                                                <View style={{ height: 30 * scale, justifyContent: 'flex-start' }}>
+                                                    <Text style={styles.announcementtext2} numberOfLines={1} ellipsizeMode={'tail'} allowFontScaling={SharedPreference.allowfontscale}>
+                                                        {item.title}
+                                                    </Text>
+                                                </View>
                                             </View>
-                                            <View style={{ flex: 3, justifyContent: 'center', marginTop: 5 }}>
-                                                <Text style={item.attributes.read === false ? { height: 40, fontSize: 11, textAlign: 'right', color: Colors.redTextColor } : { height: 40, fontSize: 11, textAlign: 'right', color: 'gray' }}>
-                                                    {item.attributes.last_modified}
-                                                </Text>
+                                            <View style={{ flex: 3, justifyContent: 'center' }}>
+                                                <View style={{ height: 30 * scale,  justifyContent: 'flex-end' ,marginTop:-4 * scale}}>
+                                                    <Text style={item.attributes.read === false ? styles.announcementtext3 : styles.announcementtext4} allowFontScaling={SharedPreference.allowfontscale}>
+                                                        {item.attributes.last_modified}
+                                                    </Text>
+                                                </View>
+                                                <View style={{ height: 30 * scale,  justifyContent: 'flex-end' }}>
+                                                    {/* <Text style={styles.announcementtext2} numberOfLines={1} ellipsizeMode={'tail'} allowFontScaling={SharedPreference.allowfontscale}>
+                                                        
+                                                    </Text> */}
+                                                </View>
                                             </View>
+
+
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -2990,7 +2995,7 @@ export default class HMF01011MainView extends Component {
                 </ScrollView>
                 <View style={tempannouncementData.length | !this.state.loadingannouncement ? { height: 0 } : { width: '100%', height: '100%', position: 'absolute', justifyContent: 'center' }}>
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={tempannouncementData.length | !this.state.loadingannouncement ? { fontSize: 25, textAlign: 'center', color: 'transparent' } : { fontSize: 25, textAlign: 'center', color: 'black' }}> No Data</Text>
+                        <Text style={tempannouncementData.length | !this.state.loadingannouncement ? styles.announcementtexthidenodata : styles.announcementtextshownodata}allowFontScaling={SharedPreference.allowfontscale}> No Data</Text>
                     </View>
                 </View>
             </View>
@@ -3018,7 +3023,7 @@ export default class HMF01011MainView extends Component {
 
                     <View style={{ flex: 5, justifyContent: 'center' }}>
 
-                        <Text style={styles.navTitleTextTop}>Manager View</Text>
+                        <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Manager View</Text>
 
                     </View>
 
@@ -3045,8 +3050,8 @@ export default class HMF01011MainView extends Component {
                                 </View>
                                 <View style={styles.mainmenuTextButton}>
 
-                                    <Text style={styles.managermenuTextname}>Employee</Text>
-                                    <Text style={styles.managermenuTextname}>Information</Text>
+                                    <Text style={styles.managermenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Employee</Text>
+                                    <Text style={styles.managermenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Information</Text>
 
                                 </View>
                             </View>
@@ -3069,7 +3074,7 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.managermenuTextButton}>
-                                    <Text style={styles.managermenuTextname}>Clock In/Out</Text>
+                                    <Text style={styles.managermenuTextname} allowFontScaling={SharedPreference.allowfontscale}>Clock In/Out</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -3095,7 +3100,7 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.managermenuTextButton}>
-                                    <Text style={styles.managermenuTextname}>Overtime Average</Text>
+                                    <Text style={styles.managermenuTextname} allowFontScaling={SharedPreference.allowfontscale}>Overtime Average</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -3116,9 +3121,9 @@ export default class HMF01011MainView extends Component {
                                     />
                                 </View>
                                 <View style={styles.managermenuTextButton}>
-
-                                    <Text style={styles.managermenuTextname}>Overtime</Text>
-                                    <Text style={styles.managermenuTextname}>History Information</Text>
+                                
+                                    <Text style={styles.managermenuTextname}allowFontScaling={SharedPreference.allowfontscale}>Overtime</Text>
+                                    <Text style={styles.managermenuTextname}allowFontScaling={SharedPreference.allowfontscale}>History Information</Text>
 
                                 </View>
                             </View>
@@ -3132,94 +3137,145 @@ export default class HMF01011MainView extends Component {
     }
 
     rendersettingview() {
-        ////console.log("rendersettingview ==> this.state.syncCalendar : 1 ", this.state.syncCalendar)
-        ////console.log("rendersettingview ==> SharedPreference.calendarAutoSync : 2 ", SharedPreference.calendarAutoSync)
-        //         let autoSyncCalendarBool = this.saveAutoSyncCalendar.getAutoSyncCalendar()
 
-        //         let syncstatus = true;
-        //         if(autoSyncCalendarBool === false){
-        //             syncstatus = false;
-        //         }
-        
-        // let syncstatus = SharedPreference.autoSyncCalendarBool;
-        // console.log('syncstatus =>',SharedPreference.autoSyncCalendarBool)
+        if (SharedPreference.APPLICATION_DEVICE === 'STM') {
+            return (
+           <View style={{ flex: 1, flexDirection: 'column',backgroundColor:'white' }}>
+               <View style={{backgroundColor: Colors.calendarRedText}} />
+               <View style={{ height: 50, flexDirection: 'row', backgroundColor: '#F20909', }}>
 
-        return (
-            <View style={{ flex: 1, flexDirection: 'column',backgroundColor:'white' }}>
-                <View style={{backgroundColor: Colors.calendarRedText}} />
-                <View style={{ height: 50, flexDirection: 'row', backgroundColor: '#F20909', }}>
+                   <View style={{ flex: 5, justifyContent: 'center' }}>
 
-                    <View style={{ flex: 5, justifyContent: 'center' }}>
+                       <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Setting</Text>
 
-                        <Text style={styles.navTitleTextTop}>Setting</Text>
+                   </View>
 
-                    </View>
+               </View>
+               <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <TouchableOpacity
+                       onPress={(this.onChangePIN.bind(this))}>
+                       <Text style={styles.settinglefttext}allowFontScaling={SharedPreference.allowfontscale}>Change PIN</Text>
+                   </TouchableOpacity>
+               </View>    
+               <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <View style={{ flex: 2, justifyContent: 'center' }}>
 
+                       <Text style={styles.settinglefttext}allowFontScaling={SharedPreference.allowfontscale}>Application Name</Text>
+                   </View>
+                   <View style={{ flex: 1.5, justifyContent: 'center' }}>
+                       <Text style={styles.settingrighttext}allowFontScaling={SharedPreference.allowfontscale}>STM Connect</Text>
 
-                </View>
-                <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
-                    <TouchableOpacity
-                        onPress={(this.onChangePIN.bind(this))}>
-                        <Text style={styles.settinglefttext}>Change PIN</Text>
-                    </TouchableOpacity>
-                </View>
+                   </View>
+               </View>
 
-                <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
-                    <View style={{ flex: 4, justifyContent: 'center' }}>
-                        <Text style={styles.settinglefttext}>Sync Calendar</Text>
+               <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <View style={{ flex: 2, justifyContent: 'center' }}>
 
-                    </View>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Switch
-                            onValueChange={(value) => this.onChangeFunction( value)}
-                            value={SharedPreference.autoSyncCalendarBool}
-                        />
-                    </View>
-                </View>
+                       <Text style={styles.settinglefttext}allowFontScaling={SharedPreference.allowfontscale}>Application Version</Text>
+                   </View>
+                   <View style={{ flex: 1.5, justifyContent: 'center' }}>
+                       <Text style={styles.settingrighttext}allowFontScaling={SharedPreference.allowfontscale}>{SharedPreference.deviceInfo.appVersion}</Text>
 
-                <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
-                    <View style={{ flex: 2, justifyContent: 'center' }}>
+                   </View>
+               </View>
 
-                        <Text style={styles.settinglefttext}>Application Name</Text>
-                    </View>
-                    <View style={{ flex: 1.5, justifyContent: 'center' }}>
-                        <Text style={styles.settingrighttext}>TDEM Connect</Text>
-
-                    </View>
-                </View>
-
-                <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
-                    <View style={{ flex: 2, justifyContent: 'center' }}>
-
-                        <Text style={styles.settinglefttext}>Application Version</Text>
-                    </View>
-                    <View style={{ flex: 1.5, justifyContent: 'center' }}>
-                        <Text style={styles.settingrighttext}>{SharedPreference.deviceInfo.appVersion}</Text>
-
-                    </View>
-                </View>
-
-                <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
-                    <TouchableOpacity
-                        onPress={(this.select_sign_out.bind(this))}>
-                        <Text style={styles.settingleftredtext}>Sign Out</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ flex: 8 }}>
+               <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <TouchableOpacity
+                       onPress={(this.select_sign_out.bind(this))}>
+                       <Text style={styles.settingleftredtext}allowFontScaling={SharedPreference.allowfontscale}>Sign Out</Text>
+                   </TouchableOpacity>
+               </View>
+               <View style={{ flex: 8 }}>
 
 
-                </View>
-            </View>
-        )
+               </View>
+           </View>
+       )
+        }else{
+            return (
+           <View style={{ flex: 1, flexDirection: 'column',backgroundColor:'white' }}>
+               <View style={{backgroundColor: Colors.calendarRedText}} />
+               <View style={{ height: 50, flexDirection: 'row', backgroundColor: '#F20909', }}>
 
-    }
+                   <View style={{ flex: 5, justifyContent: 'center' }}>
+
+                       <Text style={styles.navTitleTextTop}allowFontScaling={SharedPreference.allowfontscale}>Setting</Text>
+
+                   </View>
+
+               </View>
+               <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <TouchableOpacity
+                       onPress={(this.onChangePIN.bind(this))}>
+                       <Text style={styles.settinglefttext}allowFontScaling={SharedPreference.allowfontscale}>Change PIN</Text>
+                   </TouchableOpacity>
+               </View>
+             
+               <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <View style={{ flex: 4, justifyContent: 'center' }}>
+                       <Text style={styles.settinglefttext}allowFontScaling={SharedPreference.allowfontscale}>Sync Calendar</Text>
+
+                   </View>
+                   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                       <Switch
+                           onValueChange={(value) => this.onChangeFunction( value)}
+                           value={SharedPreference.autoSyncCalendarBool}
+                       />
+                   </View>
+               </View>
+               
+               <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <View style={{ flex: 2, justifyContent: 'center' }}>
+
+                       <Text style={styles.settinglefttext}allowFontScaling={SharedPreference.allowfontscale}>Application Name</Text>
+                   </View>
+                   <View style={{ flex: 1.5, justifyContent: 'center' }}>
+                       <Text style={styles.settingrighttext}allowFontScaling={SharedPreference.allowfontscale}>STM Connect</Text>
+
+                   </View>
+               </View>
+
+               <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <View style={{ flex: 2, justifyContent: 'center' }}>
+
+                       <Text style={styles.settinglefttext}allowFontScaling={SharedPreference.allowfontscale}>Application Version</Text>
+                   </View>
+                   <View style={{ flex: 1.5, justifyContent: 'center' }}>
+                       <Text style={styles.settingrighttext}allowFontScaling={SharedPreference.allowfontscale}>{SharedPreference.deviceInfo.appVersion}</Text>
+
+                   </View>
+               </View>
+
+               <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: 0.5, borderBottomColor: Colors.lightGrayTextColor }}>
+                   <TouchableOpacity
+                       onPress={(this.select_sign_out.bind(this))}>
+                       <Text style={styles.settingleftredtext}allowFontScaling={SharedPreference.allowfontscale}>Sign Out</Text>
+                   </TouchableOpacity>
+               </View>
+               <View style={{ flex: 8 }}>
+
+
+               </View>
+           </View>
+       )
+        }
+   }
 
     signout() {
+
+        clearTimeout(this.timer);
+        clearTimeout(this.timersession);
         SharedPreference.userRegisted = false
         this.state.loadingannouncement = false
         timerstatus = false
         SharedPreference.Handbook = []
         SharedPreference.profileObject = null
+        SharedPreference.notiAnnounceMentBadge = 0
+        page = 0
+        
+        
+        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+
         this.saveProfile.setProfile(null)
         if (Platform.OS === 'android') {
             BadgeAndroid.setBadge(0)
@@ -3231,14 +3287,15 @@ export default class HMF01011MainView extends Component {
                 .displayNotification(localNotification)
                 .catch(err => console.error(err));
         }
+
         this.setState({
-            isscreenloading: false
+            isscreenloading: false,
+            notiAnnounceMentBadge:0
+        },function(){
+            this.props.navigation.navigate('RegisterScreen')
         })
-        page = 0
-        clearTimeout(this.timer);
-        clearTimeout(this.timersession);
-        this.props.navigation.navigate('RegisterScreen')
-        SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
+        
+
     }
 
     select_sign_out() {
@@ -3323,10 +3380,6 @@ export default class HMF01011MainView extends Component {
         code = data[0]
         data = data[1]
 
-        // this.setState({
-        //     isscreenloading: false,
-        // })
-// console.log('loadSignOutAPI',data)
         if (code.SUCCESS == data.code) {
             this.state.loadingannouncement = false;
             
@@ -3338,19 +3391,25 @@ export default class HMF01011MainView extends Component {
             this.saveProfile.setProfile(null)
             
             this.saveAutoSyncCalendar.setAutoSyncCalendar(true)
-
+            
             await this.deleteEventOnCalendar()//TODO bell
             clearTimeout(this.timer);
             clearTimeout(this.timersession);
-            this.props.navigation.navigate('RegisterScreen')
-
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-
+            SharedPreference.company=''
             page = 0
-
-            // this.setState({
-            //     isscreenloading: false
-            // })
+            this.setState({
+                isscreenloading: false,
+                notiAnnounceMentBadge:0
+            },function(){
+                if(SharedPreference.APPLICATION_DEVICE === 'STM'){
+                    SharedPreference.company = 'stm'
+                    }else{
+                        SharedPreference.company = 'tmap-em'
+                    }
+                this.props.navigation.navigate('RegisterScreen')
+            })
+            
 
         } else if (code.INVALID_USER_PASS == data.code) {
 
@@ -3359,77 +3418,21 @@ export default class HMF01011MainView extends Component {
             SharedPreference.Handbook = []
             announcementData = []
             tempannouncementData = []
-            // SharedPreference.profileObject = null
-            // this.saveProfile.setProfile(null)
-
-            
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-
-            // this.setState({
-            //     isscreenloading: false
-            // })
-            // Alert.alert(
-            //     data.data.code,
-            //     data.data.detail,
-            //     [
-            //         {
-            //             text: 'OK', onPress: () => {
-            //                 page = 0
-            //                 timerstatus = false
-            //                 SharedPreference.Handbook = []
-            //                 announcementData = []
-            //                 tempannouncementData = []
-            //                 SharedPreference.profileObject = null
-            //                 this.saveProfile.setProfile(null)
-            //                 this.setState({
-            //                     isscreenloading: false
-            //                 })
-            //                 this.props.navigation.navigate('RegisterScreen')
-
-            //             }
-            //         }
-            //     ],
-            //     { cancelable: false }
-            // )
 
         } else {
 
             page = 0
             timerstatus = false
             SharedPreference.Handbook = []
-            // SharedPreference.profileObject = null
-            // this.saveProfile.setProfile(null)
             this.setState({
                 isscreenloading: false
             })
             
             this.props.navigation.navigate('RegisterScreen')
             SharedPreference.currentNavigator = SharedPreference.SCREEN_REGISTER
-            // Alert.alert(
-            //     StringText.ALERT_PIN_CANNOT_LOGOUT_TITILE,
-            //     StringText.ALERT_PIN_CANNOT_LOGOUT_DESC,
-            //     [
-            //         {
-            //             text: 'OK', onPress: () => {
-            //                 //TODO Log out
-            //                 // this.setState({
-            //                 //     isscreenloading: false
-            //                 // })
-            //                 page = 0
-            //                 timerstatus = false
-            //                 SharedPreference.Handbook = []
-            //                 SharedPreference.profileObject = null
-            //                 this.saveProfile.setProfile(null)
-            //                 this.setState({
-            //                     isscreenloading: false
-            //                 })
-            //                 this.props.navigation.navigate('RegisterScreen')
-            //             }
-            //         }
-            //     ],
-            //     { cancelable: false }
-            // )
+  
         }
 
         if (Platform.OS === 'android') {
@@ -3474,9 +3477,6 @@ export default class HMF01011MainView extends Component {
                 this.props.navigation.navigate('ChangePINScreen')
             }
 
-            console.log("onLoadLoginWithPin ==> ", data)
-            // this.onCheckPINWithChangePIN('1111', '2222')
-            // this.props.navigation.navigate('ChangePINScreen')
         } else {
             //TODO Bell
             Alert.alert(
@@ -3491,9 +3491,10 @@ export default class HMF01011MainView extends Component {
 
         // let data = await LoginChangePinAPI(PIN1, PIN2, SharedPreference.FUNCTIONID_PIN)
         let data = await RestAPI(SharedPreference.HANDBOOK_LIST, SharedPreference.FUNCTIONID_HANDBOOK)
-        console.log('onCheckPINWithChangePIN : ', data)
+
         code = data[0]
         data = data[1]
+
         if (code.DOES_NOT_EXISTS == data.code) {
 
             this.onRegisterErrorAlertDialog()
@@ -3536,21 +3537,21 @@ export default class HMF01011MainView extends Component {
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={{ marginLeft: 20, marginTop: 10, textAlign: 'left', color: 'black', fontSize: 18, fontWeight: 'bold' }}>Select Status</Text>
+                                <Text style={styles.titlepicker} allowFontScaling={SharedPreference.allowfontscale}>Select Status</Text>
                             </View>
 
                             <ScrollView style={{ height: '40%' }}>
                                 {
-                                    this.state.announcestatuslist.map((item, index) => (
-                                        <TouchableOpacity style={styles.button}
-                                            
-                                            onPress={() => { this.on_select_Announcement_status(item, index) }}
+                                    announstatuspicker.map((item, index) => (
+                                        <TouchableOpacity style={styles.button} 
+                                             key={index + 200}
+                                            onPress={() => { this.on_select_Announcement_status(item.value, index) }}
                                         >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
                                                 {/* <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text> */}
                                                 <Text style={index === this.state.select_announcement_status ?
-                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
-                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                    { color: 'red', textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18, fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }} allowFontScaling={SharedPreference.allowfontscale}> {item.value}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
@@ -3560,7 +3561,7 @@ export default class HMF01011MainView extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_change_month_andr() }}
                                 >
-                                    <Text style={styles.buttonpicker}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -3574,7 +3575,7 @@ export default class HMF01011MainView extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={styles.titlepicker}>Select Status</Text>
+                            <Text style={styles.titlepicker} allowFontScaling={SharedPreference.allowfontscale}>Select Status</Text>
                         </View>
                         <Picker
                             selectedValue={this.state.tempannouncementStatus}
@@ -3594,22 +3595,16 @@ export default class HMF01011MainView extends Component {
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_announce_status.bind(this))}
                             >
-                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft} allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 1 }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_announce_status.bind(this))}
-                            //  onPress={(this.select_announce_status)}
                             >
-                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
+                                <Text style={styles.buttonpickerdownloadright} allowFontScaling={SharedPreference.allowfontscale}>OK</Text>
                             </TouchableOpacity>
 
                         </View>
-                        {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
-                            <TouchableOpacity style={styles.button} onPress={(this.select_announce_status)}>
-                                <Text style={{ textAlign: 'center', color: Colors.redTextColor, fontSize: 18, width: 80, height: 30, alignItems: 'center' }}> OK</Text>
-                            </TouchableOpacity>
-                        </View> */}
                     </View>
                 </View>
             )
@@ -3622,20 +3617,20 @@ export default class HMF01011MainView extends Component {
                     <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                         <View style={{ width: '80%', backgroundColor: 'white' }}>
                             <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                                <Text style={{ marginLeft: 20, marginTop: 10, textAlign: 'left', color: 'black', fontSize: 18, fontWeight: 'bold' }}>Select Type</Text>
+                                <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>Select Type</Text>
                             </View>
                             <ScrollView style={{ height: '40%' }}>
                                 {
-                                    this.state.announcetypelist.map((item, index) => (
+                                    announcementpicker.map((item, index) => (
                                         <TouchableOpacity style={styles.button}
-
-                                            onPress={() => { this.on_select_Announcement_type(item, index) }}
+                                        key={index + 300}
+                                            onPress={() => { this.on_select_Announcement_type(item.value, index) }}
                                         >
                                             <View style={{ justifyContent: 'center', height: 40, alignItems: 'center', }} key={index + 200}>
                                                 {/* <Text style={styles.titlepicker}> {item}</Text> */}
                                                 <Text style={index === this.state.select_announcement_type ?
-                                                    { color: 'red', textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' } :
-                                                    { textAlign: 'center', fontSize: 18, width: '100%', height: 30, alignItems: 'center' }}> {item}</Text>
+                                                    { color: 'red', textAlign: 'center', fontSize: 18,fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' } :
+                                                    { textAlign: 'center', fontSize: 18,fontFamily: "Prompt-Regular", width: '100%', height: 30, alignItems: 'center' }}allowFontScaling={SharedPreference.allowfontscale}> {item.value}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     ))}
@@ -3645,7 +3640,7 @@ export default class HMF01011MainView extends Component {
                                 <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() => { this.cancel_select_Announcement_type() }}
                                 >
-                                    <Text style={styles.buttonpicker}> Cancel</Text>
+                                    <Text style={styles.buttonpicker}allowFontScaling={SharedPreference.allowfontscale}> Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -3659,7 +3654,7 @@ export default class HMF01011MainView extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white' }}>
                         <View style={{ height: 50, width: '100%', justifyContent: 'center', }}>
-                            <Text style={styles.titlepicker}>Select Type</Text>
+                            <Text style={styles.titlepicker}allowFontScaling={SharedPreference.allowfontscale}>Select Type</Text>
                         </View>
                         <Picker
                             selectedValue={this.state.tempannouncementType}
@@ -3682,20 +3677,15 @@ export default class HMF01011MainView extends Component {
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.cancel_select_announce_type.bind(this))}
                             >
-                                <Text style={styles.buttonpickerdownloadleft}>Cancel</Text>
+                                <Text style={styles.buttonpickerdownloadleft}allowFontScaling={SharedPreference.allowfontscale}>Cancel</Text>
                             </TouchableOpacity>
                             <View style={{ flex: 1 }} />
                             <TouchableOpacity style={{ flex: 2, justifyContent: 'center' }}
                                 onPress={(this.select_announce_type)}>
-                                <Text style={styles.buttonpickerdownloadright}>OK</Text>
+                                <Text style={styles.buttonpickerdownloadright}allowFontScaling={SharedPreference.allowfontscale}>OK</Text>
                             </TouchableOpacity>
 
                         </View>
-                        {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 50, alignItems: 'center', }}>
-                            <TouchableOpacity style={styles.button} onPress={(this.select_announce_type)}>
-                                <Text style={{ textAlign: 'center', color: Colors.redTextColor, fontSize: 18, width: 80, height: 30, alignItems: 'center' }}> OK</Text>
-                            </TouchableOpacity>
-                        </View> */}
                     </View>
                 </View>
             )
@@ -3706,7 +3696,7 @@ export default class HMF01011MainView extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white',borderRadius:10 }}>
                         <View style={{ height: 100, width: '100%', justifyContent: 'center',alignItems:'center' }}>
-                            <Text style={{ fontSize: 15 }}>Unsync Success</Text>
+                            <Text style={{ fontSize: 15 }}allowFontScaling={SharedPreference.allowfontscale}>Unsync Success</Text>
                         </View>
                     </View>
                 </View>
@@ -3718,7 +3708,7 @@ export default class HMF01011MainView extends Component {
                 <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', }} >
                     <View style={{ width: '80%', backgroundColor: 'white',borderRadius:10 }}>
                         <View style={{ height: 100, width: '100%', justifyContent: 'center',alignItems:'center' }}>
-                            <Text style={{ fontSize: 15 }}>Confirm Exit</Text>
+                            <Text style={{ fontSize: 15 }}allowFontScaling={SharedPreference.allowfontscale}>Confirm Exit</Text>
                         </View>
                     </View>
                 </View>
@@ -3755,8 +3745,6 @@ export default class HMF01011MainView extends Component {
 
             </View>
         )
-        // }
-
     }
 
     rendermanagertab() {
@@ -3786,11 +3774,12 @@ export default class HMF01011MainView extends Component {
         );
 
     }
+    
     rendertimeInterval() {
         if (SharedPreference.SERVER === 'DEV') {
             return (
                 <View style={{ flex: 1 }}>
-                    <Text style={{ color: 'black', fontSize: 10 }}>{this.state.sendlastupdate}''{this.state.Sessiontimeout}</Text>
+                    <Text style={{ color: 'black', fontSize: 10 }}allowFontScaling={SharedPreference.allowfontscale}>{this.state.sendlastupdate}''{this.state.Sessiontimeout}</Text>
                 </View>
             )
         }
@@ -3855,8 +3844,9 @@ export default class HMF01011MainView extends Component {
                                 resizeMode='contain'
                             />
                             <View style={{ position: 'absolute', height: '100%' }}  >
-                                <View style={{ height: 20, borderRadius: 20, backgroundColor: badgeBG, marginLeft: 20, marginTop: 10 }}>
-                                    <Text style={{ fontSize: 15, color: badgeText, textAlign: 'center', marginLeft: 5, marginRight: 5, height: 20, borderRadius: 10 }}>{this.state.notiAnnounceMentBadge}</Text>
+                                <View style={this.state.notiAnnounceMentBadge ? this.state.notiAnnounceMentBadge == 1 ? styles.badgeIconannouncement1 : styles.badgeIconannouncement : styles.badgeIconannouncementdisable}>
+                                    <Text style={{ fontSize: 15, color: badgeText, textAlign: 'center', marginLeft: 5, marginRight: 5, height: 20, borderRadius: 10 }}
+                                    allowFontScaling={SharedPreference.allowfontscale}>{this.state.notiAnnounceMentBadge}</Text>
                                 </View>
                             </View>
 
@@ -3888,3 +3878,4 @@ const shadow = {
     elevation: 2,
     shadowOffset: { width: 0, height: 3 }
 }
+
